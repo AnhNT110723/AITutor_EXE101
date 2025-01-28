@@ -31,11 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Hàm thay đổi logo
 	function updateLogo() {
 		if (sidebar.classList.contains('active')) {
-		  logoImg.src = '/static/images/concoc.png'; // Logo mặc định khi sidebar active
+		  logoImg.src = 'static/images/concoc.png'; // Logo mặc định khi sidebar active
 		  logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
           logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
 		} else {
-		  logoImg.src = '/static/images/FAI.png'; // Logo khi sidebar không active
+		  logoImg.src = 'static/images/FAI.png'; // Logo khi sidebar không active
 		  logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
           logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
 		}
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Thay đổi ngôn ngữ
       const changeLanguage = (lang) => {
           localStorage.setItem('language', lang); // Lưu vào localStorage
-          fetch('/static/data/languages.json')
+          fetch('/SRC/static/data/languages.json')
               .then((res) => res.json())
               .then((data) => {
                   if (data[lang]) {

@@ -30,7 +30,7 @@
 <body>
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar" class="active">
-            <h1><a href="home.html" class="logo"><img src="/static/images/concoc.png" alt="Cup"></a></h1>
+            <h1><a href="home.html" class="logo"><img src="static/images/concoc.png" alt="Cup"></a></h1>
             <ul class="list-unstyled components mb-5">
                 <li>
                     <a href="groupTalk.html" class="link-test"><span class="fa fa-users"></span>
@@ -186,40 +186,16 @@
         </div>
     </div>
 
+ <script src="static/intl-tel-input/js/intlTelInput.min.js"></script>
+ <script src="static/intl-tel-input/js/utils.js"></script>
 
     <script src="static/js/jquery.min.js"></script>
     <script src="static/js/popper.js"></script>
     <script src="static/js/main.js"></script>
-    <script src="static/assets/js/select2.min.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
 
   
- <script src="static/intl-tel-input/js/intlTelInput.min.js"></script>
- <script src="static/intl-tel-input/js/utils.js"></script>
 
- <script>
-     // Initialize intl-tel-input
-     const phoneInput = document.querySelector("#phone");
-     const iti = window.intlTelInput(phoneInput, {
-         initialCountry: "vn",
-         preferredCountries: ["vn", "us", "gb"],
-         separateDialCode: true,
-         allowDropdown: true, // Bật dropdown
-         utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
-         
-     });
-
-
-     // Function to handle submit
-     function submitPhone() {
-         if (iti.isValidNumber()) {
-             const fullNumber = iti.getNumber(); // Get the full international number
-             document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
-         } else {
-             alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
-         }
-     }
- </script>
 </body>
 
 </html>

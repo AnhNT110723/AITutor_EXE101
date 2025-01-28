@@ -39,7 +39,7 @@
 <body>
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar" class="active">
-            <h1><a href="home.html" class="logo"><img src="/static/images/concoc.png" alt="Cup"></a></h1>
+            <h1><a href="home.html" class="logo"><img src="static/images/concoc.png" alt="Cup"></a></h1>
             <ul class="list-unstyled components mb-5">
                 <li>
                     <a href="groupTalk.html" class="link-test"><span class="fa fa-users"></span>
@@ -139,7 +139,7 @@
                         <div class="row">
                             <!-- Video -->
                             <div class="col-lg-9 col-12 parent">
-                                <video src="/static/videos/nhay.mp4" controls autoplay muted loop
+                                <video src="static/videos/clap.mp4" controls autoplay muted loop
                                     style="width: 100%; height: auto; border-radius: 10px;"></video>
                             </div>
                             <!-- List Items -->
@@ -350,11 +350,11 @@
             // Hàm thay đổi logo
             function updateLogo() {
                 if (sidebar.classList.contains('active')) {
-                    logoImg.src = '/static/images/concoc.png'; // Logo mặc định khi sidebar active
+                    logoImg.src = 'static/images/concoc.png'; // Logo mặc định khi sidebar active
                     logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
                     logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
                 } else {
-                    logoImg.src = '/static/images/FAI.png'; // Logo khi sidebar không active
+                    logoImg.src = 'static/images/FAI.png'; // Logo khi sidebar không active
                     logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
                     logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
                 }

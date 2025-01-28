@@ -14,7 +14,6 @@
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
     <link href="static/assets/css/select2.min.css" rel="stylesheet" />
-
     <link rel="stylesheet" href="static/css/course.css">
 
     <style>
@@ -23,20 +22,14 @@
             border-radius: 12px;
         }
 
-        /* .head-info .container-fluid {
-            padding: 15px 10px;
-        } */
 
         .input-group .form-control {
             border-right: none;
-            /* Xóa viền phải của input */
         }
 
         .input-group .btn {
             border-top-left-radius: 0;
-            /* Xóa góc trên trái của nút */
             border-bottom-left-radius: 0;
-            /* Xóa góc dưới trái của nút */
         }
 
         .vertical-divider {
@@ -92,13 +85,70 @@
             cursor: pointer;
         }
 
+
+        .list-courses .container-fluid {
+            display: flex;
+            flex-wrap: wrap; /* Đảm bảo các phần tử tự xuống dòng */
+            gap: 10px; /* Khoảng cách giữa các phần tử */
+            justify-content: space-between; /* Căn chỉnh khoảng cách giữa các phần tử */
+           padding: 0 !important;
+        }
+
+        .list-courses .card {
+            width: 100% !important;
+        }
+
+        .list-courses .course {
+            flex: 1 1 calc(20% - 10px);
+            /* Chiều rộng mỗi phần tử chiếm 20% trừ đi khoảng cách */
+            max-width: calc(20% - 10px);
+            /* Đảm bảo không vượt quá 20% */
+            box-sizing: border-box;
+            /* Đảm bảo padding không làm tăng kích thước */
+        }
+
+        .sticky-wrapper-list-courses{
+            height: 200px;
+        }
+
+        @media (max-width: 1200px) {
+            .list-courses .course {
+                flex: 1 1 calc(25% - 10px);
+                /* Chiều rộng 4 cột */
+                max-width: calc(25% - 10px);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .list-courses .course {
+                flex: 1 1 calc(33.33% - 10px);
+                /* Chiều rộng 3 cột */
+                max-width: calc(33.33% - 10px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .list-courses .course {
+                flex: 1 1 calc(50% - 10px);
+                /* Chiều rộng 2 cột */
+                max-width: calc(50% - 10px);
+            }
+        }
+
+        @media (max-width: 400px) {
+            .list-courses .course {
+                flex: 1 1 100%;
+                /* Chiều rộng 1 cột */
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar" class="active">
-            <h1><a href="home.html" class="logo"><img src="/static/images/concoc.png" alt="Cup"></a></h1>
+            <h1><a href="home.html" class="logo"><img src="static/images/concoc.png" alt="Cup"></a></h1>
             <ul class="list-unstyled components mb-5">
                 <li>
                     <a href="groupTalk.html" class="link-test"><span class="fa fa-users"></span>
@@ -137,7 +187,7 @@
 
         <!-- Page Content  -->
         <div id="content" class="p-4 p-md-5">
-            <div class="sticky-wrapper">
+            <div class="sticky-wrapper sticky-wrapper-list-courses">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="container-fluid">
 
@@ -250,17 +300,210 @@
 
 
             </div>
-            <div class="scrollContent">
-                <div class="phone-container">
-                    <h3>Nhập số điện thoại</h3>
-                    <!-- Phone input -->
-                    <input id="phone" type="tel" placeholder="Nhập số điện thoại" />
+            <div class="list-courses">
 
-                    <!-- Submit button -->
-                    <button class="btn-submit" onclick="submitPhone()">Lưu số</button>
+                <div class="container-fluid">
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
 
-                    <!-- Display result -->
-                    <p id="result" class="result"></p>
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="custom-card">
+                                <div class="card-img">
+                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
+                                    <div class="card-text">
+                                        <p class="card-text-video">
+                                            <strong>Videos đã xem:</strong> 5/10
+                                        </p>
+                                        <p class="card-text-time">
+
+                                            <strong>Thời hạn:</strong> Trọn đời
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="custom-card">
+                                <div class="card-img">
+                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
+                                    <div class="card-text">
+                                        <p class="card-text-video">
+                                            <strong>Videos đã xem:</strong> 5/10
+                                        </p>
+                                        <p class="card-text-time">
+
+                                            <strong>Thời hạn:</strong> Trọn đời
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="custom-card">
+                                <div class="card-img">
+                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
+                                    <div class="card-text">
+                                        <p class="card-text-video">
+                                            <strong>Videos đã xem:</strong> 5/10
+                                        </p>
+                                        <p class="card-text-time">
+
+                                            <strong>Thời hạn:</strong> Trọn đời
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="custom-card">
+                                <div class="card-img">
+                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
+                                    <div class="card-text">
+                                        <p class="card-text-video">
+                                            <strong>Videos đã xem:</strong> 5/10
+                                        </p>
+                                        <p class="card-text-time">
+
+                                            <strong>Thời hạn:</strong> Trọn đời
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="parentCourseDetail.html" class="card-link">
+                            <div class="custom-card">
+                                <div class="card-img">
+                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
+                                    <div class="card-text">
+                                        <p class="card-text-video">
+                                            <strong>Videos đã xem:</strong> 5/10
+                                        </p>
+                                        <p class="card-text-time">
+
+                                            <strong>Thời hạn:</strong> Trọn đời
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
                 </div>
 
             </div>
