@@ -13,26 +13,96 @@
   <link rel="stylesheet" href="static/css/style.css">
 
   <style>
-    .mt-4-custome {
-      margin-bottom: -25px;
+    .modal-header {
+      padding-bottom: 10px !important;
+      padding-top: 0 !important;
     }
 
-    @media (max-width: 768px) {
-      .content-source .container-fluid {
-        height: auto;
-      }
+    .modal-dialog {
+      max-width: 85% !important;
+      min-height: 92vh !important;
+      /* margin: 0 auto !important; */
     }
 
-    .nav-img img {
-      border: 3px solid #ff9900;
-      padding: 2px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    .modal-content {
+      height: 100%;
+    }
+
+    .group-parent-unit {}
+
+    .group-img {
+      max-width: 120px;
+      height: 70px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .group-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   </style>
 </head>
 
 
 <body>
+  <!-- Modal -->
+  <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h4 style="font-weight: bold;" id="videoModalLabel">Hướng dẫn học Gia sư AI</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <!-- Nội dung -->
+        <div class="modal-body">
+          <h5 style="font-weight: 700;">Học Gia Sư AI ở Đâu? Hướng Dẫn Dành cho Web và App</h5>
+          <div class="row">
+            <!-- Video bên trái -->
+            <div class="col-lg-9 col-12 parent">
+              <video src="static/videos/clap.mp4" controls autoplay muted loop
+                style="width: 100%; height: auto; border-radius: 10px;"></video>
+            </div>
+            <!-- Danh sách video bên phải -->
+            <div class="col-lg-3 col-12">
+              <h6>Danh sách phát</h6>
+              <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active">
+                  <div class="group-parent-unit">
+                    <div class="row">
+                      <div class="group-img col-6">
+                        <img src="static/images/a.jpg" alt="">
+                      </div>
+                      <div class="group-title col-6">Học Gia Sư AI ở Đâu? Hướng Dẫn Dành cho Web và App</div>
+                    </div>
+
+                  </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                  Hướng dẫn mở quyền truy cập
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                  Luyện phát âm cùng gia sư AI
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                  Giới thiệu "Nhập vai" cùng gia sư AI
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                  Hướng dẫn học Nhập vai
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="wrapper d-flex align-items-stretch">
     <nav id="sidebar" class="active">
@@ -133,7 +203,8 @@
               <div
                 class="cursor-pointer items-center justify-center self-baseline rounded-lg bg-white/40 py-2 px-10 text-md font-bold md:py-3 md:px-14 lg:text-lg">
                 <!-- <p class=" text-white md:text-lg">Hướng dẫn</p> -->
-                <button class=" text-white btn btn-nav">Hướng dẫn </button>
+                <button class=" text-white btn btn-nav" data-toggle="modal" data-target="#videoModal">Hướng dẫn
+                </button>
               </div>
             </div>
           </div>
