@@ -96,6 +96,7 @@
 
         .list-courses .card {
             width: 100% !important;
+            height: 270px;
         }
 
         .list-courses .course {
@@ -141,6 +142,32 @@
                 /* Chiều rộng 1 cột */
                 max-width: 100%;
             }
+        }
+
+        .btn-create-situation {
+            background: #fff;
+            margin: 0 20px 10px 20px;
+            border-radius: 8px;
+            padding:8px 10px;
+            font-weight: bold;
+        }
+
+        .btn-save-crate-situation {
+            padding-left: 70px;
+            padding-right: 70px;
+            background: orangered;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .btn-save-crate-situation:hover {
+            background: orange;
+            color: #fff;
+        }
+
+        .form-label {
+            font-weight: bolder ;
         }
     </style>
 </head>
@@ -304,7 +331,22 @@
 
                 <div class="container-fluid">
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
+                        <a href="#" class="card-link" id="openPopup">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/create-situation.png" class="card-img-top"
+                                        alt="Course 3">
+
+                                    <div class="card-body">
+                                        <p id="titleListCourse" style="font-weight: 35px;">Tạo nhân vật và tình huống theo cách cá nhân hóa.</p>
+                                       <button class="btn btn-create-situation">Tạo tình huống</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
                             <div class="flex-shrink-0 me-3">
                                 <div class="card">
                                     <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
@@ -321,7 +363,7 @@
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
+                        <a href="learningAI.html" class="card-link">
                             <div class="flex-shrink-0 me-3">
                                 <div class="card">
                                     <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
@@ -338,7 +380,7 @@
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
+                        <a href="learningAI.html" class="card-link">
                             <div class="flex-shrink-0 me-3">
                                 <div class="card">
                                     <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
@@ -355,7 +397,7 @@
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
+                        <a href="learningAI.html" class="card-link">
                             <div class="flex-shrink-0 me-3">
                                 <div class="card">
                                     <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
@@ -372,7 +414,7 @@
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
+                        <a href="learningAI.html" class="card-link">
                             <div class="flex-shrink-0 me-3">
                                 <div class="card">
                                     <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
@@ -389,120 +431,516 @@
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
-                            <div class="custom-card">
-                                <div class="card-img">
-                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
-                                </div>
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
-                                    <div class="card-text">
-                                        <p class="card-text-video">
-                                            <strong>Videos đã xem:</strong> 5/10
-                                        </p>
-                                        <p class="card-text-time">
+                                    <div class="overlay-home"></div>
 
-                                            <strong>Thời hạn:</strong> Trọn đời
-                                        </p>
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
                                     </div>
-
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
-                            <div class="custom-card">
-                                <div class="card-img">
-                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
-                                </div>
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
-                                    <div class="card-text">
-                                        <p class="card-text-video">
-                                            <strong>Videos đã xem:</strong> 5/10
-                                        </p>
-                                        <p class="card-text-time">
+                                    <div class="overlay-home"></div>
 
-                                            <strong>Thời hạn:</strong> Trọn đời
-                                        </p>
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
                                     </div>
-
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
-                            <div class="custom-card">
-                                <div class="card-img">
-                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
-                                </div>
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
-                                    <div class="card-text">
-                                        <p class="card-text-video">
-                                            <strong>Videos đã xem:</strong> 5/10
-                                        </p>
-                                        <p class="card-text-time">
+                                    <div class="overlay-home"></div>
 
-                                            <strong>Thời hạn:</strong> Trọn đời
-                                        </p>
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
                                     </div>
-
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
-                            <div class="custom-card">
-                                <div class="card-img">
-                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
-                                </div>
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
-                                    <div class="card-text">
-                                        <p class="card-text-video">
-                                            <strong>Videos đã xem:</strong> 5/10
-                                        </p>
-                                        <p class="card-text-time">
+                                    <div class="overlay-home"></div>
 
-                                            <strong>Thời hạn:</strong> Trọn đời
-                                        </p>
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
                                     </div>
-
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="course">
-                        <a href="parentCourseDetail.html" class="card-link">
-                            <div class="custom-card">
-                                <div class="card-img">
-                                    <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
-                                </div>
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
-                                    <div class="card-text">
-                                        <p class="card-text-video">
-                                            <strong>Videos đã xem:</strong> 5/10
-                                        </p>
-                                        <p class="card-text-time">
+                                    <div class="overlay-home"></div>
 
-                                            <strong>Thời hạn:</strong> Trọn đời
-                                        </p>
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
                                     </div>
-
                                 </div>
                             </div>
                         </a>
                     </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="course">
+                        <a href="learningAI.html" class="card-link">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="card">
+                                    <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top"
+                                        alt="Course 3">
+                                    <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
 
                 </div>
 
@@ -511,6 +949,40 @@
     </div>
 
     </div>
+
+    <!-- Popup  -->
+
+<div class="modal fade" id="situationModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="situationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="situationModalLabel">Tạo tình huống</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="myRole" class="form-label">Vai trò của tôi</label>
+                        <input type="text" class="form-control" id="myRole" placeholder="Ví dụ: Nhân viên bán quần áo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="aiRole" class="form-label">AI's Role</label>
+                        <input type="text" class="form-control" id="aiRole" placeholder="Ví dụ: Khách hàng nữ">
+                    </div>
+                    <div class="mb-3">
+                        <label for="situation" class="form-label">Situation</label>
+                        <textarea class="form-control" id="situation" rows="3" placeholder="Trong cửa hàng quần áo, tôi đang tư vấn cho khách hàng mua quần jean"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="margin: 0 auto;">
+                <button type="button" class="btn btn-save-crate-situation" style="text-align: center;">Gửi</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -524,6 +996,21 @@
     <script src="static/js/main.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
 
+    
+    <script>
+        document.getElementById("openPopup").addEventListener("click", function (event) {
+            event.preventDefault(); 
+            $("#situationModal").modal({
+                backdrop: 'static', // Không đóng khi bấm bên ngoài
+                keyboard: false     // Không đóng khi nhấn Esc
+            });
+        });
+    
+        document.querySelector("#situationModal .close").addEventListener("click", function() {
+            $("#situationModal").modal("hide");
+        });
+    </script>
+    
 
 
     <script>

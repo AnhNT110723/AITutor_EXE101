@@ -2,217 +2,206 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAI English</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="static/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/style.css">
-  <link rel="stylesheet" href="static/css/course.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAI English</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- CSS for intl-tel-input -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css"> -->
+    <link href="static/intl-tel-input/css/intlTelInput.min.css" rel="stylesheet" />
 
-  <style>
-    .mt-4-custome {
-      margin-bottom: -25px;
-    }
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="static/assets/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="static/css/course.css">
 
-    @media (max-width: 768px) {
-      .content-source .container-fluid {
-        height: auto;
-      }
-    }
+    <style>
+        @media (max-width: 991px) {
+            .text-section {
+                margin-top: 15px;
+            }
+        }
 
-    .nav-img img {
-      border: 3px solid #ff9900;
-      padding: 2px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+        .learn-english-ai .sticky-wrapper {
+            height: auto;
+        }
+
+        .image-section {
+            width: 100%;
+            height: 475px;
+
+        }
+
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+
+        }
+    </style>
 </head>
 
-
 <body>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar" class="active">
+            <h1><a href="home.html" class="logo"><img src="static/images/concoc.png" alt="Cup"></a></h1>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a href="groupTalk.html" class="link-test"><span class="fa fa-users"></span>
+                        <span id="groupTalk" class="menu-text">Học nhóm cùng bạn</span></a>
+                </li>
+                <li>
+                    <a href="liveLearning.html" class="link-test"><span class="fas fa-graduation-cap icon"></span>
+                        <span id="live" class="menu-text">Học live</span> </a>
+                </li>
+                <li class="active">
+                    <a href="home.html" class="link-test">
+                        <span class="fa fa-frog"></span>
+                        <span id="AI" class="menu-text">AI Tutor</span>
 
-  <div class="wrapper d-flex align-items-stretch">
-    <nav id="sidebar" class="active">
-      <h1><a href="index.html" class="logo"><img src="static/images/concoc.png" alt="Cup"></a></h1>
-      <ul class="list-unstyled components mb-5">
-        <li>
-          <a href="groupTalk.html" class="link-test"><span class="fa fa-users"></span>
-            <span class="menu-text">Học nhóm cùng bạn</span></a>
-        </li>
-        <li>
-          <a href="liveLearning.html" class="link-test"><span class="fas fa-graduation-cap icon"></span>
-            <span class="menu-text">Học live</span> </a>
-        </li>
-        <li class="active">
-          <a href="home.html" class="link-test">
-            <span class="fa fa-frog"></span>
-            <span class="menu-text">AI Tutor</span>
-
-          </a>
-        </li>
-        <li>
-          <a href="courrse.html" class="link-test"><span class="fas fa-book-open"></span>
-            <span class="menu-text">Tự học</span></a>
-        </li>
-        <li>
-          <a href="parentCourse.html" class="link-test"><span class="bi bi-people-fill"></span>
-            <span class="menu-text">Trang học của cha mẹ</span> </a>
-        </li>
-      </ul>
-
-      <div class="footer">
-        <p style="color: #667085;">
-          Copyright &copy;
-          <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i
-            class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-            target="_blank">Colorlib.com</a>
-        </p>
-      </div>
-    </nav>
-
-    <!-- Page Content  -->
-    <div id="content" class="p-4 p-md-5">
-
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-
-          <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
-            <i class="fa fa-bars"></i>
-            <span class="sr-only">Toggle Menu</span>
-          </button>
-          <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <i class="fa fa-bars"></i>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="nav navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Portfolio</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                  data-toggle="dropdown" aria-expanded="false">
-                  <div class="nav-img">
-                    <img src="static/images/avatar.jpg" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                  </div>
-                </a>
-                <div class=" menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
-                  <a class="dropdown-item" href="profile.html">
-                    <i class="bi bi-person-circle"></i> View Profile
-                  </a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item text-danger" href="logout.html">
-                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                  </a>
-                </div>
-              </li>
+                    </a>
+                </li>
+                <li>
+                    <a href="courrse.html" class="link-test"><span class="fas fa-book-open"></span>
+                        <span id="self" class="menu-text">Tự học</span></a>
+                </li>
+                <li>
+                    <a href="parentCourse.html" class="link-test"><span class="bi bi-people-fill"></span>
+                        <span id="parentPage" class="menu-text">Trang học của cha mẹ</span> </a>
+                </li>
             </ul>
-          </div>
-        </div>
-      </nav>
-      <div class="container">
-        <div class="header">
-            <button>⬅</button>
-        </div>
-        <div class="content">
-            <div class="image-section">
-                <img src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" alt="Nurse">
+
+            <div class="footer">
+                <p style="color: #667085;">
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                        target="_blank">Colorlib.com</a>
+                </p>
             </div>
-            <div class="text-section">
-              <span class="badge">Beginner</span>
-              <h2 class="title">Making a Doctor's Appointment</h2>
-          
-              <div class="role">
-                  <div>👤 Vai trò của tôi</div> <br><span>Người bệnh</span>
-              </div>
-          
-              <div class="role">
-                  <div>📋 Vai trò của AI</div> <br> <span>Y tá</span>
-              </div>
-          
-              <div class="icon-text">
-                  <span>📅</span>
-                  <p><strong>Tình huống:</strong> Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh khủng. 
-                  Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám nhé!</p>
-              </div>
-          
-              <div class="goals">
-                  <p><strong>Mục tiêu bài học:</strong></p>
-                  <ul>
-                      <li>Bạn nắm cách đặt lịch khám bệnh</li>
-                      <li>Nắm các từ vựng về chủ đề sức khoẻ</li>
-                      <li>Thực hành cấu trúc "I want to..."</li>
-                  </ul>
-              </div>
-          
-              <div class="button-group">
-                <a href="talkingAI.html" class="button button-sample">Học mẫu câu</a>
-                <a href="talkingAI.html" class="button button-ai">Thực hành với AI</a>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5 learn-english-ai">
+            <div class="sticky-wrapper sticky-wrapper-list-courses">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                            <i class="fa fa-bars"></i>
+                            <span class="sr-only">Toggle Menu</span>
+                        </button>
+                        <!-- Nút Back -->
+                        <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                            data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link" id="navHome" href="#">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="navAbout" href="#">About</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="navPortfolio" href="#">Portfolio</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown"
+                                        role="button" data-toggle="dropdown" aria-expanded="false">
+                                        <div class="nav-img">
+                                            <img src="static/images/avatar.jpg" alt="Avatar" class="img-fluid"
+                                                style="border-radius: 50%;">
+                                        </div>
+                                    </a>
+                                    <div class=" menu-items dropdown-menu dropdown-menu-right"
+                                        aria-labelledby="avatarDropdown">
+                                        <a class="dropdown-item" href="profile.html">
+                                            <i class="bi bi-person-circle"></i> <span id="viewProfile">View
+                                                Profile</span>
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger" href="logout.html">
+                                            <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                        </a>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
             </div>
-              
+            <div class="list-courses">
+                <div class="container">
+                    <!-- <div class="header">
+                            <button>⬅</button>
+                        </div> -->
+                    <div class="content">
+                        <div class="row">
+
+
+                            <div class="image-section col-lg-6 col-12">
+                                <img src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png"
+                                    alt="Nurse">
+                            </div>
+                            <div class="text-section col-lg-6 col-12">
+                                <span class="badge">Beginner</span>
+                                <h2 class="title">Making a Doctor's Appointment</h2>
+
+                                <div class="role">
+                                    <div>👤 Vai trò của tôi</div> <br><span>Người bệnh</span>
+                                </div>
+
+                                <div class="role">
+                                    <div>📋 Vai trò của AI</div> <br> <span>Y tá</span>
+                                </div>
+
+                                <div class="icon-text">
+                                    <span>📅</span>
+                                    <p><strong>Tình huống:</strong> Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh
+                                        khủng.
+                                        Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám nhé!</p>
+                                </div>
+
+                                <div class="goals">
+                                    <p><strong>Mục tiêu bài học:</strong></p>
+                                    <ul>
+                                        <li>Bạn nắm cách đặt lịch khám bệnh</li>
+                                        <li>Nắm các từ vựng về chủ đề sức khoẻ</li>
+                                        <li>Thực hành cấu trúc "I want to..."</li>
+                                    </ul>
+                                </div>
+
+                                <div class="button-group">
+                                    <a href="talkingAI.html" class="button button-sample">Học mẫu câu</a>
+                                    <a href="talkingAI.html" class="button button-ai">Thực hành với AI</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
-      
-      
-  <script src="static/js/jquery.min.js"></script>
-  <script src="static/js/popper.js"></script>
-  <script src="static/js/main.js"></script>
-  <script src="static/js/bootstrap.min.js"></script>
+
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/popper.js"></script>
+    <script src="static/intl-tel-input/js/intlTelInput.min.js"></script>
+    <script src="static/intl-tel-input/js/utils.js"></script>
+    <script src="static/js/main.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
 
 
-  <script>
-
-    //Mới ra mắt
-    document.addEventListener('DOMContentLoaded', function () {
-      const courseList = document.getElementById('course-list-new');
-      const prevBtn = document.getElementById('prev-btn-new');
-      const nextBtn = document.getElementById('next-btn-new');
-
-      // Cuộn sang trái
-      prevBtn.addEventListener('click', () => {
-        courseList.scrollBy({ left: -300, behavior: 'smooth' });
-      });
-
-      // Cuộn sang phải
-      nextBtn.addEventListener('click', () => {
-        courseList.scrollBy({ left: 300, behavior: 'smooth' });
-      });
-    });
-
-    //Đang thình hành
-    document.addEventListener('DOMContentLoaded', function () {
-      const courseList = document.getElementById('course-list');
-      const prevBtn = document.getElementById('prev-btn');
-      const nextBtn = document.getElementById('next-btn');
-
-      // Cuộn sang trái
-      prevBtn.addEventListener('click', () => {
-        courseList.scrollBy({ left: -300, behavior: 'smooth' });
-      });
-
-      // Cuộn sang phải
-      nextBtn.addEventListener('click', () => {
-        courseList.scrollBy({ left: 300, behavior: 'smooth' });
-      });
-    });
-
-
-
-  </script>
 </body>
 
 </html>

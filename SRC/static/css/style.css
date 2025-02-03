@@ -11999,7 +11999,7 @@ a[data-toggle="collapse"] {
 
 
 
-/* Navbar and sidebar custom */
+/* Navbar and sidebar custom -- HOME */
 
 
 .logo img {
@@ -12028,7 +12028,7 @@ a[data-toggle="collapse"] {
 }
 
 .bg-custom {
-  background-image: url('/SRC/static/images/fighter-jet-3286728_1920.jpg');
+  background-image: url('https://greengarden.vn/wp-content/uploads/2023/12/House-decorated-for-the-traditional-New-Year6.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -12037,7 +12037,7 @@ a[data-toggle="collapse"] {
   overflow: hidden;
   /* height: 35%; */
   margin-bottom: 10px;
-  margin-top: 70px;
+  margin-top: 50px;
   /* Đẩy nội dung xuống dưới navbar */
   position: relative;
   /* Giữ vị trí */
@@ -12185,7 +12185,126 @@ html {
   }
 }
 
+.mt-4-custome {
+  margin-bottom: -25px;
+}
 
+@media (max-width: 768px) {
+  .content-source .container-fluid {
+    height: auto;
+  }
+}
+
+.home .nav-img img {
+  border: 3px solid #ff9900;
+  padding: 2px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home-modal .modal {
+  padding-right: 0 !important;
+}
+
+@media (max-width: 575px) {
+  .home-modal .modal {
+  padding-left: 40px !important;
+}
+
+.home-modal .modal-content {
+  margin-top: 45px;
+}
+}
+
+@media (max-width: 500px) {
+  .home-modal .modal {
+  padding-left: 25px !important;
+}
+}
+@media (max-width: 340px) {
+  .home-modal .modal {
+  padding-left: 17px !important;
+}
+}
+@media (max-width: 300px) {
+  .home-modal .modal {
+  padding-left: 13px !important;
+}
+}
+@media (max-width: 180px) {
+  .home-modal .modal {
+  padding-left: 0 !important;
+}
+}
+
+.home-modal .modal-dialog {
+  max-width: 85% !important;
+  min-height: 92vh !important;
+  /* margin: 0 auto !important; */
+}
+
+.home-modal .modal-content {
+height: 100%;
+}
+
+
+.group-img {
+  max-width: 180px;
+  height: 70px;
+  overflow: hidden;
+}
+
+.group-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.group-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  /* Giới hạn 2 dòng */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  max-height: 2.8em;
+  /* Đảm bảo phần tử không bị cao hơn 2 dòng */
+  font-size: 14px;
+  line-height: 1.4em;
+  word-break: break-word;
+}
+
+.overflow {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow-y: scroll !important;
+  scrollbar-width: none !important;
+  max-height: calc(100% - 55px);
+}
+.list-group {
+  padding-top: 10px;
+}
+
+.list-group-item {
+  border: none;
+}
+
+.group-parent-unit {
+  padding: 10px;
+  margin: -10px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+
+
+.group-parent-unit.active {
+  background-color: #ffcc80 !important;
+  /* Màu cam khi active */
+  border-color: #ffcc80 !important;
+  color: white !important;
+}
 
 
 

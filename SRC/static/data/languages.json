@@ -30,7 +30,8 @@
     "btnSaveChange": "Save your changes",
     "viewProfile": "View profile",
     "changePassword": "Change password",
-    "searchCourse":"Please enter the keyword in English"
+    "searchCourse":"Please enter the keyword in English",
+    "titleListCourse": "Create characters and situations in a personalized way."
   },
   "vi": {
     "pageTitle": "Thông tin tài khoản",
@@ -63,6 +64,7 @@
     "btnSaveChange": "Lưu thay đổi",
     "viewProfile": "Xem trang cá nhân",
     "changePassword": "Thay đổi mật khẩu",
-    "searchCourse": "Vui lòng nhập từ khóa bằng tiếng anh"
+    "searchCourse": "Vui lòng nhập từ khóa bằng tiếng anh",
+    "titleListCourse": "Tạo nhân vật và tình huống theo cách cá nhân hóa."
   }
 }
