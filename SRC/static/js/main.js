@@ -213,7 +213,8 @@ document.addEventListener('DOMContentLoaded', function () {
               btnSaveChange: 'btnSaveChange',
               viewProfile: 'viewProfile',
               changePassword: 'changePassword',
-              searchCourse : 'searchCourse'
+              searchCourse : 'searchCourse',
+              titleListCourse : 'titleListCourse'
 
           };
 
@@ -230,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Thay đổi ngôn ngữ
       const changeLanguage = (lang) => {
           localStorage.setItem('language', lang); // Lưu vào localStorage
-          fetch('/SRC/static/data/languages.json')
+          fetch('static/data/languages.json')
               .then((res) => res.json())
               .then((data) => {
                   if (data[lang]) {
