@@ -12017,7 +12017,7 @@ a[data-toggle="collapse"] {
 
 .logo-inactive {
   max-width: 180px !important;
-  height: 100px !important;
+  height: 100% !important;
   margin: 0 auto;
   display: block;
 }
@@ -12745,8 +12745,8 @@ body #sidebar.active .menu-text {
 }
 
 .form-control:focus {
-  border-color: #ff8c00;
-  outline: none;
+  border-color: #ff9800; /* Màu cam */
+  box-shadow: 0 0 0 0.25rem rgba(255, 152, 0, 0.25); /* Hiệu ứng đổ bóng màu cam */
 }
 
 /* Avatar */
