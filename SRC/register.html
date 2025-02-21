@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập - Kyna English</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- <link rel="stylesheet" href="static/css/style.css"> -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <!-- <link
+      href="static/intl-tel-input/css/intlTelInput.min.css"
+      rel="stylesheet"
+    /> -->
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+  />
+    <link rel="stylesheet" href="static/css/login-register.css" />
+
+    <style>
+      .first-card {
+        border-radius: 30px;
+      }
+
+      .form-control {
+        border: 1px solid #ccc;
+      }
+
+      .text-orange {
+        color: green;
+      }
+
+      .auto-consent-text-inner {
+        margin-top: 30px;
+      }
+      .iti {
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      class="container-fluid d-flex"
+      style="min-height: 100vh; padding-bottom: 50px"
+    >
+      <div class="w-50 body-wrraper" style="margin: 0 auto; margin-top: 50px">
+        <!-- Phần giới thiệu khóa học -->
+
+        <!-- Form Đăng nhập -->
+        <div
+          class="col-12 first-card d-flex justify-content-center align-items-center"
+        >
+          <div class="regiter-card">
+            <div class="card-body">
+              <img
+                src="static/images/FAI-2.png"
+                alt="Logo"
+                class="mb-4"
+                style="width: 250px"
+              />
+              <h3 class="mb-4 text-center fw-bold" style="color: #333">
+                Đăng Ký Tài Khoản
+              </h3>
+              <div class="social">
+                <div class="social-inner">
+                  <a class="btn btn-danger">
+                    <i class="fa-brands fa-google fa-2x"></i>
+                  </a>
+                  <a class="btn btn-info"
+                    ><i class="fa-brands fa-twitter fa-2x"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                    ><i class="fa-brands fa-facebook fa-2x"></i>
+                  </a>
+                </div>
+              </div>
+              <div>
+                <span
+                  class="d-flex justify-content-center align-items-center mt-4 mb-3"
+                  >Hoặc đăng kí với</span
+                >
+              </div>
+              <form action="" method="">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Tên tài khoản</label>
+                  <input type="email" class="form-control" id="email" />
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email </label>
+                  <input type="email" class="form-control" id="email" />
+                </div>
+                <div class="mb-3">
+                  <label for="phoneNumber" class="form-label"
+                    >Số điện thoại</label
+                  >
+                  <div class="input-group custom-input-group">
+                    <div style="width: 100%">
+                      <input type="tel" class="form-control" id="phone" />
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 position-relative">
+                  <label for="password" class="form-label">Mật khẩu</label>
+                  <input
+                    type="password"
+                    class="form-control pe-5"
+                    id="password"
+                  />
+                  <i
+                    class="bi bi-eye-slash position-absolute end-0 pe-3"
+                    style="cursor: pointer; top: 55%"
+                    ;
+                    id="togglePassword"
+                  ></i>
+                </div>
+                <script>
+                  const togglePassword =
+                    document.querySelector("#togglePassword");
+                  const passwordInput = document.querySelector("#password");
+                  togglePassword.addEventListener("click", function () {
+                    const type =
+                      passwordInput.getAttribute("type") === "password"
+                        ? "text"
+                        : "password";
+                    passwordInput.setAttribute("type", type);
+                    this.classList.toggle("bi-eye");
+                    this.classList.toggle("bi-eye-slash");
+                  });
+                </script>
+                <div class="mb-3 position-relative">
+                  <label for="password" class="form-label"
+                    >Nhập lại Mật khẩu</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control pe-5"
+                    id="password"
+                  />
+                  <i
+                    class="bi bi-eye-slash position-absolute end-0 pe-3"
+                    style="cursor: pointer; top: 55%"
+                    ;
+                    id="togglePassword"
+                  ></i>
+                </div>
+                <div class="auto-consent-text-inner">
+                  Bằng cách nhấp vào "Đăng ký Miễn phí", bạn chấp nhận
+                  <a
+                    href="#"
+                    class="text-orange document-link ec-event-handler"
+                    id="registration-app-terms-link"
+                    data-linkid="terms"
+                  >
+                    Điều khoản và Điều kiện
+                  </a>
+                  và
+                  <a
+                    href="#"
+                    class="text-orange document-link ec-event-handler"
+                    id="registration-app-privacy-link"
+                    data-linkid="privacy"
+                  >
+                    Chính sách Quyền riêng tư
+                  </a>
+                  của chúng tôi.
+                </div>
+
+                <button type="submit" class="btn login-btn text-white w-100">
+                  Đăng kí miễn phí
+                </button>
+              </form>
+
+              <div
+                class="d-flex justify-content-center align-items-center mt-5"
+              >
+                Bạn đã có tài khoản chưa?
+                <a class="link-login link-navigate" href="login.html"
+                  ><strong class="strong">Đăng nhập</strong> ngay!</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+          initialCountry: "vn",
+          preferredCountries: ["vn", "us", "gb"],
+          separateDialCode: true,
+          // Đường dẫn utilsScript cũng dùng link CDN để đảm bảo tương thích
+          utilsScript:
+            "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+      });
+    </script>
+  </body>
+</html>
