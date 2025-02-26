@@ -5,12 +5,156 @@
       "PackagePath": "staticwebassets\\EXE-FAIEnglishTutor.bundle.scp.css"
     },
     {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\CHAT.png",
+      "PackagePath": "staticwebassets\\Images\\CHAT.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\Co-Vietnam.png",
+      "PackagePath": "staticwebassets\\Images\\Co-Vietnam.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\FAI-1.png",
+      "PackagePath": "staticwebassets\\Images\\FAI-1.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\FAI-2.png",
+      "PackagePath": "staticwebassets\\Images\\FAI-2.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\FAI-NEW.png",
+      "PackagePath": "staticwebassets\\Images\\FAI-NEW.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\FAI.png",
+      "PackagePath": "staticwebassets\\Images\\FAI.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\IMAGE.png",
+      "PackagePath": "staticwebassets\\Images\\IMAGE.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\Slide2.png",
+      "PackagePath": "staticwebassets\\Images\\Slide2.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\TUVAN.webp",
+      "PackagePath": "staticwebassets\\Images\\TUVAN.webp"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\a.jpg",
+      "PackagePath": "staticwebassets\\Images\\a.jpg"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\avatar.jpg",
+      "PackagePath": "staticwebassets\\Images\\avatar.jpg"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\co-england.png",
+      "PackagePath": "staticwebassets\\Images\\co-england.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\concoc.png",
+      "PackagePath": "staticwebassets\\Images\\concoc.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\concoc1.png",
+      "PackagePath": "staticwebassets\\Images\\concoc1.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\course1.jpg",
+      "PackagePath": "staticwebassets\\Images\\course1.jpg"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\course2.webp",
+      "PackagePath": "staticwebassets\\Images\\course2.webp"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\course3.webp",
+      "PackagePath": "staticwebassets\\Images\\course3.webp"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\course4.webp",
+      "PackagePath": "staticwebassets\\Images\\course4.webp"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\create-situation.png",
+      "PackagePath": "staticwebassets\\Images\\create-situation.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\cv-1639898315592.jpg.webp",
+      "PackagePath": "staticwebassets\\Images\\cv-1639898315592.jpg.webp"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\fighter-jet-3286728_1920.jpg",
+      "PackagePath": "staticwebassets\\Images\\fighter-jet-3286728_1920.jpg"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\group.png",
+      "PackagePath": "staticwebassets\\Images\\group.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\mic-header.png",
+      "PackagePath": "staticwebassets\\Images\\mic-header.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\mic.png",
+      "PackagePath": "staticwebassets\\Images\\mic.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\panoramic-3033056_1920.jpg",
+      "PackagePath": "staticwebassets\\Images\\panoramic-3033056_1920.jpg"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\slide1.png",
+      "PackagePath": "staticwebassets\\Images\\slide1.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\slide3.png",
+      "PackagePath": "staticwebassets\\Images\\slide3.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\slide4.png",
+      "PackagePath": "staticwebassets\\Images\\slide4.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\slide5.png",
+      "PackagePath": "staticwebassets\\Images\\slide5.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\tuvan.png",
+      "PackagePath": "staticwebassets\\Images\\tuvan.png"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\css\\login-register.css",
+      "PackagePath": "staticwebassets\\css\\login-register.css"
+    },
+    {
       "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\css\\style.css",
+      "PackagePath": "staticwebassets\\css\\style.css"
+    },
+    {
       "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\main.js",
+      "PackagePath": "staticwebassets\\js\\main.js"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\register-validation.js",
+      "PackagePath": "staticwebassets\\js\\register-validation.js"
     },
     {
       "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\site.js",
@@ -243,6 +387,14 @@
     {
       "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\lib\\sweetalert2\\sweetalert2.all.min.js",
+      "PackagePath": "staticwebassets\\lib\\sweetalert2\\sweetalert2.all.min.js"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\lib\\sweetalert2\\sweetalert2.min.css",
+      "PackagePath": "staticwebassets\\lib\\sweetalert2\\sweetalert2.min.css"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EXE-FAIEnglishTutor.Microsoft.AspNetCore.StaticWebAssets.props",

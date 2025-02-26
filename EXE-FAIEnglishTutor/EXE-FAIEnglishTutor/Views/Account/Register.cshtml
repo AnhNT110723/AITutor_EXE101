@@ -1,0 +1,228 @@
+﻿@{
+    Layout = null;
+}
+@model RegisterDto
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Kí - FAI English</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <link rel="stylesheet" href="~/css/login-register.css" />
+
+    <style>
+        .first-card {
+          border-radius: 30px;
+        }
+
+        .form-control {
+          border: 1px solid #ccc;
+        }
+
+        .text-orange {
+          color: green;
+        }
+
+        .auto-consent-text-inner {
+          margin-top: 30px;
+        }
+        .iti {
+          width: 100%;
+        }
+
+        .input-group .form-control.is-invalid,
+        .input-group .form-control.is-valid {
+            z-index: 0 !important; 
+        }
+
+        .custom-confirm-btn, .custom-cancel-btn {
+            width: 100px; /* Make both buttons the same width */
+            padding: 10px; /* Add padding for better appearance */
+        }
+
+        .custom-confirm-btn {
+            background-color: #333; /* Set OK button color to black */
+            color: white;
+            border: none;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .custom-confirm-btn:hover {
+                background-color: #01d28e; /* Change OK button to green on hover */
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid d-flex"
+         style="min-height: 100vh; padding-bottom: 50px">
+        <div class="w-50 body-wrraper" style="margin: 0 auto; margin-top: 50px">
+            <!-- Phần giới thiệu khóa học -->
+            <!-- Form Đăng nhập -->
+            <div class="col-12 first-card d-flex justify-content-center align-items-center">
+                <div class="regiter-card">
+                    <div class="card-body">
+                        <img src="~/Images/FAI-2.png"
+                             alt="Logo"
+                             class="mb-4"
+                             style="width: 250px" />
+                        <h3 class="mb-4 text-center fw-bold" style="color: #333">
+                            Đăng Ký Tài Khoản
+                        </h3>
+                        <div class="social">
+                            <div class="social-inner">
+                                <a class="btn btn-danger">
+                                    <i class="fa-brands fa-google fa-2x"></i>
+                                </a>
+                                <a class="btn btn-info">
+                                    <i class="fa-brands fa-twitter fa-2x"></i>
+                                </a>
+                                <a class="btn btn-primary">
+                                    <i class="fa-brands fa-facebook fa-2x"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="d-flex justify-content-center align-items-center mt-4 mb-3">Hoặc đăng kí với</span>
+                        </div>
+                        <form  asp-controller="Account" asp-action="Register" method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Họ và tên</label>
+                                <input asp-for="FullName" type="text"  class="form-control" id="username" />
+                                <span asp-validation-for="FullName" class="validation-message"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email </label>
+                                <input asp-for="Email" type="email" class="form-control" id="email" oninput="validateEmail()" />
+                                <div id="emailError" class="err" style="color: red"></div>
+                                <span asp-validation-for="Email" style="color: red" class="validation-message"></span>
+                                @if (ViewData["EmailExist"] != null)
+                                {
+                                    <div class="err" style="color: red">Email này đã tồn tại, vui lòng nhập email khác</div>
+                                }
+                            </div>
+                            <div class="mb-3">
+                                <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                                <div class="input-group custom-input-group">
+                                    <div style="width: 100%">
+                                        <input type="tel" class="form-control" asp-for="Phone" id="phoneNumber" oninput="validatePhone()" />
+                                        <div id="phoneError" class="err" style="color: red"></div>
+                                        <span asp-validation-for="Phone" class="validation-message"></span>
+                                        @if (ViewData["PhoneExist"] != null)
+                                        {
+                                            <div class="err" style="color: red">Số điện thoại này đã tồn tại, vui lòng nhập số điện thoại khác</div>
+                                        }
+                                        @if (ViewData["PhoneErr"] != null)
+                                        {
+                                            <div class="err" style="color: red">Lỗi định dạng số điện thoại</div>
+                                        }
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="hidden" asp-for="CountryCode" id="countryCode" />
+                            </div>
+                            <div class="mb-3 position-relative">
+                                <label for="password" asp-for="Password" class="form-label">Mật khẩu</label>
+                                <input type="password"
+                                       class="form-control pe-5" asp-for="Password"
+                                       id="password" oninput="validatePassword()" />
+                                <div id="passwordError" class="err" style="color: red"></div>
+                                <span asp-validation-for="Password" class="validation-message"></span>
+                              
+                            </div>
+                            <div class="mb-3 position-relative">
+                                <label for="password" class="form-label">Nhập lại Mật khẩu</label>
+                                <input type="password"
+                                       class="form-control pe-5" asp-for="RePassword"
+                                       id="re_pass" oninput="validateConfirmPassword()" />
+                                <div id="confirmPasswordError" class="err" style="color: red"></div>
+                                <span asp-validation-for="RePassword" class="validation-message"></span>
+                            </div>
+                            <div class="auto-consent-text-inner">
+                                Bằng cách nhấp vào "Đăng ký Miễn phí", bạn chấp nhận
+                                <a href="#"
+                                   class="text-orange document-link ec-event-handler"
+                                   id="registration-app-terms-link"
+                                   data-linkid="terms">
+                                    Điều khoản và Điều kiện
+                                </a>
+                                và
+                                <a href="#"
+                                   class="text-orange document-link ec-event-handler"
+                                   id="registration-app-privacy-link"
+                                   data-linkid="privacy">
+                                    Chính sách Quyền riêng tư
+                                </a>
+                                của chúng tôi.
+                            </div>
+
+                            <button type="submit" id="submitButton" class="btn login-btn text-white w-100">
+                                Đăng kí miễn phí
+                            </button>
+                        </form>
+                      
+                        @if (ViewData["EmailError"] != null)
+                        {
+                            <div class="err" style="color: red">Không thể gửi email xác nhận. Vui lòng kiểm tra email của bạn.</div>
+                        }
+                        
+
+                        <div class="d-flex justify-content-center align-items-center mt-5">
+                            Bạn đã có tài khoản chưa?
+                            <a class="link-login link-navigate" asp-controller="Account" asp-action="Login"> Đăng nhập ngay!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const phoneInput = document.querySelector("#phoneNumber");
+            const countryInput = document.querySelector("#countryCode"); // Hidden input
+            const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "vn",
+            preferredCountries: ["vn", "us", "gb"],
+            separateDialCode: true,
+            // Đường dẫn utilsScript cũng dùng link CDN để đảm bảo tương thích
+            utilsScript:
+              "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+          });
+            // Khi trang load, cập nhật hidden input với CountryCode ban đầu
+            const initialCountryData = iti.getSelectedCountryData();
+            // Ví dụ: nếu bạn muốn lưu mã quốc gia ISO, sử dụng initialCountryData.iso2 (ví dụ "vn")
+            countryInput.value = initialCountryData.iso2.toUpperCase(); // Ví dụ: "VN"
+
+            // Lắng nghe sự kiện thay đổi quốc gia
+            phoneInput.addEventListener("countrychange", function () {
+                const countryData = iti.getSelectedCountryData();
+                // Cập nhật hidden input với giá trị mới
+                countryInput.value = countryData.iso2.toUpperCase(); // Lưu mã quốc gia
+                validatePhone();
+            });
+        });
+    </script>
+    <script src="~/js/register-validation.js"></script>
+
+
+</body>
+</html>
