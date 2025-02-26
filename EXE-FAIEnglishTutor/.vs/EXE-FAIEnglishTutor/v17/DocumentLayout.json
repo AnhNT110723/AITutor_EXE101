@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|d:\\fptu\\semester 7\\exe101\\code\\exe-faienglishtutor\\exe-faienglishtutor\\db\\db.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|solutionrelative:exe-faienglishtutor\\db\\db.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+      "AbsoluteMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|d:\\fptu\\semester 7\\exe101\\code\\exe-faienglishtutor\\exe-faienglishtutor\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|solutionrelative:exe-faienglishtutor\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|d:\\fptu\\semester 7\\exe101\\code\\exe-faienglishtutor\\exe-faienglishtutor\\db\\db.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|solutionrelative:exe-faienglishtutor\\db\\db.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+      "AbsoluteMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|d:\\fptu\\semester 7\\exe101\\code\\exe-faienglishtutor\\exe-faienglishtutor\\services\\implimentaion\\registeruserserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|solutionrelative:exe-faienglishtutor\\services\\implimentaion\\registeruserserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|d:\\fptu\\semester 7\\exe101\\code\\exe-faienglishtutor\\exe-faienglishtutor\\repositories\\interface\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|solutionrelative:exe-faienglishtutor\\repositories\\interface\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|d:\\fptu\\semester 7\\exe101\\code\\exe-faienglishtutor\\exe-faienglishtutor\\repositories\\implementation\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|solutionrelative:exe-faienglishtutor\\repositories\\implementation\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|d:\\fptu\\semester 7\\exe101\\code\\exe-faienglishtutor\\exe-faienglishtutor\\mail\\emailsendvetification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D99DC3AD-F39C-40DC-BBD8-C957D43DA119}|EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor.csproj|solutionrelative:exe-faienglishtutor\\mail\\emailsendvetification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +30,61 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1524,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 8,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EmailSendVetification.cs",
+              "DocumentMoniker": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Mail\\EmailSendVetification.cs",
+              "RelativeDocumentMoniker": "EXE-FAIEnglishTutor\\Mail\\EmailSendVetification.cs",
+              "ToolTip": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Mail\\EmailSendVetification.cs",
+              "RelativeToolTip": "EXE-FAIEnglishTutor\\Mail\\EmailSendVetification.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAewBsAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-26T04:15:31.455Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Repositories\\Implementation\\UserRepository.cs",
+              "RelativeDocumentMoniker": "EXE-FAIEnglishTutor\\Repositories\\Implementation\\UserRepository.cs",
+              "ToolTip": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Repositories\\Implementation\\UserRepository.cs",
+              "RelativeToolTip": "EXE-FAIEnglishTutor\\Repositories\\Implementation\\UserRepository.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAgwB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-26T09:15:28.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Repositories\\Interface\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "EXE-FAIEnglishTutor\\Repositories\\Interface\\IUserRepository.cs",
+              "ToolTip": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Repositories\\Interface\\IUserRepository.cs",
+              "RelativeToolTip": "EXE-FAIEnglishTutor\\Repositories\\Interface\\IUserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-26T09:15:06.395Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RegisterUserServiceImpl.cs",
+              "DocumentMoniker": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Services\\Implimentaion\\RegisterUserServiceImpl.cs",
+              "RelativeDocumentMoniker": "EXE-FAIEnglishTutor\\Services\\Implimentaion\\RegisterUserServiceImpl.cs",
+              "ToolTip": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Services\\Implimentaion\\RegisterUserServiceImpl.cs",
+              "RelativeToolTip": "EXE-FAIEnglishTutor\\Services\\Implimentaion\\RegisterUserServiceImpl.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAawHMAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-26T08:55:54.301Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
@@ -39,13 +104,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "db.sql ",
-              "DocumentMoniker": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Db\\db.sql",
-              "RelativeDocumentMoniker": "EXE-FAIEnglishTutor\\Db\\db.sql",
-              "ToolTip": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Db\\db.sql",
-              "RelativeToolTip": "EXE-FAIEnglishTutor\\Db\\db.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2025-02-20T03:45:45.942Z",
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "EXE-FAIEnglishTutor\\Controllers\\AccountController.cs",
+              "ToolTip": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "EXE-FAIEnglishTutor\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAqwJkAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-26T04:14:57.094Z",
               "EditorCaption": ""
             }
           ]

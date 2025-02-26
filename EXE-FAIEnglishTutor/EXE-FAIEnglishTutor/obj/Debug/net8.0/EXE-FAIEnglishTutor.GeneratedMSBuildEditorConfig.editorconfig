@@ -18,6 +18,22 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\FPTU\Semester 7\EXE101\CODE\EXE-FAIEnglishTutor\EXE-FAIEnglishTutor
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Account/ActivationResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxBY3RpdmF0aW9uUmVzdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Emails/VerificationEmail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1haWxzXFZlcmlmaWNhdGlvbkVtYWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
