@@ -8,6 +8,11 @@ CREATE TABLE [Role] (
     RoleID INT IDENTITY(1,1) PRIMARY KEY,
     RoleName NVARCHAR(255),
 );
+INSERT INTO [Role] (RoleName) VALUES ('admin');
+INSERT INTO [Role] (RoleName) VALUES ('mentor');
+INSERT INTO [Role] (RoleName) VALUES ('mentee');
+INSERT INTO [Role] (RoleName) VALUES ('staff');
+INSERT INTO [Role] (RoleName) VALUES ('guest');
 
 CREATE TABLE Users (
     UserID INT IDENTITY(1,1) PRIMARY KEY,
@@ -15,10 +20,15 @@ CREATE TABLE Users (
 	Email NVARCHAR(255) UNIQUE NOT NULL,
     PasswordHash NVARCHAR(255) NOT NULL,
 	PhoneNumber Varchar(15),
+	Avatar Varchar(max),
     CreatedAt DATETIME DEFAULT GETDATE(),
-    [Status] NVARCHAR(10)  NOT NULL CHECK ([Status] IN ('Pending', 'Trial', 'Actived', 'Lock')) ,
+    [Status] NVARCHAR(10)  NOT NULL CHECK ([Status] IN ('PENDING', 'TRIAL', 'ACTIVATED', 'LOCKED')) ,
 	expiryDate DATETIME
 );
+
+INSERT INTO Users (FullName, Email, PasswordHash, PhoneNumber,Avatar, CreatedAt, [Status], expiryDate)
+VALUES ('Nguyen Tuan Anh', 'anhnthe172115@fpt.edu.vn', 'AQAAAAEAACcQAAAAELfDRs7CCqQzPSu0IXkn11h2+6y8J0gFL7JhlYgD4HIo5Wd2EP8bKU4FCn1N8La50g==', '0869620295','/Images/avatar.jpg', GETDATE(), 'ACTIVATED', NULL);
+
 
 CREATE TABLE [dbo].[UserRole]
 (
@@ -28,6 +38,22 @@ CREATE TABLE [dbo].[UserRole]
     FOREIGN KEY (userId) REFERENCES [dbo].[Users] (userId),
     FOREIGN KEY (roleId) REFERENCES [dbo].[Role] (RoleId)
     );
+
+INSERT INTO UserRole (userId, roleId) VALUES (1, 2);
+
+
+CREATE TABLE RefreshToken
+(
+    RefreshTokenId INT IDENTITY(1,1) PRIMARY KEY,
+    TokenCode NVARCHAR(MAX) NOT NULL,
+    ExpiryDate DATETIME NOT NULL,
+    UserId INT NOT NULL,
+    DeviceInfo NVARCHAR(256) NULL, -- Lưu thông tin thiết bị, nếu cần
+	IsRevoked BIT NOT NULL DEFAULT 0,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_UserRefreshToken FOREIGN KEY (UserId) REFERENCES Users(UserId)
+);
+
 
 CREATE TABLE VerificationToken
 (

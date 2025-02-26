@@ -1,49 +1,205 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EXE_FAIEnglishTutor</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/EXE_FAIEnglishTutor.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EXE_FAIEnglishTutor</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - EXE_FAIEnglishTutor - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAI English</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+
+
+    <style>
+        .modal-header {
+            padding-bottom: 10px !important;
+            padding-top: 0 !important;
+        }
+
+
+        p {
+            margin: 0 !important;
+            text-align: left !important;
+        }
+
+        .custom-confirm-btn, .custom-cancel-btn {
+            width: 100px; /* Make both buttons the same width */
+            padding: 10px; /* Add padding for better appearance */
+        }
+
+        .custom-confirm-btn {
+            background-color: #ed782b !important; /* Set OK button color to black */
+            color: white;
+            border: none;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+            .custom-confirm-btn:hover {
+                background-color: #dc3545; /* Change OK button to green on hover */
+            }
+
+    </style>
+</head>
+
+<body>
+
+    @*   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EXE_FAIEnglishTutor</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+    <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </li>
+    </ul>
+    </div>
+    </div>
+    </nav> *@
+
+
+
+
+
+    <main role="main">
+        <div class="wrapper d-flex align-items-stretch">
+            <nav id="sidebar" class="active">
+                <h1><a href="home.html" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
+                <ul class="list-unstyled components mb-5">
+                    <li>
+                        <a href="groupTalk.html" class="link-test">
+                            <span class="fa fa-users"></span>
+                            <span class="menu-text">Học nhóm cùng bạn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="liveLearning.html" class="link-test">
+                            <span class="fas fa-graduation-cap icon"></span>
+                            <span class="menu-text">Học live</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="home.html" class="link-test">
+                            <span class="fa fa-frog"></span>
+                            <span class="menu-text">AI Tutor</span>
+
+                        </a>
+                    </li>
+                    <li>
+                        <a href="courrse.html" class="link-test">
+                            <span class="fas fa-book-open"></span>
+                            <span class="menu-text">Tự học</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="parentCourse.html" class="link-test">
+                            <span class="bi bi-people-fill"></span>
+                            <span class="menu-text">Trang học của cha mẹ</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="footer">
+                    <p style="color: #667085;">
+                        &copy; Powered by FAI tutor
+                        <script>document.write(new Date().getFullYear());</script> | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://www.facebook.com/nguyen.tuan.anh.950579"
+                                                                                                                                                                    target="_blank">Facebook.com</a>
+                    </p>
+                </div>
+            </nav>
+            @RenderBody()
         </div>
-    </footer>
+    </main>
+
+
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @*     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script> *@
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
+
+
+    <script>
+        const logoutLink = document.getElementById('logout-link');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Are you sure you want to logout?',
+                    icon: 'question',
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    customClass: {
+                        confirmButton: 'custom-confirm-btn',
+                        cancelButton: 'custom-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log('Người dùng đã chọn tiếp tục');
+                        localStorage.clear();
+                        document.getElementById('logoutForm').submit();
+                    } else if (result.isDismissed) {
+                        console.log('Người dùng đã hủy hành động');
+                    }
+                });
+
+            });
+        }
+    </script>
+
+    <script>
+
+        //Mới ra mắt
+        document.addEventListener('DOMContentLoaded', function () {
+            const courseList = document.getElementById('course-list-new');
+            const prevBtn = document.getElementById('prev-btn-new');
+            const nextBtn = document.getElementById('next-btn-new');
+
+            // Cuộn sang trái
+            prevBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: -300, behavior: 'smooth' });
+            });
+
+            // Cuộn sang phải
+            nextBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: 300, behavior: 'smooth' });
+            });
+        });
+
+        //Đang thình hành
+        document.addEventListener('DOMContentLoaded', function () {
+            const courseList = document.getElementById('course-list');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            // Cuộn sang trái
+            prevBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: -300, behavior: 'smooth' });
+            });
+
+            // Cuộn sang phải
+            nextBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: 300, behavior: 'smooth' });
+            });
+        });
+
+
+
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

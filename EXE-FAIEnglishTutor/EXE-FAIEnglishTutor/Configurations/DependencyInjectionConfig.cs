@@ -1,0 +1,33 @@
+﻿using EXE_FAIEnglishTutor.Helpers;
+using EXE_FAIEnglishTutor.Mail;
+using EXE_FAIEnglishTutor.Repositories.Implementation;
+using EXE_FAIEnglishTutor.Repositories.Interface;
+using EXE_FAIEnglishTutor.Services.Implimentaion;
+using EXE_FAIEnglishTutor.Services.Interface;
+
+namespace EXE_FAIEnglishTutor.Configurations
+{
+    public static class  DependencyInjectionConfig
+    {
+        public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
+        {
+            // Thêm Dependency Injection
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddScoped<IRoleRepository, RoleRepositoryImpl>();
+            services.AddScoped<IRegisterUserService, RegisterUserServiceImpl>();
+            services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+            services.AddScoped<IVerificationTokenRepository, VerificationTokenRepositoryImpl>();
+            services.AddScoped<IVerificationTokenService, VerificationTokenServiceImpl>();
+            services.AddTransient<EmailSendVetification>();
+
+
+        }
+
+
+
+
+    }
+}
