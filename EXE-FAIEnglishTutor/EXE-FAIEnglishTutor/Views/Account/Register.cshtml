@@ -17,31 +17,34 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;550;600&family=Nunito:wght@400;500;550;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/css/login-register.css" />
 
     <style>
         .first-card {
-          border-radius: 30px;
+            border-radius: 30px;
         }
 
         .form-control {
-          border: 1px solid #ccc;
+            border: 1px solid #ccc;
         }
 
         .text-orange {
-          color: green;
+            color: green;
         }
 
         .auto-consent-text-inner {
-          margin-top: 30px;
+            margin-top: 30px;
         }
+
         .iti {
-          width: 100%;
+            width: 100%;
         }
 
         .input-group .form-control.is-invalid,
         .input-group .form-control.is-valid {
-            z-index: 0 !important; 
+            z-index: 0 !important;
         }
 
         .custom-confirm-btn, .custom-cancel-btn {
@@ -56,137 +59,243 @@
             transition: background-color 0.3s; /* Smooth transition for hover effect */
         }
 
-        .custom-confirm-btn:hover {
+            .custom-confirm-btn:hover {
                 background-color: #01d28e; /* Change OK button to green on hover */
             }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid d-flex"
-         style="min-height: 100vh; padding-bottom: 50px">
-        <div class="w-50 body-wrraper" style="margin: 0 auto; margin-top: 50px">
-            <!-- Phần giới thiệu khóa học -->
+    <div class="container-fluid d-flex">
+        <div class="row w-100">
+            @*  <div class="w-50 body-wrraper" style="margin: 0 auto; margin-top: 50px"> *@
             <!-- Form Đăng nhập -->
-            <div class="col-12 first-card d-flex justify-content-center align-items-center">
-                <div class="regiter-card">
-                    <div class="card-body">
-                        <img src="~/Images/FAI-2.png"
-                             alt="Logo"
-                             class="mb-4"
-                             style="width: 250px" />
-                        <h3 class="mb-4 text-center fw-bold" style="color: #333">
-                            Đăng Ký Tài Khoản
-                        </h3>
-                        <div class="social">
-                            <div class="social-inner">
-                                <a class="btn btn-danger">
-                                    <i class="fa-brands fa-google fa-2x"></i>
-                                </a>
-                                <a class="btn btn-info">
-                                    <i class="fa-brands fa-twitter fa-2x"></i>
-                                </a>
-                                <a class="btn btn-primary">
-                                    <i class="fa-brands fa-facebook fa-2x"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="d-flex justify-content-center align-items-center mt-4 mb-3">Hoặc đăng kí với</span>
-                        </div>
-                        <form  asp-controller="Account" asp-action="Register" method="post">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Họ và tên</label>
-                                <input asp-for="FullName" type="text"  class="form-control" id="username" />
-                                <span asp-validation-for="FullName" class="validation-message"></span>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email </label>
-                                <input asp-for="Email" type="email" class="form-control" id="email" oninput="validateEmail()" />
-                                <div id="emailError" class="err" style="color: red"></div>
-                                <span asp-validation-for="Email" style="color: red" class="validation-message"></span>
-                                @if (ViewData["EmailExist"] != null)
-                                {
-                                    <div class="err" style="color: red">Email này đã tồn tại, vui lòng nhập email khác</div>
-                                }
-                            </div>
-                            <div class="mb-3">
-                                <label for="phoneNumber" class="form-label">Số điện thoại</label>
-                                <div class="input-group custom-input-group">
-                                    <div style="width: 100%">
-                                        <input type="tel" class="form-control" asp-for="Phone" id="phoneNumber" oninput="validatePhone()" />
-                                        <div id="phoneError" class="err" style="color: red"></div>
-                                        <span asp-validation-for="Phone" class="validation-message"></span>
-                                        @if (ViewData["PhoneExist"] != null)
-                                        {
-                                            <div class="err" style="color: red">Số điện thoại này đã tồn tại, vui lòng nhập số điện thoại khác</div>
-                                        }
-                                        @if (ViewData["PhoneErr"] != null)
-                                        {
-                                            <div class="err" style="color: red">Lỗi định dạng số điện thoại</div>
-                                        }
-                                        
-                                    </div>
+            <div class=" col-xl-6 col-12 first-card d-flex justify-content-center align-items-center">
+                <div class="scrollable-form parent-card">
+                    <div class="general-card " style="margin: 0 auto;">
+                        <div class="card-body">
+                            <img src="~/Images/FAI-2.png"
+                                 alt="Logo"
+                                 class="mb-4"
+                                 style="width: 250px" />
+                            <h3 class="mb-4 text-center fw-bold" style="color: #333">
+                                Đăng Ký Tài Khoản
+                            </h3>
+                            <div class="social">
+                                <div class="social-inner">
+                                    <a class="btn btn-danger">
+                                        <i class="fa-brands fa-google fa-2x"></i>
+                                    </a>
+                                    <a class="btn btn-info">
+                                        <i class="fa-brands fa-twitter fa-2x"></i>
+                                    </a>
+                                    <a class="btn btn-primary">
+                                        <i class="fa-brands fa-facebook fa-2x"></i>
+                                    </a>
                                 </div>
                             </div>
                             <div>
-                                <input type="hidden" asp-for="CountryCode" id="countryCode" />
+                                <span class="d-flex justify-content-center align-items-center mt-4 mb-3">Hoặc đăng kí với</span>
                             </div>
-                            <div class="mb-3 position-relative">
-                                <label for="password" asp-for="Password" class="form-label">Mật khẩu</label>
-                                <input type="password"
-                                       class="form-control pe-5" asp-for="Password"
-                                       id="password" oninput="validatePassword()" />
-                                <div id="passwordError" class="err" style="color: red"></div>
-                                <span asp-validation-for="Password" class="validation-message"></span>
-                              
-                            </div>
-                            <div class="mb-3 position-relative">
-                                <label for="password" class="form-label">Nhập lại Mật khẩu</label>
-                                <input type="password"
-                                       class="form-control pe-5" asp-for="RePassword"
-                                       id="re_pass" oninput="validateConfirmPassword()" />
-                                <div id="confirmPasswordError" class="err" style="color: red"></div>
-                                <span asp-validation-for="RePassword" class="validation-message"></span>
-                            </div>
-                            <div class="auto-consent-text-inner">
-                                Bằng cách nhấp vào "Đăng ký Miễn phí", bạn chấp nhận
-                                <a href="#"
-                                   class="text-orange document-link ec-event-handler"
-                                   id="registration-app-terms-link"
-                                   data-linkid="terms">
-                                    Điều khoản và Điều kiện
-                                </a>
-                                và
-                                <a href="#"
-                                   class="text-orange document-link ec-event-handler"
-                                   id="registration-app-privacy-link"
-                                   data-linkid="privacy">
-                                    Chính sách Quyền riêng tư
-                                </a>
-                                của chúng tôi.
-                            </div>
+                            <form asp-controller="Account" asp-action="Register" method="post">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Họ và tên</label>
+                                    <input asp-for="FullName" type="text" class="form-control" id="username" />
+                                    <span asp-validation-for="FullName" class="validation-message"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email </label>
+                                    <input asp-for="Email" type="email" class="form-control" id="email" oninput="validateEmail()" />
+                                    <div id="emailError" class="err" style="color: red"></div>
+                                    <span asp-validation-for="Email" style="color: red" class="validation-message"></span>
+                                    @if (ViewData["EmailExist"] != null)
+                                    {
+                                        <div class="err" style="color: red">Email này đã tồn tại, vui lòng nhập email khác</div>
+                                    }
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                                    <div class="input-group custom-input-group">
+                                        <div style="width: 100%">
+                                            <input type="tel" class="form-control" asp-for="Phone" id="phoneNumber" oninput="validatePhone()" />
+                                            <div id="phoneError" class="err" style="color: red"></div>
+                                            <span asp-validation-for="Phone" class="validation-message"></span>
+                                            @if (ViewData["PhoneExist"] != null)
+                                            {
+                                                <div class="err" style="color: red">Số điện thoại này đã tồn tại, vui lòng nhập số điện thoại khác</div>
+                                            }
+                                            @if (ViewData["PhoneErr"] != null)
+                                            {
+                                                <div class="err" style="color: red">Lỗi định dạng số điện thoại</div>
+                                            }
 
-                            <button type="submit" id="submitButton" class="btn login-btn text-white w-100">
-                                Đăng kí miễn phí
-                            </button>
-                        </form>
-                      
-                        @if (ViewData["EmailError"] != null)
-                        {
-                            <div class="err" style="color: red">Không thể gửi email xác nhận. Vui lòng kiểm tra email của bạn.</div>
-                        }
-                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="hidden" asp-for="CountryCode" id="countryCode" />
+                                </div>
+                                <div class="mb-3 position-relative">
+                                    <label for="password" asp-for="Password" class="form-label">Mật khẩu</label>
+                                    <input type="password"
+                                           class="form-control pe-5" asp-for="Password"
+                                           id="password" oninput="validatePassword()" />
+                                    <div id="passwordError" class="err" style="color: red"></div>
+                                    <span asp-validation-for="Password" class="validation-message"></span>
 
-                        <div class="d-flex justify-content-center align-items-center mt-5">
-                            Bạn đã có tài khoản chưa?
-                            <a class="link-login link-navigate" asp-controller="Account" asp-action="Login"> Đăng nhập ngay!</a>
+                                </div>
+                                <div class="mb-3 position-relative">
+                                    <label for="password" class="form-label">Nhập lại Mật khẩu</label>
+                                    <input type="password"
+                                           class="form-control pe-5" asp-for="RePassword"
+                                           id="re_pass" oninput="validateConfirmPassword()" />
+                                    <div id="confirmPasswordError" class="err" style="color: red"></div>
+                                    <span asp-validation-for="RePassword" class="validation-message"></span>
+                                </div>
+                                <div class="auto-consent-text-inner">
+                                    Bằng cách nhấp vào "Đăng ký Miễn phí", bạn chấp nhận
+                                    <a href="#"
+                                       class="text-orange document-link ec-event-handler"
+                                       id="registration-app-terms-link"
+                                       data-linkid="terms">
+                                        Điều khoản và Điều kiện
+                                    </a>
+                                    và
+                                    <a href="#"
+                                       class="text-orange document-link ec-event-handler"
+                                       id="registration-app-privacy-link"
+                                       data-linkid="privacy">
+                                        Chính sách Quyền riêng tư
+                                    </a>
+                                    của chúng tôi.
+                                </div>
+
+                                <button type="submit" id="submitButton" class="btn login-btn text-white w-100">
+                                    Đăng kí miễn phí
+                                </button>
+                            </form>
+
+                            @if (ViewData["EmailError"] != null)
+                            {
+                                <div class="err" style="color: red">Không thể gửi email xác nhận. Vui lòng kiểm tra email của bạn.</div>
+                            }
+
+
+                            <div class="d-flex justify-content-center align-items-center mt-5">
+                                Bạn đã có tài khoản chưa?
+                                <a class="link-login link-navigate" asp-controller="Account" asp-action="Login"> Đăng nhập ngay!</a>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phần giới thiệu khóa học -->
+            <div class="col-xl-6 col-12 second-card d-md-block">
+                <!-- Cột phải: Carousel + giới thiệu -->
+                <div id="carouselExampleControls"
+                     class="carousel slide mb-4"
+                     data-bs-ride="carousel">
+                    <div class="d-flex flex-column justify-content-center align-items-center pading_custome p-5">
+                        <!-- Tiêu đề -->
+                        <h2 class="mb-3 text-center">Tất cả khóa học tiếng Anh bạn cần</h2>
+                        <p class="text-center mb-4" style="max-width: 500px">
+                            Trẻ em hay người lớn, Giao tiếp, Luyện thi hay phát triển 4 kỹ
+                            năng...
+                        </p>
+
+                        <!-- Carousel (trình chiếu ảnh) -->
+                        <!-- Trình tự ảnh -->
+                        <div class="carousel-inner">
+                            <!-- Slide 1 -->
+                            <div class="carousel-item active">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="img-wrapper">
+                                        <img src="~/Images/slide5.png"
+                                             class="d-block"
+                                             alt="Tiếng Anh cho bé (4-12 tuổi)"
+                                             style="max-height: 400px" />
+                                              <div class="overlay-home"></div>
+                                    </div>
+                                    <div class="card-body-second">
+                                        <p class="mt-2 text-center">Tiếng Anh cho bé (4-12 tuổi)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="carousel-item">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="img-wrapper">
+                                        <img src="~/Images/slide1.png"
+                                             class="d-block"
+                                             alt="Tiếng Anh trung học (13-18 tuổi)"
+                                             style="max-height: 400px" />
+                                        <div class="overlay-home"></div>
+                                    </div>
+                                    <div class="card-body-second">
+                                        <p class="mt-2 text-center">
+                                            Tiếng Anh trung học (13-18 tuổi)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="carousel-item">
+                                <div class="d-flex flex-column align-items-center">
+                                    <div class="img-wrapper">
+                                        <img src="~/Images/slide2.png"
+                                             class="d-block"
+                                             alt="Tiếng Anh người lớn"
+                                             style="max-height: 400px" />
+                                        <div class="overlay-home"></div>
+                                    </div>
+                                    <div class="card-body-second">
+                                        <p class="mt-2 text-center">Tiếng Anh người lớn</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nút chuyển trái/phải -->
+                        <button class="carousel-control-prev"
+                                type="button"
+                                data-bs-target="#carouselExampleControls"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"
+                                  aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next"
+                                type="button"
+                                data-bs-target="#carouselExampleControls"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon"
+                                  aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+                    <!-- Link tải app (nếu cần) -->
+                    <div class="text-center mt-3">
+                        <p class="mb-3">Tải ứng dụng FAI English Tutor</p>
+                        <a href="#" class="me-3">
+                            <img src="https://learning.kynaforkids.vn/images/guest/google-play.png"
+                                 alt="Google Play"
+                                 style="height: 40px" />
+                        </a>
+                        <a href="#">
+                            <img src="https://learning.kynaforkids.vn/images/guest/app-store.png"
+                                 alt="App Store"
+                                 style="height: 40px" />
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"></script>
@@ -200,13 +309,13 @@
             const phoneInput = document.querySelector("#phoneNumber");
             const countryInput = document.querySelector("#countryCode"); // Hidden input
             const iti = window.intlTelInput(phoneInput, {
-            initialCountry: "vn",
-            preferredCountries: ["vn", "us", "gb"],
-            separateDialCode: true,
-            // Đường dẫn utilsScript cũng dùng link CDN để đảm bảo tương thích
-            utilsScript:
-              "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-          });
+                initialCountry: "vn",
+                preferredCountries: ["vn", "us", "gb"],
+                separateDialCode: true,
+                // Đường dẫn utilsScript cũng dùng link CDN để đảm bảo tương thích
+                utilsScript:
+                    "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            });
             // Khi trang load, cập nhật hidden input với CountryCode ban đầu
             const initialCountryData = iti.getSelectedCountryData();
             // Ví dụ: nếu bạn muốn lưu mã quốc gia ISO, sử dụng initialCountryData.iso2 (ví dụ "vn")

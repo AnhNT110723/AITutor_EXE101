@@ -3,14 +3,15 @@ body {
     background: url('https://learning.kynaforkids.vn/static/media/desktop-guest.eeb46e156eeb80d6bc2b.png') no-repeat center center/cover;
     background-color: #e6f7ff;
     /* background-image: url('https://learning.kynaforkids.vn/static/media/desktop-guest.eeb46e156eeb80d6bc2b.png'); */
-    font-family: "Arial", sans-serif;
+    font-family: 'Inter', sans-serif;
+    min-width: 375px; /* Ví dụ: Không nhỏ hơn iPhone SE */
 }
 
 .first-card {
     background-color: #fff;
 }
 
-.login-card {
+.general-card {
     padding: 0px;
     width: 100%;
     max-width: 450px;
@@ -41,7 +42,8 @@ body {
 
 .form-label {
    
-    font-weight: 540;
+    font-size: 14px;
+    font-weight: 500;
     color: #98a2b3;
 }
 
@@ -50,8 +52,12 @@ body {
     margin: 0 auto;
 }
 
-@media (max-width: 1200px) {
-    .login-card {
+.logo {
+    width: 250px
+}
+
+@media (max-width: 1201px) {
+    .general-card {
         max-width: 80%;
         padding: 20px;
         background: #fff;
@@ -67,6 +73,16 @@ body {
         border-radius: 30px;
     }
 
+    .first-card {
+        max-width: 100% !important;
+    }
+
+
+
+    .second-card {
+        width: 100% !important;
+    }
+
     .card-body {
         width: 60%;
         margin: 0 auto
@@ -80,17 +96,58 @@ body {
     .first-card {
         background: none;
     }
+
+    .img-wrapper {
+        width: 80%;
+        height: 300px; /* Chiều cao cố định */
+        border: 5px solid #fff;
+        overflow: hidden;
+        border-radius: 8px;
+    }
 }
 
 @media (max-width: 768px) {
     .img-wrapper {
         width: 100%;
         height: 300px; /* Chiều cao cố định */
-        border: 2px solid #ccc;
+        border: 5px solid #fff;
         overflow: hidden;
         border-radius: 8px;
     }
+    .general-card {
+        max-width: 80%;
+        padding: 20px;
+        background: #fff;
+        margin-top: 50px;
+        border-radius: 30px;
+    }
+
+    .card-body {
+        width: 100%;
+        margin: 0 auto
+    }
+
 }
+
+@media (max-width: 485px) {
+    .general-card {
+        max-width: 100%;
+        padding: 20px;
+        background: #fff;
+        margin-top: 50px;
+        border-radius: 30px;
+    }
+
+    .card-body {
+        width: 100%;
+        margin: 0 auto
+    }
+
+    .logo {
+        width: 150px;
+    }
+}
+
 
 .link-login {
     text-decoration: none;
@@ -144,11 +201,12 @@ a:hover {
 }
 
 .img-wrapper {
-    width: 500px;
-    height: 300px; /* Chiều cao cố định */
-    border: 2px solid #ccc;
+    width: 600px;
+    height: 400px; /* Chiều cao cố định */
+    border: 5px solid #fff;
     overflow: hidden;
     border-radius: 8px;
+    position: relative; /* Thêm để giới hạn overlay-home */
 }
 
     /* Ảnh bên trong container */
@@ -214,5 +272,126 @@ Nếu muốn thay đổi kích thước icon, ta chỉnh background-size.
 .validation-message {
     color: red;
 }
+.scrollable-form {
+    max-height: 100vh; /* Chiều cao tối đa bằng chiều cao màn hình */
+    overflow-y: auto; /* Bật cuộn dọc khi nội dung vượt quá */
+    width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+}
+
+    /* Ẩn thanh cuộn trên Chrome, Safari, và các trình duyệt Webkit */
+    .scrollable-form::-webkit-scrollbar {
+        display: none; /* Ẩn hoàn toàn thanh cuộn */
+    }
 
 
+.parent-card {
+    width: 100%;
+}
+
+.first-card {
+    max-width: 47%;
+}
+
+
+
+.second-card {
+    width: 53%;
+    padding-bottom: 0 !important
+}
+
+.pading_custome {
+    padding-bottom: 0 !important;
+    padding-top: 2rem !important
+    
+}
+
+.img-wrapper .overlay-home {
+    position: absolute !important;
+    top: 100px !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-image: linear-gradient(180deg, #02020200 43%, #020202) !important;
+    z-index: 1 !important;
+}
+
+.card-body-second {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* background-image: linear-gradient(180deg, #02020200 43%, #020202); */
+    /* Nền mờ để chữ dễ đọc */
+    color: white;
+    padding: 10px;
+    text-align: center;
+    z-index: 2;
+}
+
+
+
+
+/*Reset password*/
+.reset-password-container {
+    position: relative;
+    background: #f8f8f8;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    width: 500px;
+    text-align: center;
+}
+
+    .reset-password-container h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .reset-password-container p {
+        font-weight: 400;
+    }
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+    .form-group input {
+        width: 100% !important;
+        padding: 22px 15px !important;
+        border: 1px solid #ccc;
+        border-radius: 10px !important;
+    }
+
+.form-button {
+    margin-top: 20px;
+}
+
+    .form-button input {
+        background-color: #ffa500;
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 10px 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        width: 50%;
+    }
+
+        .form-button input:hover {
+            background-color: #d79506;
+        }
+
+.last-title-reset-password {
+    padding: 10px;
+}
+
+.modal-header-background-send-activation {
+    background-color: #fa8f00;
+}
+
+.btn-send-email-custom {
+    background-color: #dc3545 !important;
+}

@@ -125,6 +125,10 @@
       "PackagePath": "staticwebassets\\Images\\tuvan.png"
     },
     {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\user_icon.webp",
+      "PackagePath": "staticwebassets\\Images\\user_icon.webp"
+    },
+    {
       "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\css\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap.min.css"
     },
@@ -147,6 +151,10 @@
     {
       "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\bootstrap.min.js",
       "PackagePath": "staticwebassets\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\itel_number_phone.js",
+      "PackagePath": "staticwebassets\\js\\itel_number_phone.js"
     },
     {
       "Id": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\main.js",

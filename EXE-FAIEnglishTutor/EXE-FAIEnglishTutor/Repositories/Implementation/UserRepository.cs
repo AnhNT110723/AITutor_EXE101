@@ -1,5 +1,6 @@
 ﻿using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace EXE_FAIEnglishTutor.Repositories.Implementation
 {
@@ -11,21 +12,43 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
         {
             _context = context;
         }
+
+        public async Task<User> FindExternalUserByProviderAsync(string provider, string providerId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Provider == provider && u.ProviderId == providerId);
+        }
+
         public User? GetUserByEmail(string email)
         {
             return _context.Users.FirstOrDefault(u => u.Email.Equals(email));
         }
 
-        public bool IsPhoneNumberExists(string phoneNumber)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.PhoneNumber.Equals(phoneNumber));
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+        }
+
+        public async Task<bool> IsPhoneNumberExists(string phoneNumber)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.PhoneNumber.Equals(phoneNumber));
             return user != null;
         }
 
         public async Task save(User user)
         {
-            _context.Users.Add(user);
-           await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Err: " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+                }
+            }
+
         }
 
         public async Task Update(User user)

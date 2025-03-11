@@ -1,7 +1,7 @@
-﻿ @{
-     Layout = null;
- }
-@model LoginModel
+﻿@{
+    Layout = null;
+}
+@model LoginDto
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -14,10 +14,12 @@
     <!-- <link rel="stylesheet" href="static/css/style.css"> -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;550;600&family=Nunito:wght@400;500;550;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/login-register.css">
 
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
     <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
+
 
     <style>
         .custom-confirm-btn, .custom-cancel-btn {
@@ -56,39 +58,126 @@
             });
         </script>
     }
+
+    @if (TempData["SendLinkResendPWSuccess"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    title: 'Send enail successfully!',
+                    text: '\n' +
+                        'We have sent an account Reser Password link to your email, please check your email and change password your account.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'custom-confirm-btn'
+                    }
+                });
+            });
+        </script>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '@TempData["Error"]',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
+    }
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+            <!-- modal-lg để rộng hơn, modal-dialog-centered để căn giữa -->
+            <div class="modal-content">
+                <div class="modal-header modal-header-background-send-activation text-white">
+                    <h5 class="modal-title fw-bold" id="exampleModalLabel">
+                        <i class="bi bi-envelope-paper"></i> Send Account Activation Email
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <p class="text-muted">
+                        An activation email is sent when registering for a <strong>FAI English</strong> account. If you did not receive it, please enter your registered email, and we will resend the activation email.
+                    </p>
+
+                    <!-- Hiển thị thành công -->
+                    <div class="alert alert-success d-none" id="success-message">
+                        <i class="bi bi-check-circle"></i>
+                        <span id="success-text"></span>
+                    </div>
+
+
+                    <form id="resendActivationForm" method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-semibold">Your Email</label>
+                            <input type="email" class="form-control" name="email" id="emailResend" placeholder="Enter your email" />
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-send-email-custom btn-success px-4">
+                                <i class="bi bi-send"></i> Send Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
     <div class="container-fluid vh-100 d-flex">
         <div class="row w-100">
             <!-- Form Đăng nhập -->
             <div class="col-xl-6 col-12 first-card d-flex justify-content-center align-items-center">
-                <div class="login-card">
+                <div class="general-card">
                     <div class="card-body">
-                        <img src="~/Images/FAI-2.png"
-                             alt="Logo"
-                             class="mb-4"
-                             style="width: 250px" />
+                        <img src="~/Images/FAI-2.png" alt="Logo" class="mb-4 logo" />
                         <h3 class="mb-4 text-center fw-bold" style="color: #333">
                             Đăng nhập
                         </h3>
+
+                        @if (ViewBag.ErrorLockedAcc != null)
+                        {
+                            <p class="text-danger">@ViewBag.ErrorLockedAcc</p>
+                        }
+                        @if (ViewBag.ErrorPendingAcc != null)
+                        {
+                            <p style="margin: 0" class="text-danger">
+                                Your account is not active. Please activate your account.
+                            </p>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">Click here to active.</a>
+                        }
+
+
                         <form asp-controller="Account" asp-action="Login" method="post">
-                            @Html.AntiForgeryToken()
                             <div class="mb-3">
                                 <p asp-for="Email" class="form-label">Email hoặc số điện thoại đăng nhập</p>
-                                <input type="email" asp-for="Email" class="form-control" id="email" name="email" /> 
+                                <input type="email" asp-for="Email" class="form-control" id="email" name="email" />
                                 <span asp-validation-for="Email" class="validation-message"></span>
                             </div>
                             @*  <div class="validation">
-                                 <span asp-validation-for="Email" class="validation-message"></span>
-                           </div> *@
+                            <span asp-validation-for="Email" class="validation-message"></span>
+                            </div> *@
                             <div class="mb-3 position-relative">
                                 <p class="form-label">Mật khẩu</p>
                                 <input type="password" asp-for="Password" class="form-control pe-5" id="password" name="Password" />
-                                <i class="bi bi-eye-slash position-absolute end-0 pe-3" style="cursor: pointer; top: 55%"; id="togglePassword"></i>
-                              
+                                <i class="bi bi-eye-slash position-absolute end-0 pe-3" style="cursor: pointer; top: 55%" ; id="togglePassword"></i>
+
                             </div>
                             <div class="validation">
                                 <span asp-validation-for="Password" class="validation-message"></span>
                             </div>
-                            
+
                             @if (ViewBag.ErrorMessage != null)
                             {
                                 <p class="text-danger">Tên đăng nhập hoặc mật khẩu không chính xác</p>
@@ -108,7 +197,7 @@
                                     this.classList.toggle("bi-eye-slash");
                                 });
                             </script>
-                            
+
                             <div class="mt-4 d-flex justify-content-between align-items-center" style="margin-top:15px;">
                                 <div class="form-check mb-3">
                                     <input class="form-check-input"
@@ -117,10 +206,10 @@
                                     <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>
                                 </div>
                                 <div class="mb-3">
-                                    <a class="link-login" >Quên mật khẩu?</a>
+                                    <a class="link-login" asp-controller="Account" asp-action="ForgotPassword" asp-route-email="@Model.Email">Quên mật khẩu?</a>
                                 </div>
                             </div>
-                            
+
                             <button type="submit" class="btn login-btn text-white w-100">
                                 Đăng nhập
                             </button>
@@ -130,13 +219,13 @@
                             <span class="d-flex justify-content-center align-items-center mt-4">Hoặc</span>
                             <div class="social">
                                 <div class="social-inner">
-                                    <a class="btn btn-danger">
+                                    <a class="btn btn-danger" asp-controller="Auth" asp-action="LoginWithGoogle">
                                         <i class="fa-brands fa-google fa-2x"></i>
                                     </a>
-                                    <a class="btn btn-info">
+                                    <a class="btn btn-info" asp-controller="Auth" asp-action="LoginWithTwitter">
                                         <i class="fa-brands fa-twitter fa-2x"></i>
                                     </a>
-                                    <a class="btn btn-primary">
+                                    <a class="btn btn-primary" asp-controller="Auth" asp-action="LoginWithFacebook">
                                         <i class="fa-brands fa-facebook fa-2x"></i>
                                     </a>
                                 </div>
@@ -144,19 +233,19 @@
                         </div>
                         <div class="d-flex justify-content-center align-items-center mt-3">
                             Bạn chưa có tài khoản?
-                            <a class="link-login link-navigate"  asp-controller="Account" asp-action="Register" >Đăng ký <strong class="strong">MIỄN PHÍ</strong> ngay!</a>
+                            <a class="link-login link-navigate" asp-controller="Account" asp-action="Register"> Đăng ký <strong class="strong">miễn phí</strong> ngay!</a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Phần giới thiệu khóa học -->
-            <div class="col-xl-6 col-12 d-md-block">
+            <div class="col-xl-6 col-12 second-card d-md-block">
                 <!-- Cột phải: Carousel + giới thiệu -->
                 <div id="carouselExampleControls"
                      class="carousel slide mb-4"
                      data-bs-ride="carousel">
-                    <div class="d-flex flex-column justify-content-center align-items-center p-5">
+                    <div class="d-flex flex-column justify-content-center align-items-center pading_custome p-5">
                         <!-- Tiêu đề -->
                         <h2 class="mb-3 text-center">Tất cả khóa học tiếng Anh bạn cần</h2>
                         <p class="text-center mb-4" style="max-width: 500px">
@@ -174,9 +263,12 @@
                                         <img src="~/Images/slide5.png"
                                              class="d-block"
                                              alt="Tiếng Anh cho bé (4-12 tuổi)"
-                                             style="max-height: 300px" />
+                                             style="max-height: 400px" />
+                                        <div class="overlay-home"></div>
                                     </div>
-                                    <p class="mt-2 text-center">Tiếng Anh cho bé (4-12 tuổi)</p>
+                                    <div class="card-body-second">
+                                        <p class="mt-2 text-center">Tiếng Anh cho bé (4-12 tuổi)</p>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Slide 2 -->
@@ -186,11 +278,14 @@
                                         <img src="~/Images/Co-Vietnam.png"
                                              class="d-block"
                                              alt="Tiếng Anh trung học (13-18 tuổi)"
-                                             style="max-height: 300px" />
+                                             style="max-height: 400px" />
+                                        <div class="overlay-home"></div>
                                     </div>
-                                    <p class="mt-2 text-center">
-                                        Tiếng Anh trung học (13-18 tuổi)
-                                    </p>
+                                    <div class="card-body-second">
+                                        <p class="mt-2 text-center">
+                                            Tiếng Anh trung học (13-18 tuổi)
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Slide 3 -->
@@ -200,9 +295,12 @@
                                         <img src="~/Images/co-england.png"
                                              class="d-block"
                                              alt="Tiếng Anh người lớn"
-                                             style="max-height: 300px" />
+                                             style="max-height: 400px" />
+                                        <div class="overlay-home"></div>
                                     </div>
-                                    <p class="mt-2 text-center">Tiếng Anh người lớn</p>
+                                    <div class="card-body-second">
+                                        <p class="mt-2 text-center">Tiếng Anh người lớn</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -228,14 +326,14 @@
 
                     <!-- Link tải app (nếu cần) -->
                     <div class="text-center mt-3">
-                        <h5 class="mb-3">Tải ứng dụng Kyna English</h5>
-                        <a  class="me-3">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Get_it_on_Google_play.svg/512px-Get_it_on_Google_play.svg.png"
+                        <p class="mb-3">Tải ứng dụng FAI English Tutor</p>
+                        <a class="me-3">
+                            <img src="https://learning.kynaforkids.vn/images/guest/google-play.png"
                                  alt="Google Play"
                                  style="height: 40px" />
                         </a>
                         <a>
-                            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                            <img src="https://learning.kynaforkids.vn/images/guest/app-store.png"
                                  alt="App Store"
                                  style="height: 40px" />
                         </a>
@@ -256,5 +354,41 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("resendActivationForm").addEventListener("submit", function (e) {
+                e.preventDefault();  // Ngăn form submit mặc định
+
+                let email = document.getElementById("emailResend").value;
+                console.log("Email", email);
+                fetch('/Account/ReSendActivation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ email: email }) // Chuyển thành form data
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Congatulations',
+                                text: data.message
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+
+
+
+
+    </script>
 </body>
 </html>

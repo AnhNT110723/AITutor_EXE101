@@ -5,9 +5,7 @@ namespace EXE_FAIEnglishTutor.Services.Interface
     public interface IVerificationTokenService
     {
         void createVertificationToken(User user, string token);
-        void updateVerificationToken(User user, string newToken);
-
-        void updateResetPasswordToken(User user, String newToken);
+        Task updateVerificationToken(User user, string newToken, int expireTime);
         Task<VerificationToken> getVerificationToken(string token);
     }
 }

@@ -12,7 +12,7 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
+    public string? PasswordHash { get; set; }
 
     public string? PhoneNumber { get; set; }
 
@@ -23,6 +23,12 @@ public partial class User
     public AccountStatus Status { get; set; }
 
     public DateTime? ExpiryDate { get; set; }
+
+    public string Provider { get; set; } = null!;
+
+    public string? ProviderId { get; set; }
+
+    public DateTime? LastLogin { get; set; }
 
     public virtual ICollection<Feeback> Feebacks { get; set; } = new List<Feeback>();
 
