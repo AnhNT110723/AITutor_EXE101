@@ -18,6 +18,10 @@ namespace EXE_FAIEnglishTutor.Services.Implimentaion
         {
             var user = _userRepository.GetUserByEmail(email);
             if (user == null) return null;
+            if (string.IsNullOrEmpty(user?.PasswordHash)) //check null pass word in db 
+            {
+                return null;
+            }
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
             return result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded ? user : null;

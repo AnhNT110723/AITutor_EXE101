@@ -421,26 +421,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-//set uo head phone for each contries
+////set uo head phone for each contries
 
-// Initialize intl-tel-input
-const phoneInput = document.querySelector("#phone");
-const iti = window.intlTelInput(phoneInput, {
-    initialCountry: "vn",
-    preferredCountries: ["vn", "us", "gb"],
-    separateDialCode: true,
-    allowDropdown: true, // Bật dropdown
-    utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
+//// Initialize intl-tel-input
+//const phoneInput = document.querySelector("#phone");
+//const iti = window.intlTelInput(phoneInput, {
+//    initialCountry: "vn",
+//    preferredCountries: ["vn", "us", "gb"],
+//    separateDialCode: true,
+//    allowDropdown: true, // Bật dropdown
+//    utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
 
-});
+//});
 
 
-// Function to handle submit
-function submitPhone() {
-    if (iti.isValidNumber()) {
-        const fullNumber = iti.getNumber(); // Get the full international number
-        document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
-    } else {
-        alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
-    }
-}
+//// Function to handle submit
+//function submitPhone() {
+//    if (iti.isValidNumber()) {
+//        const fullNumber = iti.getNumber(); // Get the full international number
+//        document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
+//    } else {
+//        alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
+//    }
+//}

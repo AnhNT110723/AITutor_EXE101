@@ -4,8 +4,10 @@ using EXE_FAIEnglishTutor.Services.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using EXE_FAIEnglishTutor.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.ComponentModel.DataAnnotations;
 namespace EXE_FAIEnglishTutor.Controllers
 {
     public class AccountController : Controller
@@ -13,19 +15,24 @@ namespace EXE_FAIEnglishTutor.Controllers
         private readonly IUserService _userService;
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IRegisterUserService _registerUserService;
+        private readonly IForgotPasswordService _forgotPasswordService;
+        private readonly IVerificationTokenService _verificationTokenService;
 
-        public AccountController(IUserService userService, IRefreshTokenService refreshTokenService, IRegisterUserService registerUserService)
+        public AccountController(IUserService userService, IRefreshTokenService refreshTokenService, IRegisterUserService registerUserService,
+            IForgotPasswordService forgotPasswordService, IVerificationTokenService verificationTokenService)
         {
             _userService = userService;
             _refreshTokenService = refreshTokenService;
             _registerUserService = registerUserService;
+            _forgotPasswordService = forgotPasswordService;
+            _verificationTokenService = verificationTokenService;
         }
 
         // GET: /Account/Login
         [HttpGet]
         public IActionResult Login()
         {
-            var model = new LoginModel();
+            var model = new LoginDto();
 
             // Kiểm tra nếu có cookie "SavedEmail" thì lấy giá trị
             if (Request.Cookies.TryGetValue("SavedEmail", out string savedEmail))
@@ -37,10 +44,9 @@ namespace EXE_FAIEnglishTutor.Controllers
 
         }
 
-        //CÒn thiếu phân role
-        // POST: /Account/Register
+        // POST: /Account/Login
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -50,6 +56,13 @@ namespace EXE_FAIEnglishTutor.Controllers
             var user = _userService.AuthenticateUser(model.Email, model.Password);
             if (user != null)
             {
+
+                // Gọi hàm kiểm tra trạng thái tài khoản
+                if (HandleAccountStatus(user.Status))
+                {
+                    return View(model);
+                }
+
                 var claims = new List<Claim>()
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
@@ -149,7 +162,6 @@ namespace EXE_FAIEnglishTutor.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<IActionResult> ConfirmVerificationToken(string token)
         {
@@ -173,9 +185,153 @@ namespace EXE_FAIEnglishTutor.Controllers
             {
                 ViewData["UnknownError"] = "An unknown error occurred.";
             }
-            return  View("ActivationResult");
+            return View("ActivationResult");
         }
 
+        // POST: /Account/ReSendActivation
+        [HttpPost]
+        public async Task<IActionResult> ReSendActivation([FromForm] string email)
+        {
+            if (string.IsNullOrEmpty(email) || !new EmailAddressAttribute().IsValid(email))
+            {
+                return Json(new { success = false, message = "Định dạng email không hợp lệ." });
+            }
+
+            try
+            {
+                await _registerUserService.resendActivation(email);
+            }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "NotFoundTokenByUserId":
+                        return Json(new { success = false, message = "Email này chưa được đăng kí!" });
+                    case "NotFound":
+                        return Json(new { success = false, message = "Không tìm thấy tài khoản của bạn!" });
+                    case "Account Locked":
+                        return Json(new { success = false, message = "Tài khoản của bạn đã bị khóa!" });
+                    case "Account activated":
+                        return Json(new { success = false, message = "Tài khoản của bạn đã được kích hoạt!" });
+                }
+            }
+            return Json(new { success = true, message = "Mail kích hoạt đã được gửi thành công, vui lòng kiểm tra mail của bạn và kích hoạt tài khoản!" });
+        }
+
+        //GET: /Account/ForgotPassword
+        [HttpGet]
+        public IActionResult ForgotPassword(string email)
+        {
+            return View();
+        }
+
+        //Post: /Account/ForgotPassword
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await _forgotPasswordService.ForGotPassword(model.Email);
+                TempData["SendLinkResendPWSuccess"] = "success";
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "NotFoundAccount":
+                        ViewData["NotFoundAccount"] = "Email này của bạn chưa được đăng kí";
+                        break;
+                    case "Account Locked":
+                        ViewData["AccountLocked"] = "Tài khoản này của bạn đã bị khóa, vui lòng liên hệ lại với nhân viên chăm sóc khách hàng để được hỗ trợ.";
+                        break;
+                    case "Account not activate":
+                        ViewData["AccountNotActivate"] = "Tài khoản của bạn chưa được kích hoạt";
+                        break; 
+                    case "NotFoundTokenByUserId":
+                        ViewData["NotFoundTokenByUserId"] = "Tài khoản của bạn không được đăng kí local, nên không thể sử dụng được chức năng này. Xin cảm ơn.";
+                        break;
+                }
+            }
+
+
+            return View(model);
+        }
+
+
+        // GET: /Account/ResetPassword
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string token, string email)
+        {
+            string result = await _forgotPasswordService.CheckTokenValid(token);
+            var messages = new Dictionary<string, string>
+            {
+                { "Invalid token", "Invalid Token" },
+                { "Token expired", "Your token has expired." },
+                //{ "UserNotFound", "User not found." },
+                //{ "Account Locked", "Your account is locked." },
+                //{ "Account activated", "Your account has been activated" },
+                { "Token Valid", "true" }
+            };
+            if (messages.ContainsKey(result))
+            {
+                ViewData[result.Replace(" ", "")] = messages[result];
+            }
+            else
+            {
+                ViewData["UnknownError"] = "An unknown error occurred.";
+            }
+            return View("ResetPassword");
+        }
+
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["TokenValid"] = "true";
+                return View(model);
+            }
+            //Lấy token của reset pass nhung dùng chung với vetification token
+            VerificationToken vertificationToken = await _verificationTokenService.getVerificationToken(model.Token);
+            string email = vertificationToken.User.Email;
+            if (email == null)
+            {
+                ViewBag.EmailNull = true;
+                ViewData["TokenValid"] = "true";
+                return View();
+            }
+            await _forgotPasswordService.ResetPassword(email, model.Password, model.RePassword);
+            TempData["Success"] = "True";
+            ViewData["TokenValid"] = "true";
+            return View();
+
+        }
+
+
+
+
+
+        private bool HandleAccountStatus(AccountStatus status)
+        {
+            if (status == AccountStatus.LOCKED)
+            {
+                ViewBag.ErrorLockedAcc = "Tài khoản của bạn đã bị khóa.";
+                return true; // Trả về true để báo hiệu cần dừng xử lý
+            }
+            if (status == AccountStatus.PENDING)
+            {
+                ViewBag.ErrorPendingAcc = "Tài khoản của bạn chưa được kích hoạt";
+                return true; // Trả về true để báo hiệu cần dừng xử lý
+            }
+            return false; // Tài khoản hợp lệ, tiếp tục xử lý
+        }
         private void HandleSavedEmailAndRefreshToken(bool isPersistent, string email, User user)
         {
             if (!isPersistent)

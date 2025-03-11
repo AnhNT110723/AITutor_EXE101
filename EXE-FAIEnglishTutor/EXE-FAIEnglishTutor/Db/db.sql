@@ -1,4 +1,7 @@
-﻿CREATE DATABASE FAI_ENGLISH
+﻿USE MASTER
+GO
+
+CREATE DATABASE FAI_ENGLISH
 GO
 
 USE FAI_ENGLISH
@@ -14,20 +17,36 @@ INSERT INTO [Role] (RoleName) VALUES ('mentee');
 INSERT INTO [Role] (RoleName) VALUES ('staff');
 INSERT INTO [Role] (RoleName) VALUES ('guest');
 
+
 CREATE TABLE Users (
     UserID INT IDENTITY(1,1) PRIMARY KEY,
     FullName NVARCHAR(255),
-	Email NVARCHAR(255) UNIQUE NOT NULL,
-    PasswordHash NVARCHAR(255) NOT NULL,
-	PhoneNumber Varchar(15),
-	Avatar Varchar(max),
+    Email NVARCHAR(255) UNIQUE NOT NULL,
+    PasswordHash NVARCHAR(255) NULL, -- Cho phép null cho Google, Facebook login
+    PhoneNumber VARCHAR(15),
+    Avatar VARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE(),
-    [Status] NVARCHAR(10)  NOT NULL CHECK ([Status] IN ('PENDING', 'TRIAL', 'ACTIVATED', 'LOCKED')) ,
-	expiryDate DATETIME
+    [Status] NVARCHAR(10) NOT NULL CHECK ([Status] IN ('PENDING', 'TRIAL', 'ACTIVATED', 'LOCKED')),
+    expiryDate DATETIME,
+    [Provider] NVARCHAR(50) NOT NULL, -- "Google", "Facebook", "Local", v.v.
+    ProviderId NVARCHAR(255) NULL, -- ID từ provider (Google, Facebook), Local có thể NULL
+    LastLogin DATETIME, -- Thời gian đăng nhập cuối
+
+    -- Đảm bảo ProviderId chỉ unique khi nó KHÔNG NULL (Google/Facebook)
+    CONSTRAINT CK_Provider_ProviderId CHECK (
+        (Provider = 'Local' AND ProviderId IS NULL) 
+        OR (Provider <> 'Local' AND ProviderId IS NOT NULL)
+    )
 );
 
-INSERT INTO Users (FullName, Email, PasswordHash, PhoneNumber,Avatar, CreatedAt, [Status], expiryDate)
-VALUES ('Nguyen Tuan Anh', 'anhnthe172115@fpt.edu.vn', 'AQAAAAEAACcQAAAAELfDRs7CCqQzPSu0IXkn11h2+6y8J0gFL7JhlYgD4HIo5Wd2EP8bKU4FCn1N8La50g==', '0869620295','/Images/avatar.jpg', GETDATE(), 'ACTIVATED', NULL);
+-- Unique chỉ áp dụng khi ProviderId không NULL (chặn trùng ID từ Google, Facebook)
+CREATE UNIQUE INDEX UQ_Provider_ProviderId 
+ON Users([Provider], ProviderId) 
+WHERE ProviderId IS NOT NULL;
+
+
+INSERT INTO Users (FullName, Email, PasswordHash, PhoneNumber,Avatar, CreatedAt, [Status], expiryDate, [Provider])
+VALUES ('Nguyen Tuan Anh', 'anhnthe172115@fpt.edu.vn', 'AQAAAAEAACcQAAAAELfDRs7CCqQzPSu0IXkn11h2+6y8J0gFL7JhlYgD4HIo5Wd2EP8bKU4FCn1N8La50g==', '0869620295','/Images/avatar.jpg', GETDATE(), 'ACTIVATED', NULL, 'Local');
 
 
 CREATE TABLE [dbo].[UserRole]
