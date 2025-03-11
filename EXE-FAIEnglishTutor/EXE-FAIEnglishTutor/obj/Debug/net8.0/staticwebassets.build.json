@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "p79h0R3A0Ik94v0pc2FXppiHGheo6DKDaUVsgrGkEhA=",
+  "Hash": "E8Rnrg5lnMkMva+i9BJswf2QMLXJJPix6XJT7izEuHU=",
   "Source": "EXE-FAIEnglishTutor",
   "BasePath": "_content/EXE-FAIEnglishTutor",
   "Mode": "Default",
@@ -720,6 +720,25 @@
       "OriginalItemSpec": "wwwroot\\Images\\TUVAN.webp"
     },
     {
+      "Identity": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\Images\\user_icon.webp",
+      "SourceId": "EXE-FAIEnglishTutor",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\",
+      "BasePath": "_content/EXE-FAIEnglishTutor",
+      "RelativePath": "Images/user_icon.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\user_icon.webp"
+    },
+    {
       "Identity": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\bootstrap.min.js",
       "SourceId": "EXE-FAIEnglishTutor",
       "SourceType": "Discovered",
@@ -737,6 +756,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\bootstrap.min.js"
+    },
+    {
+      "Identity": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\itel_number_phone.js",
+      "SourceId": "EXE-FAIEnglishTutor",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\",
+      "BasePath": "_content/EXE-FAIEnglishTutor",
+      "RelativePath": "js/itel_number_phone.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\itel_number_phone.js"
     },
     {
       "Identity": "D:\\FPTU\\Semester 7\\EXE101\\CODE\\EXE-FAIEnglishTutor\\EXE-FAIEnglishTutor\\wwwroot\\js\\main.js",

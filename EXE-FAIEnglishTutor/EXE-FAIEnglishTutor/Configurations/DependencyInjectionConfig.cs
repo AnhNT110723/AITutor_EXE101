@@ -21,6 +21,7 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
             services.AddScoped<IVerificationTokenRepository, VerificationTokenRepositoryImpl>();
             services.AddScoped<IVerificationTokenService, VerificationTokenServiceImpl>();
+            services.AddScoped<IForgotPasswordService, ForgotPasswordServiceImpl>();
             services.AddTransient<EmailSendVetification>();
 
 

@@ -30,14 +30,16 @@ namespace EXE_FAIEnglishTutor.Services.Implimentaion
             return await _repository.findByToken(token);
         }
 
-        public void updateResetPasswordToken(User user, string newToken)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void updateVerificationToken(User user, string newToken)
+        public async Task updateVerificationToken(User user, string newToken, int expireTime)
         {
-            throw new NotImplementedException();
+            VerificationToken existingToken = await _repository.findByUserId(user.UserId);
+            if (existingToken == null) {
+                throw new Exception("NotFoundTokenByUserId");
+            } 
+                existingToken.TokenCode = newToken;
+                existingToken.ExpiryDate = DateTime.Now.AddMinutes(expireTime);
+                await _repository.UpdateToken(existingToken);
         }
 
 

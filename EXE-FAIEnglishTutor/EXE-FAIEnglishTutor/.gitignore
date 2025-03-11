@@ -1,0 +1,8 @@
+﻿#File cấu hình thực tế
+#appsettings.json
+appsettings.Development.json
+#file build solution
+.vs/
+bin/
+obj/
+*.csproj.user

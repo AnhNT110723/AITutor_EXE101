@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -18,7 +19,7 @@ builder.Services.AddDependencyInjectionConfiguration();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // thời gian hết hạn session
+    options.IdleTimeout = TimeSpan.FromMinutes(30); 
     options.Cookie.HttpOnly = true;                 // chỉ server có thể truy cập cookie
     options.Cookie.IsEssential = true;              // cookie bắt buộc, dù người dùng có từ chối cookie
 });
@@ -27,15 +28,31 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";         // Đường dẫn trang đăng nhập
-        options.LogoutPath = "/Account/Logout";         // Đường dẫn đăng xuất
-        options.AccessDeniedPath = "/Account/AccessDenied"; // Đường dẫn khi không có quyền truy cập
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Thời gian hết hạn cookie
+        options.LoginPath = "/Account/Login";         
+        options.LogoutPath = "/Account/Logout";         
+        options.AccessDeniedPath = "/Account/AccessDenied"; 
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;             // Gia hạn cookie nếu có request mới
-        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // HTTPS only
-        //options.Cookie.HttpOnly = true; // Chống XSS
-        //options.Cookie.SameSite = SameSiteMode.Strict; // Chống CSRF cross-site
+    })
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Google:ClientId"];
+        options.ClientSecret = builder.Configuration["Google:ClientSecret"];
+        options.CallbackPath = "/login-google";
+    })
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Facebook:AppId"];
+        options.AppSecret = builder.Configuration["Facebook:AppSecret"];
+        options.CallbackPath = "/signin-facebook"; // Phải khớp với Redirect URI ở Facebook
+    })
+    .AddTwitter("Twitter", options =>
+    {
+        options.ConsumerKey = builder.Configuration["Twitter:ClientId"];
+        options.ConsumerSecret = builder.Configuration["Twitter:ClientSecret"];
+        options.CallbackPath = "/signin-twitter";
     });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,8 +60,6 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
-
-
 
 
 //Midleware

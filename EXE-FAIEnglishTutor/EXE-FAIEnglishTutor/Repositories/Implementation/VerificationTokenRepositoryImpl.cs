@@ -13,6 +13,12 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
             _context = context;
         }
 
+        public async Task UpdateToken(VerificationToken token)
+        {
+            _context.VerificationTokens.Update(token);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<VerificationToken> findByToken(string token)
         {
             return await _context.VerificationTokens.Include(vt => vt.User).FirstOrDefaultAsync(x => x.TokenCode.Equals(token));
@@ -22,6 +28,12 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
         {
            _context.VerificationTokens.Add(verificationToken);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<VerificationToken> findByUserId(int ID)
+        {
+            return await _context.VerificationTokens.FirstOrDefaultAsync(x => x.UserId.Equals(ID));
+             
         }
     }
 }

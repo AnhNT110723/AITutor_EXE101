@@ -1,4 +1,4 @@
-﻿@model string  
+﻿@model EmailVerificationDto
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -55,10 +55,22 @@
             <h2>FAI English</h2>
         </div>
         <div class="content">
-            <p>Chào bạn,</p>
-            <p>Vui lòng nhấp vào nút dưới đây để xác thực địa chỉ email của bạn:</p>
-            <a class="btn" href="@Model">Xác thực Email</a>
-            <p>Nếu bạn không đăng ký tài khoản, hãy bỏ qua email này.</p>
+            <p>Chào @Model.FullName,</p>
+            @if(Model.isVertification == true)
+            {
+                <p>Vui lòng nhấp vào nút dưới đây để xác thực địa chỉ email của bạn:</p>
+                <a class="btn" href="@Model.VerificationLink">Xác thực Email</a>
+                <p>Link này sẽ hết hạn vào lúc <strong>@Model.ExpirationTime.ToLocalTime().ToString("HH:mm dd/MM/yyyy")</strong>.</p>
+                <p>Nếu bạn không đăng ký tài khoản, hãy bỏ qua email này.</p>
+            }
+            @if(Model.isResendPassword == true)
+            {
+                <p>Vui lòng nhấp vào nút dưới đây để thay đổi mật khẩu mới của bạn:</p>
+                <a class="btn" href="@Model.VerificationLink">Đặt lại mật khẩu</a>
+                <p>Link này sẽ hết hạn vào lúc <strong>@Model.ExpirationTime.ToLocalTime().ToString("HH:mm dd/MM/yyyy")</strong>.</p>
+                <p>Nếu bạn không đặt lại mật khẩu cho tài khoản, hãy bỏ qua email này.</p>
+            }
+
         </div>
         <div class="footer">
             <p>© 2025 FAI English. All rights reserved.</p>
