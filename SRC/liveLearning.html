@@ -16,7 +16,26 @@
     <link rel="stylesheet" href="static/css/course.css">
 
     <style>
-       
+        .btn-test-online {
+            display: inline-block;
+            background-color: #4CAF50; /* Màu xanh lá */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px; /* Bo góc */
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-test-online:hover {
+            background-color: #45a049; /* Màu xanh nhạt hơn khi hover */
+            color: white;
+            transform: scale(1.05);
+        }
        .navbar {
               position: unset;
               border-radius: 10px;
@@ -86,15 +105,11 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">About</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Portfolio</a>
-                            </li>
+
+                            <div>
+                                <a style="margin-right: 20px;" class="btn-test-online" href="testOnline.html">Test Online</a>
+                            </div>
+                          
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown"
                                     role="button" data-toggle="dropdown" aria-expanded="false">

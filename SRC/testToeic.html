@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mana Test Toeic</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="static/intl-tel-input/css/intlTelInput.min.css" rel="stylesheet" />
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="static/assets/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="static/css/course.css">
+
+    <style>
+        .btn-test-online {
+            display: inline-block;
+            background-color: #4CAF50;
+            /* Màu xanh lá */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            /* Bo góc */
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-test-online:hover {
+            background-color: #45a049;
+            /* Màu xanh nhạt hơn khi hover */
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .navbar {
+            position: unset;
+            border-radius: 10px;
+            top: 1 !important;
+            /* Căn với sidebar mặc định */
+            width: 100% !important;
+            margin-top: -30px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .table {
+            margin: auto;
+            width: 100%;
+        }
+
+        .btn-start {
+            background-color: #FFA53A;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-start:hover {
+            background-color: #FFA53A;
+        }
+
+        .test-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .test-table {
+            width: 100%;
+            text-align: center;
+        }
+        .test-table td {
+            padding: 10px;
+            text-align: center;
+            text-align: left;
+
+        }
+        .section-title {
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: left;
+        }
+        .stt{
+            background-color: #ffc379;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar" class="active">
+            <h1><a href="home.html" class="logo"><img src="static/images/concoc.png" alt="Cup"></a></h1>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a href="groupTalk.html" class="link-test"><span class="fa fa-users"></span>
+                        <span class="menu-text">Học nhóm cùng bạn</span></a>
+                </li>
+                <li>
+                    <a href="liveLearning.html" class="link-test"><span class="fas fa-graduation-cap icon"></span>
+                        <span class="menu-text">Học live</span> </a>
+                </li>
+                <li class="active">
+                    <a href="home.html" class="link-test">
+                        <span class="fa fa-frog"></span>
+                        <span class="menu-text">AI Tutor</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="courrse.html" class="link-test"><span class="fas fa-book-open"></span>
+                        <span class="menu-text">Tự học</span></a>
+                </li>
+                <li>
+                    <a href="parentCourse.html" class="link-test"><span class="bi bi-people-fill"></span>
+                        <span class="menu-text">Trang học của cha mẹ</span> </a>
+                </li>
+            </ul>
+
+            <div class="footer">
+                <p style="color: #667085;">
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                        target="_blank">Colorlib.com</a>
+                </p>
+            </div>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                </div>
+            </nav>
+
+
+            <!-- Khối lệnh tư vấn -->
+            <div class="container-content">
+                <h5 class="fw-bold">TEST ĐẦU VÀO (3)</h5>
+                <div>
+                    <p><strong>Thời gian làm bài thi:</strong> <span class="text-danger">2 giờ</span></p>
+                    <p><strong>Cấu trúc đề thi</strong></p>
+
+                 <div  class="test-container">
+                      <h5 class="section-title">LISTENING</h5>
+                      <table class="table table-bordered test-table">
+                            <tr>
+                                <td class="stt">1</td>
+                                <td>PART 1</td>
+                                <td>6 CÂU</td>
+                            </tr>
+                            <tr>
+                                <td class="stt">2</td>
+                                <td>PART 2</td>
+                                <td>25 CÂU</td>
+                            </tr>
+                            <tr>
+                                <td class="stt">3</td>
+                                <td>PART 3</td>
+                                <td>39 CÂU</td>
+                            </tr>
+                            <tr>
+                                <td class="stt">4</td>
+                                <td>PART 4</td>
+                                <td>30 CÂU</td>
+                            </tr>
+                        </table>
+    
+                       <h5 class="section-title">READING</h5>
+                        <table class="table table-bordered test-table">
+                            <tr>
+                                <td class="stt">1</td>
+                                <td>PART 5</td>
+                                <td>30 CÂU</td>
+                            </tr>
+                            <tr>
+                                <td class="stt">2</td>
+                                <td>PART 6</td>
+                                <td>16 CÂU</td>
+                            </tr>
+                            <tr>
+                                <td class="stt">3</td>
+                                <td>PART 7</td>
+                                <td>54 CÂU</td>
+                            </tr>
+                        </table>
+                        <a href="toeicTest.html"><button class="btn btn-start mt-3">BẮT ĐẦU</button></a> 
+                    </div>           
+                </div>
+
+                
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <!-- Lớp Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+
+    <script src="static/intl-tel-input/js/intlTelInput.min.js"></script>
+    <script src="static/intl-tel-input/js/utils.js"></script>
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/popper.js"></script>
+    <script src="static/js/main.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+
+
+
+    <script>
+        // Initialize intl-tel-input
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "vn",
+            preferredCountries: ["vn", "us", "gb"],
+            separateDialCode: true,
+            allowDropdown: true, // Bật dropdown
+            utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
+
+        });
+
+
+        // Function to handle submit
+        function submitPhone() {
+            if (iti.isValidNumber()) {
+                const fullNumber = iti.getNumber(); // Get the full international number
+                document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
+            } else {
+                alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
+            }
+        }
+    </script>
+</body>
+
+</html>
