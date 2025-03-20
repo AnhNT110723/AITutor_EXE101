@@ -14,7 +14,112 @@
     <link rel="stylesheet" href="static/css/style.css">
     <link href="static/assets/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="static/css/course.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7ff;
+            padding: 20px;
+        }
 
+        a {
+            color: white;
+            /* Đổi màu chữ thành trắng */
+            text-decoration: none;
+            /* Loại bỏ gạch chân */
+        }
+
+        a:hover {
+            color: lightgray;
+            /* Màu khi hover */
+        }
+
+        .test-container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .test-box {
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .full-test {
+            background-color: white;
+        }
+
+        .mini-test {
+            background-color: white;
+            border: 1px solid #ddd;
+        }
+
+        /* Hover: Khi di chuột vào, đổi màu giống Full Test */
+        .test-box:hover {
+            background-color: #c5cbe9;
+        }
+
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            width: 70%;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #ddd;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            /* Đảm bảo phần dư không tràn ra */
+        }
+
+        .progress-bar::after {
+            content: "";
+            width: var(--progress, 0%);
+            height: 100%;
+            background-color: #aaa;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+
+
+        .progress-text {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-continue {
+            background-color: #ff6688;
+        }
+
+        .btn-start {
+            background-color: #0057d9;
+        }
+    </style>
     <style>
         .btn-test-online {
             display: inline-block;
@@ -233,10 +338,12 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <div>
-                                <a style="margin-right: 20px;" class="btn-test-online" href="testIelts.html">Test IELTS</a>
+                                <a style="margin-right: 20px;" class="btn-test-online" href="testIelts.html">Test
+                                    IELTS</a>
                             </div>
                             <div>
-                                <a style="margin-right: 20px;" class="btn-test-online" href="#">Test Online</a>
+                                <a style="margin-right: 20px;" class="btn-test-online" href="testOnline.html">Test
+                                    Online</a>
                             </div>
 
                             <li class="nav-item dropdown">
@@ -265,213 +372,46 @@
 
 
             <!-- Khối lệnh test Online Toeic -->
-            <div class="content-container">
-                <div class="container text-center">
-                    <h5>FAI Tutor LÀ Website TẠI VIỆT NAM CÓ TEST TOEIC 4 KỸ NĂNG GIỐNG 90% ĐỀ THI THẬT</h5>
-
-                    <!-- Tabs -->
-                    <div class="tabs ">
-                        <button class="tab-button active-tab" onclick="showTab('listening-reading', this)">Listening &
-                            Reading</button>
-                        <button class="tab-button inactive-tab" onclick="showTab('speaking-writing', this)">Speaking &
-                            Writing</button>
-
-                    </div>
-
-                    <!-- Listening - Reading -->
-                    <div class="timeline tab-content" id="listening-reading">
-                        <div class="timeline-item">TOEIC LISTENING & READING - FULL TEST
-                        </div>
-
-                        <div class="timeline-item" data-number="1">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                TEST ĐẦU VÀO
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <a style="text-decoration: none;" href="testToeic.html"><div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div></a>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="timeline-item" data-number="2">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                HACKER TOEIC 3
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item" data-number="3">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                HACKER TOEIC 2
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="timeline-item" data-number="4">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                ETS 2024
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item" data-number="5">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                ETS 2023
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item" data-number="6">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                ETS 2022
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- Speaking - Writing -->
-
-                    <div id="speaking-writing" class="timeline" style="display: none;">
-                        <div class="timeline-item">TOEIC Speaking & Writing </div>
-                        <div class="timeline-item" data-number="1">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                TOEIC SPEAKING & WRITING 
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
+            <div class="test-container">
+                <!-- Full Test -->
+                <div class="test-box full-test">
+                    <div class="test-content">
+                        <div class="test-title">Bài kiểm tra đầu vào (IELTS Full-test)</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="fullTestProgress"></div>
+                            <span class="progress-text" id="fullTestText">0%</span>
                         </div>
                     </div>
+                    <button class="btn btn-continue"><a href="Ieltstest1.html">Continue</a></button>
+                </div>
 
-
+                <!-- Mini Test -->
+                <div class="test-box mini-test">
+                    <div class="test-content">
+                        <div class="test-title">Bài kiểm tra đầu vào (IELTS Mini-test)</div>
+                        <div class="progress-container">
+                            <div class="progress-bar"></div>
+                            <span class="progress-text">0%</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-start"> <a href="Ieltstest1.html">Start</a></button>
                 </div>
             </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const progressBar = document.getElementById("fullTestProgress");
+                    const progressText = document.getElementById("fullTestText");
+
+                    if (progressBar && progressText) {
+                        progressBar.style.setProperty("--progress", "30%");
+                        progressText.textContent = "30%";
+                    } else {
+                        console.error("Không tìm thấy phần tử progressBar hoặc progressText");
+                    }
+                });
+
+            </script>
 
         </div>
 
