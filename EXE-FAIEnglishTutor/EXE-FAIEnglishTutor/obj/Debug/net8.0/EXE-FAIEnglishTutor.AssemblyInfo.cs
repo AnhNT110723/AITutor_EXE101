@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EXE-FAIEnglishTutor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+641595344d41aa10cb69465f6b92883f710a89d1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f06dd654df20709b128f1598c0a413302a494e45")]
 [assembly: System.Reflection.AssemblyProductAttribute("EXE-FAIEnglishTutor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EXE-FAIEnglishTutor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
