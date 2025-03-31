@@ -294,6 +294,90 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Đổi ngôn ngữ
+    document.addEventListener('DOMContentLoaded', () => {
+      const languageDropdown = document.getElementById('languageDropdown');
+      const languageItems = document.querySelectorAll('.dropdown-item');
+
+      // Cập nhật nội dung trên trang
+      const updatePageContent = (translations) => {
+          const elementsToUpdate = {
+              title: 'title',
+              accountRe: 'accountRe',
+              navHome: 'navHome',
+              navAbout: 'navAbout',
+              navPortfolio: 'navPortfolio',
+              profileOption: 'profileOption',
+              logoutOption: 'logoutOption',
+              footerText: 'footerText',
+              titleModalImg: 'titleModalImg',
+              avatarModalLabel: 'avatarModalLabel',
+              inputName: 'inputName',
+              inputDate: 'inputDate',
+              inputPhone: 'inputPhone',
+              inputEmail: 'inputEmail',
+              inputPassword: 'inputPassword',
+              inputRepass: 'inputRepass',
+              closeBtn: 'closeBtn',
+              saveBtn: 'saveAvatarBtn',
+              live: 'live',
+              AI: 'AI',
+              self: 'self',
+              parentPage: 'parentPage',
+              groupTalk: 'groupTalk',
+              inputAddress: 'inputAddress',
+              inputOldpass: 'inputOldpass',
+              btnSaveChange: 'btnSaveChange',
+              viewProfile: 'viewProfile',
+              changePassword: 'changePassword',
+              searchCourse : 'searchCourse',
+              titleListCourse : 'titleListCourse'
+
+          };
+
+          Object.keys(elementsToUpdate).forEach((key) => {
+              const element = document.getElementById(elementsToUpdate[key]);
+              if (element) {
+                  element.textContent = translations[key] || element.textContent;
+              } else {
+                  console.warn(`Element with ID '${elementsToUpdate[key]}' not found.`);
+              }
+          });
+      };
+
+      // Thay đổi ngôn ngữ
+      const changeLanguage = (lang) => {
+          localStorage.setItem('language', lang); // Lưu vào localStorage
+          fetch('static/data/languages.json')
+              .then((res) => res.json())
+              .then((data) => {
+                  if (data[lang]) {
+                      updatePageContent(data[lang]);
+                  } else {
+                      console.error(`No translations available for language: ${lang}`);
+                  }
+              })
+              .catch((err) => console.error('Error fetching language file:', err));
+      };
+
+      // Đặt ngôn ngữ mặc định
+      const savedLanguage = localStorage.getItem('language') || 'en';
+      changeLanguage(savedLanguage);
+
+      // Lắng nghe sự kiện thay đổi ngôn ngữ
+      languageItems.forEach((item) => {
+          item.addEventListener('click', (e) => {
+              const lang = e.target.getAttribute('data-lang');
+              changeLanguage(lang);
+
+              // Cập nhật dropdown
+              const flagSrc = e.target.querySelector('img').src;
+              const langText = e.target.textContent.trim();
+              languageDropdown.innerHTML = `<img src="${flagSrc}" class="flag-icon" /> ${langText}`;
+          });
+      });
+  });
+
     // Lưu ảnh
     saveAvatarBtn.addEventListener('click', () => {
         if (selectedAvatar) {

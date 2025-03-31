@@ -4,6 +4,8 @@ using EXE_FAIEnglishTutor.Repositories.Implementation;
 using EXE_FAIEnglishTutor.Repositories.Interface;
 using EXE_FAIEnglishTutor.Services.Implimentaion;
 using EXE_FAIEnglishTutor.Services.Interface;
+using EXE_FAIEnglishTutor.Services.Interface.AI;
+using EXE_FAIEnglishTutor.Services.Implimentaion.AI;
 
 namespace EXE_FAIEnglishTutor.Configurations
 {
@@ -24,6 +26,8 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<IForgotPasswordService, ForgotPasswordServiceImpl>();
             services.AddTransient<EmailSendVetification>();
 
+            // Chat bot - Sử dụng AddHttpClient thay vì AddScoped
+            services.AddHttpClient<IChatBotService, ChatBotService>();
 
         }
 

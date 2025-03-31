@@ -20,6 +20,7 @@
 
 
 
+
 //xử lí sidebar với nave bar và popup
 
 window.addEventListener('DOMContentLoaded', function () {
@@ -79,6 +80,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Hàm cập nhật giao diện khi thay đổi kích thước màn hình
     function updateLayoutOnResize() {
+        updateLogo();
         if (window.innerWidth >= 1400) {
             sidebar.classList.contains('active')
                 ? (sidebar.classList.add('active'),
@@ -129,6 +131,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Xử lý sự kiện click vào nút toggle sidebar
     sidebarCollapse.addEventListener('click', function () {
+        updateLogo();
         sidebar.classList.toggle('active');
 
         sidebar.classList.toggle('active');
@@ -138,19 +141,17 @@ window.addEventListener('DOMContentLoaded', function () {
         if (width >= 991) {
             navbar.style.left = isActive ? "80px" : "270px";
             navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            bg_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            item_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
-
-                content.style.marginLeft = isActive ? "80px" : "270px";
+            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+            if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+            if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
+            content.style.marginLeft = isActive ? "80px" : "270px";
         } else {
             navbar.style.left = isActive ? "80px" : "0";
             navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            bg_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            item_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
-
-                content.style.marginLeft = isActive ? "80px" : "0";
+            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
+            if (item_custom)item_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
+            if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
+            content.style.marginLeft = isActive ? "80px" : "0";
 
         }
         updateLogo();
@@ -178,95 +179,6 @@ window.addEventListener('DOMContentLoaded', function () {
     adjustListHeight();
 });
 
-//xử lí sidebar với nave bar
-// document.addEventListener('DOMContentLoaded', function () {
-//   const sidebar = document.getElementById('sidebar');
-//   const navbar = document.querySelector('.navbar');
-//   const content = document.getElementById('content');
-//   const sidebarCollapse = document.getElementById('sidebarCollapse');
-//   const logoImg = document.querySelector('#sidebar .logo img'); // Lấy phần tử ảnh logo
-
-//     // Hàm thay đổi logo
-// 	function updateLogo() {
-// 		if (sidebar.classList.contains('active')) {
-// 		  logoImg.src = 'static/images/concoc.png'; // Logo mặc định khi sidebar active
-// 		  logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
-//           logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
-// 		} else {
-// 		  logoImg.src = 'static/images/FAI.png'; // Logo khi sidebar không active
-// 		  logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
-//           logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
-// 		}
-// 	  }
-
-
-//   // Hàm cập nhật giao diện khi thay đổi kích thước màn hình
-// function updateLayoutOnResize() {
-//     if (window.innerWidth >= 1400) {
-//         sidebar.classList.contains('active')
-//             ? (sidebar.classList.remove('active'),
-//               (navbar.style.left = "270px"),
-//               (navbar.style.width = "calc(100% - 270px)"),
-//               (content.style.marginLeft = "270px"))
-//             : (sidebar.classList.add('active'),
-//               (navbar.style.left = "80px"),
-//               (navbar.style.width = "calc(100% - 80px)"),
-//               (content.style.marginLeft = "80px"));
-//     } else if (window.innerWidth >= 991) {
-//         sidebar.classList.add('active');
-//         navbar.style.left = "80px";
-//         navbar.style.width = "calc(100% - 80px)";
-//         content.style.marginLeft = "80px";
-//     } else {
-//         sidebar.classList.contains('active')
-//             ? (sidebar.classList.remove('active'),
-//               (navbar.style.left = "0"),
-//               (navbar.style.width = "100%"),
-//               (content.style.marginLeft = "0"))
-//             : (sidebar.classList.add('active'),
-//               (navbar.style.left = "80px"),
-//               (navbar.style.width = "calc(100% - 80px)"),
-//               (content.style.marginLeft = "80px"));
-//     }
-//     updateLogo();
-// }
-
-
-//   // Xử lý sự kiện click vào nút toggle sidebar
-//   sidebarCollapse.addEventListener('click', function () {
-// 	sidebar.classList.toggle('active');
-
-// 	sidebar.classList.toggle('active');
-//     const isActive = sidebar.classList.contains('active');
-//     const width = window.innerWidth;
-
-//     if (width >= 991) {
-//       navbar.style.left = isActive ? "80px" : "270px";
-//       navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-//       content.style.marginLeft = isActive ? "80px" : "270px";
-//     } else {
-//       navbar.style.left = isActive ? "80px" : "0";
-//       navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
-//       content.style.marginLeft = isActive ? "80px" : "0";
-//     }
-//     updateLogo();
-//   });
-
-//   // Lắng nghe sự kiện thay đổi kích thước màn hình
-//   // window.addEventListener('resize', updateLayoutOnResize);
-//   let resizeTimeout;
-
-//   window.addEventListener('resize', function () {
-// 	if (resizeTimeout) clearTimeout(resizeTimeout);
-
-// 	// Chỉ gọi updateLayoutOnResize sau khi resize dừng 200ms
-// 	resizeTimeout = setTimeout(() => {
-// 	  updateLayoutOnResize();
-// 	  updateLogo();
-// 	}, 120);
-//   });
-
-// });
 
 
 
@@ -389,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Thay đổi ngôn ngữ
     const changeLanguage = (lang) => {
         localStorage.setItem('language', lang); // Lưu vào localStorage
-        fetch('static/data/languages.json')
+        fetch('data/languages.json')
             .then((res) => res.json())
             .then((data) => {
                 if (data[lang]) {
