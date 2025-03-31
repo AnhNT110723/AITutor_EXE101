@@ -12146,7 +12146,7 @@ html {
 
 /* Nội dung chính */
 #content {
-    margin-left: 230px;
+    margin-left: 250px;
     /* Căn với sidebar mặc định */
     transition: all 0.3s ease;
 }
@@ -12874,7 +12874,7 @@ body #sidebar.active .menu-text {
 
 /* Nội dung chính đẩy qua phải (để tránh chồng sidebar) */
 #content {
-    margin-left: 250px;
+/*    margin-left: 250px;*/
     /* Đẩy nội dung sang phải để tránh sidebar */
     padding: 15px;
 }
@@ -13068,3 +13068,5 @@ p {
 .iti {
     width: 100%;
 }
+
+

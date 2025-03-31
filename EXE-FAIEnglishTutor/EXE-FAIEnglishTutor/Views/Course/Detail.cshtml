@@ -1,0 +1,232 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAI English</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/lib/intl-tel-input/css/intlTelInput.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/course-gen.css">
+
+    <style>
+        @@media (max-width: 991px) {
+            .text-section {
+                margin-top: 15px;
+            }
+        }
+
+        .learn-english-ai .sticky-wrapper {
+            height: auto;
+        }
+
+        .image-section {
+            width: 100%;
+            height: 475px;
+
+        }
+
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar" class="active">
+            <h1><a href="home.html" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a asp-controller="Ielts" class="link-test">
+                        <span class="fa fa-users"></span>
+                        <span class="menu-text">Học Ielts</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Toeic" class="link-test">
+                        <span class="fas fa-graduation-cap icon"></span>
+                        <span class="menu-text">Học Toeic</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a asp-controller="home" class="link-test">
+                        <span class="fa fa-frog"></span>
+                        <span class="menu-text">AI Tutor</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="selfStudy" class="link-test">
+                        <span class="fas fa-book-open"></span>
+                        <span class="menu-text">Tự học</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="ParentCourse" class="link-test">
+                        <span class="bi bi-people-fill"></span>
+                        <span class="menu-text">Trang học của cha mẹ</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="footer">
+                <p style="color: #667085;">
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                                                                                  target="_blank">Colorlib.com</a>
+                </p>
+            </div>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5 learn-english-ai">
+            <div class="sticky-wrapper sticky-wrapper-list-courses">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                            <i class="fa fa-bars"></i>
+                            <span class="sr-only">Toggle Menu</span>
+                        </button>
+                        <!-- Nút Back -->
+                        <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                                data-toggle="collapse" data-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                @*  <li class="nav-item active">
+                                <a class="nav-link" href="home.html">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">Portfolio</a>
+                                </li> *@
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    // Đọc thông tin từ cookie
+                                    var fullName = User.Identity.Name;
+                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                    <li class="nav-item dropdown">
+
+                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div class="nav-img">
+                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                            </div>
+                                        </a>
+                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                            <div class="menu-title">
+                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                                <i class="bi bi-person-circle"></i> View Profile
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                            </a>
+
+                                            <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="list-courses">
+                <div class="container">
+                    <!-- <div class="header">
+                            <button>⬅</button>
+                        </div> -->
+                    <div class="content">
+                        <div class="row">
+
+
+                            <div class="image-section col-lg-6 col-12">
+                                <img src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png"
+                                     alt="Nurse">
+                            </div>
+                            <div class="text-section col-lg-6 col-12">
+                                <span class="badge">Beginner</span>
+                                <h2 class="title">Making a Doctor's Appointment</h2>
+
+                                <div class="role">
+                                    <div>👤 Vai trò của tôi</div> <br><span>Người bệnh</span>
+                                </div>
+
+                                <div class="role">
+                                    <div>📋 Vai trò của AI</div> <br> <span>Y tá</span>
+                                </div>
+
+                                <div class="icon-text">
+                                    <span>📅</span>
+                                    <p>
+                                        <strong>Tình huống:</strong> Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh
+                                        khủng.
+                                        Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám nhé!
+                                    </p>
+                                </div>
+
+                                <div class="goals">
+                                    <p><strong>Mục tiêu bài học:</strong></p>
+                                    <ul>
+                                        <li>Bạn nắm cách đặt lịch khám bệnh</li>
+                                        <li>Nắm các từ vựng về chủ đề sức khoẻ</li>
+                                        <li>Thực hành cấu trúc "I want to..."</li>
+                                    </ul>
+                                </div>
+
+                                <div class="button-group">
+                                    <a asp-controller="Course" asp-action="TakingAi" class="button button-sample">Học mẫu câu</a>
+                                    <a asp-controller="Course" asp-action="TakingAi" class="button button-ai">Thực hành với AI</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/lib/intl-tel-input/js/intlTelInput.min.js"></script>
+    <script src="~/lib/intl-tel-input/js/utils.js"></script>
+    <script src="~/js/main.js"></script>
+
+
+</body>
+
+</html>

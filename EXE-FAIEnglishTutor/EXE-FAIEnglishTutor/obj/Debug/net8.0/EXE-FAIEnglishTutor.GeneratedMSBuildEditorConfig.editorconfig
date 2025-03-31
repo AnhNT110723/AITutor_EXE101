@@ -38,6 +38,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Course/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXERldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Course/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Course/TakingAI.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXFRha2luZ0FJLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Emails/VerificationEmail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1haWxzXFZlcmlmaWNhdGlvbkVtYWlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -50,12 +62,68 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Ielts/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWVsdHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Ielts/ResultTest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWVsdHNcUmVzdWx0VGVzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Ielts/TestIelts1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWVsdHNcVGVzdEllbHRzMS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Ielts/TestIelts2.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWVsdHNcVGVzdEllbHRzMi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Ielts/TestOnline.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSWVsdHNcVGVzdE9ubGluZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/ParentCourse/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFyZW50Q291cnNlXERldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/ParentCourse/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFyZW50Q291cnNlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Profile/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZmlsZVxQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Pronunciation/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvbnVuY2lhdGlvblxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/SelfStudy/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VsZlN0dWR5XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Toeic/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9laWNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Toeic/TestInput.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9laWNcVGVzdElucHV0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Toeic/TestOnline.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9laWNcVGVzdE9ubGluZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/Toeic/TestToeic.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9laWNcVGVzdFRvZWljLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FPTU/Semester 7/EXE101/CODE/EXE-FAIEnglishTutor/EXE-FAIEnglishTutor/Views/_ViewImports.cshtml]

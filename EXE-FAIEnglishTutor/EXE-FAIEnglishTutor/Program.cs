@@ -48,10 +48,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     })
     .AddTwitter("Twitter", options =>
     {
-        options.ConsumerKey = builder.Configuration["Twitter:ClientId"];
-        options.ConsumerSecret = builder.Configuration["Twitter:ClientSecret"];
+        options.ConsumerKey = builder.Configuration["Twitter:APIKey"];
+        options.ConsumerSecret = builder.Configuration["Twitter:APIKeySecret"];
         options.CallbackPath = "/signin-twitter";
-    });
+		options.SaveTokens = true;
+	});
 
 var app = builder.Build();
 

@@ -41,6 +41,12 @@
                 background-color: #dc3545; /* Change OK button to green on hover */
             }
 
+        .btn-login-custom {
+            background-color: black;
+            color: white;
+            border-color:aqua;
+        }
+
     </style>
 </head>
 
@@ -76,32 +82,32 @@
                 <h1><a href="home.html" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
                 <ul class="list-unstyled components mb-5">
                     <li>
-                        <a href="groupTalk.html" class="link-test">
+                        <a asp-controller="Ielts" class="link-test">
                             <span class="fa fa-users"></span>
-                            <span class="menu-text">Học nhóm cùng bạn</span>
+                            <span class="menu-text">Học Ielts</span>
                         </a>
                     </li>
                     <li>
-                        <a href="liveLearning.html" class="link-test">
+                        <a asp-controller="Toeic" class="link-test">
                             <span class="fas fa-graduation-cap icon"></span>
-                            <span class="menu-text">Học live</span>
+                            <span class="menu-text">Học Toeic</span>
                         </a>
                     </li>
                     <li class="active">
-                        <a href="home.html" class="link-test">
+                        <a asp-controller="home" class="link-test">
                             <span class="fa fa-frog"></span>
                             <span class="menu-text">AI Tutor</span>
 
                         </a>
                     </li>
                     <li>
-                        <a href="courrse.html" class="link-test">
+                        <a asp-controller="selfStudy" class="link-test">
                             <span class="fas fa-book-open"></span>
                             <span class="menu-text">Tự học</span>
                         </a>
                     </li>
                     <li>
-                        <a href="parentCourse.html" class="link-test">
+                        <a asp-controller="ParentCourse" class="link-test">
                             <span class="bi bi-people-fill"></span>
                             <span class="menu-text">Trang học của cha mẹ</span>
                         </a>

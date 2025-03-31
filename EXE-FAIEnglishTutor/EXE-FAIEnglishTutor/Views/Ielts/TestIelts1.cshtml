@@ -1,0 +1,549 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC Test</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="~/lib/intl-tel-input/css/intlTelInput.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/course-gen.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        a {
+            color: white;
+            /* Đổi màu chữ thành trắng */
+            text-decoration: none;
+            /* Loại bỏ gạch chân */
+        }
+
+        a:hover {
+            color: lightgray;
+            /* Màu khi hover */
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8a85e;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .countdown-timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+        }
+
+        .left-panel,
+        .right-panel {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .left-panel {
+            width: 50%;
+            border-right: 2px solid #ddd;
+        }
+
+        .right-panel {
+            width: 50%;
+        }
+
+        .question-box {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .highlight {
+            border: 2px solid blue;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
+    <style>
+        .btn-test-online {
+            display: inline-block;
+            background-color: #4CAF50;
+            /* Màu xanh lá */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            /* Bo góc */
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-test-online:hover {
+            background-color: #45a049;
+            /* Màu xanh nhạt hơn khi hover */
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .navbar {
+            position: unset;
+            border-radius: 10px;
+            top: 1 !important;
+            /* Căn với sidebar mặc định */
+            width: 100% !important;
+            margin-top: -30px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 8px;
+
+        }
+
+        .active-tab {
+            background-color: #ff6600;
+            /* Màu cam */
+            color: white;
+        }
+
+        .inactive-tab {
+            background-color: #0033cc;
+            /* Màu xanh */
+            color: white;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px auto;
+            max-width: 600px;
+            padding-left: 40px;
+        }
+
+        /* Mục timeline */
+        .timeline-item {
+            position: relative;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            transition: 0.3s;
+
+        }
+
+        .timeline-item:hover {
+            background: #f1f1f1;
+        }
+
+        /* Số thứ tự trên timeline */
+        .timeline-item::before {
+            content: attr(data-number);
+            position: absolute;
+            left: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #FFA53A;
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #f59a5e;
+            font-size: 18px;
+        }
+
+        .timeline-header .arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+
+        }
+
+        .test-item:hover {
+            background: #f0f0f0;
+        }
+
+        #testList {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .test-item {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            min-width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar" class="active">
+            <h1><a asp-controller="home" asp-action="index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a asp-controller="Ielts" asp-action="index" class="link-test">
+                        <span class="fa fa-users"></span>
+                        <span class="menu-text">Học Ielts</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Toeic" asp-action="index" class="link-test">
+                        <span class="fas fa-graduation-cap icon"></span>
+                        <span class="menu-text">Học Toeic</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a asp-controller="home" asp-action="index" class="link-test">
+                        <span class="fa fa-frog"></span>
+                        <span class="menu-text">AI Tutor</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="selfStudy" asp-action="index" class="link-test">
+                        <span class="fas fa-book-open"></span>
+                        <span class="menu-text">Tự học</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="ParentCourse" asp-action="index" class="link-test">
+                        <span class="bi bi-people-fill"></span>
+                        <span class="menu-text">Trang học của cha mẹ</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="footer">
+                <p style="color: #667085;">
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                                                                                  target="_blank">Colorlib.com</a>
+                </p>
+            </div>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            @*  <li class="nav-item active">
+                            <a class="nav-link" href="home.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="#">Portfolio</a>
+                            </li> *@
+                            <li>
+                                <a style="margin-right: 20px;" class="btn-test-online" asp-controller="Ielts" asp-action="TestOnline">
+                                    Test
+                                    IELTS
+                                </a>
+                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                // Đọc thông tin từ cookie
+                                var fullName = User.Identity.Name;
+                                var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                <li class="nav-item dropdown">
+
+                                    <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="nav-img">
+                                            <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                        </div>
+                                    </a>
+                                    <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                        <div class="menu-title">
+                                            <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                            <i class="bi bi-person-circle"></i> View Profile
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                            <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                        </a>
+
+                                        <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="header">
+                <h4>Nguyễn Tuấn Anh</h4>
+                <div class="countdown-timer" id="countdown">10:00</div>
+                <button class="btn btn-primary finish-btn"><a asp-controller="Ielts" asp-action="TestIelts2">Finish Section</a> </button>
+            </div>
+
+            <div class="container">
+                <!-- Bên trái: Nội dung bài đọc -->
+                <div class="left-panel">
+                    <small>
+                        You should spend about 20 minutes on these questions, which are based on the reading passage
+                        below.
+                    </small>
+                    <h3>Chinstrap Penguin Population In The Last 50 Years</h3>
+                    <p>
+                        <strong>A.</strong> The chinstrap penguin has a cap of black plumage, a white face, and a
+                        continuous band of black feathers extending from one side of the head to the other, the
+                        “chinstrap.” The northern part of the Antarctic Peninsula, several Antarctic and subantarctic
+                        islands, and the uninhabited Balleny Islands between Antarctica and New Zealand are the habitats
+                        of the species.
+                    </p>
+                    <p>
+                        <strong>B.</strong> Antarctic penguin colonies in some parts of the Antarctic have declined over
+                        the last 50 years, mostly because of climate change, researchers say. The colonies of chinstrap
+                        penguins, also known as ringed or bearded penguins, have dramatically dropped since they were
+                        last surveyed almost 50 years ago, scientists discovered. The findings became surprising
+                        because, until now, the chinstraps have been deemed of “least concern” by the International
+                        Union for Conservation of Nature (IUCN). “We really didn’t know what to expect, and then we
+                        found this huge decline on Elephant Island,” Noah Strycker, an ornithologist and penguin
+                        researcher at Stony Brook University, told CNN from Greenpeace’s Esperanza ship in the
+                        Antarctic. “It’s a little bit worrying as it means that something is shifting in the ecosystem
+                        and the fall in penguin numbers is reflecting that shift.”
+                    </p>
+                    <P>
+                        <strong>c.</strong> Every colony of Elephant Island, which is a crucial penguin habitat northeast
+                        of the Antarctic Peninsula, when surveyed, experienced a population fall, as per the independent
+                        researchers who joined a Greenpeace expedition to the region. Elephant Island was last surveyed
+                        in 1971, and there were 122,550 pairs of penguins across all colonies. However, the recent count
+                        revealed just 52,786 pairs with a drop of almost 60%. On Elephant Island, the size of the
+                        population change varied from colony to colony, and the most significant decline was recorded at
+                        a colony known as Chinstrap Camp, which is 77%.
+                    </P>
+                </div>
+
+                <!-- Bên phải: Câu hỏi -->
+                <div class="right-panel">
+                    <div id="questions-container">
+                        <div class="question-box highlight" id="question1">
+                            <p>
+                                <strong>Question 1:</strong> The IUCN showed little concern about the fall in penguin
+                                numbers.
+                            </p>
+                            <input type="radio" name="q1" value="true"> TRUE <br>
+                            <input type="radio" name="q1" value="false"> FALSE <br>
+                            <input type="radio" name="q1" value="not_given"> NOT GIVEN
+                        </div>
+                        <div class="question-box" id="question2">
+                            <p>
+                                <strong>Question 2:</strong> Climate change is a reason for the changes in the food chain
+                                of chinstrap penguins.
+                            </p>
+                            <input type="radio" name="q2" value="true"> TRUE <br>
+                            <input type="radio" name="q2" value="false"> FALSE <br>
+                            <input type="radio" name="q2" value="not_given"> NOT GIVEN
+                        </div>
+                    </div>
+
+                    <!-- Điều hướng câu hỏi -->
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">Previous</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()">Next</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function startCountdown(duration) {
+                    let timer = duration, minutes, seconds;
+                    const countdownElement = document.getElementById('countdown');
+
+                    const interval = setInterval(function () {
+                        minutes = Math.floor(timer / 60);
+                        seconds = timer % 60;
+                        countdownElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                        if (--timer < 0) {
+                            clearInterval(interval);
+                            countdownElement.textContent = "Time's up!";
+                            alert("Hết thời gian làm bài!");
+                        }
+                    }, 1000);
+                }
+
+                window.onload = function () {
+                    startCountdown(600); // Đếm ngược từ 10 phút (600 giây)
+                };
+            </script>
+
+            <script>
+                let currentQuestion = 1;
+                function updateHighlight() {
+                    document.querySelectorAll('.question-box').forEach(q => q.classList.remove('highlight'));
+                    document.getElementById(`question${currentQuestion}`).classList.add('highlight');
+                }
+                function prevQuestion() {
+                    if (currentQuestion > 1) { currentQuestion--; updateHighlight(); }
+                }
+                function nextQuestion() {
+                    if (currentQuestion < 2) { currentQuestion++; updateHighlight(); }
+                }
+            </script>
+
+        </div>
+
+        <!-- Lớp Overlay -->
+        <div class="overlay" id="overlay"></div>
+
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="~/lib/intl-tel-input/js/intlTelInput.min.js"></script>
+        <script src="~/lib/intl-tel-input/js/utils.js"></script>
+        <script src="~/js/main.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll(".timeline-header").forEach(header => {
+                    header.addEventListener("click", function () {
+                        let content = this.nextElementSibling;
+                        let arrow = this.querySelector(".arrow");
+
+                        if (content.style.display === "none" || content.style.display === "") {
+                            content.style.display = "block"; // Hiển thị nội dung
+                            arrow.innerHTML = "▼"; // Đổi mũi tên xuống
+                        } else {
+                            content.style.display = "none"; // Ẩn nội dung
+                            arrow.innerHTML = "▲"; // Đổi mũi tên lên
+                        }
+                    });
+
+                    // Ẩn nội dung khi tải trang
+                    let content = header.nextElementSibling;
+                    content.style.display = "none";
+                });
+            });
+
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Mặc định hiển thị Listening & Reading, ẩn Speaking & Writing
+                document.getElementById('listening-reading').style.display = 'block';
+                document.getElementById('speaking-writing').style.display = 'none';
+            });
+
+            function showTab(tabId, btn) {
+                // Ẩn tất cả các tab trước khi hiển thị tab được chọn
+                document.getElementById('listening-reading').style.display = 'none';
+                document.getElementById('speaking-writing').style.display = 'none';
+
+                // Hiển thị tab được chọn
+                document.getElementById(tabId).style.display = 'block';
+
+                // Cập nhật trạng thái active/inactive của các nút
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    button.classList.remove('active-tab');
+                    button.classList.add('inactive-tab');
+                });
+
+                // Cập nhật lại class cho nút đang chọn
+                btn.classList.add('active-tab');
+                btn.classList.remove('inactive-tab');
+            }
+
+        </script>
+
+
+</body>
+
+</html>
