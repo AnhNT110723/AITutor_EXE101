@@ -18,170 +18,6 @@
 
 })(jQuery);
 
-
-
-
-//xử lí sidebar với nave bar và popup
-
-window.addEventListener('DOMContentLoaded', function () {
-    const sidebar = document.getElementById('sidebar');
-    const navbar = document.querySelector('.navbar');
-    const bg_custom = document.querySelector('.bg-custom');
-    const item_custom = document.querySelector('.item-custom');
-    const right_btn = document.querySelector('.right-btn');
-    const content = document.getElementById('content');
-    const sidebarCollapse = document.getElementById('sidebarCollapse');
-    const logoImg = document.querySelector('#sidebar .logo img'); // Lấy phần tử ảnh logo
-    var video = document.querySelector('video');
-    var list = document.querySelector('.overflow');
-    var list_auto = document.querySelector('.overflow-auto');
-
-
-    // Đảm bảo video đã được tải và chiều cao được xác định
-    if (video != null) {
-        video.addEventListener('loadedmetadata', function () {
-            adjustListHeight();
-        });
-    }
-
-
-    function adjustListHeight() {
-        // Kiểm tra chiều cao của video
-        var videoHeight = video.offsetHeight;
-
-        // Kiểm tra nếu video có chiều cao hợp lệ
-        if (videoHeight > 0) {
-            if (list != null) {
-                list.style.height = videoHeight + 'px';
-            }
-            if (list_auto != null) {
-                list_auto.style.height = videoHeight + 'px';
-
-            }
-        } else {
-            // Nếu chiều cao video không hợp lệ, đặt lại chiều cao của danh sách
-            setTimeout(adjustListHeight, 100);  // Thử lại sau một thời gian ngắn
-        }
-    }
-
-    // Hàm thay đổi logo
-    function updateLogo() {
-        if (sidebar.classList.contains('active')) {
-            logoImg.src = 'Images/concoc.png'; // Logo mặc định khi sidebar active
-            logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
-            logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
-        } else {
-            logoImg.src = 'Images/FAI-1.png'; // Logo khi sidebar không active
-            logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
-            logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
-        }
-    }
-
-
-    // Hàm cập nhật giao diện khi thay đổi kích thước màn hình
-    function updateLayoutOnResize() {
-        updateLogo();
-        if (window.innerWidth >= 1400) {
-            sidebar.classList.contains('active')
-                ? (sidebar.classList.add('active'),
-                    (navbar.style.left = "80px"),
-                    (navbar.style.width = "calc(100% - 80px)"),
-                    (bg_custom.style.width = "calc(100% - 80px)"),
-                    (item_custom.style.width = "calc(100% - 80px)"),
-                    (right_btn.classList.add('active')),
-                    (content.style.marginLeft = "80px"))
-
-                : (sidebar.classList.remove('active'),
-                    (navbar.style.left = "270px"),
-                    (navbar.style.width = "calc(100% - 270px)"),
-                    (bg_custom.style.width = "calc(100% - 270px)"),
-                    (item_custom.style.width = "calc(100% - 270px)"),
-                    (right_btn.classList.remove('active')),
-                    (content.style.marginLeft = "270px")
-
-                );
-        } else if (window.innerWidth >= 991) {
-            sidebar.classList.add('active');
-            navbar.style.left = "80px";
-            navbar.style.width = "calc(100% - 80px)";
-            bg_custom.style.width = "calc(100% - 80px)";
-            item_custom.style.width = "calc(100% - 80px)";
-            right_btn.classList.add('active');
-            content.style.marginLeft = "80px";
-        } else {
-            sidebar.classList.contains('active')
-                ? (sidebar.classList.remove('active'),
-                    (navbar.style.left = "0"),
-                    (navbar.style.width = "100%"),
-                    (bg_custom.style.width = "100%"),
-                    (item_custom.style.width = "100%"),
-                    (right_btn.classList.remove('active')),
-                    (content.style.marginLeft = "0"))
-                : (sidebar.classList.add('active'),
-                    (navbar.style.left = "80px"),
-                    (navbar.style.width = "calc(100% - 80px)"),
-                    (bg_custom.style.width = "calc(100% - 80px)"),
-                    (item_custom.style.width = "calc(100% - 80px)"),
-                    (right_btn.classList.add('active')),
-                    (content.style.marginLeft = "80px"));
-        }
-        updateLogo();
-        adjustListHeight();
-    }
-
-    // Xử lý sự kiện click vào nút toggle sidebar
-    sidebarCollapse.addEventListener('click', function () {
-        updateLogo();
-        sidebar.classList.toggle('active');
-
-        sidebar.classList.toggle('active');
-        const isActive = sidebar.classList.contains('active');
-        const width = window.innerWidth;
-
-        if (width >= 991) {
-            navbar.style.left = isActive ? "80px" : "270px";
-            navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
-            content.style.marginLeft = isActive ? "80px" : "270px";
-        } else {
-            navbar.style.left = isActive ? "80px" : "0";
-            navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            if (item_custom)item_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
-            content.style.marginLeft = isActive ? "80px" : "0";
-
-        }
-        updateLogo();
-        setTimeout(adjustListHeight, 300);
-
-    });
-
-
-    // Lắng nghe sự kiện thay đổi kích thước màn hình
-    // window.addEventListener('resize', updateLayoutOnResize);
-    let resizeTimeout;
-
-    window.addEventListener('resize', function () {
-        if (resizeTimeout) clearTimeout(resizeTimeout);
-
-        // Chỉ gọi updateLayoutOnResize sau khi resize dừng 200ms
-        resizeTimeout = setTimeout(() => {
-            updateLayoutOnResize();
-            adjustListHeight();
-        }, 120);
-    });
-
-    // Điều chỉnh lại chiều cao khi cửa sổ thay đổi kích thước
-    window.addEventListener('resize', adjustListHeight);
-    adjustListHeight();
-});
-
-
-
-
 // popups
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -209,40 +45,57 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedAvatar = null;
 
     // Xử lý chọn ảnh mặc định
-    defaultAvatars.forEach((img) => {
-        img.addEventListener('click', () => {
-            // Đặt viền cho ảnh được chọn
-            defaultAvatars.forEach((item) => item.parentElement.style.borderColor = '#ddd');
-            img.parentElement.style.borderColor = '#007bff';
+    if (defaultAvatars && defaultAvatars.length > 0) {
+        defaultAvatars.forEach((img) => {
+            img.addEventListener('click', () => {
+                // Đặt viền cho ảnh được chọn
+                defaultAvatars.forEach((item) => item.parentElement.style.borderColor = '#ddd');
+                img.parentElement.style.borderColor = '#007bff';
 
-            // Xóa preview nếu có và lưu đường dẫn ảnh được chọn
-            filePreview.innerHTML = '<span>Tải ảnh lên từ thiết bị</span>';
-            selectedAvatar = img.src;
+                // Xóa preview nếu có và lưu đường dẫn ảnh được chọn
+                if (filePreview) {
+                    filePreview.innerHTML = '<span>Tải ảnh lên từ thiết bị</span>';
+                }
+                selectedAvatar = img.src;
+            });
         });
-    });
+    }
 
     // Xử lý chọn ảnh từ máy
-    uploadAvatar.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                filePreview.innerHTML = `<img src="${e.target.result}" alt="Ảnh tải lên">`;
-                selectedAvatar = e.target.result; // Gán ảnh tải lên làm ảnh được chọn
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+    if (uploadAvatar && filePreview) {
+        uploadAvatar.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    filePreview.innerHTML = `<img src="${e.target.result}" alt="Ảnh tải lên">`;
+                    selectedAvatar = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
 
     // Lưu ảnh
-    saveAvatarBtn.addEventListener('click', () => {
-        if (selectedAvatar) {
-            document.querySelector('.avatar-change img').src = selectedAvatar; // Thay đổi ảnh đại diện
-            $('#avatarModal').modal('hide'); // Ẩn modal
-        } else {
-            alert('Vui lòng chọn một ảnh đại diện.');
-        }
-    });
+    if (saveAvatarBtn) {
+        saveAvatarBtn.addEventListener('click', () => {
+            if (selectedAvatar) {
+                const avatarChange = document.querySelector('.avatar-change img');
+                if (avatarChange) {
+                    avatarChange.src = selectedAvatar;
+                }
+                const avatarModal = document.getElementById('avatarModal');
+                if (avatarModal) {
+                    const modal = bootstrap.Modal.getInstance(avatarModal);
+                    if (modal) {
+                        modal.hide();
+                    }
+                }
+            } else {
+                alert('Vui lòng chọn một ảnh đại diện.');
+            }
+        });
+    }
 });
 
 
@@ -356,3 +209,4 @@ document.addEventListener('DOMContentLoaded', () => {
 //        alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
 //    }
 //}
+

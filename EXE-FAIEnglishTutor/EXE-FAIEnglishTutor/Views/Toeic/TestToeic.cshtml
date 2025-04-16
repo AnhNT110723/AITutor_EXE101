@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -299,6 +298,13 @@
                 alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
             }
         }
+
+        // Sidebar toggle functionality
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
     </script>
 </body>
 

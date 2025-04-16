@@ -1,6 +1,5 @@
 ﻿#File cấu hình thực tế
 #appsettings.json
-appsettings.json
 appsettings.Development.json
 #file build solution
 .vs/
