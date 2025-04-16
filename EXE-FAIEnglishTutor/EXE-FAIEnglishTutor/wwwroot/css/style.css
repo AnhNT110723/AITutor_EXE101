@@ -12050,6 +12050,7 @@ a[data-toggle="collapse"] {
     width: calc(100% - 80px); /* Giả sử trạng thái ban đầu là inactive */
     transition: width 0.3s ease, left 0.3s ease, margin-left 0.3s ease;
 }
+
 .w-full {
     width: 100%;
 }
@@ -12365,6 +12366,7 @@ html {
     transform: translateY(-50%);
     z-index: 2;
 }
+
 .left-btn {
     position: absolute;
     left: 15px;
@@ -12800,6 +12802,17 @@ body #sidebar.active .menu-text {
 
 
 @media (max-width: 991px) {
+
+    .navbar-nav .nav-item {
+        margin: 10px 0;
+    }
+
+    .btn-test-online {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+
     .menu-items {
         margin-top: 0px;
         margin-right: 0px;
@@ -12834,7 +12847,9 @@ body #sidebar.active .menu-text {
 
 /* Style cho dropdown */
 .dropdown-menu {
-    width: 200px;
+    /*    width: 200px;*/
+    right: 0;
+    left: auto;
     border: 1px solid #ccc;
 }
 
@@ -12874,7 +12889,7 @@ body #sidebar.active .menu-text {
 
 /* Nội dung chính đẩy qua phải (để tránh chồng sidebar) */
 #content {
-/*    margin-left: 250px;*/
+    /*    margin-left: 250px;*/
     /* Đẩy nội dung sang phải để tránh sidebar */
     padding: 15px;
 }
@@ -13068,5 +13083,3 @@ p {
 .iti {
     width: 100%;
 }
-
-

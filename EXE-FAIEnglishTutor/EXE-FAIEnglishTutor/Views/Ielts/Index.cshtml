@@ -21,13 +21,13 @@
     <style>
 
         .navbar {
-                      position: unset;
-                      border-radius: 10px;
-                      top: 1 !important;
-                      /* Căn với sidebar mặc định */
-                      width: 100% !important;
-                      margin-top: -30px;
-                  }
+            position: unset;
+            border-radius: 10px;
+            top: 1 !important;
+            /* Căn với sidebar mặc định */
+            width: 100% !important;
+            margin-top: -30px;
+        }
 
         .effect-test-online {
             color: white;
@@ -119,8 +119,8 @@
                         <i class="fa fa-bars"></i>
                         <span class="sr-only">Toggle Menu</span>
                     </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-bs-toggle="collapse"
-                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -138,9 +138,9 @@
                             </li> *@
                             <li>
                                 <a style="margin-right: 20px;" class="btn-test-online" asp-controller="Ielts" asp-action="TestOnline">
-                             
-                                     <span class="effect-test-online">
-                                         Test
+
+                                    <span class="effect-test-online">
+                                        Test
                                         IELTS
                                     </span>
                                 </a>
@@ -259,7 +259,7 @@
         </div>
     </div>
 
-
+    <script src="~/js/handle-sidbar/common_sidebar.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script> *@
 
@@ -280,6 +280,36 @@
             separateDialCode: true,
             allowDropdown: true, // Bật dropdown
             utilsScript: "~/lib/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
+
+        });
+
+
+        // Sidebar toggle functionality
+        $(document).ready(function () {
+
+            // Handle mobile menu toggle
+            $('.btn-dark.d-inline-block.d-lg-none.ml-auto').on('click', function () {
+                var navbar = $('#navbarSupportedContent');
+                if (navbar.hasClass('show')) {
+                    navbar.removeClass('show');
+                } else {
+                    navbar.addClass('show');
+                }
+            });
+
+
+            // Handle avatar dropdown
+            $('.nav-link-avatar').on('click', function (e) {
+                e.preventDefault();
+                $(this).next('.dropdown-menu').toggleClass('show');
+            });
+
+            // Close dropdown when clicking outside
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.nav-link-avatar').length) {
+                    $('.dropdown-menu').removeClass('show');
+                }
+            });
 
         });
 

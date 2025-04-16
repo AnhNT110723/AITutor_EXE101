@@ -14,6 +14,10 @@ builder.Services.AddControllersWithViews();
 
 //Thêm dbcontext vào web server
 builder.Services.AddDbContextConfiguration(builder.Configuration);
+
+//cau hinh view areas
+builder.Services.ConfigureRazorViewEngine();
+
 // Cấu hình DI
 builder.Services.AddDependencyInjectionConfiguration();
 
@@ -74,6 +78,11 @@ app.UseMiddleware<TokenMiddleware>();
 
 app.UseAuthorization();
 
+//Kiem tra area truoc
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
+);
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

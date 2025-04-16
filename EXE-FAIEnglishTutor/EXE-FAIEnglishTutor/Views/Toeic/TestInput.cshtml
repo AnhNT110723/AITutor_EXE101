@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -254,7 +253,7 @@
     <!-- Lớp Overlay -->
     <div class="overlay" id="overlay"></div>
 
-
+    <script src="~/js/handle-sidbar/common_sidebar.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -288,6 +287,13 @@
                 alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
             }
         }
+
+        // Sidebar toggle functionality
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
     </script>
 </body>
 
