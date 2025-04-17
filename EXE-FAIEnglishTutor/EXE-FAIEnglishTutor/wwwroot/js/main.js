@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Thay đổi ngôn ngữ
     const changeLanguage = (lang) => {
         localStorage.setItem('language', lang); // Lưu vào localStorage
-        fetch('data/languages.json')
+        fetch('../data/languages.json')
             .then((res) => res.json())
             .then((data) => {
                 if (data[lang]) {

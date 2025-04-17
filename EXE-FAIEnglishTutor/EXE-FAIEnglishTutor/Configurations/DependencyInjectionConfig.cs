@@ -2,10 +2,14 @@
 using EXE_FAIEnglishTutor.Mail;
 using EXE_FAIEnglishTutor.Repositories.Implementation;
 using EXE_FAIEnglishTutor.Repositories.Interface;
-using EXE_FAIEnglishTutor.Services.Implimentaion;
+using EXE_FAIEnglishTutor.Services.Implementaion;
 using EXE_FAIEnglishTutor.Services.Interface;
 using EXE_FAIEnglishTutor.Services.Interface.AI;
 using EXE_FAIEnglishTutor.Services.Implimentaion.AI;
+using EXE_FAIEnglishTutor.Repositories.Interface.Mentee;
+using EXE_FAIEnglishTutor.Repositories.Implementation.Mentee;
+using EXE_FAIEnglishTutor.Services.Interface.Mentee;
+using EXE_FAIEnglishTutor.Services.Implementaion.Mentee;
 
 namespace EXE_FAIEnglishTutor.Configurations
 {
@@ -14,6 +18,8 @@ namespace EXE_FAIEnglishTutor.Configurations
         public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
         {
             // Thêm Dependency Injection
+
+            //Login
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -28,6 +34,13 @@ namespace EXE_FAIEnglishTutor.Configurations
 
             // Chat bot - Sử dụng AddHttpClient thay vì AddScoped
             services.AddHttpClient<IChatBotService, ChatBotService>();
+
+
+            //Profile
+            services.AddScoped<IProfileRepository, ProfileRepository>();
+            services.AddScoped<IProfileService, ProfileService>();
+
+
 
         }
 
