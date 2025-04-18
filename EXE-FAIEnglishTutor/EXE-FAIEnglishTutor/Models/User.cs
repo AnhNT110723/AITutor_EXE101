@@ -18,6 +18,10 @@ public partial class User
 
     public string? Avatar { get; set; }
 
+    public DateTime? Dob { get; set; }
+
+    public int? District { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public AccountStatus Status { get; set; }

@@ -7,7 +7,7 @@ namespace EXE_FAIEnglishTutor.Common
 {
     public class PhoneNumberAttribute : ValidationAttribute
     {
-        public string DefaultRegion { get; set; } = "VN"; // Mặc định là Việt Nam
+        public string DefaultRegion {  get; set; } = "VN"; // Mặc định là Việt Nam
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null)
@@ -17,9 +17,18 @@ namespace EXE_FAIEnglishTutor.Common
             if (string.IsNullOrEmpty(phoneNumber))
                 return ValidationResult.Success;
 
-            // Lấy giá trị CountryCode từ model nếu có
-            var model = validationContext.ObjectInstance as RegisterDto;
-            string region = model?.CountryCode ?? DefaultRegion;
+            // Tìm thuộc tính "CountryCode" trong model bằng reflection
+            var countryCodeProp = validationContext.ObjectType.GetProperty("CountryCode");
+            string region = DefaultRegion;
+
+            if (countryCodeProp != null)
+            {
+                var regionValue = countryCodeProp.GetValue(validationContext.ObjectInstance) as string;
+                if (!string.IsNullOrWhiteSpace(regionValue))
+                {
+                    region = regionValue;
+                }
+            }
 
             try
             {
@@ -39,5 +48,6 @@ namespace EXE_FAIEnglishTutor.Common
                 return new ValidationResult(ErrorMessage ?? $"Lỗi định dạng: {ex.Message}");
             }
         }
+
     }
 }

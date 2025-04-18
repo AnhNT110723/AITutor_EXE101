@@ -46,6 +46,7 @@ function validatePhone() {
 
     // Lấy số điện thoại đã được định dạng theo chuẩn E.164
     const phoneNumber = iti.getNumber();
+    console.log("Formatted Number:", phoneNumber); // Số điện thoại đã định dạng
 
     if (!phoneNumber || !iti.isValidNumber()) {
         phoneError.textContent = "Invalid phone number format.";
