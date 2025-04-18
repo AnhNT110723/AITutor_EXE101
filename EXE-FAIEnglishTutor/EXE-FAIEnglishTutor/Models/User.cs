@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EXE_FAIEnglishTutor.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace EXE_FAIEnglishTutor.Models;
@@ -23,7 +24,7 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
-    public string Status { get; set; } = null!;
+    public AccountStatus Status { get; set; }
 
     public DateTime? ExpiryDate { get; set; }
 

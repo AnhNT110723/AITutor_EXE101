@@ -25,37 +25,35 @@
             text-shadow: 0px 1px 7px hsl(302, 100%, 37%);
             background: url(../Images/effect-1.gif);
         }
+         .btn-test-online {
+             display: inline-block;
+             background-color: black !important; 
+             color: white;
+             font-size: 14px;
+             font-weight: bold;
+             padding: 8px 15px;
+             border: none;
+             border-radius: 5px; /* Bo góc */
+             text-decoration: none;
+             text-transform: uppercase;
+             transition: 0.3s ease-in-out;
+             box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+             background: url(../Images/effect-1.gif);
+         }
 
-        .btn-test-online {
-            display: inline-block;
-            background-color: black !important;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px; /* Bo góc */
-            text-decoration: none;
-            text-transform: uppercase;
-            transition: 0.3s ease-in-out;
-            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
-            background: url(../Images/effect-1.gif);
-        }
-
-            .btn-test-online:hover {
-                background-color: #45a049; /* Màu xanh nhạt hơn khi hover */
-                color: white;
-                transform: scale(1.05);
-            }
-
+         .btn-test-online:hover {
+             background-color: #45a049; /* Màu xanh nhạt hơn khi hover */
+             color: white;
+             transform: scale(1.05);
+         }
         .navbar {
-            position: unset;
-            border-radius: 10px;
-            top: 1 !important;
-            /* Căn với sidebar mặc định */
-            width: 100% !important;
-            margin-top: -30px;
-        }
+               position: unset;
+               border-radius: 10px;
+               top: 1 !important;
+               /* Căn với sidebar mặc định */
+               width: 100% !important;
+               margin-top: -30px;
+           }
     </style>
 </head>
 
@@ -117,27 +115,32 @@
                         <i class="fa fa-bars"></i>
                         <span class="sr-only">Toggle Menu</span>
                     </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-bs-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fa fa-bars"></i>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
+                            @*  <li class="nav-item active">
+                            <a class="nav-link" href="home.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="#">Portfolio</a>
+                            </li> *@
                             <li>
                                 <a style="margin-right: 20px;" class="btn-test-online" asp-controller="Toeic" asp-action="TestOnline">
                                     <span class="effect-test-online">Test Online</span>
                                 </a>
                             </li>
                             @if (User.Identity.IsAuthenticated)
-
                             {
-
                                 // Đọc thông tin từ cookie
-
                                 var fullName = User.Identity.Name;
-
                                 var avatarUrl = User.FindFirst("Avatar")?.Value;
                                 <li class="nav-item dropdown">
 
@@ -165,9 +168,7 @@
                                     </div>
                                 </li>
                             }
-
                             else
-
                             {
                                 <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
                             }
@@ -250,7 +251,7 @@
         </div>
     </div>
 
-    <script src="~/js/handle-sidbar/common_sidebar.js"></script>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script> *@
 
@@ -258,7 +259,7 @@
     <script src="~/lib/intl-tel-input/js/utils.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/main.js"></script>
-    
+
 
 
 
@@ -284,35 +285,6 @@
                 alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
             }
         }
-
-        // Sidebar toggle functionality
-        $(document).ready(function () {
-
-            // Handle mobile menu toggle
-            $('.btn-dark.d-inline-block.d-lg-none.ml-auto').on('click', function () {
-                var navbar = $('#navbarSupportedContent');
-                if (navbar.hasClass('show')) {
-                    navbar.removeClass('show');
-                } else {
-                    navbar.addClass('show');
-                }
-            });
-
-
-            // Handle avatar dropdown
-            $('.nav-link-avatar').on('click', function (e) {
-                e.preventDefault();
-                $(this).next('.dropdown-menu').toggleClass('show');
-            });
-
-            // Close dropdown when clicking outside
-            $(document).on('click', function (e) {
-                if (!$(e.target).closest('.nav-link-avatar').length) {
-                    $('.dropdown-menu').removeClass('show');
-                }
-            });
-
-        });
     </script>
 </body>
 

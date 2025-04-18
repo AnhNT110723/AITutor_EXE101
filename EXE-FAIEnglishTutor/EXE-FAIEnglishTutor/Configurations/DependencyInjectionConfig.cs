@@ -41,6 +41,9 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<IProfileService, ProfileService>();
 
 
+            //UpLoad File
+            services.AddScoped<IFileUploadService, FileUploadService>();
+
 
         }
 

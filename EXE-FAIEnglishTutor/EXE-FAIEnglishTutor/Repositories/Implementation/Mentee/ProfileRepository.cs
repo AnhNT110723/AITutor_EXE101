@@ -8,5 +8,9 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation.Mentee
     {
         public ProfileRepository(FaiEnglishContext context) : base(context) { }
 
+        public async Task SaveChangeAysnc()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

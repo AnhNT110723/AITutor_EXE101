@@ -31,7 +31,22 @@
     "viewProfile": "View profile",
     "changePassword": "Change password",
     "searchCourse":"Please enter the keyword in English",
-    "titleListCourse": "Create characters and situations in a personalized way."
+    "titleListCourse": "Create characters and situations in a personalized way.",
+    "dateErrorEmpty": "Please select your date of birth",
+    "dateErrorFuture": "Date of birth cannot be in the future",
+    "dateErrorMinAge": "You must be at least 5 years old",
+    "dateErrorMaxAge": "Invalid date of birth",
+    "phoneErrorInvalid": "Invalid phone number",
+    "passwordErrorEmpty": "Please enter your password",
+    "passwordErrorMinLength": "Password must be at least 6 characters",
+    "passwordErrorMaxLength": "Password cannot exceed 20 characters",
+    "passwordErrorSpecialChar": "Password must contain at least one special character",
+    "passwordErrorNumber": "Password must contain at least one number",
+    "passwordErrorUppercase": "Password must contain at least one uppercase letter",
+    "passwordErrorLowercase": "Password must contain at least one lowercase letter",
+    "confirmPasswordError": "Passwords do not match",
+    "oldPasswordError": "Please enter your old password",
+    "emailError": "Please enter a valid email address"
   },
   "vi": {
     "pageTitle": "Thông tin tài khoản",
@@ -65,6 +80,21 @@
     "viewProfile": "Xem trang cá nhân",
     "changePassword": "Thay đổi mật khẩu",
     "searchCourse": "Vui lòng nhập từ khóa bằng tiếng anh",
-    "titleListCourse": "Tạo nhân vật và tình huống theo cách cá nhân hóa."
+    "titleListCourse": "Tạo nhân vật và tình huống theo cách cá nhân hóa.",
+    "dateErrorEmpty": "Vui lòng chọn ngày sinh",
+    "dateErrorFuture": "Ngày sinh không thể trong tương lai",
+    "dateErrorMinAge": "Bạn phải đủ 5 tuổi",
+    "dateErrorMaxAge": "Ngày sinh không hợp lệ",
+    "phoneErrorInvalid": "Số điện thoại không hợp lệ",
+    "passwordErrorEmpty": "Vui lòng nhập mật khẩu",
+    "passwordErrorMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+    "passwordErrorMaxLength": "Mật khẩu không được vượt quá 20 ký tự",
+    "passwordErrorSpecialChar": "Mật khẩu phải chứa ít nhất một ký tự đặc biệt",
+    "passwordErrorNumber": "Mật khẩu phải chứa ít nhất một số",
+    "passwordErrorUppercase": "Mật khẩu phải chứa ít nhất một chữ in hoa",
+    "passwordErrorLowercase": "Mật khẩu phải chứa ít nhất một chữ thường",
+    "confirmPasswordError": "Mật khẩu không khớp",
+    "oldPasswordError": "Vui lòng nhập mật khẩu cũ",
+    "emailError": "Vui lòng nhập địa chỉ email hợp lệ"
   }
 }

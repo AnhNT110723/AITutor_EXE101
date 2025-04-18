@@ -6,22 +6,25 @@ namespace EXE_FAIEnglishTutor.Dtos
 {
     public class ProfileDto
     {
+        public int UserId {  get; set; }
+
         [Required(ErrorMessage = "Username is required")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
         public string? FullName { get; set; }
 
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        public string Email { get; set; } = null!;
+        public string Email { get; set; } = "";
 
 
         [Required(ErrorMessage = "Please select a country")]
         public string CountryCode { get; set; } = "VN";
 
-        [Required(ErrorMessage = "Phone is required")]
+        [Required(ErrorMessage = "The Phone field is required.")]
         [PhoneNumber(ErrorMessage = "Invalid phone number")]
         public string Phone { get; set; } = "";
 
+        [Required(ErrorMessage = "Old Password is required")]
+        [DataType(DataType.Password)]
+        public string OldPassword { get; set; } = "";
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
@@ -34,10 +37,18 @@ namespace EXE_FAIEnglishTutor.Dtos
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match")]
         public string RePassword { get; set; }
-
         public string? AvatarStr { get; set; }
         public IFormFile? Avatar { get; set; }
 
-        public DateTime? ExpiryDate { get; set; }
+        [Required(ErrorMessage = "The Date of birth field is required.")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [CustomDateValidation(ErrorMessage = "Ngày sinh không hợp lệ")]
+        public DateTime? Dob { get; set; }
+
+        public int Province {  get; set; }
+
+        public string? Provider { get; set; } 
+
     }
 }

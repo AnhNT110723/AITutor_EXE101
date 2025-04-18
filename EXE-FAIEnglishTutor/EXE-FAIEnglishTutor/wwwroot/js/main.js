@@ -35,68 +35,68 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-//Xử lý ảnh trong profile
+////Xử lý ảnh trong profile
 
-document.addEventListener('DOMContentLoaded', () => {
-    const defaultAvatars = document.querySelectorAll('.default-avatar img');
-    const uploadAvatar = document.getElementById('uploadAvatar');
-    const filePreview = document.getElementById('filePreview');
-    const saveAvatarBtn = document.getElementById('saveAvatarBtn');
-    let selectedAvatar = null;
+//document.addEventListener('DOMContentLoaded', () => {
+//    const defaultAvatars = document.querySelectorAll('.default-avatar img');
+//    const uploadAvatar = document.getElementById('uploadAvatar');
+//    const filePreview = document.getElementById('filePreview');
+//    const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+//    let selectedAvatar = null;
 
-    // Xử lý chọn ảnh mặc định
-    if (defaultAvatars && defaultAvatars.length > 0) {
-        defaultAvatars.forEach((img) => {
-            img.addEventListener('click', () => {
-                // Đặt viền cho ảnh được chọn
-                defaultAvatars.forEach((item) => item.parentElement.style.borderColor = '#ddd');
-                img.parentElement.style.borderColor = '#007bff';
+//    // Xử lý chọn ảnh mặc định
+//    if (defaultAvatars && defaultAvatars.length > 0) {
+//        defaultAvatars.forEach((img) => {
+//            img.addEventListener('click', () => {
+//                // Đặt viền cho ảnh được chọn
+//                defaultAvatars.forEach((item) => item.parentElement.style.borderColor = '#ddd');
+//                img.parentElement.style.borderColor = '#007bff';
 
-                // Xóa preview nếu có và lưu đường dẫn ảnh được chọn
-                if (filePreview) {
-                    filePreview.innerHTML = '<span>Tải ảnh lên từ thiết bị</span>';
-                }
-                selectedAvatar = img.src;
-            });
-        });
-    }
+//                // Xóa preview nếu có và lưu đường dẫn ảnh được chọn
+//                if (filePreview) {
+//                    filePreview.innerHTML = '<span>Tải ảnh lên từ thiết bị</span>';
+//                }
+//                selectedAvatar = img.src;
+//            });
+//        });
+//    }
 
-    // Xử lý chọn ảnh từ máy
-    if (uploadAvatar && filePreview) {
-        uploadAvatar.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    filePreview.innerHTML = `<img src="${e.target.result}" alt="Ảnh tải lên">`;
-                    selectedAvatar = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
+//    // Xử lý chọn ảnh từ máy
+//    if (uploadAvatar && filePreview) {
+//        uploadAvatar.addEventListener('change', (event) => {
+//            const file = event.target.files[0];
+//            if (file) {
+//                const reader = new FileReader();
+//                reader.onload = function (e) {
+//                    filePreview.innerHTML = `<img src="${e.target.result}" alt="Ảnh tải lên">`;
+//                    selectedAvatar = e.target.result;
+//                };
+//                reader.readAsDataURL(file);
+//            }
+//        });
+//    }
 
-    // Lưu ảnh
-    if (saveAvatarBtn) {
-        saveAvatarBtn.addEventListener('click', () => {
-            if (selectedAvatar) {
-                const avatarChange = document.querySelector('.avatar-change img');
-                if (avatarChange) {
-                    avatarChange.src = selectedAvatar;
-                }
-                const avatarModal = document.getElementById('avatarModal');
-                if (avatarModal) {
-                    const modal = bootstrap.Modal.getInstance(avatarModal);
-                    if (modal) {
-                        modal.hide();
-                    }
-                }
-            } else {
-                alert('Vui lòng chọn một ảnh đại diện.');
-            }
-        });
-    }
-});
+//    // Lưu ảnh
+//    if (saveAvatarBtn) {
+//        saveAvatarBtn.addEventListener('click', () => {
+//            if (selectedAvatar) {
+//                const avatarChange = document.querySelector('.avatar-change img');
+//                if (avatarChange) {
+//                    avatarChange.src = selectedAvatar;
+//                }
+//                const avatarModal = document.getElementById('avatarModal');
+//                if (avatarModal) {
+//                    const modal = bootstrap.Modal.getInstance(avatarModal);
+//                    if (modal) {
+//                        modal.hide();
+//                    }
+//                }
+//            } else {
+//                alert('Vui lòng chọn một ảnh đại diện.');
+//            }
+//        });
+//    }
+//});
 
 
 

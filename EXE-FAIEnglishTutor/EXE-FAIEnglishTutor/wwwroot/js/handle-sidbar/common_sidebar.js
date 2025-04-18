@@ -119,18 +119,18 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    // Lắng nghe sự kiện thay đổi kích thước màn hình
-    // window.addEventListener('resize', updateLayoutOnResize);
-    let resizeTimeout;
+    //// Lắng nghe sự kiện thay đổi kích thước màn hình
+    //// window.addEventListener('resize', updateLayoutOnResize);
+    //let resizeTimeout;
 
-    window.addEventListener('resize', function () {
-        if (resizeTimeout) clearTimeout(resizeTimeout);
+    //window.addEventListener('resize', function () {
+    //    if (resizeTimeout) clearTimeout(resizeTimeout);
 
-        // Chỉ gọi updateLayoutOnResize sau khi resize dừng 200ms
-        resizeTimeout = setTimeout(() => {
-            //updateLayoutOnResize();
-            adjustListHeight();
-        }, 120);
-    });
+    //    // Chỉ gọi updateLayoutOnResize sau khi resize dừng 200ms
+    //    resizeTimeout = setTimeout(() => {
+    //        //updateLayoutOnResize();
+    //        //adjustListHeight();
+    //    }, 120);
+    //});
 });
 
