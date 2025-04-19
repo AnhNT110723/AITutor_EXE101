@@ -1,0 +1,206 @@
+﻿/* Đảm bảo flag container luôn hiển thị và không bị che */
+.iti__flag-container {
+    z-index: 5;
+}
+
+/* Style cho validation states */
+.iti .form-control.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.iti .form-control.is-valid {
+    border-color: #198754 !important;
+}
+
+/* Điều chỉnh dropdown */
+.iti__country-list {
+    z-index: 999;
+}
+
+/* Custom form-select */
+.form-select {
+    color: #495057;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Custom select container */
+.select-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Styling the select element */
+.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* Custom dropdown arrow */
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ff8c00' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+}
+
+    /* Animation for options */
+    .form-select option {
+        color: #495057;
+        background-color: white;
+        padding: 10px;
+        transition: all 0.2s ease;
+        animation: slideIn 0.3s ease;
+    }
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover and focus states */
+.form-select:hover,
+.form-select:focus {
+    border-color: #ff8c00;
+    box-shadow: 0 0 0 0.25rem rgba(255, 140, 0, 0.25);
+}
+
+/* Custom scrollbar */
+.form-select::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-select::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.form-select::-webkit-scrollbar-thumb {
+    background: #ff8c00;
+    border-radius: 4px;
+}
+
+    .form-select::-webkit-scrollbar-thumb:hover {
+        background: #e67e00;
+    }
+
+/* Add smooth opening animation for the dropdown */
+.form-select[size]:not([size="1"]) {
+    animation: expandDropdown 0.3s ease-out;
+    transform-origin: top center;
+}
+
+@keyframes expandDropdown {
+    from {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+/* Style for the options when dropdown is open */
+.form-select:focus option {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-select option:hover,
+.form-select option:focus,
+.form-select option:active,
+.form-select option:checked {
+    background-color: #ff8c00;
+    color: white;
+}
+
+.custom-confirm-btn, .custom-cancel-btn {
+    width: 100px;
+    padding: 10px;
+}
+
+.custom-confirm-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+    .custom-confirm-btn:hover {
+        background-color: #ffa130;
+    }
+
+.avatar-border {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, hsl(325, 100%, 49%), hsl(240, 100%, 50%), hsl(120, 100%, 50%), hsl(60, 100%, 50%), hsl(0, 100%, 50%), hsl(325, 100%, 49%));
+    background-size: 400%;
+    animation: rotateGradient 10s linear infinite;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1); /* nhẹ nhẹ thêm */
+}
+
+    .avatar-border::before {
+        content: '';
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        width: calc(100% + 40px);
+        height: calc(100% + 40px);
+        border-radius: 50%;
+        background: conic-gradient( from 0deg, hsla(325, 100%, 60%, 0.6) 0%, hsla(240, 100%, 60%, 0.6) 25%, hsla(120, 100%, 60%, 0.6) 50%, hsla(60, 100%, 60%, 0.6) 75%, hsla(0, 100%, 60%, 0.6) 100% );
+        animation: rotateGlow 4s linear infinite;
+        filter: blur(35px);
+        opacity: 0.5;
+        z-index: -2;
+    }
+
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    z-index: 2;
+}
+
+@keyframes rotateGlow {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 400% 50%;
+    }
+}

@@ -1,6 +1,8 @@
 ﻿using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Tweetinvi.Core.Models;
@@ -60,7 +62,22 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
             try
             {
-                await _profileService.SaveChangeAsync(model);
+                var user = await _profileService.SaveChangeAsync(model);
+                // Lưu avatar mới vào cookie
+                if (!string.IsNullOrEmpty(model.AvatarStr) || model.Avatar != null)
+                {
+                    var identity = (ClaimsIdentity)User.Identity;
+                    var avatarClaim = identity.FindFirst("Avatar");
+                    if (avatarClaim != null)
+                    {
+                        identity.RemoveClaim(avatarClaim);
+                    }
+                    identity.AddClaim(new Claim("Avatar", user.Avatar));
+
+                    // Cập nhật lại cookie sau khi thay đổi avatar
+                    var claimsPrincipal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                }
                 TempData["success"] = "Save information change successfully!";
                 return RedirectToAction("Index");
 
