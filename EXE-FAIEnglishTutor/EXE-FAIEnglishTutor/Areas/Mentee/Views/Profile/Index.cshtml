@@ -20,154 +20,9 @@
 
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
     <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
-
+    <link href="~/css/mentee/profile.css" rel="stylesheet" />
 
     <style>
-        /* Đảm bảo flag container luôn hiển thị và không bị che */
-        .iti__flag-container {
-            z-index: 5;
-        }
-
-        /* Style cho validation states */
-        .iti .form-control.is-invalid {
-            border-color: #dc3545 !important;
-        }
-
-        .iti .form-control.is-valid {
-            border-color: #198754 !important;
-        }
-
-        /* Điều chỉnh dropdown */
-        .iti__country-list {
-            z-index: 999;
-        }
-
-        /* Custom form-select */
-        .form-select {
-            color: #495057;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        /* Custom select container */
-        .select-container {
-            position: relative;
-            width: 100%;
-        }
-
-        /* Styling the select element */
-        .form-select {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
-            cursor: pointer;
-        }
-
-        /* Custom dropdown arrow */
-        .form-select {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ff8c00' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 16px 12px;
-        }
-
-            /* Animation for options */
-            .form-select option {
-                color: #495057;
-                background-color: white;
-                padding: 10px;
-                transition: all 0.2s ease;
-                animation: slideIn 0.3s ease;
-            }
-
-        @@keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Hover and focus states */
-        .form-select:hover,
-        .form-select:focus {
-            border-color: #ff8c00;
-            box-shadow: 0 0 0 0.25rem rgba(255, 140, 0, 0.25);
-        }
-
-        /* Custom scrollbar */
-        .form-select::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .form-select::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        .form-select::-webkit-scrollbar-thumb {
-            background: #ff8c00;
-            border-radius: 4px;
-        }
-
-            .form-select::-webkit-scrollbar-thumb:hover {
-                background: #e67e00;
-            }
-
-        /* Add smooth opening animation for the dropdown */
-        .form-select[size]:not([size="1"]) {
-            animation: expandDropdown 0.3s ease-out;
-            transform-origin: top center;
-        }
-
-        @@keyframes expandDropdown {
-            from {
-                opacity: 0;
-                transform: scaleY(0);
-            }
-
-            to {
-                opacity: 1;
-                transform: scaleY(1);
-            }
-        }
-
-        /* Style for the options when dropdown is open */
-        .form-select:focus option {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .form-select option:hover,
-        .form-select option:focus,
-        .form-select option:active,
-        .form-select option:checked {
-            background-color: #ff8c00;
-            color: white;
-        }
-
-        .custom-confirm-btn, .custom-cancel-btn {
-            width: 100px;
-            padding: 10px;
-        }
-
-        .custom-confirm-btn {
-            background-color: #333;
-            color: white;
-            border: none;
-            transition: background-color 0.3s;
-        }
-
-            .custom-confirm-btn:hover {
-                background-color: #01d28e;
-            }
     </style>
 </head>
 
@@ -334,7 +189,7 @@
                                 <div class="row">
                                     <!-- Avatar -->
                                     <div class="col-lg-2 col-12">
-                                        <div class="avatar-change position-relative">
+                                        <div class="avatar-change position-relative avatar-border">
                                             <img src="@Url.Content(Model.AvatarStr)" id="avatarDisplay" alt="">
                                             <!-- Biểu tượng máy ảnh -->
                                             <button class="camera-icon" id="avatarEditBtn" type="button">
@@ -419,11 +274,11 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <p id="inputOldpass">Nhập mật khẩu cũ</p>
-                                            <input type="password" asp-for="OldPassword" class="form-control"
+                                            <input type="password" asp-for="OldPassword" id="OldPassword" class="form-control" oninput="validateOldPassword()"
                                                    placeholder="Nhập mật khẩu cũ">
                                             @if (TempData["OldPassErr"] != null)
                                             {
-                                                <div class="err" id="PhoneExist" style="color: red">@TempData["OldPassErr"]</div>
+                                                <div class="err" id="OldPassErrBE" style="color: red">@TempData["OldPassErr"]</div>
 
                                             }
                                             <span asp-validation-for="OldPassword" class="text-danger"></span>
@@ -513,7 +368,7 @@
             </div>
         </div>
     </div>
-
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script> *@
     <script src="~/js/handle-sidbar/common_sidebar.js"></script>
@@ -522,9 +377,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/main.js"></script>
-    @* <script src="~/js/register-validation.js"></script> *@
-
-
+    <script src="~/js/mentee/profile.js"></script>
+    <script src="~/js/mentee/profile_validation.js"></script>
     @if (TempData["success"] != null)
     {
         <script>
@@ -555,154 +409,9 @@
         </script>
     }
 
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const avatarEditBtn = document.getElementById('avatarEditBtn');
-            const avatarModal = document.getElementById('avatarModal');
 
 
-            // Hiển thị popup
-            avatarEditBtn.addEventListener('click', () => {
-                $(avatarModal).modal('show'); // Sử dụng Bootstrap modal
-            });
-
-
-        });
-
-        let iti;
-
-
-
-
-        const phoneInput = document.querySelector("#phoneNumber");
-        const countryInput = document.querySelector("#countryCode");
-        let hasUserInput = false; // Thêm biến để track user input
-
-        // Khởi tạo intlTelInput với CDN utils
-        iti = intlTelInput(phoneInput, {
-            initialCountry: "vn",
-            preferredCountries: ["vn", "us", "gb"],
-            separateDialCode: true,
-            allowDropdown: true,
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/21.0.2/js/utils.js"
-        });
-
-        // Khi trang load, cập nhật hidden input với CountryCode ban đầu
-        const initialCountryData = iti.getSelectedCountryData();
-        if (countryInput) {
-            countryInput.value = initialCountryData.iso2.toUpperCase();
-        }
-
-        // Lắng nghe sự kiện thay đổi quốc gia
-        phoneInput.addEventListener("countrychange", function () {
-            const countryData = iti.getSelectedCountryData();
-            if (countryInput) {
-                countryInput.value = countryData.iso2.toUpperCase();
-            }
-            validatePhone1();
-
-        });
-
-        // Set lại quốc gia theo ViewBag
-        const regionCode = "@ViewBag.RegionCode";
-        if (regionCode) {
-            iti.setCountry(regionCode);
-        }
-
-        // Gắn sự kiện oninput để kiểm tra số điện thoại
-        phoneInput.addEventListener("input", function () {
-            hasUserInput = true; // Đánh dấu đã có tương tác
-            validatePhone1();
-        });
-
-        // Reset validation state khi load trang
-        phoneInput.classList.remove("is-valid", "is-invalid");
-
-        // Hàm kiểm tra tính hợp lệ số điện thoại
-        function validatePhone1() {
-            const phoneError = document.getElementById("phoneError");
-            const phoneInput = document.getElementById("phoneNumber");
-
-            if (!iti) {
-                console.error("intlTelInput chưa được khởi tạo!");
-                return;
-            }
-
-            const phoneNumber = iti.getNumber();
-
-            if (!phoneNumber || !iti.isValidNumber()) {
-                phoneError.textContent = "Số điện thoại không hợp lệ";
-                phoneInput.classList.remove("is-valid");
-                phoneInput.classList.add("is-invalid");
-            } else {
-                phoneError.textContent = "";
-                phoneInput.classList.remove("is-invalid");
-                phoneInput.classList.add("is-valid");
-            }
-        }
-
-        // Validate Date
-        function validateDate() {
-            const dateInput = document.getElementById('birthYear');
-            const dateError = document.getElementById('dateError');
-            const selectedDate = new Date(dateInput.value);
-            const today = new Date();
-
-            // Tính tuổi
-            const age = today.getFullYear() - selectedDate.getFullYear();
-            const monthDiff = today.getMonth() - selectedDate.getMonth();
-            const dayDiff = today.getDate() - selectedDate.getDate();
-            const finalAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
-
-            // Reset classes
-            dateInput.classList.remove('is-valid', 'is-invalid');
-            dateError.textContent = '';
-
-            // Kiểm tra ngày hợp lệ
-            if (!dateInput.value) {
-                dateError.textContent = 'Vui lòng chọn ngày sinh';
-                dateInput.classList.add('is-invalid');
-                return false;
-            }
-
-            // Kiểm tra ngày trong tương lai
-            if (selectedDate > today) {
-                dateError.textContent = 'Ngày sinh không thể trong tương lai';
-                dateInput.classList.add('is-invalid');
-                return false;
-            }
-
-            // Kiểm tra tuổi tối thiểu (18 tuổi)
-            if (finalAge < 5) {
-                dateError.textContent = 'Bạn phải đủ 5 tuổi';
-                dateInput.classList.add('is-invalid');
-                return false;
-            }
-
-            // Kiểm tra tuổi tối đa (100 tuổi)
-            if (finalAge > 100) {
-                dateError.textContent = 'Ngày sinh không hợp lệ';
-                dateInput.classList.add('is-invalid');
-                return false;
-            }
-
-            // Nếu mọi thứ OK
-            dateInput.classList.add('is-valid');
-            return true;
-        }
-
-        // fetch("https:provinces.open-api.vn/api/p/")
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         const select = document.getElementById('provinceSelect');
-        //         data.forEach(province => {
-        //             const option = document.createElement('option');
-        //             option.value = province.code;
-        //             option.textContent = province.name;
-        //             select.appendChild(option);
-        //         });
-        //     });
         // Sidebar toggle functionality
         $(document).ready(function () {
 
@@ -717,9 +426,16 @@
             });
 
         });
-    </script>
 
-    <script>
+        // Set lại quốc gia theo ViewBag
+        const regionCode = "@ViewBag.RegionCode";
+        if (regionCode) {
+            iti.setCountry(regionCode);
+        }
+
+        // Reset validation state khi load trang
+        phoneInput.classList.remove("is-valid", "is-invalid");
+
         document.addEventListener('DOMContentLoaded', function () {
             const select = document.getElementById('provinceSelect');
             const modelProvinceValue = parseInt("@Model.Province", 10);

@@ -53,7 +53,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.Mentee
             }
         }
 
-        public async Task SaveChangeAsync(ProfileDto profileDto)
+        public async Task<User> SaveChangeAsync(ProfileDto profileDto)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.Mentee
                 user.District = profileDto.Province > 0 ? profileDto.Province : user.District; // Chỉ cập nhật nếu hợp lệ
 
                 await _profileRepo.SaveChangeAysnc();
-
+                return user;
             }
             catch (SqlException ex)
             {

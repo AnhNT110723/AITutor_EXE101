@@ -6,6 +6,6 @@ namespace EXE_FAIEnglishTutor.Services.Interface.Mentee
     public interface IProfileService
     {
         Task<ProfileDto> GetUserById(int id);
-        Task SaveChangeAsync(ProfileDto profileDto);
+        Task<User> SaveChangeAsync(ProfileDto profileDto);
     }
 }
