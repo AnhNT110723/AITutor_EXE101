@@ -39,7 +39,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.Mentee
                     FullName = user.FullName,
                     Email = user.Email,
                     Dob = user.Dob,
-                    Province = user.District ?? 0,
+                    Province = user.Province ?? 0,
                     Phone = string.IsNullOrWhiteSpace(user.PhoneNumber) ? string.Empty : PhoneHelper.ConvertE164ToNational(user.PhoneNumber),
                     CountryCode = string.IsNullOrWhiteSpace(user.PhoneNumber) ? "vn" : PhoneHelper.GetRegionCodeFromE164(user.PhoneNumber).ToLower(),
                     Password = user.PasswordHash,
@@ -111,7 +111,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.Mentee
                 user.FullName = profileDto.FullName ?? user.FullName; // Giữ giá trị cũ nếu null
                 user.PhoneNumber = profileDto.Phone ?? user.PhoneNumber;
                 user.Dob = profileDto.Dob ?? user.Dob; // Giữ giá trị cũ nếu null
-                user.District = profileDto.Province > 0 ? profileDto.Province : user.District; // Chỉ cập nhật nếu hợp lệ
+                user.Province = profileDto.Province > 0 ? profileDto.Province : user.Province; // Chỉ cập nhật nếu hợp lệ
 
                 await _profileRepo.SaveChangeAysnc();
                 return user;

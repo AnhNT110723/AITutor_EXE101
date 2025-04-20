@@ -43,6 +43,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ClientId = builder.Configuration["Google:ClientId"];
         options.ClientSecret = builder.Configuration["Google:ClientSecret"];
         options.CallbackPath = "/login-google";
+
+        // 👉 Bắt lỗi nếu login Google thất bại
+        options.Events.OnRemoteFailure = context =>
+        {
+            context.Response.Redirect("/Account/LoginFailed?message=" + Uri.EscapeDataString(context.Failure?.Message));
+            context.HandleResponse(); // Ngăn chặn lỗi mặc định
+            return Task.CompletedTask;
+        };
     })
     .AddFacebook(options =>
     {
