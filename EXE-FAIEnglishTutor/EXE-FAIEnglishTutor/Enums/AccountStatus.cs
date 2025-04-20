@@ -6,5 +6,6 @@
         TRIAL,
         ACTIVATED,
         LOCKED,
+        DELETE
     }
 }

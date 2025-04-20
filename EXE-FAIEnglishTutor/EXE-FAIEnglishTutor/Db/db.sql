@@ -24,9 +24,11 @@ CREATE TABLE Users (
     Email NVARCHAR(255) UNIQUE NOT NULL,
     PasswordHash NVARCHAR(255) NULL, -- Cho phép null cho Google, Facebook login
     PhoneNumber VARCHAR(15),
-    Avatar VARCHAR(MAX),
+    Avatar NVARCHAR(MAX),
+	Dob DATETIME,
+	Province INT,
     CreatedAt DATETIME DEFAULT GETDATE(),
-    [Status] NVARCHAR(10) NOT NULL CHECK ([Status] IN ('PENDING', 'TRIAL', 'ACTIVATED', 'LOCKED')),
+    [Status] NVARCHAR(10) NOT NULL CHECK ([Status] IN ('PENDING', 'TRIAL', 'ACTIVATED', 'LOCKED', 'DELETE')),
     expiryDate DATETIME,
     [Provider] NVARCHAR(50) NOT NULL, -- "Google", "Facebook", "Local", v.v.
     ProviderId NVARCHAR(255) NULL, -- ID từ provider (Google, Facebook), Local có thể NULL
@@ -136,5 +138,70 @@ CREATE TABLE Feeback (
     Rating INT CHECK (Rating BETWEEN 1 AND 5),
     Comment NVARCHAR(MAX),
     CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE ExamType (
+    ExamTypeID INT IDENTITY(1,1) PRIMARY KEY,
+    ExamName NVARCHAR(100) -- 'IELTS', 'TOEIC'
+);
+
+CREATE TABLE ExamPart (
+    PartID INT IDENTITY(1,1) PRIMARY KEY,
+    ExamTypeID INT FOREIGN KEY REFERENCES ExamType(ExamTypeID),
+    PartName NVARCHAR(100),         -- 'Listening Part 1', 'Reading Part 5', ...
+    Description NVARCHAR(MAX) NULL  -- nếu cần mô tả thêm
+);
+
+CREATE TABLE Exam (
+    ExamID INT IDENTITY(1,1) PRIMARY KEY,
+    ExamTypeID INT FOREIGN KEY REFERENCES ExamType(ExamTypeID),
+    Title NVARCHAR(255),
+    Description NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+
+CREATE TABLE ExamSection (
+    SectionID INT IDENTITY(1,1) PRIMARY KEY,
+    ExamID INT FOREIGN KEY REFERENCES Exam(ExamID),
+    PartID INT FOREIGN KEY REFERENCES ExamPart(PartID)
+);
+
+
+CREATE TABLE Question (
+    QuestionID INT IDENTITY(1,1) PRIMARY KEY,
+    SectionID INT FOREIGN KEY REFERENCES ExamSection(SectionID),
+    QuestionText NVARCHAR(MAX),
+    AudioURL NVARCHAR(500),   -- cho câu hỏi nghe TOEIC/IELTS
+    ImageURL NVARCHAR(500),   -- nếu có hình ảnh
+    QuestionType NVARCHAR(50) CHECK (QuestionType IN ('MultipleChoice', 'FillBlank', 'Essay')),
+    Explanation NVARCHAR(MAX) NULL
+);
+
+
+CREATE TABLE Answer (
+    AnswerID INT IDENTITY(1,1) PRIMARY KEY,
+    QuestionID INT FOREIGN KEY REFERENCES Question(QuestionID),
+    AnswerText NVARCHAR(MAX),
+    IsCorrect BIT
+);
+
+
+CREATE TABLE UserExamResult (
+    ResultID INT IDENTITY(1,1) PRIMARY KEY,
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    ExamID INT FOREIGN KEY REFERENCES Exam(ExamID),
+    StartTime DATETIME,
+    EndTime DATETIME,
+    Score FLOAT
+);
+
+
+CREATE TABLE UserAnswer (
+    UserAnswerID INT IDENTITY(1,1) PRIMARY KEY,
+    ResultID INT FOREIGN KEY REFERENCES UserExamResult(ResultID),
+    QuestionID INT FOREIGN KEY REFERENCES Question(QuestionID),
+    SelectedAnswerID INT FOREIGN KEY REFERENCES Answer(AnswerID),
+    IsCorrect BIT
 );
 

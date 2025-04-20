@@ -20,7 +20,7 @@ public partial class User
 
     public DateTime? Dob { get; set; }
 
-    public int? District { get; set; }
+    public int? Province { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -41,6 +41,8 @@ public partial class User
     public virtual ICollection<Progress> Progresses { get; set; } = new List<Progress>();
 
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+
+    public virtual ICollection<UserExamResult> UserExamResults { get; set; } = new List<UserExamResult>();
 
     public virtual VerificationToken? VerificationToken { get; set; }
 
