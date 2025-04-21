@@ -18,6 +18,22 @@
     <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
 
     <style>
+        /* Tạo wrapper để chứa cả navbar và head-info */
+        .sticky-wrapper-h110 {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            /* Ưu tiên hiển thị phía trên nội dung khác */
+            background: #e9eef5;
+            /* Màu nền */
+            height: 110px;
+            padding-top: 55px;
+            margin-top: -52px;
+        }
+
+        .mg-top-20 {
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -25,7 +41,7 @@
     <main role="main">
         <div class="wrapper d-flex align-items-stretch">
 <nav id="sidebar" class="active">
-            <h1><a asp-area="" asp-controller="home" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
+                <h1><a asp-area="" asp-controller="home" asp-action="Index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
             <ul class="list-unstyled components mb-5">
                 <li>
                     <a asp-area="" asp-controller="Ielts" class="link-test">
@@ -34,13 +50,13 @@
                     </a>
                 </li>
                 <li>
-                    <a asp-area="" asp-controller="Toeic" class="link-test">
+                    <a asp-area="Mentee" asp-controller="Toeic" asp-action="Index" class="link-test">
                         <span class="fas fa-graduation-cap icon"></span>
                         <span class="menu-text">Học Toeic</span>
                     </a>
                 </li>
                 <li class="active">
-                    <a asp-area="" asp-controller="home" class="link-test">
+                    <a asp-area="" asp-controller="home" asp-action="Index" class="link-test">
                         <span class="fa fa-frog"></span>
                         <span class="menu-text">AI Tutor</span>
 
@@ -88,6 +104,22 @@
 
 
     <script>
+
+        // Sidebar toggle functionality
+        $(document).ready(function () {
+
+            // Handle mobile menu toggle
+            $('.btn-dark.d-inline-block.d-lg-none.ml-auto').on('click', function () {
+                var navbar = $('#navbarSupportedContent');
+                if (navbar.hasClass('show')) {
+                    navbar.removeClass('show');
+                } else {
+                    navbar.addClass('show');
+                }
+            });
+
+        });
+
         const logoutLink = document.getElementById('logout-link');
         if (logoutLink) {
             logoutLink.addEventListener('click', function (event) {

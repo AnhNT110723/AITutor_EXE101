@@ -1,0 +1,218 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" 
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            @*  <li class="nav-item active">
+                            <a class="nav-link" href="home.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                            </li>
+                            <li class="nav-item">
+                            <a class="nav-link" href="#">Portfolio</a>
+                            </li> *@
+                            <li>
+                                <a style="margin-right: 20px;" asp-area="Mentee" class="btn-test-online" asp-controller="Toeic" asp-action="TestOnline">
+                                    <span class="effect-test-online">Test Online</span>
+                                </a>
+                            </li>
+                            @if (User.Identity.IsAuthenticated)
+
+                            {
+
+                                // Đọc thông tin từ cookie
+
+                                var fullName = User.Identity.Name;
+
+                                var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                <li class="nav-item dropdown">
+
+                                    <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="nav-img">
+                                            <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                        </div>
+                                    </a>
+                                    <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                        <div class="menu-title">
+                                            <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                            <i class="bi bi-person-circle"></i> View Profile
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                            <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                        </a>
+
+                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                    </div>
+                                </li>
+                            }
+
+                            else
+
+                            {
+                        <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+
+            <!-- Khối lệnh tư vấn -->
+            <div class="content-container">
+                <div class="frame-image">
+                    <img src="~/Images/TUVAN.webp">
+                </div>
+                <div class="content-body">
+                    <div class="content-tilte">
+                        <p class="text-center" style="font-weight: bold; font-size: 20px; color: black; margin-top: -10px;">FAI English 1 kèm 1</p>
+                        <p class=" text-center" style="padding: 0 20px; font-size: 17px; color: #333; margin-top: -18px ;">
+                            Học giao tiếp, 4 kỹ năng,
+                            luyện thi chứng chỉ, theo SGK, thương mại… với 10,000+ giáo viên giỏi toàn cầu
+                        </p>
+
+                        <button data-bs-toggle="modal" data-bs-target="#registerModal" id="button-tuvan"
+                                class="button-tuvan">
+                            <i style="margin-right: 5px !important;" class="bi bi-headset"></i>Nhận tư vấn ngay
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    <!-- Lớp Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="font-size: 22px;" id="registerModalLabel">Đăng ký tài khoản</h5>
+                    <button type="button" class="btn-close-custom" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align: center; font-size: 20px; font-weight: bold; color: #333;">
+                        Đăng ký <span style="color: orange;">miễn phí</span> ngay!
+                    </p>
+                    <form>
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Nhập họ và tên">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                            <div class="input-group custom-input-group">
+                                <div style="width: 100%;">
+                                    <input type="tel" class="form-control" id="phone"
+                                           placeholder="Nhập số điện thoại">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Nhập email">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-regiter">Đăng ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    <style>
+        .effect-test-online {
+            color: white;
+            font-weight: bold;
+            text-shadow: 0px 1px 7px hsl(302, 100%, 37%);
+            background: url(../Images/effect-1.gif);
+        }
+
+        .btn-test-online {
+            display: inline-block;
+            background-color: black !important;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px; /* Bo góc */
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+            background: url(../Images/effect-1.gif);
+        }
+
+            .btn-test-online:hover {
+                background-color: #45a049; /* Màu xanh nhạt hơn khi hover */
+                color: white;
+                transform: scale(1.05);
+            }
+
+        .navbar {
+            position: unset;
+            border-radius: 10px;
+            top: 1 !important;
+            /* Căn với sidebar mặc định */
+            width: 100% !important;
+            margin-top: -30px;
+        }
+    </style>
+    <script>
+        // Initialize intl-tel-input
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "vn",
+            preferredCountries: ["vn", "us", "gb"],
+            separateDialCode: true,
+            allowDropdown: true, // Bật dropdown
+            utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
+
+        });
+
+
+        // Function to handle submit
+        function submitPhone() {
+            if (iti.isValidNumber()) {
+                const fullNumber = iti.getNumber(); // Get the full international number
+                document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
+            } else {
+                alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
+            }
+        }
+    </script>
+}

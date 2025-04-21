@@ -27,6 +27,7 @@
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\Mentee\Data\" />
     <Folder Include="Areas\Mentee\Models\" />
+    <Folder Include="Areas\Mentee\Views\ToeicTest\" />
     <Folder Include="Areas\Mentor\Controllers\" />
     <Folder Include="Areas\Mentor\Data\" />
     <Folder Include="Areas\Mentor\Models\" />

@@ -347,7 +347,80 @@
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/main.js"></script>
+    <script src="~/js/handle-sidbar/home-sidebar.js"></script>
 
+    <script>
+                window.addEventListener('DOMContentLoaded', function () {
+
+            const content = document.getElementById('content');
+            const sidebarCollapse = document.getElementById('sidebarCollapse');
+
+            var video = document.querySelector('video');
+            var list = document.querySelector('.overflow');
+            var list_auto = document.querySelector('.overflow-auto');
+
+
+            // Đảm bảo video đã được tải và chiều cao được xác định
+            if (video != null) {
+                video.addEventListener('loadedmetadata', function () {
+                    adjustListHeight();
+                });
+            }
+
+
+            function adjustListHeight() {
+                // Kiểm tra chiều cao của video
+                var videoHeight = video.offsetHeight;
+
+                // Kiểm tra nếu video có chiều cao hợp lệ
+                if (videoHeight > 0) {
+                    if (list != null) {
+                        list.style.height = videoHeight + 'px';
+                    }
+                    if (list_auto != null) {
+                        list_auto.style.height = videoHeight + 'px';
+
+                    }
+                } else {
+                    // Nếu chiều cao video không hợp lệ, đặt lại chiều cao của danh sách
+                    setTimeout(adjustListHeight, 100);  // Thử lại sau một thời gian ngắn
+                }
+            }
+
+        
+
+
+            // Hàm cập nhật giao diện khi thay đổi kích thước màn hình
+            function updateLayoutOnResize() {
+                adjustListHeight();
+            }
+
+            // Xử lý sự kiện click vào nút toggle sidebar
+            sidebarCollapse.addEventListener('click', function () {
+                setTimeout(adjustListHeight, 300);
+
+            });
+
+
+            // Lắng nghe sự kiện thay đổi kích thước màn hình
+            // window.addEventListener('resize', updateLayoutOnResize);
+            let resizeTimeout;
+
+            window.addEventListener('resize', function () {
+                if (resizeTimeout) clearTimeout(resizeTimeout);
+
+                // Chỉ gọi updateLayoutOnResize sau khi resize dừng 200ms
+                resizeTimeout = setTimeout(() => {
+                    updateLayoutOnResize();
+                    adjustListHeight();
+                }, 120);
+            });
+
+            // Điều chỉnh lại chiều cao khi cửa sổ thay đổi kích thước
+            window.addEventListener('resize', adjustListHeight);
+            adjustListHeight();
+        });
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,233 @@
+﻿
+@{
+
+    Layout = "_Layout";
+}
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5">
+    <div class="sticky-wrapper-h110">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" 
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <button class="btn btn-start" style="background-color: #0d6efd;">
+                        <span>Nộp Bài</span>
+                    </button>
+
+                </div>
+            </nav>
+            </div>
+
+            <!-- Khối lệnh Question -->
+            <div class="content-container">
+                <div class="container mt-4">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <h4 class="fw-bold text-primary">PART 1</h4>
+                        <button class="btn btn-start " style="margin-bottom: 20px;">
+                            <span>0/200</span>
+                        </button>
+                    </div>
+
+                    <div class="row border p-3">
+                        <div class="col-md-6">
+                            <p class="fw-bold">Câu hỏi</p>
+                            <p>LISTENING TEST</p>
+                            </br>
+                            In the Listening test, you will be asked to demonstrate how well you understand spoken English.
+                            The entire Listening test will last approximately 45 minutes.
+                            There are four parts, and directions are given for each part.
+                            You must mark your answers on the separate answer sheet.
+                            Do not write your answers in your test book.
+
+                            </br>
+                            PART 1:
+                            </br>
+                            Directions: For each question in this part, you will hear four statements about a picture in your test book.
+                            When you hear the statements, you must select the one statement that best describes what you see in the picture.
+                            Then find the number of the question on your answer sheet and mark your answer.
+                            The statements will not be printed in your test book and will be spoken only one time.
+                            </br>
+
+                            <img src="https://zenlishtoeic.vn/wp-content/uploads/2022/08/4.jpg" alt="Câu hỏi hình ảnh">
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fw-bold">1.</p>
+                            <form>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer1" id="optionA">
+                                    <label class="form-check-label" for="optionA">A.</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer1" id="optionB">
+                                    <label class="form-check-label" for="optionB">B.</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer1" id="optionC">
+                                    <label class="form-check-label" for="optionC">C.</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer1" id="optionD">
+                                    <label class="form-check-label" for="optionD">D.</label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    <!-- Lớp Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+
+@section Scripts {
+    <style>
+        .btn-test-online {
+            display: inline-block;
+            background-color: #4CAF50;
+            /* Màu xanh lá */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            /* Bo góc */
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+            .btn-test-online:hover {
+                background-color: #45a049;
+                /* Màu xanh nhạt hơn khi hover */
+                color: white;
+                transform: scale(1.05);
+            }
+
+        .navbar {
+            position: unset;
+            border-radius: 10px;
+            top: 1 !important;
+            /* Căn với sidebar mặc định */
+            width: 100% !important;
+            margin-top: -30px;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .part-title {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+            overflow-y: auto;
+            max-height: 500px;
+            border: 1px solid #ddd;
+        }
+
+        .test-title {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .test-content {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .test-image {
+            width: 100%;
+            display: block;
+            margin: 10px auto;
+            border-radius: 8px;
+        }
+
+        .start-btn {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #ffcc66;
+            border: none;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .score-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff6600;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .btn-start {
+            background-color: #FFA53A;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .btn-start:hover {
+                background-color: #FFA53A;
+            }
+    </style>
+
+
+
+
+    <script>
+        // Initialize intl-tel-input
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "vn",
+            preferredCountries: ["vn", "us", "gb"],
+            separateDialCode: true,
+            allowDropdown: true, // Bật dropdown
+            utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
+
+        });
+
+
+        // Function to handle submit
+        function submitPhone() {
+            if (iti.isValidNumber()) {
+                const fullNumber = iti.getNumber(); // Get the full international number
+                document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
+            } else {
+                alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
+            }
+        }
+    </script>
+}
