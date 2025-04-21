@@ -1,0 +1,219 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+    <div class="sticky-wrapper-h110">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+            </div>
+        </nav>
+
+    </div>
+    <!-- Khối lệnh tư vấn -->
+    <div class="container-content mg-top-20">
+        <h5 class="fw-bold">TEST ĐẦU VÀO (3)</h5>
+        <div>
+            <p><strong>Thời gian làm bài thi:</strong> <span class="text-danger">2 giờ</span></p>
+            <p><strong>Cấu trúc đề thi</strong></p>
+
+            <div class="test-container">
+                <h5 class="section-title">LISTENING</h5>
+                <table class="table table-bordered test-table">
+                    <tr>
+                        <td class="stt">1</td>
+                        <td>PART 1</td>
+                        <td>6 CÂU</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">2</td>
+                        <td>PART 2</td>
+                        <td>25 CÂU</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">3</td>
+                        <td>PART 3</td>
+                        <td>39 CÂU</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">4</td>
+                        <td>PART 4</td>
+                        <td>30 CÂU</td>
+                    </tr>
+                </table>
+
+                <h5 class="section-title">READING</h5>
+                <table class="table table-bordered test-table">
+                    <tr>
+                        <td class="stt">1</td>
+                        <td>PART 5</td>
+                        <td>30 CÂU</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">2</td>
+                        <td>PART 6</td>
+                        <td>16 CÂU</td>
+                    </tr>
+                    <tr>
+                        <td class="stt">3</td>
+                        <td>PART 7</td>
+                        <td>54 CÂU</td>
+                    </tr>
+                </table>
+                <a asp-controller="Toeic" asp-action="TestToeic" class="btn btn-start mt-3">BẮT ĐẦU</a>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- Lớp Overlay -->
+<div class="overlay" id="overlay"></div>
+@section Scripts {
+    <style>
+        .btn-test-online {
+            display: inline-block;
+            background-color: #4CAF50;
+            /* Màu xanh lá */
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            /* Bo góc */
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+            .btn-test-online:hover {
+                background-color: #45a049;
+                /* Màu xanh nhạt hơn khi hover */
+                color: white;
+                transform: scale(1.05);
+            }
+
+        .navbar {
+            position: unset;
+            border-radius: 10px;
+            top: 1 !important;
+            /* Căn với sidebar mặc định */
+            width: 100% !important;
+            margin-top: -30px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            /*             display: flex;
+                     justify-content: center;
+                     align-items: center; */
+            /* height: 100vh; */
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .table {
+            margin: auto;
+            width: 100%;
+        }
+
+        .btn-start {
+            background-color: #FFA53A;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .btn-start:hover {
+                background-color: #FFA53A;
+            }
+
+        .test-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .test-table {
+            width: 100%;
+            text-align: center;
+        }
+
+            .test-table td {
+                padding: 10px;
+                text-align: center;
+                text-align: left;
+            }
+
+        .section-title {
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .stt {
+            background-color: #ffc379 !important;
+        }
+    </style>
+
+
+
+
+    <script>
+        // Initialize intl-tel-input
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "vn",
+            preferredCountries: ["vn", "us", "gb"],
+            separateDialCode: true,
+            allowDropdown: true, // Bật dropdown
+            utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
+
+        });
+
+
+        // Function to handle submit
+        function submitPhone() {
+            if (iti.isValidNumber()) {
+                const fullNumber = iti.getNumber(); // Get the full international number
+                document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
+            } else {
+                alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
+            }
+        }
+    </script>
+}
