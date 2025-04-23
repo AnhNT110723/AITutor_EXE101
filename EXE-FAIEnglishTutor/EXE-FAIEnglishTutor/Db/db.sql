@@ -140,68 +140,138 @@ CREATE TABLE Feeback (
     CreatedAt DATETIME DEFAULT GETDATE()
 );
 
-CREATE TABLE ExamType (
-    ExamTypeID INT IDENTITY(1,1) PRIMARY KEY,
-    ExamName NVARCHAR(100) -- 'IELTS', 'TOEIC'
-);
+    CREATE TABLE ExamType (
+        ExamTypeID INT IDENTITY(1,1) PRIMARY KEY,
+        ExamName NVARCHAR(100) -- 'IELTS', 'TOEIC'
+    );
 
-CREATE TABLE ExamPart (
-    PartID INT IDENTITY(1,1) PRIMARY KEY,
-    ExamTypeID INT FOREIGN KEY REFERENCES ExamType(ExamTypeID),
-    PartName NVARCHAR(100),         -- 'Listening Part 1', 'Reading Part 5', ...
-    Description NVARCHAR(MAX) NULL  -- nếu cần mô tả thêm
-);
+    CREATE TABLE ExamPart (
+        PartID INT IDENTITY(1,1) PRIMARY KEY,
+        ExamTypeID INT FOREIGN KEY REFERENCES ExamType(ExamTypeID),
+        PartName NVARCHAR(100),         -- 'Listening Part 1', 'Reading Part 5', ...
+        Description NVARCHAR(MAX) NULL  -- nếu cần mô tả thêm
+    );
 
-CREATE TABLE Exam (
-    ExamID INT IDENTITY(1,1) PRIMARY KEY,
-    ExamTypeID INT FOREIGN KEY REFERENCES ExamType(ExamTypeID),
-    Title NVARCHAR(255),
-    Description NVARCHAR(MAX),
-    CreatedAt DATETIME DEFAULT GETDATE()
-);
-
-
-CREATE TABLE ExamSection (
-    SectionID INT IDENTITY(1,1) PRIMARY KEY,
-    ExamID INT FOREIGN KEY REFERENCES Exam(ExamID),
-    PartID INT FOREIGN KEY REFERENCES ExamPart(PartID)
-);
+    CREATE TABLE Exam (
+        ExamID INT IDENTITY(1,1) PRIMARY KEY,
+        ExamTypeID INT FOREIGN KEY REFERENCES ExamType(ExamTypeID),
+        Title NVARCHAR(255),
+        Description NVARCHAR(MAX),
+        CreatedAt DATETIME DEFAULT GETDATE(),
+        ParentExamID INT NULL, 
+        CONSTRAINT FK_Exam_Parent FOREIGN KEY (ParentExamID) REFERENCES Exam(ExamID)
+    );
 
 
-CREATE TABLE Question (
-    QuestionID INT IDENTITY(1,1) PRIMARY KEY,
-    SectionID INT FOREIGN KEY REFERENCES ExamSection(SectionID),
-    QuestionText NVARCHAR(MAX),
-    AudioURL NVARCHAR(500),   -- cho câu hỏi nghe TOEIC/IELTS
-    ImageURL NVARCHAR(500),   -- nếu có hình ảnh
-    QuestionType NVARCHAR(50) CHECK (QuestionType IN ('MultipleChoice', 'FillBlank', 'Essay')),
-    Explanation NVARCHAR(MAX) NULL
-);
+    CREATE TABLE ExamSection (
+        SectionID INT IDENTITY(1,1) PRIMARY KEY,
+        ExamID INT FOREIGN KEY REFERENCES Exam(ExamID),
+        PartID INT FOREIGN KEY REFERENCES ExamPart(PartID)
+    );
 
 
-CREATE TABLE Answer (
-    AnswerID INT IDENTITY(1,1) PRIMARY KEY,
-    QuestionID INT FOREIGN KEY REFERENCES Question(QuestionID),
-    AnswerText NVARCHAR(MAX),
-    IsCorrect BIT
-);
+    CREATE TABLE Question (
+        QuestionID INT IDENTITY(1,1) PRIMARY KEY,
+        SectionID INT FOREIGN KEY REFERENCES ExamSection(SectionID),
+        QuestionText NVARCHAR(MAX),
+        AudioURL NVARCHAR(500),   -- cho câu hỏi nghe TOEIC/IELTS
+        ImageURL NVARCHAR(500),   -- nếu có hình ảnh
+        QuestionType NVARCHAR(50) CHECK (QuestionType IN ('MultipleChoice', 'FillBlank', 'Essay')),
+        Explanation NVARCHAR(MAX) NULL
+    );
 
 
-CREATE TABLE UserExamResult (
-    ResultID INT IDENTITY(1,1) PRIMARY KEY,
-    UserID INT FOREIGN KEY REFERENCES Users(UserID),
-    ExamID INT FOREIGN KEY REFERENCES Exam(ExamID),
-    StartTime DATETIME,
-    EndTime DATETIME,
-    Score FLOAT
-);
+    CREATE TABLE Answer (
+        AnswerID INT IDENTITY(1,1) PRIMARY KEY,
+        QuestionID INT FOREIGN KEY REFERENCES Question(QuestionID),
+        AnswerText NVARCHAR(MAX),
+        IsCorrect BIT
+    );
 
 
-CREATE TABLE UserAnswer (
-    UserAnswerID INT IDENTITY(1,1) PRIMARY KEY,
-    ResultID INT FOREIGN KEY REFERENCES UserExamResult(ResultID),
-    QuestionID INT FOREIGN KEY REFERENCES Question(QuestionID),
-    SelectedAnswerID INT FOREIGN KEY REFERENCES Answer(AnswerID),
-    IsCorrect BIT
-);
+    CREATE TABLE UserExamResult (
+        ResultID INT IDENTITY(1,1) PRIMARY KEY,
+        UserID INT FOREIGN KEY REFERENCES Users(UserID),
+        ExamID INT FOREIGN KEY REFERENCES Exam(ExamID),
+        StartTime DATETIME,
+        EndTime DATETIME,
+        Score FLOAT
+    );
+
+
+    CREATE TABLE UserAnswer (
+        UserAnswerID INT IDENTITY(1,1) PRIMARY KEY,
+        ResultID INT FOREIGN KEY REFERENCES UserExamResult(ResultID),
+        QuestionID INT FOREIGN KEY REFERENCES Question(QuestionID),
+        SelectedAnswerID INT FOREIGN KEY REFERENCES Answer(AnswerID),
+        IsCorrect BIT
+    );
+
+    INSERT INTO ExamType 
+    VALUES (N'TOEIC'),(N'IELTS'),
+    (N'TOEIC Listening & Reading'), 
+    (N'TOEIC Speaking & Writing');
+
+
+    INSERT INTO ExamPart (ExamTypeID, PartName, Description) VALUES
+(3, N'Listening Part 1', N'Mô tả part nghe tranh'),
+(3, N'Listening Part 2', N'Mô tả part hỏi đáp'),
+(3, N'Reading Part 5', N'Mô tả part điền từ'),
+(2, N'Listening Section 1', N'Listening cho IELTS'),
+(2, N'Writing Task 1', N'Viết báo cáo');
+
+
+INSERT INTO Exam (ExamTypeID, Title, Description, CreatedAt) VALUES
+(3, N'TEST ĐẦU VÀO', N'Kiểm tra năng lực đầu vào', '2025-04-21 08:00:00'),
+(3, N'HACKER TOEIC 3', N'Đề thi luyện tập Hacker 3', '2025-04-20 10:00:00'),
+(3, N'HACKER TOEIC 2', N'Đề thi luyện tập Hacker 2', '2025-04-19 09:30:00'),
+(1, N'ETS 2024', N'Đề mô phỏng từ ETS 2024', '2025-04-18 15:20:00'),
+(2, N'IELTS MOCK TEST 1', N'Thi thử IELTS 4 kỹ năng', '2025-04-17 11:45:00');
+
+INSERT INTO Exam (ExamTypeID, Title, Description, CreatedAt, ParentExamID) VALUES
+(3, N'TEST ĐẦU VÀO (1)', N'Kiểm tra năng lực đầu vào', '2025-04-21 08:00:00', 1),
+(3, N'TEST ĐẦU VÀO (2)', N'Kiểm tra năng lực đầu vào', '2025-04-21 08:00:00',1),
+(3, N'TEST ĐẦU VÀO (3)', N'Kiểm tra năng lực đầu vào', '2025-04-21 08:00:00',1);
+
+INSERT INTO ExamSection (ExamID, PartID) VALUES
+(1, 1),
+(1, 2),
+(2, 1),
+(2, 2),
+(2, 3),
+(3, 1),
+(3, 2),
+(4, 1),
+(4, 2),
+(4, 3),
+(5, 4),
+(5, 5);
+
+
+INSERT INTO Question (SectionID, QuestionText, AudioURL, ImageURL, QuestionType, Explanation) VALUES
+(1, N'What is the man doing?', '/audio/q1.mp3', '/img/q1.jpg', 'MultipleChoice', N'Nhìn hành động'),
+(2, N'Where is the nearest bank?', '/audio/q2.mp3', NULL, 'MultipleChoice', N'Đoán theo context'),
+(5, N'Choose the correct word', NULL, NULL, 'FillBlank', N'Từ loại đúng');
+
+
+INSERT INTO Answer (QuestionID, AnswerText, IsCorrect) VALUES
+(1, N'He is cooking', 0),
+(1, N'He is running', 1),
+(1, N'He is sleeping', 0),
+(2, N'Next to the library', 1),
+(2, N'In the supermarket', 0),
+(3, N'went', 1),
+(3, N'go', 0);
+
+
+INSERT INTO UserExamResult (UserID, ExamID, StartTime, EndTime, Score) VALUES
+(2, 1, '2025-04-21 09:00:00', '2025-04-21 10:30:00', 650);
+
+
+INSERT INTO UserAnswer (ResultID, QuestionID, SelectedAnswerID, IsCorrect) VALUES
+(2, 1, 2, 1),
+(2, 2, 4, 1),
+(2, 3, 6, 1);
+
+
 

@@ -80,213 +80,23 @@
                     <h5>FAI Tutor LÀ Website TẠI VIỆT NAM CÓ TEST TOEIC 4 KỸ NĂNG GIỐNG 90% ĐỀ THI THẬT</h5>
 
                     <!-- Tabs -->
-                    <div class="tabs ">
-                        <button class="tab-button active-tab" onclick="showTab('listening-reading', this)">
-                            Listening &
-                            Reading
-                        </button>
-                        <button class="tab-button inactive-tab" onclick="showTab('speaking-writing', this)">
-                            Speaking &
-                            Writing
-                        </button>
+            <div class="tabs">
+                <button class="tab-button active-tab" onclick="fetchAndShowTab('listening-reading', 3, this)">
+                    Listening & Reading
+                </button>
+                <button class="tab-button inactive-tab" onclick="fetchAndShowTab('speaking-writing', 2, this)">
+                    Speaking & Writing
+                </button>
+            </div>
 
-                    </div>
+            <!-- Listening - Reading -->
+            <div class="timeline tab-content" id="listening-reading"></div>
 
-                    <!-- Listening - Reading -->
-                    <div class="timeline tab-content" id="listening-reading">
-                        <div class="timeline-item">
-                            TOEIC LISTENING & READING - FULL TEST
-                        </div>
+            <!-- Speaking - Writing -->
+            <div class="timeline tab-content" id="speaking-writing" style="display: none;"></div>
 
-                        <div class="timeline-item" data-number="1">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                TEST ĐẦU VÀO
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <a style="text-decoration: none;" asp-controller="Toeic" asp-action="TestInput">
-                                    <div class="test-item">
-                                        <strong>TEST ĐẦU VÀO (3)</strong>
-                                        <div class="count">13,744 lượt hoàn thành</div>
-                                    </div>
-                                </a>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="timeline-item" data-number="2">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                HACKER TOEIC 3
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item" data-number="3">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                HACKER TOEIC 2
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="timeline-item" data-number="4">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                ETS 2024
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item" data-number="5">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                ETS 2023
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item" data-number="6">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                ETS 2022
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- Speaking - Writing -->
-
-                    <div id="speaking-writing" class="timeline" style="display: none;">
-                        <div class="timeline-item">TOEIC Speaking & Writing </div>
-                        <div class="timeline-item" data-number="1">
-                            <!-- Header click để mở -->
-                            <div class="timeline-header" id="toggleTestList">
-                                <div></div>
-                                TOEIC SPEAKING & WRITING
-                                <div class="arrow">▲</div>
-                            </div>
-
-                            <!-- Nội dung ẩn -->
-                            <div class="timeline-content" id="testList">
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (3)</strong>
-                                    <div class="count">13,744 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (2)</strong>
-                                    <div class="count">14,349 lượt hoàn thành</div>
-                                </div>
-                                <div class="test-item">
-                                    <strong>TEST ĐẦU VÀO (1)</strong>
-                                    <div class="count">49,927 lượt hoàn thành</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+                
+            
                 </div>
             </div>
 
@@ -454,7 +264,7 @@
     }
 </style>
 
-    <script>
+@*     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".timeline-header").forEach(header => {
                 header.addEventListener("click", function () {
@@ -477,33 +287,166 @@
         });
 
     </script>
-
+ *@
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Mặc định hiển thị Listening & Reading, ẩn Speaking & Writing
-            document.getElementById('listening-reading').style.display = 'block';
-            document.getElementById('speaking-writing').style.display = 'none';
-        });
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     // Mặc định hiển thị Listening & Reading, ẩn Speaking & Writing
+        //     document.getElementById('listening-reading').style.display = 'block';
+        //     document.getElementById('speaking-writing').style.display = 'none';
+        // });
 
-        function showTab(tabId, btn) {
-            // Ẩn tất cả các tab trước khi hiển thị tab được chọn
-            document.getElementById('listening-reading').style.display = 'none';
-            document.getElementById('speaking-writing').style.display = 'none';
+        // function showTab(tabId, btn) {
+        //     // Ẩn tất cả các tab trước khi hiển thị tab được chọn
+        //     document.getElementById('listening-reading').style.display = 'none';
+        //     document.getElementById('speaking-writing').style.display = 'none';
 
-            // Hiển thị tab được chọn
-            document.getElementById(tabId).style.display = 'block';
+        //     // Hiển thị tab được chọn
+        //     document.getElementById(tabId).style.display = 'block';
 
-            // Cập nhật trạng thái active/inactive của các nút
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active-tab');
-                button.classList.add('inactive-tab');
+        //     // Cập nhật trạng thái active/inactive của các nút
+        //     document.querySelectorAll('.tab-button').forEach(button => {
+        //         button.classList.remove('active-tab');
+        //         button.classList.add('inactive-tab');
+        //     });
+
+        //     // Cập nhật lại class cho nút đang chọn
+        //     btn.classList.add('active-tab');
+        //     btn.classList.remove('inactive-tab');
+        // }
+
+
+        // Hàm chuyển đổi tab và lấy dữ liệu
+        async function fetchAndShowTab(tabId, examTypeId, button) {
+            // Cập nhật trạng thái nút tab
+            const tabButtons = document.querySelectorAll('.tab-button');
+            if (!tabButtons.length) {
+                console.error('Không tìm thấy .tab-button');
+                return;
+            }
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active-tab');
+                btn.classList.add('inactive-tab');
+            });
+            button.classList.add('active-tab');
+            button.classList.remove('inactive-tab');
+
+            // Ẩn/hiện tab content
+            const tabContents = document.querySelectorAll('.tab-content');
+            if (!tabContents.length) {
+                console.error('Không tìm thấy .tab-content');
+                return;
+            }
+            tabContents.forEach(content => {
+                content.style.display = 'none';
             });
 
-            // Cập nhật lại class cho nút đang chọn
-            btn.classList.add('active-tab');
-            btn.classList.remove('inactive-tab');
+            const activeTab = document.getElementById(tabId);
+            if (!activeTab) {
+                console.error(`Không tìm thấy tab với ID: ${tabId}`);
+                return;
+            }
+            activeTab.style.display = 'block';
+            activeTab.innerHTML = '<div class="timeline-item">Đang tải...</div>';
+
+            try {
+                const response = await fetch(`/Mentee/Toeic/TestOnline/${examTypeId}`);
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Data received:', data);
+
+                if (!Array.isArray(data)) {
+                    console.warn('Dữ liệu không phải là mảng:', data);
+                    activeTab.innerHTML = '<div class="timeline-item">Không có dữ liệu để hiển thị.</div>';
+                    return;
+                }
+
+                activeTab.innerHTML = '';
+                const title = document.createElement('div');
+                title.className = 'timeline-item';
+                title.textContent = tabId === 'listening-reading' ? 'TOEIC LISTENING & READING - FULL TEST' : 'TOEIC SPEAKING & WRITING';
+                activeTab.appendChild(title);
+
+                data.forEach((category, index) => {
+                    if (!category.title || !Array.isArray(category.tests)) {
+                        console.warn('Category không hợp lệ:', category);
+                        return;
+                    }
+
+                    const timelineItem = document.createElement('div');
+                    timelineItem.className = 'timeline-item';
+                    timelineItem.dataset.number = index + 1;
+
+                    const header = document.createElement('div');
+                    header.className = 'timeline-header';
+                    header.innerHTML = `
+                        <div></div>
+                        ${category.title}
+                        <div class="arrow">▲</div>
+                    `;
+                    header.addEventListener('click', () => toggleTestList(timelineItem));
+
+                    const content = document.createElement('div');
+                    content.className = 'timeline-content';
+                    content.style.display = 'none';
+                    category.tests.forEach(test => {
+                        if (!test.name || test.completedCount == null) {
+                            console.warn('Test không hợp lệ:', test);
+                            return;
+                        }
+                        const testItem = document.createElement('div');
+                        testItem.className = 'test-item';
+                        testItem.innerHTML = `
+                            <a style="text-decoration: none;" href="/Mentee/Toeic/TestInput?examTypeId=${examTypeId}&testName=${encodeURIComponent(test.name)}">
+                                <strong>${test.name}</strong>
+                                <div class="count">${test.completedCount.toLocaleString()} lượt hoàn thành</div>
+                            </a>
+                        `;
+                        content.appendChild(testItem);
+                    });
+
+                    timelineItem.appendChild(header);
+                    timelineItem.appendChild(content);
+                    activeTab.appendChild(timelineItem);
+                });
+
+                if (!data.length) {
+                    activeTab.innerHTML = '<div class="timeline-item">Không có dữ liệu để hiển thị.</div>';
+                }
+            } catch (error) {
+                console.error('Error details:', error.message, error.stack);
+                activeTab.innerHTML = '<div class="timeline-item">Đã xảy ra lỗi khi tải dữ liệu: ' + error.message + '</div>';
+            }
         }
 
+        function toggleTestList(timelineItem) {
+            const content = timelineItem.querySelector('.timeline-content');
+            const arrow = timelineItem.querySelector('.arrow');
+            if (!content || !arrow) {
+                console.error('Không tìm thấy .timeline-content hoặc .arrow trong timelineItem');
+                return;
+            }
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                arrow.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                arrow.textContent = '▲';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const defaultButton = document.querySelector('.tab-button.active-tab');
+            if (!defaultButton) {
+                console.error('Không tìm thấy .tab-button.active-tab mặc định');
+                return;
+            }
+            fetchAndShowTab('listening-reading', 3, defaultButton); // Sửa examTypeId=1 thành 3
+        });
+      
     </script>
 
 

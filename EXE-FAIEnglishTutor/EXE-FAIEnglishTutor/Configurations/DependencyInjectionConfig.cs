@@ -45,6 +45,11 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<IFileUploadService, FileUploadService>();
 
 
+            //Toeic test
+            services.AddScoped<IToeicTestService, ToeicTestService>();
+            //Exam
+            services.AddScoped<IExamRepositoy,ExamRepository>();
+
         }
 
 

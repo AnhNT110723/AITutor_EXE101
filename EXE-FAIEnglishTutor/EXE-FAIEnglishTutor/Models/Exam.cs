@@ -15,9 +15,15 @@ public partial class Exam
 
     public DateTime? CreatedAt { get; set; }
 
+    public int? ParentExamId { get; set; }
+
     public virtual ICollection<ExamSection> ExamSections { get; set; } = new List<ExamSection>();
 
     public virtual ExamType? ExamType { get; set; }
+
+    public virtual ICollection<Exam> InverseParentExam { get; set; } = new List<Exam>();
+
+    public virtual Exam? ParentExam { get; set; }
 
     public virtual ICollection<UserExamResult> UserExamResults { get; set; } = new List<UserExamResult>();
 }
