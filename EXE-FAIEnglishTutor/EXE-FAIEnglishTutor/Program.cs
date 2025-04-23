@@ -84,6 +84,8 @@ app.UseAuthentication();
 
 app.UseMiddleware<TokenMiddleware>();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseAuthorization();
 
 //Kiem tra area truoc
