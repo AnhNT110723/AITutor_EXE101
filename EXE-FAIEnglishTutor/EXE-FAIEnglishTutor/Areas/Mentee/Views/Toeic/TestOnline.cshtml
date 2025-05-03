@@ -263,58 +263,8 @@
         min-width: 200px;
     }
 </style>
-
-@*     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".timeline-header").forEach(header => {
-                header.addEventListener("click", function () {
-                    let content = this.nextElementSibling;
-                    let arrow = this.querySelector(".arrow");
-
-                    if (content.style.display === "none" || content.style.display === "") {
-                        content.style.display = "block"; // Hiển thị nội dung
-                        arrow.innerHTML = "▼"; // Đổi mũi tên xuống
-                    } else {
-                        content.style.display = "none"; // Ẩn nội dung
-                        arrow.innerHTML = "▲"; // Đổi mũi tên lên
-                    }
-                });
-
-                // Ẩn nội dung khi tải trang
-                let content = header.nextElementSibling;
-                content.style.display = "none";
-            });
-        });
-
-    </script>
- *@
+    <script src="~/js/slug.js"></script>
     <script>
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     // Mặc định hiển thị Listening & Reading, ẩn Speaking & Writing
-        //     document.getElementById('listening-reading').style.display = 'block';
-        //     document.getElementById('speaking-writing').style.display = 'none';
-        // });
-
-        // function showTab(tabId, btn) {
-        //     // Ẩn tất cả các tab trước khi hiển thị tab được chọn
-        //     document.getElementById('listening-reading').style.display = 'none';
-        //     document.getElementById('speaking-writing').style.display = 'none';
-
-        //     // Hiển thị tab được chọn
-        //     document.getElementById(tabId).style.display = 'block';
-
-        //     // Cập nhật trạng thái active/inactive của các nút
-        //     document.querySelectorAll('.tab-button').forEach(button => {
-        //         button.classList.remove('active-tab');
-        //         button.classList.add('inactive-tab');
-        //     });
-
-        //     // Cập nhật lại class cho nút đang chọn
-        //     btn.classList.add('active-tab');
-        //     btn.classList.remove('inactive-tab');
-        // }
-
-
         // Hàm chuyển đổi tab và lấy dữ liệu
         async function fetchAndShowTab(tabId, examTypeId, button) {
             // Cập nhật trạng thái nút tab
@@ -356,7 +306,7 @@
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Data received:', data);
+               
 
                 if (!Array.isArray(data)) {
                     console.warn('Dữ liệu không phải là mảng:', data);
@@ -400,7 +350,7 @@
                         const testItem = document.createElement('div');
                         testItem.className = 'test-item';
                         testItem.innerHTML = `
-                            <a style="text-decoration: none;" href="/Mentee/Toeic/TestInput?examTypeId=${examTypeId}&testName=${encodeURIComponent(test.name)}">
+                                 <a style="text-decoration: none;" href="/Mentee/Toeic/TestOnline/TestInput/${examTypeId}/${test.slug}">
                                 <strong>${test.name}</strong>
                                 <div class="count">${test.completedCount.toLocaleString()} lượt hoàn thành</div>
                             </a>

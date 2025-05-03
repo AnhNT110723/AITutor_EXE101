@@ -17,9 +17,13 @@ public partial class UserExamResult
 
     public double? Score { get; set; }
 
+    public int? CustomDuration { get; set; }
+
     public virtual Exam? Exam { get; set; }
 
     public virtual User? User { get; set; }
 
     public virtual ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
+
+    public virtual ICollection<UserExamPartSelection> UserExamPartSelections { get; set; } = new List<UserExamPartSelection>();
 }

@@ -30,9 +30,21 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled exception");
+                // Ghi log chi tiết hơn
+                _logger.LogError(ex, "Unhandled exception: {Message}\nStackTrace: {StackTrace}", ex.Message, ex.StackTrace);
+                if (ex.InnerException != null)
+                {
+                    _logger.LogError(ex.InnerException, "Inner exception: {Message}\nStackTrace: {StackTrace}",
+                        ex.InnerException.Message, ex.InnerException.StackTrace);
+                }
+
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsJsonAsync(new { message = "An unexpected error occurred." });
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    message = "An unexpected error occurred.",
+                    error = ex.Message, // Thêm chi tiết lỗi (cẩn thận với thông tin nhạy cảm trong production)
+                    stackTrace = ex.StackTrace // Thêm stack trace (chỉ dùng trong môi trường dev)
+                });
             }
         }
     }

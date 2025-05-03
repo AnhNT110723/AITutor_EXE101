@@ -1,5 +1,8 @@
-﻿using EXE_FAIEnglishTutor.Services.Interface.Mentee;
+﻿using EXE_FAIEnglishTutor.Models;
+using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 {
@@ -7,7 +10,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
     public class ToeicController : Controller
     {
         private readonly IToeicTestService _toeicService;
-        public ToeicController(IToeicTestService toeicTestService) 
+        public ToeicController(IToeicTestService toeicTestService)
         {
             _toeicService = toeicTestService;
         }
@@ -30,14 +33,11 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         {
             try
             {
-                Console.WriteLine($"Processing GetExamByTypeAsync with examTypeId: {examTypeId}");
                 var exams = await _toeicService.GetExamsByType(examTypeId);
                 if (exams == null || !exams.Any())
                 {
-                    Console.WriteLine($"No exams found for examTypeId: {examTypeId}");
                     return Ok(new List<object>()); // Trả về mảng rỗng
                 }
-                Console.WriteLine($"Exams retrieved: {System.Text.Json.JsonSerializer.Serialize(exams)}");
                 return Ok(exams);
             }
             catch (Exception ex)
@@ -48,17 +48,70 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         }
 
 
-        [HttpGet("Mentee/Toeic/TestOnline/TestInput")]
-        public IActionResult TestInput()
+        [HttpGet("Mentee/Toeic/TestOnline/TestInput/{examTypeId}/{testName}")]
+        public async Task<IActionResult> TestInput(int examTypeId, string testName)
         {
-            return View("TestInput");
+            if (examTypeId <= 0 || string.IsNullOrEmpty(testName))
+            {
+                return BadRequest("Invalid examTypeId or testName.");
+            }
+
+
+
+            // Tìm bài thi trong bảng Exam
+            var exam = await _toeicService.GetExamsByTypeAndNameAsync(examTypeId, testName);
+
+            if (exam == null)
+            {
+                return NotFound("Exam not found.");
+            }
+
+
+            // Tìm các part của bài thi
+            var examParts = await _toeicService.GetExamPartsByTypeAndNameAsync(exam.ExamId);
+
+            // Truyền dữ liệu vào View
+            ViewData["TestId"] = exam.ExamId;
+            ViewData["ExamTypeId"] = examTypeId;
+            ViewData["ExamTitle"] = exam.Title;
+            ViewData["Slug"] = exam.Slug;
+
+            // Trả về view với dữ liệu exam
+            return View("TestInput", examParts);
         }
 
 
-        [HttpGet("Mentee/Toeic/TestOnline/TestInput/TestToeic")]
-        public IActionResult TestToeic()
+        [HttpGet("Mentee/Toeic/TestOnline/StartTest/{examTypeId}/{slug}")]
+        public async Task<IActionResult> TestToeic(int examTypeId, string slug)
         {
-            return View("TestToeic");
+            try
+            {
+                // Tìm bài thi dựa trên examTypeId và slug
+                var exam = await _toeicService.GetExamsByTypeAndNameAsync(examTypeId, slug);
+
+                if (exam == null)
+                {
+                    return NotFound("Exam not found.");
+                }
+
+                // Lấy danh sách câu hỏi của bài thi
+                var questions = await _toeicService.GetQuestionsForExamAsync(exam.ExamId);
+                if (questions == null || !questions.Any())
+                {
+                    return NotFound("No questions found for this exam.");
+                }
+
+                // Truyền ExamId vào ViewData để sử dụng sau này
+                ViewData["ExamId"] = exam.ExamId;
+                ViewData["ExamTypeId"] = examTypeId;
+                ViewData["Slug"] = slug;
+
+                return View("TestToeic", questions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Đã xảy ra lỗi khi bắt đầu bài thi. Vui lòng thử lại sau.");
+            }
         }
     }
 }

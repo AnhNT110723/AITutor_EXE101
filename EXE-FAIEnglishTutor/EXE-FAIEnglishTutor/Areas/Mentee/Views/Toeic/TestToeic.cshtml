@@ -1,7 +1,7 @@
 ﻿
 @{
-
     Layout = "_Layout";
+    ViewData["Title"] = "Test TOEIC";
 }
 
         <!-- Page Content  -->
@@ -33,13 +33,13 @@
                 <div class="container mt-4">
 
                     <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                        <h4 class="fw-bold text-primary">PART 1</h4>
+                    <h4 class="fw-bold text-primary" id="part-name">PART 1</h4>
                         <button class="btn btn-start " style="margin-bottom: 20px;">
-                            <span>0/200</span>
+                        <span id="progress">0/200</span>
                         </button>
                     </div>
 
-                    <div class="row border p-3">
+                    <div class="row border p-3" id="question-container">
                         <div class="col-md-6">
                             <p class="fw-bold">Câu hỏi</p>
                             <p>LISTENING TEST</p>
@@ -205,7 +205,171 @@
     </style>
 
 
+    <script>
+        const questions = @Html.Raw(Json.Serialize(Model)); // Truyền danh sách câu hỏi từ Model sang JavaScript
+        let currentQuestionIndex = 0;
+        let audio = new Audio();
+        let answers = {}; // Lưu đáp án người dùng (questionId: selectedAnswer)
 
+
+        // Hàm hiển thị câu hỏi hiện tại
+        function displayQuestion(index) {
+            const question = questions[index];
+            const partName = document.getElementById('part-name');
+            const progress = document.getElementById('progress');
+            const container = document.getElementById('question-container');
+
+            // Cập nhật tiêu đề phần thi và tiến độ
+            partName.textContent = question.partName;
+            progress.textContent = `${index + 1}/${questions.length}`;
+
+            // Hiển thị câu hỏi và đáp án
+            let html = `
+                        <div class="col-md-6">
+                             <p class="fw-bold">Câu hỏi ${index + 1}: </p>
+                                <br>
+                         <p>Directions: ${question.partType === 'Listening'
+                            ? 'For each question in this part, you will hear four statements about a picture. Select the one statement that best describes what you see in the picture.'
+                            : 'For each question in this part, read the text and select the best answer.'
+                         }</p>
+                          <br>
+                        `;
+
+            // Hiển thị hình ảnh nếu có (cho Listening Part 1 hoặc Reading Part 7)
+            if (question.imageUrl) {
+                html += `<img src="${question.imageUrl}" alt="Câu hỏi hình ảnh" class="test-image">`;
+            }
+
+            html += `</div>
+                        <div class="col-md-6">
+                            <p class="fw-bold">${index + 1}.</p>
+                            <form>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionA${index}" value="A" onchange="saveAnswer(${question.questionId}, 'A')">
+                                    <label class="form-check-label" for="optionA${index}">A. ${question.answerA || ''}</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionB${index}" value="B" onchange="saveAnswer(${question.questionId}, 'B')">
+                                    <label class="form-check-label" for="optionB${index}">B. ${question.answerB || ''}</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionC${index}" value="C" onchange="saveAnswer(${question.questionId}, 'C')">
+                                    <label class="form-check-label" for="optionC${index}">C. ${question.answerC || ''}</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionD${index}" value="D" onchange="saveAnswer(${question.questionId}, 'D')">
+                                    <label class="form-check-label" for="optionD${index}">D. ${question.answerD || ''}</label>
+                                </div>
+                            </form>
+                    `;
+
+            // Nếu là phần Reading, hiển thị nút "Tiếp theo"
+            if (question.partType === 'Reading') {
+                html += `
+                            <button onclick="nextQuestion()" class="btn btn-primary mt-3">Tiếp theo</button>
+                        `;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+
+            // Nếu là phần Listening, phát audio
+            if (question.partType === 'Listening' && question.audioUrl) {
+                audio.src = question.audioUrl;
+                audio.play();
+            }
+        }
+
+
+        // Hàm lưu trạng thái vào localStorage
+        function saveState() {
+            localStorage.setItem('toeicExamState', JSON.stringify({
+                examId: @ViewData["ExamId"],
+                currentQuestionIndex: currentQuestionIndex,
+                answers: answers
+            }));
+        }
+
+        // Hàm khôi phục trạng thái từ localStorage
+        function restoreState() {
+            const savedState = localStorage.getItem('toeicExamState');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                // Chỉ khôi phục nếu examId trùng với bài thi hiện tại
+                if (state.examId == @ViewData["ExamId"]) {
+                    currentQuestionIndex = state.currentQuestionIndex || 0;
+                    answers = state.answers || {};
+                }
+            }
+        }
+
+
+        // Lưu đáp án người dùng
+        function saveAnswer(questionId, selectedAnswer) {
+            answers[questionId] = selectedAnswer;
+            console.log(`Saved answer for question ${questionId}: ${selectedAnswer}`);
+        }
+
+
+        // Chuyển sang câu hỏi tiếp theo
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion(currentQuestionIndex);
+                saveState();
+            } else {
+                submitExam();
+            }
+        }
+
+
+        // Khi audio kết thúc, tự động chuyển câu hỏi (cho phần Listening)
+        audio.onended = function () {
+            // Chỉ chuyển câu hỏi tự động nếu vẫn đang ở phần Listening
+            if (questions[currentQuestionIndex].partType === 'Listening') {
+                nextQuestion();
+            }
+        };
+
+
+        // Gửi kết quả bài thi
+        async function submitExam() {
+            try {
+                const response = await fetch('/Mentee/Toeic/SubmitExam', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        examId: @ViewData["ExamId"],
+                        answers: answers
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Hoàn thành bài thi! Điểm số: ' + result.score);
+                    window.location.href = '/Mentee/Toeic/Result/' + @ViewData["ExamId"];
+                } else {
+                    alert('Có lỗi khi gửi kết quả. Vui lòng thử lại.');
+                }
+            } catch (error) {
+                console.error('Error submitting exam:', error);
+                alert('Có lỗi xảy ra. Vui lòng thử lại.');
+            }
+        }
+
+        // Khi trang tải, khôi phục trạng thái
+        window.onload = function () {
+            if (questions.length > 0) {
+                restoreState(); // Khôi phục trạng thái
+                displayQuestion(currentQuestionIndex);
+                startTimer(); // Bắt đầu đếm ngược thời gian (sẽ thêm ở phần sau)
+            } else {
+                document.getElementById('question-container').innerHTML = '<p>Không có câu hỏi nào.</p>';
+            }
+        };
+    </script>
 
     <script>
         // Initialize intl-tel-input

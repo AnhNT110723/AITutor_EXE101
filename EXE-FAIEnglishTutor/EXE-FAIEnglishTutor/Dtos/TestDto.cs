@@ -5,5 +5,6 @@
         public int TestId { get; set; }
         public string Name { get; set; }
         public int CompletedCount { get; set; }
+        public string? Slug { get; set; }
     }
 }
