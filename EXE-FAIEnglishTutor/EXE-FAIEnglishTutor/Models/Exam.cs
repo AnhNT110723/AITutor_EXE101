@@ -17,6 +17,10 @@ public partial class Exam
 
     public int? ParentExamId { get; set; }
 
+    public string? Slug { get; set; }
+
+    public int? Duration { get; set; }
+
     public virtual ICollection<ExamSection> ExamSections { get; set; } = new List<ExamSection>();
 
     public virtual ExamType? ExamType { get; set; }

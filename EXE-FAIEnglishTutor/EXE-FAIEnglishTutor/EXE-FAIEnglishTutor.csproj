@@ -32,6 +32,7 @@
     <Folder Include="Areas\Mentor\Data\" />
     <Folder Include="Areas\Mentor\Models\" />
     <Folder Include="Areas\Mentor\Views\" />
+    <Folder Include="wwwroot\img\listening\part1\" />
   </ItemGroup>
 
   <ItemGroup>

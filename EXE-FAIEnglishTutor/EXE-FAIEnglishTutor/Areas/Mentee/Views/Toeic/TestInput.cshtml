@@ -1,7 +1,11 @@
 ﻿@{
     Layout = "_Layout";
 }
+@model List<ExamPartDto>
 
+@{
+    ViewData["Title"] = "Test Input";
+}
 
 <!-- Page Content  -->
 <div id="content" class="p-4 p-md-5">
@@ -25,7 +29,7 @@
     </div>
     <!-- Khối lệnh tư vấn -->
     <div class="container-content mg-top-20">
-        <h5 class="fw-bold">TEST ĐẦU VÀO (3)</h5>
+        <h5 class="fw-bold" id="exam-title">@ViewData["ExamTitle"]</h5>
         <div>
             <p><strong>Thời gian làm bài thi:</strong> <span class="text-danger">2 giờ</span></p>
             <p><strong>Cấu trúc đề thi</strong></p>
@@ -33,47 +37,65 @@
             <div class="test-container">
                 <h5 class="section-title">LISTENING</h5>
                 <table class="table table-bordered test-table">
-                    <tr>
-                        <td class="stt">1</td>
-                        <td>PART 1</td>
-                        <td>6 CÂU</td>
-                    </tr>
-                    <tr>
-                        <td class="stt">2</td>
-                        <td>PART 2</td>
-                        <td>25 CÂU</td>
-                    </tr>
-                    <tr>
-                        <td class="stt">3</td>
-                        <td>PART 3</td>
-                        <td>39 CÂU</td>
-                    </tr>
-                    <tr>
-                        <td class="stt">4</td>
-                        <td>PART 4</td>
-                        <td>30 CÂU</td>
-                    </tr>
+                    @{
+                        var listeningParts = Model.Where(ep => ep.PartType == "Listening").OrderBy(ep => ep.PartName).ToList();
+                        int sttListening = 1;
+                    }
+                    @if (listeningParts.Any())
+                    {
+                        @foreach (var part in listeningParts)
+
+                        {
+                            var partNumber = part.PartName.Replace("Listening Part ", "");
+                            <tr>
+                                <td class="stt">@sttListening</td>
+                                <td>PART @partNumber</td>
+                                <td>@part.QuestionCount CÂU</td>
+                            </tr>
+                            sttListening++;
+
+                        }
+                    }
+                    else
+
+                    {
+                        <tr>
+                            <td colspan="3">Không có phần Listening</td>
+                        </tr>
+                    }
                 </table>
 
                 <h5 class="section-title">READING</h5>
                 <table class="table table-bordered test-table">
-                    <tr>
-                        <td class="stt">1</td>
-                        <td>PART 5</td>
-                        <td>30 CÂU</td>
-                    </tr>
-                    <tr>
-                        <td class="stt">2</td>
-                        <td>PART 6</td>
-                        <td>16 CÂU</td>
-                    </tr>
-                    <tr>
-                        <td class="stt">3</td>
-                        <td>PART 7</td>
-                        <td>54 CÂU</td>
-                    </tr>
+                    @{
+                        var readingParts = Model.Where(ep => ep.PartType == "Reading").OrderBy(ep => ep.PartName).ToList();
+
+                        int sttReading = 1;
+                    }
+                    @if (readingParts.Any())
+                    {
+                        @foreach (var part in readingParts)
+
+                        {
+                            var partNumber = part.PartName.Replace("Reading Part ", "");
+                            <tr>
+                                <td class="stt">@sttReading</td>
+                                <td>PART @partNumber</td>
+                                <td>@part.QuestionCount CÂU</td>
+                            </tr>
+                            sttReading++;
+
+                        }
+                    }
+                    else
+
+                    {
+                        <tr>
+                            <td colspan="3">Không có phần Reading</td>
+                        </tr>
+                    }
                 </table>
-                <a asp-controller="Toeic" asp-action="TestToeic" class="btn btn-start mt-3">BẮT ĐẦU</a>
+                <a asp-controller="Toeic" asp-action="TestToeic" asp-route-examTypeId="@ViewData["ExamTypeId"]" asp-route-slug="@ViewData["Slug"]" class="btn btn-start mt-3">BẮT ĐẦU</a>
             </div>
         </div>
 
@@ -86,6 +108,7 @@
 <!-- Lớp Overlay -->
 <div class="overlay" id="overlay"></div>
 @section Scripts {
+    <script src="~/js/slug.js"></script>
     <style>
         .btn-test-online {
             display: inline-block;
