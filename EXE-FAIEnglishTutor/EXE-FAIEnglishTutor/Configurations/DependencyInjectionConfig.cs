@@ -33,7 +33,7 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddTransient<EmailSendVetification>();
 
             // Chat bot - Sử dụng AddHttpClient thay vì AddScoped
-            services.AddHttpClient<IChatBotService, ChatBotService>();
+            services.AddHttpClient<IAIService, AIService>();
 
 
             //Profile

@@ -5,9 +5,9 @@ namespace EXE_FAIEnglishTutor.Controllers
 {
     public class ChatController : Controller
     {
-        private readonly IChatBotService _chatBotService;
+        private readonly IAIService _chatBotService;
 
-        public ChatController(IChatBotService chatBotService)
+        public ChatController(IAIService chatBotService)
         {
             _chatBotService = chatBotService;
         }
