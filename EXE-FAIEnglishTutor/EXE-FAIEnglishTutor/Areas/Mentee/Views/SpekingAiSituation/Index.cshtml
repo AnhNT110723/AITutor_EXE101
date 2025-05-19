@@ -1,0 +1,296 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
+}
+
+
+
+
+
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    @*  <li class="nav-item active">
+                    <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                    </li> *@
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        // Đọc thông tin từ cookie
+                        var fullName = User.Identity.Name;
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="nav-img">
+                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                </div>
+                            </a>
+                            <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                <div class="menu-title">
+                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                    <i class="bi bi-person-circle"></i> View Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                </a>
+
+                                <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Left Section -->
+        <div class="left-section">
+            <div class="sticky-wrapper">
+                <!-- Top Navigation -->
+                <div class="navigation">
+                    <div class="nav-left">
+                        <span class="icon">&#8592;</span>
+                        <p class="nav-title">Y tá</p>
+                    </div>
+                    <div class="nav-right">
+                        <span class="icon">&#9835;</span>
+                        <span class="icon">&#63;</span>
+                    </div>
+                </div>
+
+                <!-- Situation Card -->
+                <div class="situation-card">
+                    <div class="situation-header">
+                        <span class="icon">&#128221;</span>
+                        <p class="situation-title">Situation</p>
+                    </div>
+                    <p class="situation-text">
+                        Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh khủng. Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám nhé!
+                    </p>
+                </div>
+            </div>
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <!-- Chat Bubble -->
+                <div class="chat-bubble ai">
+                    <p>Hello, this is Nurse Kani at Dr. Smith's clinic, how can I help you?</p>
+                    <div class="chat-actions">
+                        <span class="icon">&#128222;</span>
+                        <span class="icon">&#128264;</span>
+                    </div>
+                </div>
+                <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>
+
+                <!-- Optional: Add more bubbles to test scrolling -->
+                <div class="chat-bubble ai">
+                    <p>Sure, we have an opening at 2 PM today. Does that work for you?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>
+                <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>  <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>  <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>  <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>  <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>  <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>  <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>  <!-- Chat Bubble (User Response) -->
+                <div class="chat-bubble user">
+                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
+                    <div class="chat-actions">
+                        <span class="icon">📞</span>
+                        <span class="icon">🔈</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nurse-image">
+                <img src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" alt="Nurse">
+            </div>
+            <div class="bottom-controls">
+                <button class="mic-btn"><i class="bi-mic-fill"></i></button>
+                <div class="controls">
+                    <span class="icon">💡</span>
+                    <span class="icon">⌨</span>
+                    <span class="icon">✏</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+
+    <link rel="stylesheet" href="~/css./talking.css">
+
+    <style>
+
+        #content {
+            margin-top: 100px;
+            padding: 35px 20px !important;
+        }
+
+        .sticky-wrapper {
+            margin-top: -30px;
+        }
+
+        .mt-4-custome {
+            margin-bottom: -25px;
+        }
+
+        @@media (max-width: 768px) {
+            .content-source .container-fluid {
+                height: auto;
+            }
+        }
+
+        .nav-img img {
+            border: 3px solid #ff9900;
+            padding: 2px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+
+
+    <script>
+
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const navbar = document.querySelector('.navbar');
+            const bg_custom = document.querySelector('.bg-custom');
+            const item_custom = document.querySelector('.item-custom');
+            const right_btn = document.querySelector('.right-btn');
+            const content = document.getElementById('content');
+            const sidebarCollapse = document.getElementById('sidebarCollapse');
+            const logoImg = document.querySelector('#sidebar .logo img'); // Lấy phần tử ảnh logo
+
+
+            // Hàm thay đổi logo
+            function updateLogo() {
+                if (sidebar.classList.contains('active')) {
+                    logoImg.src = '/Images/concoc.png'; // Logo mặc định khi sidebar active
+                    logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
+                    logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
+                } else {
+                    logoImg.src = '/Images/FAI-1.png'; // Logo khi sidebar không active
+                    logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
+                    logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
+                }
+            }
+
+
+
+            // Xử lý sự kiện click vào nút toggle sidebar
+            sidebarCollapse.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+
+                sidebar.classList.toggle('active');
+                const isActive = sidebar.classList.contains('active');
+                const width = window.innerWidth;
+
+                if (width >= 991) {
+                    navbar.style.left = isActive ? "80px" : "270px";
+                    navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+                    content.style.marginLeft = isActive ? "80px" : "270px";
+                } else {
+                    navbar.style.left = isActive ? "80px" : "0";
+                    navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
+                    content.style.marginLeft = isActive ? "80px" : "0";
+
+                }
+                updateLogo();
+                setTimeout(adjustListHeight, 300);
+
+            });
+
+        });
+    </script>
+
+}

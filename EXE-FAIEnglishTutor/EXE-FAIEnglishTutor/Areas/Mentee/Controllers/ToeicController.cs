@@ -1,4 +1,5 @@
-﻿using EXE_FAIEnglishTutor.Models;
+﻿using EXE_FAIEnglishTutor.Dtos;
+using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -111,6 +112,32 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Đã xảy ra lỗi khi bắt đầu bài thi. Vui lòng thử lại sau.");
+            }
+        }
+
+
+
+        [HttpPost("/Mentee/Toeic/SubmitExam")]
+        public async Task<IActionResult> SubmitExam([FromBody] SubmitExamDto model)
+        {
+            try
+            {
+                var questions = await _toeicService.GetQuestionsForExamAsync(model.ExamId);
+                int correctCount = 0;
+                foreach (var question in questions)
+                {
+                    if (model.Answers.TryGetValue(question.QuestionId, out var userAnswer) &&
+                        userAnswer == question.CorrectAnswer)
+                    {
+                        correctCount++;
+                    }
+                }
+                int score = correctCount * 5; // Giả định mỗi câu 5 điểm
+                return Ok(new { score, correctCount });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Lỗi khi chấm điểm: " + ex.Message);
             }
         }
     }
