@@ -100,6 +100,23 @@ CREATE TABLE Courses (
 
 );
 
+CREATE TABLE [Level] (
+	LevelID INT IDENTITY(1,1) PRIMARY KEY,
+	LevelName NVARCHAR(200),
+	LevelScore NVARCHAR(50)
+);
+
+
+CREATE TABLE Situation (
+    SituatuonID INT IDENTITY(1,1) PRIMARY KEY,
+    SituationName NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+	ImageUrl NVARCHAR(MAX),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+	TypeID Int foreign key references [Type](TypeID),
+	LevelID Int foreign key references [Level](LevelID)
+);
+
 
 
 CREATE TABLE Lessons (
@@ -217,6 +234,37 @@ CREATE TABLE Feeback (
         SelectedAnswerID INT FOREIGN KEY REFERENCES Answer(AnswerID),
         IsCorrect BIT
     );
+
+
+INSERT INTO [Type]  VALUES 
+(N'Nhập Vai'),(N'Học qua hình'), (N'Phát âm');
+
+
+-- TOEIC Levels
+INSERT INTO [Level] (LevelName, LevelScore) VALUES 
+(N'Beginner', '0-250'),
+(N'Pre-Intermediate', '405-600'),
+(N'Intermediate', '605-780'),
+(N'Upper-Intermediate', '785-900'),
+(N'Upper-Intermediate', '905-990'),
+(N'Advanced','0-250')
+
+
+
+
+INSERT INTO Situation (SituationName, Description, ImageUrl, TypeId, LevelID)
+VALUES 
+(N'Gọi đặt lịch khám', N'Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh khủng. Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám để đặt lịch nhé!', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png',1, 1),
+
+(N'Trẻ bị ho kéo dài', N'Trẻ bị ho nhiều ngày không khỏi, có thể do viêm phế quản hoặc viêm họng.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef81600-b2a1-659c-b6f8-0242ac110005-1727943497.png',1, 2),
+
+(N'Trẻ bị tiêu chảy', N'Trẻ đi ngoài nhiều lần, phân lỏng, cần tránh mất nước.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-21c3-622e-aa19-0242ac110002-1723465683.png',1, 2),
+
+(N'Trẻ có dấu hiệu dị ứng', N'Xuất hiện phát ban hoặc ngứa sau khi ăn hoặc tiếp xúc với dị nguyên.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-4b1e-62cc-8ab5-0242ac110002-1723465688.png',1, 3),
+
+(N'Trẻ bị chấn thương nhẹ', N'Trẻ bị té ngã, trầy xước nhẹ, cần sát trùng và theo dõi.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef58a65-7f9b-68f6-a031-0242ac110002-1723465693.png',1, 5);
+
+
 
     INSERT INTO ExamType 
     VALUES (N'TOEIC'),(N'IELTS'),

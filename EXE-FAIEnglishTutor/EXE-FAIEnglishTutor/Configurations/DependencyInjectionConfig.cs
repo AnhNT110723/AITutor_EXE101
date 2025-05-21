@@ -50,6 +50,10 @@ namespace EXE_FAIEnglishTutor.Configurations
             //Exam
             services.AddScoped<IExamRepositoy,ExamRepository>();
 
+            //Situation
+            services.AddScoped<ISituationService, SituationService>();
+            services.AddScoped<ISituationRepository, SituationRepository>();
+
         }
 
 

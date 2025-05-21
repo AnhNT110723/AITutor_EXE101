@@ -1,6 +1,9 @@
-﻿using EXE_FAIEnglishTutor.Dtos;
+﻿using EXE_FAIEnglishTutor.Common;
+using EXE_FAIEnglishTutor.Dtos;
+using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Implimentaion.AI;
 using EXE_FAIEnglishTutor.Services.Interface.AI;
+using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -12,22 +15,68 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         private readonly IAIService _aiService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public SpekingAiSituationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IAIService aiService)
+        private readonly ISituationService _situationService;    
+        public SpekingAiSituationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IAIService aiService, ISituationService situationService)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _aiService = aiService;
-        }
-        public IActionResult Index()
-        {
-            return View(new ChatViewModel());
-        }
-        public IActionResult Index1()
-        {
-            return View(new ChatViewModel());
+            _situationService = situationService;
         }
 
-        // Xử lý tin nhắn text
+        [HttpGet("Mentee/Role-Play/{situationId}/practice")]
+        public async Task<IActionResult> Index(int situationId)
+        {
+            var situation = await _situationService.GetSituationByIdAsync(situationId);
+            if (situation == null)
+            {
+                return NotFound();
+            }
+
+            // Truyền situationId và thông tin tình huống vào ViewBag
+            ViewBag.SituationId = situationId;
+            ViewBag.SituationTitle = situation.SituatuonName;
+            ViewBag.SituationDescription = situation.Description;
+
+            // Gọi logic SendMessage để AI nói trước
+            string situationContext = $"Situation: {situation.SituatuonName}\nDescription: {situation.Description}";
+            string initialMessage = "Please start the conversation based on the given situation.";
+            string aiReply = await _aiService.GetChatResponseAsync(initialMessage, situationContext);
+            string audioUrl = await GenerateSpeechAsync(aiReply);
+
+            // Truyền câu trả lời mở đầu của AI vào ViewBag
+            ViewBag.InitialAiMessage = aiReply;
+            ViewBag.InitialAiAudioUrl = audioUrl;
+
+            return View();
+        }
+
+       
+      
+        [HttpGet("Mentee/Role-Play")]
+        public async Task<IActionResult> GetListSituationsAsync()
+        {
+
+            var listSituations = await _situationService.GetListSituationByRolePlay(Constants.ROLE_PLAY);
+            return View("ListSituations", listSituations);
+        }
+
+        [HttpGet("Mentee/Role-Play/{situationId}")]
+        public async Task<IActionResult> GetSituationByIdAsync(int situationId)
+        {
+
+            var situation = await _situationService.GetSituationByIdAsync(situationId);
+            if (situation == null)
+            {
+                return NotFound();
+            }
+            return View("SituationDetail", situation);
+        }
+
+
+
+
+
         // Xử lý tin nhắn text
         [HttpPost]
         public async Task<IActionResult> SendMessage([FromBody] ChatRequest request)
@@ -35,12 +84,24 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             try
             {
                 // KIỂM TRA: Thêm kiểm tra đầu vào để đảm bảo không rỗng
-                if (request == null || string.IsNullOrEmpty(request.Message) || string.IsNullOrEmpty(request.Situation))
+                if (request == null || string.IsNullOrEmpty(request.Message) || request.SituationId == 0)
                 {
                     return Json(new { reply = "Please provide a message and select a situation." });
                 }
 
-                var reply = await _aiService.GetChatResponseAsync(request.Message, request.Situation);
+                // Lấy thông tin tình huống từ database
+                var situation = await _situationService.GetSituationByIdAsync(request.SituationId);
+                if (situation == null)
+                {
+                    return Json(new { reply = "Situation not found." });
+                }
+
+                // Gửi thông tin tình huống (mô tả) vào AIService
+                string situationContext = $"Situation: {situation.SituatuonName}\nDescription: {situation.Description}";
+                string userMessage = request.Message;
+              
+
+                var reply = await _aiService.GetChatResponseAsync(userMessage, situationContext);
                 if (string.IsNullOrEmpty(reply))
                 {
                     return Json(new { reply = "AI could not generate a response. Please try again." });
@@ -159,8 +220,8 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         public class ChatRequest
         {
             public string Message { get; set; }
-            public string Situation { get; set; }
-        }
+        public int SituationId { get; set; }
+    }
 
         public class WhisperResponse
         {
