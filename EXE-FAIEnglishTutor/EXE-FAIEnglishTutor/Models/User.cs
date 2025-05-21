@@ -24,7 +24,7 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
-    public AccountStatus Status { get; set; } 
+    public AccountStatus Status { get; set; }
 
     public DateTime? ExpiryDate { get; set; }
 

@@ -95,7 +95,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    height: 465px; /* Không vượt quá chiều cao cha */
+    height: 430px; /* Không vượt quá chiều cao cha */
 }
 
   .chat-bubble {

@@ -80,7 +80,7 @@
                 <!-- Top Navigation -->
                 <div class="navigation">
                     <div class="nav-left">
-                        <span class="icon">&#8592;</span>
+                        <a href="window.history.back();"><span class="icon">&#8592;</span></a>
                         <p class="nav-title">Y tá</p>
                     </div>
                     <div class="nav-right">
@@ -101,89 +101,8 @@
                 </div>
             </div>
             <!-- Chat Container -->
-            <div class="chat-container">
-                <!-- Chat Bubble -->
-                <div class="chat-bubble ai">
-                    <p>Hello, this is Nurse Kani at Dr. Smith's clinic, how can I help you?</p>
-                    <div class="chat-actions">
-                        <span class="icon">&#128222;</span>
-                        <span class="icon">&#128264;</span>
-                    </div>
-                </div>
-                <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>
-
-                <!-- Optional: Add more bubbles to test scrolling -->
-                <div class="chat-bubble ai">
-                    <p>Sure, we have an opening at 2 PM today. Does that work for you?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>
-                <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>  <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>  <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>  <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>  <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>  <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>  <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>  <!-- Chat Bubble (User Response) -->
-                <div class="chat-bubble user">
-                    <p>Hi, I woke up with a bad headache and sore throat. Can I book an appointment today?</p>
-                    <div class="chat-actions">
-                        <span class="icon">📞</span>
-                        <span class="icon">🔈</span>
-                    </div>
-                </div>
+            <div id="chatBox" class="chat-container">
+                @* Lịch sử trò truyện *@
             </div>
         </div>
 
@@ -193,11 +112,19 @@
                 <img src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" alt="Nurse">
             </div>
             <div class="bottom-controls">
-                <button class="mic-btn"><i class="bi-mic-fill"></i></button>
+                <button id="micButton" onclick="toggleRecording()" class="mic-btn"><i class="bi-mic-fill"></i></button>
                 <div class="controls">
                     <span class="icon">💡</span>
-                    <span class="icon">⌨</span>
+                    <span class="icon keyboard-icon" onclick="toggleInput()">⌨</span>
                     <span class="icon">✏</span>
+                </div>
+
+                <div class="input-wrapper hidden">
+                    <div class="input-container">
+                        <input type="text" id="userInput" placeholder="Type your message..." style="width: 100%;" />
+                        <span class="mic-icon-in-input" onclick="toggleMicFromInput()"><i class="bi-mic-fill"></i></span>
+                    </div>
+                    <button onclick="sendMessage()" class="send-btn"><i class="bi-send-fill"></i></button>
                 </div>
             </div>
         </div>
@@ -234,7 +161,418 @@
             padding: 2px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+
+        /* CSS cho bottom-controls */
+        .bottom-controls {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* CSS cho nút micro */
+        .mic-btn {
+            transition: background-color 0.3s ease;
+        }
+
+            .mic-btn:hover {
+                background-color: #ff7875;
+            }
+
+        /* CSS cho các icon trong controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+            .controls .icon {
+                cursor: pointer;
+                font-size: 20px;
+                padding: 5px;
+                border-radius: 50%;
+                transition: background-color 0.3s ease;
+            }
+
+                .controls .icon:hover {
+                    background-color: #e9ecef;
+                }
+
+        /* CSS cho ô nhập liệu và icon micro bên trong */
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+            .input-wrapper.hidden {
+                display: none;
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+        .input-container {
+            position: relative;
+            flex-grow: 1;
+        }
+
+        #userInput {
+            padding: 10px 40px 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+            #userInput:focus {
+                border-color: #ff9900;
+                box-shadow: 0 0 5px rgba(255, 153, 0, 0.3);
+            }
+
+        .mic-icon-in-input {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #ff4d4f;
+            transition: color 0.3s ease;
+        }
+
+            .mic-icon-in-input:hover {
+                color: #ff7875;
+            }
+
+        /* CSS cho nút Send */
+        .send-btn {
+            background-color: #ff9900;
+            color: white;
+            border: none;
+            padding: 8px 12px; /* Giảm padding để phù hợp với icon */
+            border-radius: 50%; /* Bo tròn nút thành hình tròn */
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px; /* Kích thước cố định */
+            height: 40px;
+            transition: background-color 0.3s ease;
+        }
+
+            .send-btn:hover {
+                background-color: #ffaa33;
+            }
+
+            .send-btn i {
+                font-size: 18px; /* Kích thước icon */
+            }
+
+        /* CSS cho chat-bubble */
+        .chat-bubble {
+            max-width: 70%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+            .chat-bubble.user {
+                background-color: #ff9900;
+                color: white;
+                margin-left: auto;
+                border-bottom-right-radius: 0;
+            }
+
+            .chat-bubble.ai {
+                background-color: #e9ecef;
+                color: #333;
+                margin-right: auto;
+                border-bottom-left-radius: 0;
+            }
+
+        .chat-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+            .chat-actions .icon {
+                cursor: pointer;
+                font-size: 16px;
+                color: #666;
+            }
+
+                .chat-actions .icon:hover {
+                    color: #ff9900;
+                }
     </style>
+
+
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        const situationId = @ViewBag.SituationId;
+        const chatHistoryKey = `chatHistory_${situationId}`; // Key duy nhất cho mỗi situationId
+
+       
+        // Hàm hiển thị/ẩn ô nhập liệu khi nhấn icon ⌨
+        function toggleInput() {
+            const inputWrapper = document.querySelector('.input-wrapper');
+            const micButton = document.getElementById('micButton');
+            const keyboardIcon = document.querySelector('.keyboard-icon');
+
+            if (inputWrapper.classList.contains('hidden')) {
+                // Hiện ô nhập liệu, ẩn nút micro
+                inputWrapper.classList.remove('hidden');
+                micButton.style.display = 'none';
+                keyboardIcon.style.display = 'none';
+            }
+        }
+
+
+        // Hàm chuyển lại chế độ nói chuyện khi nhấn icon micro trong ô nhập liệu
+        function toggleMicFromInput() {
+            const inputWrapper = document.querySelector('.input-wrapper');
+            const micButton = document.getElementById('micButton');
+            const keyboardIcon = document.querySelector('.keyboard-icon');
+
+            // Ẩn ô nhập liệu, hiện nút micro và icon ⌨
+            inputWrapper.classList.add('hidden');
+            micButton.style.display = 'inline-block';
+            keyboardIcon.style.display = 'inline-block';
+        }
+
+
+        async function toggleRecording() {
+            if (isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById("micButton").style.backgroundColor = "";
+            } else {
+                try {
+                    audioChunks = [];
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); //Yêu cầu quyền truy cập micro từ trình duyệt (sẽ hiện thông báo hỏi người dùng có cho phép không
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        await sendAudio(audioBlob);
+                    };
+                    mediaRecorder.start();
+                    isRecording = true;
+                    document.getElementById("micButton").style.backgroundColor = "red";
+                } catch (error) {
+                    console.error("Error accessing microphone:", error);
+                    alert("Could not access microphone. Please check permissions.");
+                    isRecording = false;
+                }
+            }
+        }
+
+        async function sendAudio(audioBlob) {
+            const chatBox = document.getElementById("chatBox");
+            // const situation = document.getElementById("situation").value;
+
+            // Bước 1: Gửi file âm thanh để chuyển thành text
+            const formData = new FormData();
+            formData.append("audio", audioBlob, "recording.webm");
+
+            try {
+                const transcribeResponse = await fetch('/Mentee/SpekingAiSituation/TranscribeAudio', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!transcribeResponse.ok) {
+                    throw new Error(`Transcribe error! Status: ${transcribeResponse.status}`);
+                }
+
+                const transcribeData = await transcribeResponse.json();
+                if (!transcribeData.userMessage) {
+                    throw new Error("Could not transcribe audio");
+                }
+
+                // Hiển thị câu hỏi của người dùng ngay lập tức
+                const userMessage = transcribeData.userMessage;
+                // chatBox.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+                chatBox.innerHTML += `
+                    <div class="chat-bubble user">
+                        <p>${userMessage}</p>
+                        <div class="chat-actions">
+                            <span class="icon">📞</span>
+                            <span class="icon">🔈</span>
+                        </div>
+                    </div>
+                `;
+
+                chatBox.scrollTop = chatBox.scrollHeight;
+                // Lưu lịch sử sau khi thêm tin nhắn người dùng
+                saveChatHistory();
+                // Bước 2: Gửi userMessage để lấy phản hồi AI
+                const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userMessage, situationId: situationId })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`AI response error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.reply) {
+                    throw new Error("Reply not found in response");
+                }
+
+                // Hiển thị phản hồi AI từ từ với hiệu ứng đánh chữ
+                await typeMessage(data.reply);
+                // Lưu lịch sử sau khi thêm tin nhắn AI
+                saveChatHistory();
+                // Phát âm thanh
+                if (data.audioUrl) {
+                    const audio = new Audio(data.audioUrl);
+                    audio.play();
+                } else {
+                    speak(data.reply);
+                }
+            } catch (error) {
+                console.error("Error in sendAudio:", error);
+                chatBox.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                // Lưu lịch sử nếu có lỗi
+                saveChatHistory();
+            }
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            // const situation = document.getElementById("situation").value;
+            const chatBox = document.getElementById("chatBox");
+
+            if (!userInput) return;
+
+            // chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+            chatBox.innerHTML += `
+                            <div class="chat-bubble user">
+                                        <p>${userInput}</p>
+                                <div class="chat-actions">
+                                    <span class="icon">📞</span>
+                                    <span class="icon">🔈</span>
+                                </div>
+                            </div>
+                        `;
+            document.getElementById("userInput").value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+            // Lưu lịch sử sau khi thêm tin nhắn người dùng
+            saveChatHistory();
+            try {
+                const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userInput, situationId: situationId })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.reply) {
+                    throw new Error("Reply not found in response");
+                }
+
+                await typeMessage(data.reply);
+                // Lưu lịch sử sau khi thêm tin nhắn AI
+                saveChatHistory();
+                if (data.audioUrl) {
+                    const audio = new Audio(data.audioUrl);
+                    audio.play();
+                } else {
+                    speak(data.reply);
+                }
+            } catch (error) {
+                console.error("Error in sendMessage:", error);
+                chatBox.innerHTML += `<p><strong>Error:</strong> Could not get response from AI. Please try again.</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        async function typeMessage(message) {
+            const chatBox = document.getElementById("chatBox");
+
+            let bubble = document.createElement("div");
+            bubble.className = "chat-bubble ai";
+            let p = document.createElement("p");
+            bubble.appendChild(p);
+
+            let actions = document.createElement("div");
+            actions.className = "chat-actions";
+            actions.innerHTML = `<span class="icon">&#128222;</span><span class="icon">&#128264;</span>`;
+            bubble.appendChild(actions);
+
+            chatBox.appendChild(bubble);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            for (let i = 0; i < message.length; i++) {
+                p.textContent += message.charAt(i);
+                await new Promise(resolve => setTimeout(resolve, 20)); // Hiệu ứng đánh máy
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            window.speechSynthesis.speak(utterance);
+        }
+        // Hàm lưu lịch sử trò chuyện vào sessionStorage
+        function saveChatHistory() {
+            const chatBox = document.getElementById("chatBox");
+            sessionStorage.setItem(chatHistoryKey, chatBox.innerHTML);
+        }
+
+        // Hàm khôi phục lịch sử trò chuyện từ sessionStorage
+        function restoreChatHistory() {
+            const chatBox = document.getElementById("chatBox");
+            const savedChat = sessionStorage.getItem(chatHistoryKey);
+            if (savedChat) {
+                chatBox.innerHTML = savedChat;
+            } else if ("@ViewBag.InitialAiMessage") {
+                // Nếu không có lịch sử, hiển thị tin nhắn mở đầu của AI
+                chatBox.innerHTML = `
+                                    <div class="chat-bubble ai">
+                                        <p>@ViewBag.InitialAiMessage</p>
+                                        <div class="chat-actions">
+                                            <span class="icon">📞</span>
+                                            <span class="icon">🔈</span>
+                                        </div>
+                                    </div>
+                                `;
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+
+
+
+
 
 
 
@@ -242,11 +580,27 @@
 
 
         window.addEventListener('DOMContentLoaded', function () {
+
+            // Khôi phục lịch sử trò chuyện khi trang được tải
+            restoreChatHistory();
+
+            // Tự động phát audio của AI nếu có
+            @if (!string.IsNullOrEmpty(ViewBag.InitialAiAudioUrl))
+            {
+                <text>
+                        const audio = new Audio("@ViewBag.InitialAiAudioUrl");
+                        audio.play();
+                </text>
+            }
+            else if (!string.IsNullOrEmpty(ViewBag.InitialAiMessage))
+            {
+                <text>
+                        speak("@ViewBag.InitialAiMessage");
+                </text>
+            }
+
             const sidebar = document.getElementById('sidebar');
             const navbar = document.querySelector('.navbar');
-            const bg_custom = document.querySelector('.bg-custom');
-            const item_custom = document.querySelector('.item-custom');
-            const right_btn = document.querySelector('.right-btn');
             const content = document.getElementById('content');
             const sidebarCollapse = document.getElementById('sidebarCollapse');
             const logoImg = document.querySelector('#sidebar .logo img'); // Lấy phần tử ảnh logo
