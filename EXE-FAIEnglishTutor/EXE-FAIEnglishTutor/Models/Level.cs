@@ -11,5 +11,5 @@ public partial class Level
 
     public string? LevelScore { get; set; }
 
-    public virtual ICollection<Situation> Situatuons { get; set; } = new List<Situation>();
+    public virtual ICollection<Situation> Situations { get; set; } = new List<Situation>();
 }

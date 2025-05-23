@@ -5,6 +5,7 @@ using EXE_FAIEnglishTutor.Services.Implimentaion.AI;
 using EXE_FAIEnglishTutor.Services.Interface.AI;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Text;
 
 namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
@@ -35,13 +36,16 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
             // Truyền situationId và thông tin tình huống vào ViewBag
             ViewBag.SituationId = situationId;
-            ViewBag.SituationTitle = situation.SituatuonName;
+            ViewBag.SituationTitle = situation.SituationName;
             ViewBag.SituationDescription = situation.Description;
 
             // Gọi logic SendMessage để AI nói trước
-            string situationContext = $"Situation: {situation.SituatuonName}\nDescription: {situation.Description}";
-            string initialMessage = "Please start the conversation based on the given situation.";
-            string aiReply = await _aiService.GetChatResponseAsync(initialMessage, situationContext);
+            string roleAi = situation.RoleAi;
+            string roleUser = situation.RoleUser;
+            string level = situation.Level.LevelName;
+            string situationContext = $"Situation: {situation.SituationName}\nDescription: {situation.Description}\nYou are {roleAi}. The user is {roleUser}. Respond in English at a {level} level (e.g., use simple words and sentences for Beginner, more complex language for Advanced). Maintain your role as {roleAi} throughout the conversation and do not switch roles.";
+            string initialPrompt = $"Start the conversation naturally as {roleAi}, greeting the user and offering assistance. Do not summarize the situation, just respond as {roleAi} would.";
+            string aiReply = await _aiService.GetChatResponseAsync(initialPrompt, situationContext);
             string audioUrl = await GenerateSpeechAsync(aiReply);
 
             // Truyền câu trả lời mở đầu của AI vào ViewBag
@@ -97,7 +101,10 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 }
 
                 // Gửi thông tin tình huống (mô tả) vào AIService
-                string situationContext = $"Situation: {situation.SituatuonName}\nDescription: {situation.Description}";
+                string roleAi = situation.RoleAi;
+                string roleUser = situation.RoleUser;
+                string level = situation.Level.LevelName;
+                string situationContext = $"Situation: {situation.SituationName}\nDescription: {situation.Description}\nYou are {roleAi}. The user is {roleUser}. Respond in English at a {level} level (e.g., use simple words and sentences for Beginner, more complex language for Advanced). Maintain your role as {roleAi} throughout the conversation and do not switch roles.";
                 string userMessage = request.Message;
               
 

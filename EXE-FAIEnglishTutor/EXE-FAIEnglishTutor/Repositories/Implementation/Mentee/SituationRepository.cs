@@ -14,13 +14,13 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation.Mentee
 
         public async Task<List<Situation>> GetListSituationByRolePlay(int rolePlay)
         {
-            var x = await _context.Situatuons.Include(x => x.Level).Where(t => t.TypeId == rolePlay).ToListAsync();
+            var x = await _context.Situations.Include(x => x.Level).Where(t => t.TypeId == rolePlay).ToListAsync();
             return x;
         }
 
         public async Task<Situation?> GetSituationByIdAsync(int situationId)
         {
-            var x = await _context.Situatuons.Include(x => x.Level).Where(t => t.SituatuonId == situationId).FirstOrDefaultAsync();
+            var x = await _context.Situations.Include(x => x.Level).Where(t => t.SituatuonId == situationId).FirstOrDefaultAsync();
             return x;
         }
     }

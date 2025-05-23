@@ -112,6 +112,8 @@ CREATE TABLE Situation (
     SituationName NVARCHAR(255) NOT NULL,
     Description NVARCHAR(MAX),
 	ImageUrl NVARCHAR(MAX),
+	RoleAI NVARCHAR(255),
+	RoleUser NVARCHAR(255),
     CreatedAt DATETIME DEFAULT GETDATE(),
 	TypeID Int foreign key references [Type](TypeID),
 	LevelID Int foreign key references [Level](LevelID)
@@ -252,17 +254,17 @@ INSERT INTO [Level] (LevelName, LevelScore) VALUES
 
 
 
-INSERT INTO Situation (SituationName, Description, ImageUrl, TypeId, LevelID)
+INSERT INTO Situation (SituationName, Description, ImageUrl, RoleAI, RoleUser, TypeId , LevelID)
 VALUES 
-(N'Gọi đặt lịch khám', N'Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh khủng. Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám để đặt lịch nhé!', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png',1, 1),
+(N'Gọi đặt lịch khám', N'Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh khủng. Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám để đặt lịch nhé!', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png', N'Y tá', N'Người bệnh',1, 1),
 
-(N'Trẻ bị ho kéo dài', N'Trẻ bị ho nhiều ngày không khỏi, có thể do viêm phế quản hoặc viêm họng.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef81600-b2a1-659c-b6f8-0242ac110005-1727943497.png',1, 2),
+(N'Trẻ bị ho kéo dài', N'Trẻ bị ho nhiều ngày không khỏi, có thể do viêm phế quản hoặc viêm họng.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef81600-b2a1-659c-b6f8-0242ac110005-1727943497.png',N'Y tá', N'Người bệnh',1, 2),
 
-(N'Trẻ bị tiêu chảy', N'Trẻ đi ngoài nhiều lần, phân lỏng, cần tránh mất nước.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-21c3-622e-aa19-0242ac110002-1723465683.png',1, 2),
+(N'Trẻ bị tiêu chảy', N'Trẻ đi ngoài nhiều lần, phân lỏng, cần tránh mất nước.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-21c3-622e-aa19-0242ac110002-1723465683.png',N'Y tá', N'Người bệnh',1, 2),
 
-(N'Trẻ có dấu hiệu dị ứng', N'Xuất hiện phát ban hoặc ngứa sau khi ăn hoặc tiếp xúc với dị nguyên.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-4b1e-62cc-8ab5-0242ac110002-1723465688.png',1, 3),
+(N'Trẻ có dấu hiệu dị ứng', N'Xuất hiện phát ban hoặc ngứa sau khi ăn hoặc tiếp xúc với dị nguyên.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-4b1e-62cc-8ab5-0242ac110002-1723465688.png',N'Y tá', N'Người bệnh',1, 3),
 
-(N'Trẻ bị chấn thương nhẹ', N'Trẻ bị té ngã, trầy xước nhẹ, cần sát trùng và theo dõi.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef58a65-7f9b-68f6-a031-0242ac110002-1723465693.png',1, 5);
+(N'Trẻ bị chấn thương nhẹ', N'Trẻ bị té ngã, trầy xước nhẹ, cần sát trùng và theo dõi.', N'https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef58a65-7f9b-68f6-a031-0242ac110002-1723465693.png',N'Y tá', N'Người bệnh',1, 5);
 
 
 

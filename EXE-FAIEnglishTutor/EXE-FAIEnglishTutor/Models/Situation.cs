@@ -7,11 +7,15 @@ public partial class Situation
 {
     public int SituatuonId { get; set; }
 
-    public string SituatuonName { get; set; } = null!;
+    public string SituationName { get; set; } = null!;
 
     public string? Description { get; set; }
 
     public string? ImageUrl { get; set; }
+
+    public string? RoleAi { get; set; }
+
+    public string? RoleUser { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
