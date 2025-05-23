@@ -11,5 +11,5 @@ public partial class Type
 
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
 
-    public virtual ICollection<Situation> Situatuons { get; set; } = new List<Situation>();
+    public virtual ICollection<Situation> Situations { get; set; } = new List<Situation>();
 }

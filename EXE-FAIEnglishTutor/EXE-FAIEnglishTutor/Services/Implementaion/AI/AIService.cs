@@ -19,10 +19,10 @@ namespace EXE_FAIEnglishTutor.Services.Implimentaion.AI
 
         public async Task<string> GetChatResponseAsync(string userMessage, string situation = null)
         {
+            // Tạo system prompt động dựa trên situation
             var systemPrompt = situation != null
-                ? $"You are an English tutor specializing in spoken English. Focus strictly on the following situation and do not deviate from the topic: {situation}. " +
-                  $"Provide a concise, natural, and conversational response in English suitable for speaking practice. Start the conversation if the user requests it."
-                : "You are a helpful assistant. Provide a concise and conversational response.";
+                ? $"{situation}\nProvide a concise, natural, and conversational response in English suitable for speaking practice. Do not summarize the situation, just respond naturally as the specified role."
+                : "You are a helpful assistant. Provide a concise and conversational response in English suitable for speaking practice.";
 
             var requestBody = new
             {

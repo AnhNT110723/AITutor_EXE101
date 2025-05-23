@@ -16,11 +16,11 @@
                 <i class="fa fa-bars"></i>
                 <span class="sr-only">Toggle Menu</span>
             </button>
-            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <i class="fa fa-bars"></i>
-            </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="nav navbar-nav ml-auto">
@@ -80,8 +80,8 @@
                 <!-- Top Navigation -->
                 <div class="navigation">
                     <div class="nav-left">
-                        <a href="window.history.back();"><span class="icon">&#8592;</span></a>
-                        <p class="nav-title">Y tá</p>
+                        <a href="#" onclick="toggleBack(event, @ViewBag.SituationId)"><span class="icon">&#8592;</span></a>
+                        @* <p class="nav-title">Y tá</p> *@
                     </div>
                     <div class="nav-right">
                         <span class="icon">&#9835;</span>
@@ -96,7 +96,7 @@
                         <p class="situation-title">Situation</p>
                     </div>
                     <p class="situation-text">
-                        Sáng nay ngủ dậy bạn nhức đầu và đau họng kinh khủng. Bạn cần đi bác sĩ khám bệnh và lấy thuốc. Hãy gọi cho phòng khám nhé!
+                        @ViewBag.SituationDescription
                     </p>
                 </div>
             </div>
@@ -578,6 +578,40 @@
 
     <script>
 
+        function toggleBack(event, situationId) {
+                 if (event) {
+                    event.preventDefault();
+                 }
+                Swal.fire({
+                    title: 'Are you sure you want to quit?',
+                    icon: 'question',
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    customClass: {
+                        confirmButton: 'custom-confirm-btn',
+                        cancelButton: 'custom-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log('Người dùng đã chọn tiếp tục');
+                        const chatHistoryKey = `chatHistory_${situationId}`;
+                        sessionStorage.removeItem(chatHistoryKey);
+                        // Đảm bảo quay lại trang trước
+                        setTimeout(() => {
+                            if (history.length > 1) {
+                                 history.back();
+                            } else {
+                                // Nếu không có trang trước, chuyển hướng về trang mặc định
+                                 window.location.href = '/Mentee/Role-Play';
+                            }
+                        }, 100); // Đợi 100ms để đảm bảo popup đã đóng hoàn toàn
+                    } else if (result.isDismissed) {
+                        console.log('Người dùng đã hủy hành động');
+                    }
+                });
+        }
 
         window.addEventListener('DOMContentLoaded', function () {
 
