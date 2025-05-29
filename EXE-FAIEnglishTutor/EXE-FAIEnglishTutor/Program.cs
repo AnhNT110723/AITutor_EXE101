@@ -18,6 +18,12 @@ builder.Services.AddHttpClient<SpeechService>(client =>
     new SpeechService(client, builder.Configuration["OpenAI:ApiKey"])); // Store API key in appsettings.json
 //Thêm dbcontext vào web server
 builder.Services.AddDbContextConfiguration(builder.Configuration);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
 
 //cau hinh view areas
 builder.Services.ConfigureRazorViewEngine();
@@ -71,7 +77,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 	});
 
 var app = builder.Build();
-
+app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

@@ -1,4 +1,6 @@
-﻿using EXE_FAIEnglishTutor.Services.Interface.AI;
+﻿using EXE_FAIEnglishTutor.Dtos;
+using EXE_FAIEnglishTutor.Services.Interface.AI;
+using System.Text;
 using System.Text.Json;
 
 namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
@@ -240,7 +242,95 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                 return null;
             }
         }
+        // Generate IELTS listening exercise using ChatGPT API
+        public async Task<IeltsListeningExercise> GenerateIeltsListeningExerciseAsync()
+        {
+            var prompt = @"Generate an IELTS listening practice exercise in English. Provide:
+                - A short script (1000-1350 words, suitable for IELTS listening, e.g., a conversation or announcement).
+                - 4 multiple-choice questions with 4 options each and the correct answer.
+                Return the response as a raw JSON object, without markdown or additional text. Example:
+                {
+                    ""script"": ""A conversation between two people about a topic..."",
+                    ""questions"": [
+                        {
+                            ""question"": ""What is the main topic?"",
+                            ""options"": [""Option A"", ""Option B"", ""Option C"", ""Option D""],
+                            ""answer"": ""Option A""
+                        }
+                    ]
+                }";
 
+            var requestBody = new
+            {
+                model = "gpt-3.5-turbo",
+                messages = new[] { new { role = "user", content = prompt } },
+                max_tokens = 500,
+                temperature = 0.7
+            };
+
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
+
+            var response = await _httpClient.PostAsJsonAsync("chat/completions", requestBody);
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var jsonDoc = JsonDocument.Parse(jsonResponse);
+            var content = jsonDoc.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString();
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                throw new InvalidOperationException("Empty content received from OpenAI API");
+            }
+
+            content = content.Trim();
+            if (content.StartsWith("```json") && content.EndsWith("```"))
+            {
+                content = content.Substring(7, content.Length - 10).Trim();
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                AllowTrailingCommas = true,
+                ReadCommentHandling = JsonCommentHandling.Skip
+            };
+
+            var exercise = JsonSerializer.Deserialize<IeltsListeningExercise>(content, options);
+            if (exercise == null || string.IsNullOrEmpty(exercise.Script) || exercise.Questions == null || !exercise.Questions.Any())
+            {
+                throw new JsonException($"Invalid IELTS listening exercise format: {content}");
+            }
+
+            return exercise;
+        }
+
+
+        // Generate audio from text
+        public async Task<byte[]> GenerateSpeechAsync(string text)
+        {
+            var requestBody = new
+            {
+                model = "tts-1", // Mô hình text-to-speech của OpenAI
+                input = text,    // Sử dụng "input" thay vì "text"
+                voice = "alloy"  // Chọn một giọng hợp lệ, ví dụ "alloy"
+            };
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/v1/audio/speech")
+            {
+                Content = new StringContent(JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json")
+            };
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
+
+            var response = await _httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsByteArrayAsync();
+        }
 
 
     }

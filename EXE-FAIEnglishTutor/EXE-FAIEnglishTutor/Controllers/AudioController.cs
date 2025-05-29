@@ -3,6 +3,7 @@ using EXE_FAIEnglishTutor.Services.Implementaion.AI;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO; // Explicitly include System.IO
+using System.Text.Json;
 using System.Threading.Tasks;
 namespace EXE_FAIEnglishTutor.Controllers
 {
@@ -84,17 +85,22 @@ namespace EXE_FAIEnglishTutor.Controllers
 
             try
             {
-                // Generate a unique temporary file path for the audio
+                // Tạo tên file tạm với GUID duy nhất
                 var tempFileName = $"{Guid.NewGuid()}.mp3";
                 var tempPath = Path.Combine(Path.GetTempPath(), tempFileName);
 
-                // Call the speech service to generate audio for English
+                // Gọi dịch vụ để tạo âm thanh
                 await _speechService.TextToSpeechAsync(text, tempPath, "en");
 
-                // Read the generated audio file
-                var audioBytes = await System.IO.File.ReadAllBytesAsync(tempPath);
+                // Đọc file âm thanh bằng FileStream
+                byte[] audioBytes;
+                using (var fileStream = new FileStream(tempPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    audioBytes = new byte[fileStream.Length];
+                    await fileStream.ReadAsync(audioBytes, 0, (int)fileStream.Length);
+                }
 
-                // Clean up the temporary file
+                // Xóa file tạm
                 try
                 {
                     if (System.IO.File.Exists(tempPath))
@@ -102,17 +108,35 @@ namespace EXE_FAIEnglishTutor.Controllers
                         System.IO.File.Delete(tempPath);
                     }
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
-                    // Log the error if deletion fails (optional)
+                    // Log lỗi chi tiết để debug
+                    Console.WriteLine($"Lỗi khi xóa file tạm: {ex.Message}");
+                    return StatusCode(500, $"Lỗi khi xóa file tạm: {ex.Message}");
                 }
 
-                // Return the audio file as a response
+                // Trả về file âm thanh
                 return File(audioBytes, "audio/mpeg", tempFileName);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error generating speech: {ex.Message}");
+            }
+        }
+        [HttpPost("generate-ielts-listening")]
+        public async Task<IActionResult> GenerateIeltsListening()
+        {
+            try
+            {
+                // Lấy bài tập nghe IELTS
+                var listeningExercise = await _speechService.GenerateIeltsListeningExerciseAsync();
+
+                // Trả về dữ liệu JSON
+                return Ok(listeningExercise);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi tạo bài tập nghe IELTS", error = ex.Message });
             }
         }
         [HttpPost("generate-random-word")]
