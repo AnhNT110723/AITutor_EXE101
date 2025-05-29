@@ -16,8 +16,8 @@
                 <i class="fa fa-bars"></i>
                 <span class="sr-only">Toggle Menu</span>
             </button>
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                         aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
@@ -42,7 +42,7 @@
                         <li class="nav-item dropdown">
 
                             <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
+                               data-toggle="dropdown" aria-expanded="false">
                                 <div class="nav-img">
                                     <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
                                 </div>
@@ -324,7 +324,9 @@
         let audioChunks = [];
         let isRecording = false;
         const situationId = @ViewBag.SituationId;
-        const chatHistoryKey = `chatHistory_${situationId}`; // Key duy nhất cho mỗi situationId
+        const typeId = @ViewBag.TypeId;
+        const userId = @ViewBag.UserId;
+        const chatHistoryKey = `chatHistory_${userId}_${situationId}_${typeId}`; // Key duy nhất cho mỗi situationId
 
        
         // Hàm hiển thị/ẩn ô nhập liệu khi nhấn icon ⌨
@@ -413,7 +415,6 @@
                     <div class="chat-bubble user">
                         <p>${userMessage}</p>
                         <div class="chat-actions">
-                            <span class="icon">📞</span>
                             <span class="icon">🔈</span>
                         </div>
                     </div>
@@ -449,6 +450,7 @@
                 } else {
                     speak(data.reply);
                 }
+                updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 mới
             } catch (error) {
                 console.error("Error in sendAudio:", error);
                 chatBox.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
@@ -470,7 +472,6 @@
                             <div class="chat-bubble user">
                                         <p>${userInput}</p>
                                 <div class="chat-actions">
-                                    <span class="icon">📞</span>
                                     <span class="icon">🔈</span>
                                 </div>
                             </div>
@@ -504,6 +505,8 @@
                 } else {
                     speak(data.reply);
                 }
+
+                updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 mới
             } catch (error) {
                 console.error("Error in sendMessage:", error);
                 chatBox.innerHTML += `<p><strong>Error:</strong> Could not get response from AI. Please try again.</p>`;
@@ -521,7 +524,7 @@
 
             let actions = document.createElement("div");
             actions.className = "chat-actions";
-            actions.innerHTML = `<span class="icon">&#128222;</span><span class="icon">&#128264;</span>`;
+            actions.innerHTML = `<span class="icon">&#128264;</span>`;
             bubble.appendChild(actions);
 
             chatBox.appendChild(bubble);
@@ -532,6 +535,7 @@
                 await new Promise(resolve => setTimeout(resolve, 20)); // Hiệu ứng đánh máy
                 chatBox.scrollTop = chatBox.scrollHeight;
             }
+            updateSpeakEventListeners();// Thêm sự kiện cho các icon 🔈 mới
         }
 
 
@@ -560,13 +564,40 @@
                                     <div class="chat-bubble ai">
                                         <p>@ViewBag.InitialAiMessage</p>
                                         <div class="chat-actions">
-                                            <span class="icon">📞</span>
                                             <span class="icon">🔈</span>
                                         </div>
                                     </div>
                                 `;
             }
             chatBox.scrollTop = chatBox.scrollHeight;
+            updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 trong lịch sử
+        }
+
+
+        // Hàm thêm sự kiện cho các icon 🔈 để phát lại nội dung
+        function addSpeakEventListeners() {
+            const speakIcons = document.querySelectorAll('.chat-actions .icon');
+            speakIcons.forEach(icon => {
+                if (icon.textContent === '🔈') {
+                    // Xóa tất cả sự kiện click cũ trước khi thêm mới
+                    icon.removeEventListener('click', handleSpeakClick); // Xóa sự kiện cũ
+                    icon.addEventListener('click', handleSpeakClick); // Thêm sự kiện mới
+                }
+            });
+        }
+        // Hàm xử lý sự kiện click cho 🔈
+        function handleSpeakClick() {
+            const chatBubble = this.closest('.chat-bubble');
+            const messageText = chatBubble.querySelector('p').textContent;
+            speak(messageText);
+        }
+        // Gọi hàm để thêm sự kiện sau khi khôi phục lịch sử trò chuyện hoặc thêm tin nhắn mới
+        document.addEventListener('DOMContentLoaded', function () {
+            addSpeakEventListeners(); // Gọi khi trang tải
+        });
+        // Gọi lại hàm sau mỗi lần thêm tin nhắn mới để đảm bảo các icon mới được gán sự kiện
+        function updateSpeakEventListeners() {
+            addSpeakEventListeners();
         }
     </script>
 
@@ -598,15 +629,8 @@
                         console.log('Người dùng đã chọn tiếp tục');
                         const chatHistoryKey = `chatHistory_${situationId}`;
                         sessionStorage.removeItem(chatHistoryKey);
-                        // Đảm bảo quay lại trang trước
-                        setTimeout(() => {
-                            if (history.length > 1) {
-                                 history.back();
-                            } else {
-                                // Nếu không có trang trước, chuyển hướng về trang mặc định
-                                 window.location.href = '/Mentee/Role-Play';
-                            }
-                        }, 100); // Đợi 100ms để đảm bảo popup đã đóng hoàn toàn
+                        window.location.href = `/Mentee/Role-Play/${situationId}`;
+
                     } else if (result.isDismissed) {
                         console.log('Người dùng đã hủy hành động');
                     }

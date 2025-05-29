@@ -27,5 +27,11 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion
             return result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded ? user : null;
 
         }
+
+        public async Task<User?> GetUserById(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            return user;
+        }
     }
 }
