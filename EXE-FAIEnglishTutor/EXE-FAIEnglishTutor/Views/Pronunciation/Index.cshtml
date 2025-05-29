@@ -1,5 +1,4 @@
-﻿ 
-@{
+﻿@{
     Layout = null;
 }
 
@@ -9,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAI English</title>
+    <title>Pronunciation Practice - FAI English</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- CSS for intl-tel-input -->
@@ -22,6 +21,20 @@
     <link rel="stylesheet" href="~/css/course-gen.css">
 
     <style>
+        :root {
+            --primary-color: #FF6B6B;
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFE66D;
+            --text-color: #2C3E50;
+            --background-color: #F7F9FC;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            min-height: 100vh;
+        }
+
         .header {
             background: linear-gradient(to right, #FF9800, #FF5722);
             padding: 10px;
@@ -75,11 +88,11 @@
             overflow: hidden;
         }
 
-        .parent-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+            .parent-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
 
         .mic-btn {
             bottom: 0;
@@ -90,14 +103,12 @@
             border-radius: 50%;
             width: 80px;
             height: 80px;
-
             font-size: 24px;
         }
 
         .container.pronoun {
             background: none;
             padding: 0px !important;
-
         }
 
         .text-header {
@@ -105,14 +116,14 @@
             padding: 10px;
         }
 
-        .text-header h5 {
-            margin: 0;
-            text-align: start;
-        }
+            .text-header h5 {
+                margin: 0;
+                text-align: start;
+            }
 
         /* .card-custom.number2 {
-            height: 532px;
-        } */
+                    height: 532px;
+                } */
 
         .frame-text {
             height: 320px;
@@ -121,10 +132,315 @@
             justify-content: center;
             align-items: center;
         }
-        .frame-text h4 {
-            font-weight: 700    ;
-            color: #475467;
+
+            .frame-text h4 {
+                font-weight: 700;
+                color: #475467;
+            }
+
+        .pronunciation-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            border: 8px solid var(--accent-color);
         }
+
+            .pronunciation-container::before {
+                content: '';
+                position: absolute;
+                top: -50px;
+                right: -50px;
+                width: 150px;
+                height: 150px;
+                background: var(--accent-color);
+                border-radius: 50%;
+                opacity: 0.4;
+                animation: float 6s ease-in-out infinite;
+            }
+
+            .pronunciation-container::after {
+                content: '';
+                position: absolute;
+                bottom: -30px;
+                left: -30px;
+                width: 120px;
+                height: 120px;
+                background: var(--secondary-color);
+                border-radius: 50%;
+                opacity: 0.4;
+                animation: float 8s ease-in-out infinite;
+            }
+
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            position: relative;
+            padding: 1rem;
+        }
+
+            h2::before, h2::after {
+                content: '🎯';
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 2rem;
+            }
+
+            h2::before {
+                left: 0;
+            }
+
+            h2::after {
+                right: 0;
+            }
+
+        .input-group {
+            margin: 2rem auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+            max-width: 800px;
+            display: flex;
+            align-items: stretch;
+        }
+
+            .input-group:hover {
+                transform: translateY(-5px);
+            }
+
+        .form-control {
+            flex: 1;
+            border: 4px solid var(--secondary-color);
+            border-right: none;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.2rem;
+            border-radius: 20px 0 0 20px;
+            background: rgba(255, 255, 255, 0.9);
+            height: auto;
+        }
+
+        .btn-primary {
+            flex: 0 0 auto;
+            background: linear-gradient(45deg, var(--primary-color), #ff8e8e);
+            border: none;
+            padding: 1.2rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .btn-primary i {
+                margin-right: 8px;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+            }
+
+            .btn-primary::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: rgba(255,255,255,0.2);
+                transform: rotate(45deg);
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary:hover::after {
+                transform: rotate(45deg) translate(50%, 50%);
+            }
+
+        .word-display {
+            text-align: center;
+            margin: 3rem 0;
+            padding: 3rem;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 6px solid var(--accent-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .word {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+
+
+        .phonetic {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            font-style: italic;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            align-items: center;
+        }
+
+        audio {
+            width: 400px;
+            height: 50px;
+            border-radius: 30px;
+            background: var(--background-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .record-btn {
+            background: linear-gradient(45deg, var(--primary-color), #ff8e8e);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255,107,107,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .record-btn:hover {
+                transform: scale(1.1) rotate(5deg);
+                box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+            }
+
+            .record-btn.recording {
+                background: linear-gradient(45deg, #ff4444, #ff6b6b);
+                animation: pulse 1.5s infinite;
+            }
+
+        .score-display {
+            margin-top: 3rem;
+            padding: 3rem;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 6px solid var(--secondary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .score-display h4 {
+                color: var(--primary-color);
+                text-align: center;
+                margin-bottom: 2.5rem;
+                font-size: 2.5rem;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            }
+
+            .score-display .row {
+                display: flex;
+                justify-content: space-around;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .score-display p {
+                font-size: 1.8rem;
+                color: var(--text-color);
+                margin: 0;
+                font-weight: bold;
+            }
+
+            .score-display span {
+                display: block;
+                font-size: 3rem;
+                font-weight: bold;
+                color: var(--secondary-color);
+                margin-top: 1rem;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            }
+
+
+
+        /* Decorative elements */
+        .decoration {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            left: 20px;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FF6B6B"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            right: 20px;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234ECDC4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+            .floating-element:nth-child(1) {
+                top: 10%;
+                left: 5%;
+                animation-delay: 0s;
+            }
+
+            .floating-element:nth-child(2) {
+                top: 20%;
+                right: 5%;
+                animation-delay: 1s;
+            }
+
+            .floating-element:nth-child(3) {
+                bottom: 20%;
+                left: 5%;
+                animation-delay: 2s;
+            }
+
+            .floating-element:nth-child(4) {
+                bottom: 10%;
+                right: 5%;
+                animation-delay: 3s;
+            }
     </style>
 </head>
 
@@ -176,124 +492,58 @@
         </nav>
 
         <!-- Page Content  -->
-        <div id="content" class="p-4 p-md-5 pronoun">
-            <div class="sticky-wrapper">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
+        <div id="content" class="p-4 p-md-5">
+            <div class="pronunciation-container">
+                <div class="decoration decoration-1"></div>
+                <div class="decoration decoration-2"></div>
+                <div class="floating-element">🎨</div>
+                <div class="floating-element">🎮</div>
+                <div class="floating-element">🎵</div>
+                <div class="floating-element">🎪</div>
 
-                        <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
-                            <i class="fa fa-bars"></i>
-                            <span class="sr-only">Toggle Menu</span>
-                        </button>
-                        <!-- Nút Back -->
-                        <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
-                            <i class="fa fa-arrow-left"></i> Daily Routines
-                        </button>
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
-                                data-toggle="collapse" data-target="#navbarSupportedContent"
-                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fa fa-bars"></i>
-                        </button>
+                <h2>Let's Practice Pronunciation!</h2>
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="nav navbar-nav ml-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link"  href="#"><span>🎵</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link"  href="#"> <span>❔</span></a>
-                                </li>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    // Đọc thông tin từ cookie
-                                    var fullName = User.Identity.Name;
-                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
-                                    <li class="nav-item dropdown">
-
-                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            <div class="nav-img">
-                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                            </div>
-                                        </a>
-                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                            <div class="menu-title">
-                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                            </div>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                                <i class="bi bi-person-circle"></i> View Profile
-                                            </a>
-                                            <div class="dropdown-divider"></div>
-                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                            </a>
-
-                                            <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                                        </div>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
-                                }
-                            </ul>
-                           
-                        </div>
-                    </div>
-                </nav>
-                <div class="parent-progress">
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-custom"></div>
-                    </div>
-                    <div>
-                        <p class="text-end">1/12</p>
-                    </div>
-
+                <!-- Topic Input -->
+                <div class="input-group mb-4">
+                    <input type="text" id="topicInput" class="form-control" placeholder="What would you like to learn? (e.g., animals 🐘, food 🍕, colors 🌈)">
+                    <button class="btn btn-primary" id="generateWordBtn">
+                        <i class="fas fa-magic"></i> Generate Word
+                    </button>
                 </div>
 
-            </div>
+                <!-- Word Display -->
+                <div class="word-display" style="display: none;">
+                    <div class="word" id="wordDisplay"></div>
+                    <div class="phonetic" id="phoneticDisplay"></div>
 
-            <div class="container pronoun mt-3">
-
-                <div class="row g-3">
-                    <div class="col-md-8">
-                        <div class="card-custom">
-                            <div class="text-header">
-                                <h5>&#x1F4A1; Listen and repeat</h5>
-                            </div>
-
-                            <div class="text-center">
-                                <div class="parent-img">
-                                    <img src="https://files.kynaenglish.com/tmp/ai_tutor/44/1ef58b34-15c6-629e-8c28-0242ac110003-1723471239.png"
-                                         class="rounded" alt="Make the bed">
-                                </div>
-                                <h4 class="mt-2">make the bed</h4>
-                                <p class="text-muted">/meɪk ðə bɛd/</p>
-                                <p>Dọn giường</p>
-                            </div>
-                        </div>
+                    <!-- Audio Controls -->
+                    <div class="audio-controls">
+                        <audio id="sampleAudio" controls></audio>
+                        <button class="record-btn" id="recordBtn">
+                            <i class="fas fa-microphone"></i>
+                        </button>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card-custom text-center number2">
-                            <div class="text-header">
-                                <h5>📋 Phát âm của bạn</h5>
-                            </div>
-                            <div class="frame-text">
-                                <h4>Nhấp vào nút màu cam và đọc câu trả lời</h4>
-                            </div>
 
-                            <div class="loudspeaker">
-                                <i class="fa fa-volume-up"></i>
+                    <!-- Score Display -->
+                    <div class="score-display" id="scoreDisplay" style="display: none;">
+                        <h4>🌟 Your Pronunciation Score 🌟</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p>Pronunciation</p>
+                                <span id="pronunciationScore">-</span>
                             </div>
-                            <p>Nhấn để thu âm</p>
-                            <button class="mic-btn"><i class="bi-mic-fill"></i> </button>
+                            <div class="col-md-4">
+                                <p>Stress</p>
+                                <span id="stressScore">-</span>
+                            </div>
+                            <div class="col-md-4">
+                                <p>Syllable</p>
+                                <span id="syllableScore">-</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -303,9 +553,123 @@
     <script src="~/lib/intl-tel-input/js/utils.js"></script>
     <script src="~/js/main.js"></script>
 
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
 
+        $(document).ready(function() {
+            const generateWordBtn = $('#generateWordBtn');
+            const recordBtn = $('#recordBtn');
+            const topicInput = $('#topicInput');
+            const wordDisplay = $('#wordDisplay');
+            const phoneticDisplay = $('#phoneticDisplay');
+            const sampleAudio = $('#sampleAudio');
+            const scoreDisplay = $('#scoreDisplay');
 
+            generateWordBtn.click(async function() {
+                const topic = topicInput.val().trim();
+                if (!topic) {
+                    alert('Please enter a topic');
+                    return;
+                }
 
+                try {
+                    const response = await fetch('/api/audio/generate-random-word', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `topic=${encodeURIComponent(topic)}`
+                    });
+
+                    if (!response.ok) throw new Error('Failed to generate word');
+
+                    const data = await response.json();
+
+                    // Display word and phonetic
+                    wordDisplay.text(data.word);
+                    phoneticDisplay.text(data.phonetic);
+                    $('.word-display').show();
+                    scoreDisplay.hide();
+
+                    // Generate and play sample audio
+                    const audioResponse = await fetch('/api/audio/generate-english', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `text=${encodeURIComponent(data.word)}`
+                    });
+
+                    if (!audioResponse.ok) throw new Error('Failed to generate audio');
+
+                    const audioBlob = await audioResponse.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    sampleAudio.attr('src', audioUrl);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while generating the word');
+                }
+            });
+
+            recordBtn.click(async function() {
+                if (!isRecording) {
+                    // Start recording
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstop = async () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const formData = new FormData();
+                            formData.append('audio', audioBlob, 'recording.wav');
+                            formData.append('standardSentence', wordDisplay.text());
+
+                            try {
+                                const response = await fetch('/api/audio/process', {
+                                    method: 'POST',
+                                    body: formData
+                                });
+
+                                if (!response.ok) throw new Error('Failed to process audio');
+
+                                const result = await response.json();
+
+                                // Display scores
+                                $('#pronunciationScore').text(result.pronunciationScore + '%');
+                                $('#stressScore').text(result.stressScore + '%');
+                                $('#syllableScore').text(result.syllableScore + '%');
+                                scoreDisplay.show();
+                            } catch (error) {
+                                console.error('Error processing audio:', error);
+                                alert('Error processing your pronunciation');
+                            }
+                        };
+
+                        mediaRecorder.start();
+                        isRecording = true;
+                        recordBtn.addClass('recording');
+                        recordBtn.html('<i class="fas fa-stop"></i>');
+                    } catch (error) {
+                        console.error('Error accessing microphone:', error);
+                        alert('Error accessing microphone');
+                    }
+                } else {
+                    // Stop recording
+                    mediaRecorder.stop();
+                    isRecording = false;
+                    recordBtn.removeClass('recording');
+                    recordBtn.html('<i class="fas fa-microphone"></i>');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

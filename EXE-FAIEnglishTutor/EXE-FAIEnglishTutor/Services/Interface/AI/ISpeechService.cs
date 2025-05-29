@@ -1,0 +1,21 @@
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+
+namespace EXE_FAIEnglishTutor.Services.Interface.AI
+{
+    public interface ISpeechService
+    {
+        Task<string> TranscribeAudioAsync(string audioPath, string language = "en");
+        double CalculateLevenshteinScore(string source, string target);
+        double CalculateSequenceMatchScore(string source, string target);
+        int CountSyllables(string text);
+        Task TextToSpeechAsync(string text, string outputPath, string language);
+        Task<WordResult> GetRandomWordAsync(string topic);
+    }
+    public class WordResult
+    {
+        public string Word { get; set; }
+        public string Meaning { get; set; }
+        public string Phonetic { get; set; }
+    }
+
+}
