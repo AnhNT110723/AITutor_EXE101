@@ -1,0 +1,148 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
+}
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+
+
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    @*  <li class="nav-item active">
+                    <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                    </li> *@
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        // Đọc thông tin từ cookie
+                        var fullName = User.Identity.Name;
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <div class="nav-img">
+                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                </div>
+                            </a>
+                            <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                <div class="menu-title">
+                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                    <i class="bi bi-person-circle"></i> View Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                </a>
+
+                                <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Begin Page Content -->
+    <div class="container-fluid" style="margin-top: 30px;">
+
+        <!-- 404 Error Text -->
+        <div class="text-center">
+            <div class="error mx-auto" data-text="@ViewBag.StatusCode">@ViewBag.StatusCode</div>
+            <p class="lead text-gray-800 mb-5" style="text-align: center !important;">@ViewBag.Message</p>
+            <p class="text-gray-500 mb-0" style="text-align: center !important;"> It looks like you found a glitch in the matrix...</p>
+            <a href="/">&larr; Back to Home</a>
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link href="~/css/error-page.css" rel="stylesheet" />
+
+    <script>
+
+        window.addEventListener('DOMContentLoaded', function () {
+
+            const sidebar = document.getElementById('sidebar');
+            const navbar = document.querySelector('.navbar');
+            const content = document.getElementById('content');
+            const sidebarCollapse = document.getElementById('sidebarCollapse');
+            const logoImg = document.querySelector('#sidebar .logo img'); // Lấy phần tử ảnh logo
+
+
+            // Hàm thay đổi logo
+            function updateLogo() {
+                if (sidebar.classList.contains('active')) {
+                    logoImg.src = '/Images/concoc.png'; // Logo mặc định khi sidebar active
+                    logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
+                    logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
+                } else {
+                    logoImg.src = '/Images/FAI-1.png'; // Logo khi sidebar không active
+                    logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
+                    logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
+                }
+            }
+
+
+
+            // Xử lý sự kiện click vào nút toggle sidebar
+            sidebarCollapse.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+
+                sidebar.classList.toggle('active');
+                const isActive = sidebar.classList.contains('active');
+                const width = window.innerWidth;
+
+                if (width >= 991) {
+                    navbar.style.left = isActive ? "80px" : "270px";
+                    navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+                    content.style.marginLeft = isActive ? "80px" : "270px";
+                } else {
+                    navbar.style.left = isActive ? "80px" : "0";
+                    navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
+                    content.style.marginLeft = isActive ? "80px" : "0";
+
+                }
+                updateLogo();
+                setTimeout(adjustListHeight, 300);
+
+            });
+
+        });
+    </script>
+
+}

@@ -2,10 +2,12 @@
 using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Implimentaion.AI;
+using EXE_FAIEnglishTutor.Services.Interface;
 using EXE_FAIEnglishTutor.Services.Interface.AI;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Security.Claims;
 using System.Text;
 
 namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
@@ -16,18 +18,27 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         private readonly IAIService _aiService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        private readonly ISituationService _situationService;    
-        public SpekingAiSituationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IAIService aiService, ISituationService situationService)
+        private readonly ISituationService _situationService; 
+        private readonly IUserService _userService; 
+        
+        public SpekingAiSituationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IAIService aiService, ISituationService situationService, IUserService userService)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _aiService = aiService;
             _situationService = situationService;
+            _userService = userService;
         }
 
         [HttpGet("Mentee/Role-Play/{situationId}/practice")]
         public async Task<IActionResult> Index(int situationId)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
             var situation = await _situationService.GetSituationByIdAsync(situationId);
             if (situation == null)
             {
@@ -38,6 +49,12 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             ViewBag.SituationId = situationId;
             ViewBag.SituationTitle = situation.SituationName;
             ViewBag.SituationDescription = situation.Description;
+            int userId = int.Parse(userIdClaim.Value);
+            var user = await _userService.GetUserById(userId);
+            if (user == null) { return NotFound(); }
+            ViewBag.UserId = user.UserId;
+            ViewBag.SituationId = situationId;
+            ViewBag.TypeId = situation.TypeId;
 
             // Gọi logic SendMessage để AI nói trước
             string roleAi = situation.RoleAi;
@@ -68,12 +85,23 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         [HttpGet("Mentee/Role-Play/{situationId}")]
         public async Task<IActionResult> GetSituationByIdAsync(int situationId)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
             var situation = await _situationService.GetSituationByIdAsync(situationId);
             if (situation == null)
             {
                 return NotFound();
             }
+            int userId = int.Parse(userIdClaim.Value);
+            var user = await _userService.GetUserById(userId);
+            if (user == null) { return NotFound(); }
+            ViewBag.UserId = user.UserId;
+            ViewBag.SituationId = situationId;
+            ViewBag.TypeId = situation.TypeId;
             return View("SituationDetail", situation);
         }
 

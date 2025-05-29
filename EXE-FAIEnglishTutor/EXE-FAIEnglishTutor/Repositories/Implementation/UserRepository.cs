@@ -4,13 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EXE_FAIEnglishTutor.Repositories.Implementation
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly FaiEnglishContext _context;
 
-        public UserRepository(FaiEnglishContext context)
+        public UserRepository(FaiEnglishContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task<User> FindExternalUserByProviderAsync(string provider, string providerId)

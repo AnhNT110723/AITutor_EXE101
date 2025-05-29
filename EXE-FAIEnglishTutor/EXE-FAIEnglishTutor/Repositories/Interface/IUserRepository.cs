@@ -2,7 +2,7 @@
 
 namespace EXE_FAIEnglishTutor.Repositories.Interface
 {
-    public interface IUserRepository
+    public interface IUserRepository : IBaseRepository<User>
     {
         User? GetUserByEmail(string email);
         Task<User> GetUserByEmailAsync(string email);
