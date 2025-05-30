@@ -32,6 +32,8 @@ public partial class FaiEnglishContext : DbContext
 
     public virtual DbSet<Lesson> Lessons { get; set; }
 
+    public virtual DbSet<Level> Levels { get; set; }
+
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Progress> Progresses { get; set; }
@@ -41,6 +43,8 @@ public partial class FaiEnglishContext : DbContext
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
+
+    public virtual DbSet<Situation> Situations { get; set; }
 
     public virtual DbSet<Type> Types { get; set; }
 
@@ -54,11 +58,15 @@ public partial class FaiEnglishContext : DbContext
 
     public virtual DbSet<VerificationToken> VerificationTokens { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=TUAN-ANH ;Initial Catalog=FAI_ENGLISH; Trusted_Connection=SSPI;Encrypt=false");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Answer>(entity =>
         {
-            entity.HasKey(e => e.AnswerId).HasName("PK__Answer__D4825024FF63DA95");
+            entity.HasKey(e => e.AnswerId).HasName("PK__Answer__D4825024212DF4A4");
 
             entity.ToTable("Answer");
 
@@ -67,12 +75,12 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.Question).WithMany(p => p.Answers)
                 .HasForeignKey(d => d.QuestionId)
-                .HasConstraintName("FK__Answer__Question__778AC167");
+                .HasConstraintName("FK__Answer__Question__7E37BEF6");
         });
 
         modelBuilder.Entity<Course>(entity =>
         {
-            entity.HasKey(e => e.CourseId).HasName("PK__Courses__C92D71874008468C");
+            entity.HasKey(e => e.CourseId).HasName("PK__Courses__C92D718714678DC1");
 
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
             entity.Property(e => e.CourseName).HasMaxLength(255);
@@ -88,7 +96,7 @@ public partial class FaiEnglishContext : DbContext
 
         modelBuilder.Entity<Exam>(entity =>
         {
-            entity.HasKey(e => e.ExamId).HasName("PK__Exam__297521A7C79C623D");
+            entity.HasKey(e => e.ExamId).HasName("PK__Exam__297521A79A730637");
 
             entity.ToTable("Exam");
 
@@ -103,7 +111,7 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.ExamType).WithMany(p => p.Exams)
                 .HasForeignKey(d => d.ExamTypeId)
-                .HasConstraintName("FK__Exam__ExamTypeID__6B24EA82");
+                .HasConstraintName("FK__Exam__ExamTypeID__71D1E811");
 
             entity.HasOne(d => d.ParentExam).WithMany(p => p.InverseParentExam)
                 .HasForeignKey(d => d.ParentExamId)
@@ -112,7 +120,7 @@ public partial class FaiEnglishContext : DbContext
 
         modelBuilder.Entity<ExamPart>(entity =>
         {
-            entity.HasKey(e => e.PartId).HasName("PK__ExamPart__7C3F0D3086CC0164");
+            entity.HasKey(e => e.PartId).HasName("PK__ExamPart__7C3F0D30B140EB29");
 
             entity.ToTable("ExamPart");
 
@@ -125,12 +133,12 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.ExamType).WithMany(p => p.ExamParts)
                 .HasForeignKey(d => d.ExamTypeId)
-                .HasConstraintName("FK__ExamPart__ExamTy__68487DD7");
+                .HasConstraintName("FK__ExamPart__ExamTy__6EF57B66");
         });
 
         modelBuilder.Entity<ExamSection>(entity =>
         {
-            entity.HasKey(e => e.SectionId).HasName("PK__ExamSect__80EF08924B948848");
+            entity.HasKey(e => e.SectionId).HasName("PK__ExamSect__80EF08922EFA13B8");
 
             entity.ToTable("ExamSection");
 
@@ -140,16 +148,16 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.Exam).WithMany(p => p.ExamSections)
                 .HasForeignKey(d => d.ExamId)
-                .HasConstraintName("FK__ExamSecti__ExamI__6FE99F9F");
+                .HasConstraintName("FK__ExamSecti__ExamI__76969D2E");
 
             entity.HasOne(d => d.Part).WithMany(p => p.ExamSections)
                 .HasForeignKey(d => d.PartId)
-                .HasConstraintName("FK__ExamSecti__PartI__70DDC3D8");
+                .HasConstraintName("FK__ExamSecti__PartI__778AC167");
         });
 
         modelBuilder.Entity<ExamType>(entity =>
         {
-            entity.HasKey(e => e.ExamTypeId).HasName("PK__ExamType__087D5110C09BB733");
+            entity.HasKey(e => e.ExamTypeId).HasName("PK__ExamType__087D51102EE45658");
 
             entity.ToTable("ExamType");
 
@@ -159,7 +167,7 @@ public partial class FaiEnglishContext : DbContext
 
         modelBuilder.Entity<Feeback>(entity =>
         {
-            entity.HasKey(e => e.FeebackId).HasName("PK__Feeback__FE6C68828CF93EFD");
+            entity.HasKey(e => e.FeebackId).HasName("PK__Feeback__FE6C68820BB4B9E5");
 
             entity.ToTable("Feeback");
 
@@ -173,17 +181,17 @@ public partial class FaiEnglishContext : DbContext
             entity.HasOne(d => d.Course).WithMany(p => p.Feebacks)
                 .HasForeignKey(d => d.CourseId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Feeback__CourseI__619B8048");
+                .HasConstraintName("FK__Feeback__CourseI__68487DD7");
 
             entity.HasOne(d => d.User).WithMany(p => p.Feebacks)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Feeback__UserID__60A75C0F");
+                .HasConstraintName("FK__Feeback__UserID__6754599E");
         });
 
         modelBuilder.Entity<Lesson>(entity =>
         {
-            entity.HasKey(e => e.LessonId).HasName("PK__Lessons__B084ACB02540CE7F");
+            entity.HasKey(e => e.LessonId).HasName("PK__Lessons__B084ACB077713C89");
 
             entity.Property(e => e.LessonId).HasColumnName("LessonID");
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
@@ -201,12 +209,23 @@ public partial class FaiEnglishContext : DbContext
             entity.HasOne(d => d.Course).WithMany(p => p.Lessons)
                 .HasForeignKey(d => d.CourseId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Lessons__CourseI__5165187F");
+                .HasConstraintName("FK__Lessons__CourseI__5812160E");
+        });
+
+        modelBuilder.Entity<Level>(entity =>
+        {
+            entity.HasKey(e => e.LevelId).HasName("PK__Level__09F03C06697880A3");
+
+            entity.ToTable("Level");
+
+            entity.Property(e => e.LevelId).HasColumnName("LevelID");
+            entity.Property(e => e.LevelName).HasMaxLength(200);
+            entity.Property(e => e.LevelScore).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A583652CB4B");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A58CB3957F1");
 
             entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
             entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
@@ -220,17 +239,17 @@ public partial class FaiEnglishContext : DbContext
             entity.HasOne(d => d.Course).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.CourseId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Payments__Course__5629CD9C");
+                .HasConstraintName("FK__Payments__Course__5CD6CB2B");
 
             entity.HasOne(d => d.User).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Payments__UserID__5535A963");
+                .HasConstraintName("FK__Payments__UserID__5BE2A6F2");
         });
 
         modelBuilder.Entity<Progress>(entity =>
         {
-            entity.HasKey(e => e.ProgressId).HasName("PK__Progress__BAE29C858B75E980");
+            entity.HasKey(e => e.ProgressId).HasName("PK__Progress__BAE29C8525695C70");
 
             entity.ToTable("Progress");
 
@@ -245,17 +264,17 @@ public partial class FaiEnglishContext : DbContext
             entity.HasOne(d => d.Lesson).WithMany(p => p.Progresses)
                 .HasForeignKey(d => d.LessonId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Progress__Lesson__5BE2A6F2");
+                .HasConstraintName("FK__Progress__Lesson__628FA481");
 
             entity.HasOne(d => d.User).WithMany(p => p.Progresses)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Progress__UserID__5AEE82B9");
+                .HasConstraintName("FK__Progress__UserID__619B8048");
         });
 
         modelBuilder.Entity<Question>(entity =>
         {
-            entity.HasKey(e => e.QuestionId).HasName("PK__Question__0DC06F8C711B3B7C");
+            entity.HasKey(e => e.QuestionId).HasName("PK__Question__0DC06F8C733D8BCC");
 
             entity.ToTable("Question");
 
@@ -271,12 +290,12 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.Section).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.SectionId)
-                .HasConstraintName("FK__Question__Sectio__73BA3083");
+                .HasConstraintName("FK__Question__Sectio__7A672E12");
         });
 
         modelBuilder.Entity<RefreshToken>(entity =>
         {
-            entity.HasKey(e => e.RefreshTokenId).HasName("PK__RefreshT__F5845E39EB8095F7");
+            entity.HasKey(e => e.RefreshTokenId).HasName("PK__RefreshT__F5845E3920A74E2C");
 
             entity.ToTable("RefreshToken");
 
@@ -294,7 +313,7 @@ public partial class FaiEnglishContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE3AE54277CE");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE3AC7CFCA3D");
 
             entity.ToTable("Role");
 
@@ -302,9 +321,36 @@ public partial class FaiEnglishContext : DbContext
             entity.Property(e => e.RoleName).HasMaxLength(255);
         });
 
+        modelBuilder.Entity<Situation>(entity =>
+        {
+            entity.HasKey(e => e.SituatuonId).HasName("PK__Situatio__7F5DBBC35132FED7");
+
+            entity.ToTable("Situation");
+
+            entity.Property(e => e.SituatuonId).HasColumnName("SituatuonID");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.LevelId).HasColumnName("LevelID");
+            entity.Property(e => e.RoleAi)
+                .HasMaxLength(255)
+                .HasColumnName("RoleAI");
+            entity.Property(e => e.RoleUser).HasMaxLength(255);
+            entity.Property(e => e.SituationName).HasMaxLength(255);
+            entity.Property(e => e.TypeId).HasColumnName("TypeID");
+
+            entity.HasOne(d => d.Level).WithMany(p => p.Situations)
+                .HasForeignKey(d => d.LevelId)
+                .HasConstraintName("FK__Situation__Level__5535A963");
+
+            entity.HasOne(d => d.Type).WithMany(p => p.Situations)
+                .HasForeignKey(d => d.TypeId)
+                .HasConstraintName("FK__Situation__TypeI__5441852A");
+        });
+
         modelBuilder.Entity<Type>(entity =>
         {
-            entity.HasKey(e => e.TypeId).HasName("PK__Type__516F0395B6F9E419");
+            entity.HasKey(e => e.TypeId).HasName("PK__Type__516F039515590909");
 
             entity.ToTable("Type");
 
@@ -314,13 +360,13 @@ public partial class FaiEnglishContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC98F641E6");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACD25A0C28");
 
             entity.HasIndex(e => new { e.Provider, e.ProviderId }, "UQ_Provider_ProviderId")
                 .IsUnique()
                 .HasFilter("([ProviderId] IS NOT NULL)");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534BC89D7C5").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D105340A85EE1D").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreatedAt)
@@ -339,11 +385,10 @@ public partial class FaiEnglishContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Provider).HasMaxLength(50);
             entity.Property(e => e.ProviderId).HasMaxLength(255);
-            entity.Property(e => e.Status).HasMaxLength(10)
-           .HasConversion(
+            entity.Property(e => e.Status).HasMaxLength(10).HasConversion(
             v => v.ToString(),                  // Chuyển enum thành chuỗi khi lưu vào DB
             v => (AccountStatus)Enum.Parse(typeof(AccountStatus), v) // Chuyển chuỗi từ DB thành enum
-        ); 
+        ); ;
 
             entity.HasMany(d => d.Roles).WithMany(p => p.Users)
                 .UsingEntity<Dictionary<string, object>>(
@@ -358,7 +403,7 @@ public partial class FaiEnglishContext : DbContext
                         .HasConstraintName("FK__UserRole__userId__3F466844"),
                     j =>
                     {
-                        j.HasKey("UserId", "RoleId").HasName("PK__UserRole__7743989D1EADA242");
+                        j.HasKey("UserId", "RoleId").HasName("PK__UserRole__7743989DCDB8E012");
                         j.ToTable("UserRole");
                         j.IndexerProperty<int>("UserId").HasColumnName("userId");
                         j.IndexerProperty<int>("RoleId").HasColumnName("roleId");
@@ -367,7 +412,7 @@ public partial class FaiEnglishContext : DbContext
 
         modelBuilder.Entity<UserAnswer>(entity =>
         {
-            entity.HasKey(e => e.UserAnswerId).HasName("PK__UserAnsw__47CE235F9D731B98");
+            entity.HasKey(e => e.UserAnswerId).HasName("PK__UserAnsw__47CE235FACBDEC3D");
 
             entity.ToTable("UserAnswer");
 
@@ -378,20 +423,20 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.Question).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.QuestionId)
-                .HasConstraintName("FK__UserAnswe__Quest__03F0984C");
+                .HasConstraintName("FK__UserAnswe__Quest__0A9D95DB");
 
             entity.HasOne(d => d.Result).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.ResultId)
-                .HasConstraintName("FK__UserAnswe__Resul__02FC7413");
+                .HasConstraintName("FK__UserAnswe__Resul__09A971A2");
 
             entity.HasOne(d => d.SelectedAnswer).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.SelectedAnswerId)
-                .HasConstraintName("FK__UserAnswe__Selec__04E4BC85");
+                .HasConstraintName("FK__UserAnswe__Selec__0B91BA14");
         });
 
         modelBuilder.Entity<UserExamPartSelection>(entity =>
         {
-            entity.HasKey(e => e.SelectionId).HasName("PK__UserExam__7F17912FE8BB0A77");
+            entity.HasKey(e => e.SelectionId).HasName("PK__UserExam__7F17912F83A4EE49");
 
             entity.ToTable("UserExamPartSelection");
 
@@ -403,16 +448,16 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.Part).WithMany(p => p.UserExamPartSelections)
                 .HasForeignKey(d => d.PartId)
-                .HasConstraintName("FK__UserExamP__PartI__00200768");
+                .HasConstraintName("FK__UserExamP__PartI__06CD04F7");
 
             entity.HasOne(d => d.Result).WithMany(p => p.UserExamPartSelections)
                 .HasForeignKey(d => d.ResultId)
-                .HasConstraintName("FK__UserExamP__Resul__7F2BE32F");
+                .HasConstraintName("FK__UserExamP__Resul__05D8E0BE");
         });
 
         modelBuilder.Entity<UserExamResult>(entity =>
         {
-            entity.HasKey(e => e.ResultId).HasName("PK__UserExam__97690228C4DE3CDF");
+            entity.HasKey(e => e.ResultId).HasName("PK__UserExam__976902284512DEB0");
 
             entity.ToTable("UserExamResult");
 
@@ -424,20 +469,20 @@ public partial class FaiEnglishContext : DbContext
 
             entity.HasOne(d => d.Exam).WithMany(p => p.UserExamResults)
                 .HasForeignKey(d => d.ExamId)
-                .HasConstraintName("FK__UserExamR__ExamI__7B5B524B");
+                .HasConstraintName("FK__UserExamR__ExamI__02084FDA");
 
             entity.HasOne(d => d.User).WithMany(p => p.UserExamResults)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__UserExamR__UserI__7A672E12");
+                .HasConstraintName("FK__UserExamR__UserI__01142BA1");
         });
 
         modelBuilder.Entity<VerificationToken>(entity =>
         {
-            entity.HasKey(e => e.TokenId).HasName("PK__Verifica__AC16DB4741C400FD");
+            entity.HasKey(e => e.TokenId).HasName("PK__Verifica__AC16DB4787A304B1");
 
             entity.ToTable("VerificationToken");
 
-            entity.HasIndex(e => e.UserId, "UQ__Verifica__CB9A1CFEB26124D6").IsUnique();
+            entity.HasIndex(e => e.UserId, "UQ__Verifica__CB9A1CFE6844F159").IsUnique();
 
             entity.Property(e => e.TokenId).HasColumnName("tokenId");
             entity.Property(e => e.ExpiryDate)

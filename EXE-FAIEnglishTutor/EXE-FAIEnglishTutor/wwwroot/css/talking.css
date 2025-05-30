@@ -1,21 +1,24 @@
-/* General Styles */
+﻿/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f7f7f7;
     margin: 0;
     padding: 0;
-    height: 110vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+    overflow: hidden;
+}
   
+
+
   .container {
     display: flex;
     width: 100%;
     max-width: 2000px;
     gap: 24px;
-    height: 104%;
+    height: 100%;
   }
   
   /* Left Section */
@@ -35,6 +38,7 @@ body {
     padding: 16px 24px;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom : 15px;
   }
   
   .nav-left {
@@ -49,7 +53,7 @@ body {
   }
   
   .icon {
-    font-size: 20px;
+    font-size: 15px;
     color: #888;
     cursor: pointer;
   }
@@ -62,7 +66,7 @@ body {
   .situation-card {
     background: #e6f9e6;
     border: 1px solid #faea06;
-    padding: 16px;
+    padding: 5px 10px; 
     border-radius: 12px;
   }
   
@@ -74,7 +78,7 @@ body {
   .situation-title {
     margin-left: 8px;
     font-weight: bold;
-    color: #faea06;
+    color: black;
   }
   
   .situation-text {
@@ -83,14 +87,39 @@ body {
   }
   
   /* Chat Bubble */
+
+/* Chat Container */
+.chat-container {
+    overflow-y: auto; /* Scroll only chats */
+    padding: 1px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 430px; /* Không vượt quá chiều cao cha */
+}
+
   .chat-bubble {
     background: #f0bc22;
     color: white;
-    padding: 16px;
+    padding: 5px 10px;
     border-radius: 12px;
     border-bottom-left-radius: 0;
     max-width: 80%;
   }
+
+    .chat-bubble.ai {
+        background: #f0bc22;
+        color: white;
+        border-bottom-left-radius: 0;
+        align-self: flex-start;
+    }
+
+    .chat-bubble.user {
+        background: #e0e0e0;
+        color: #333;
+        border-bottom-right-radius: 0;
+        align-self: flex-end;
+    }
   
   .chat-actions {
     display: flex;
@@ -101,13 +130,13 @@ body {
   }
   
   .chat-actions .icon {
-    margin-right: 12px;
+    margin-right: 10px;
   }
   
   /* Right Section */
   .right-section {
     width: 300px;
-    height: 90%;
+    height: 95%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,20 +160,7 @@ body {
     object-fit: cover;
   }
   
-  .record-button {
-    width: 64px;
-    height: 64px;
-    background: #ff4081;
-    color: white;
-    font-size: 24px;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+
   
   .controls {
     display: flex;
@@ -163,4 +179,33 @@ body {
       display: none;
     }
   }
-  
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .right-section {
+        display: none;
+    }
+
+    .left-section {
+        flex: 1; /* Take full width */
+    }
+}
+.bottom-controls {
+    margin-top: auto; /* Đẩy xuống dưới cùng */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.mic-btn {
+    bottom: 0;
+    margin: 0 auto;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
+}

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace EXE_FAIEnglishTutor.Models;
 
-public partial class Type
+public partial class Level
 {
-    public int TypeId { get; set; }
+    public int LevelId { get; set; }
 
-    public string? TypeName { get; set; }
+    public string? LevelName { get; set; }
 
-    public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
+    public string? LevelScore { get; set; }
 
     public virtual ICollection<Situation> Situations { get; set; } = new List<Situation>();
 }

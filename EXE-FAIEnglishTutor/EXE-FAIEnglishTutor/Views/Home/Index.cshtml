@@ -223,7 +223,7 @@
             <div></div>
             <div></div>
             <div></div>
-            <a asp-controller="Course">
+        <a href="/Mentee/Role-Play">
                 <div class="d-flex flex-column align-items-center cursor-pointer">
 
                     <div class="rounded-circle bg-orange p-1">
@@ -963,5 +963,46 @@
             });
         });
     </script>
+
+    <script>
+
+        //Mới ra mắt
+        document.addEventListener('DOMContentLoaded', function () {
+            const courseList = document.getElementById('course-list-new');
+            const prevBtn = document.getElementById('prev-btn-new');
+            const nextBtn = document.getElementById('next-btn-new');
+
+            // Cuộn sang trái
+            prevBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: -300, behavior: 'smooth' });
+            });
+
+            // Cuộn sang phải
+            nextBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: 300, behavior: 'smooth' });
+            });
+        });
+
+        //Đang thình hành
+        document.addEventListener('DOMContentLoaded', function () {
+            const courseList = document.getElementById('course-list');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            // Cuộn sang trái
+            prevBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: -300, behavior: 'smooth' });
+            });
+
+            // Cuộn sang phải
+            nextBtn.addEventListener('click', () => {
+                courseList.scrollBy({ left: 300, behavior: 'smooth' });
+            });
+        });
+
+
+
+    </script>
+
 }
 

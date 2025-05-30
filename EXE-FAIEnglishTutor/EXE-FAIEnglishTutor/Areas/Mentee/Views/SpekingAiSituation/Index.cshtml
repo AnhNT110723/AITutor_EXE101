@@ -1,0 +1,708 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
+}
+
+
+
+
+
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    @*  <li class="nav-item active">
+                    <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                    </li> *@
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        // Đọc thông tin từ cookie
+                        var fullName = User.Identity.Name;
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <div class="nav-img">
+                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                </div>
+                            </a>
+                            <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                <div class="menu-title">
+                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                    <i class="bi bi-person-circle"></i> View Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                </a>
+
+                                <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Left Section -->
+        <div class="left-section">
+            <div class="sticky-wrapper">
+                <!-- Top Navigation -->
+                <div class="navigation">
+                    <div class="nav-left">
+                        <a href="#" onclick="toggleBack(event, @ViewBag.SituationId)"><span class="icon">&#8592;</span></a>
+                        @* <p class="nav-title">Y tá</p> *@
+                    </div>
+                    <div class="nav-right">
+                        <span class="icon">&#9835;</span>
+                        <span class="icon">&#63;</span>
+                    </div>
+                </div>
+
+                <!-- Situation Card -->
+                <div class="situation-card">
+                    <div class="situation-header">
+                        <span class="icon">&#128221;</span>
+                        <p class="situation-title">Situation</p>
+                    </div>
+                    <p class="situation-text">
+                        @ViewBag.SituationDescription
+                    </p>
+                </div>
+            </div>
+            <!-- Chat Container -->
+            <div id="chatBox" class="chat-container">
+                @* Lịch sử trò truyện *@
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nurse-image">
+                <img src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" alt="Nurse">
+            </div>
+            <div class="bottom-controls">
+                <button id="micButton" onclick="toggleRecording()" class="mic-btn"><i class="bi-mic-fill"></i></button>
+                <div class="controls">
+                    <span class="icon">💡</span>
+                    <span class="icon keyboard-icon" onclick="toggleInput()">⌨</span>
+                    <span class="icon">✏</span>
+                </div>
+
+                <div class="input-wrapper hidden">
+                    <div class="input-container">
+                        <input type="text" id="userInput" placeholder="Type your message..." style="width: 100%;" />
+                        <span class="mic-icon-in-input" onclick="toggleMicFromInput()"><i class="bi-mic-fill"></i></span>
+                    </div>
+                    <button onclick="sendMessage()" class="send-btn"><i class="bi-send-fill"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+
+    <link rel="stylesheet" href="~/css./talking.css">
+
+    <style>
+
+        #content {
+            margin-top: 100px;
+            padding: 35px 20px !important;
+        }
+
+        .sticky-wrapper {
+            margin-top: -30px;
+        }
+
+        .mt-4-custome {
+            margin-bottom: -25px;
+        }
+
+        @@media (max-width: 768px) {
+            .content-source .container-fluid {
+                height: auto;
+            }
+        }
+
+        .nav-img img {
+            border: 3px solid #ff9900;
+            padding: 2px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* CSS cho bottom-controls */
+        .bottom-controls {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* CSS cho nút micro */
+        .mic-btn {
+            transition: background-color 0.3s ease;
+        }
+
+            .mic-btn:hover {
+                background-color: #ff7875;
+            }
+
+        /* CSS cho các icon trong controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+            .controls .icon {
+                cursor: pointer;
+                font-size: 20px;
+                padding: 5px;
+                border-radius: 50%;
+                transition: background-color 0.3s ease;
+            }
+
+                .controls .icon:hover {
+                    background-color: #e9ecef;
+                }
+
+        /* CSS cho ô nhập liệu và icon micro bên trong */
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+            .input-wrapper.hidden {
+                display: none;
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+        .input-container {
+            position: relative;
+            flex-grow: 1;
+        }
+
+        #userInput {
+            padding: 10px 40px 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 20px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+            #userInput:focus {
+                border-color: #ff9900;
+                box-shadow: 0 0 5px rgba(255, 153, 0, 0.3);
+            }
+
+        .mic-icon-in-input {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #ff4d4f;
+            transition: color 0.3s ease;
+        }
+
+            .mic-icon-in-input:hover {
+                color: #ff7875;
+            }
+
+        /* CSS cho nút Send */
+        .send-btn {
+            background-color: #ff9900;
+            color: white;
+            border: none;
+            padding: 8px 12px; /* Giảm padding để phù hợp với icon */
+            border-radius: 50%; /* Bo tròn nút thành hình tròn */
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px; /* Kích thước cố định */
+            height: 40px;
+            transition: background-color 0.3s ease;
+        }
+
+            .send-btn:hover {
+                background-color: #ffaa33;
+            }
+
+            .send-btn i {
+                font-size: 18px; /* Kích thước icon */
+            }
+
+        /* CSS cho chat-bubble */
+        .chat-bubble {
+            max-width: 70%;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+            .chat-bubble.user {
+                background-color: #ff9900;
+                color: white;
+                margin-left: auto;
+                border-bottom-right-radius: 0;
+            }
+
+            .chat-bubble.ai {
+                background-color: #e9ecef;
+                color: #333;
+                margin-right: auto;
+                border-bottom-left-radius: 0;
+            }
+
+        .chat-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+            .chat-actions .icon {
+                cursor: pointer;
+                font-size: 16px;
+                color: #666;
+            }
+
+                .chat-actions .icon:hover {
+                    color: #ff9900;
+                }
+    </style>
+
+
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        const situationId = @ViewBag.SituationId;
+        const typeId = @ViewBag.TypeId;
+        const userId = @ViewBag.UserId;
+        const chatHistoryKey = `chatHistory_${userId}_${situationId}_${typeId}`; // Key duy nhất cho mỗi situationId
+
+       
+        // Hàm hiển thị/ẩn ô nhập liệu khi nhấn icon ⌨
+        function toggleInput() {
+            const inputWrapper = document.querySelector('.input-wrapper');
+            const micButton = document.getElementById('micButton');
+            const keyboardIcon = document.querySelector('.keyboard-icon');
+
+            if (inputWrapper.classList.contains('hidden')) {
+                // Hiện ô nhập liệu, ẩn nút micro
+                inputWrapper.classList.remove('hidden');
+                micButton.style.display = 'none';
+                keyboardIcon.style.display = 'none';
+            }
+        }
+
+
+        // Hàm chuyển lại chế độ nói chuyện khi nhấn icon micro trong ô nhập liệu
+        function toggleMicFromInput() {
+            const inputWrapper = document.querySelector('.input-wrapper');
+            const micButton = document.getElementById('micButton');
+            const keyboardIcon = document.querySelector('.keyboard-icon');
+
+            // Ẩn ô nhập liệu, hiện nút micro và icon ⌨
+            inputWrapper.classList.add('hidden');
+            micButton.style.display = 'inline-block';
+            keyboardIcon.style.display = 'inline-block';
+        }
+
+
+        async function toggleRecording() {
+            if (isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById("micButton").style.backgroundColor = "";
+            } else {
+                try {
+                    audioChunks = [];
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); //Yêu cầu quyền truy cập micro từ trình duyệt (sẽ hiện thông báo hỏi người dùng có cho phép không
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        await sendAudio(audioBlob);
+                    };
+                    mediaRecorder.start();
+                    isRecording = true;
+                    document.getElementById("micButton").style.backgroundColor = "red";
+                } catch (error) {
+                    console.error("Error accessing microphone:", error);
+                    alert("Could not access microphone. Please check permissions.");
+                    isRecording = false;
+                }
+            }
+        }
+
+        async function sendAudio(audioBlob) {
+            const chatBox = document.getElementById("chatBox");
+            // const situation = document.getElementById("situation").value;
+
+            // Bước 1: Gửi file âm thanh để chuyển thành text
+            const formData = new FormData();
+            formData.append("audio", audioBlob, "recording.webm");
+
+            try {
+                const transcribeResponse = await fetch('/Mentee/SpekingAiSituation/TranscribeAudio', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!transcribeResponse.ok) {
+                    throw new Error(`Transcribe error! Status: ${transcribeResponse.status}`);
+                }
+
+                const transcribeData = await transcribeResponse.json();
+                if (!transcribeData.userMessage) {
+                    throw new Error("Could not transcribe audio");
+                }
+
+                // Hiển thị câu hỏi của người dùng ngay lập tức
+                const userMessage = transcribeData.userMessage;
+                // chatBox.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+                chatBox.innerHTML += `
+                    <div class="chat-bubble user">
+                        <p>${userMessage}</p>
+                        <div class="chat-actions">
+                            <span class="icon">🔈</span>
+                        </div>
+                    </div>
+                `;
+
+                chatBox.scrollTop = chatBox.scrollHeight;
+                // Lưu lịch sử sau khi thêm tin nhắn người dùng
+                saveChatHistory();
+                // Bước 2: Gửi userMessage để lấy phản hồi AI
+                const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userMessage, situationId: situationId })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`AI response error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.reply) {
+                    throw new Error("Reply not found in response");
+                }
+
+                // Hiển thị phản hồi AI từ từ với hiệu ứng đánh chữ
+                await typeMessage(data.reply);
+                // Lưu lịch sử sau khi thêm tin nhắn AI
+                saveChatHistory();
+                // Phát âm thanh
+                if (data.audioUrl) {
+                    const audio = new Audio(data.audioUrl);
+                    audio.play();
+                } else {
+                    speak(data.reply);
+                }
+                updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 mới
+            } catch (error) {
+                console.error("Error in sendAudio:", error);
+                chatBox.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                // Lưu lịch sử nếu có lỗi
+                saveChatHistory();
+            }
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            // const situation = document.getElementById("situation").value;
+            const chatBox = document.getElementById("chatBox");
+
+            if (!userInput) return;
+
+            // chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+            chatBox.innerHTML += `
+                            <div class="chat-bubble user">
+                                        <p>${userInput}</p>
+                                <div class="chat-actions">
+                                    <span class="icon">🔈</span>
+                                </div>
+                            </div>
+                        `;
+            document.getElementById("userInput").value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+            // Lưu lịch sử sau khi thêm tin nhắn người dùng
+            saveChatHistory();
+            try {
+                const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userInput, situationId: situationId })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.reply) {
+                    throw new Error("Reply not found in response");
+                }
+
+                await typeMessage(data.reply);
+                // Lưu lịch sử sau khi thêm tin nhắn AI
+                saveChatHistory();
+                if (data.audioUrl) {
+                    const audio = new Audio(data.audioUrl);
+                    audio.play();
+                } else {
+                    speak(data.reply);
+                }
+
+                updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 mới
+            } catch (error) {
+                console.error("Error in sendMessage:", error);
+                chatBox.innerHTML += `<p><strong>Error:</strong> Could not get response from AI. Please try again.</p>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+
+        async function typeMessage(message) {
+            const chatBox = document.getElementById("chatBox");
+
+            let bubble = document.createElement("div");
+            bubble.className = "chat-bubble ai";
+            let p = document.createElement("p");
+            bubble.appendChild(p);
+
+            let actions = document.createElement("div");
+            actions.className = "chat-actions";
+            actions.innerHTML = `<span class="icon">&#128264;</span>`;
+            bubble.appendChild(actions);
+
+            chatBox.appendChild(bubble);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            for (let i = 0; i < message.length; i++) {
+                p.textContent += message.charAt(i);
+                await new Promise(resolve => setTimeout(resolve, 20)); // Hiệu ứng đánh máy
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+            updateSpeakEventListeners();// Thêm sự kiện cho các icon 🔈 mới
+        }
+
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            window.speechSynthesis.speak(utterance);
+        }
+        // Hàm lưu lịch sử trò chuyện vào sessionStorage
+        function saveChatHistory() {
+            const chatBox = document.getElementById("chatBox");
+            sessionStorage.setItem(chatHistoryKey, chatBox.innerHTML);
+        }
+
+        // Hàm khôi phục lịch sử trò chuyện từ sessionStorage
+        function restoreChatHistory() {
+            const chatBox = document.getElementById("chatBox");
+            const savedChat = sessionStorage.getItem(chatHistoryKey);
+            if (savedChat) {
+                chatBox.innerHTML = savedChat;
+            } else if ("@ViewBag.InitialAiMessage") {
+                // Nếu không có lịch sử, hiển thị tin nhắn mở đầu của AI
+                chatBox.innerHTML = `
+                                    <div class="chat-bubble ai">
+                                        <p>@ViewBag.InitialAiMessage</p>
+                                        <div class="chat-actions">
+                                            <span class="icon">🔈</span>
+                                        </div>
+                                    </div>
+                                `;
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+            updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 trong lịch sử
+        }
+
+
+        // Hàm thêm sự kiện cho các icon 🔈 để phát lại nội dung
+        function addSpeakEventListeners() {
+            const speakIcons = document.querySelectorAll('.chat-actions .icon');
+            speakIcons.forEach(icon => {
+                if (icon.textContent === '🔈') {
+                    // Xóa tất cả sự kiện click cũ trước khi thêm mới
+                    icon.removeEventListener('click', handleSpeakClick); // Xóa sự kiện cũ
+                    icon.addEventListener('click', handleSpeakClick); // Thêm sự kiện mới
+                }
+            });
+        }
+        // Hàm xử lý sự kiện click cho 🔈
+        function handleSpeakClick() {
+            const chatBubble = this.closest('.chat-bubble');
+            const messageText = chatBubble.querySelector('p').textContent;
+            speak(messageText);
+        }
+        // Gọi hàm để thêm sự kiện sau khi khôi phục lịch sử trò chuyện hoặc thêm tin nhắn mới
+        document.addEventListener('DOMContentLoaded', function () {
+            addSpeakEventListeners(); // Gọi khi trang tải
+        });
+        // Gọi lại hàm sau mỗi lần thêm tin nhắn mới để đảm bảo các icon mới được gán sự kiện
+        function updateSpeakEventListeners() {
+            addSpeakEventListeners();
+        }
+    </script>
+
+
+
+
+
+
+
+    <script>
+
+        function toggleBack(event, situationId) {
+                 if (event) {
+                    event.preventDefault();
+                 }
+                Swal.fire({
+                    title: 'Are you sure you want to quit?',
+                    icon: 'question',
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    showCancelButton: true,
+                    showCloseButton: true,
+                    customClass: {
+                        confirmButton: 'custom-confirm-btn',
+                        cancelButton: 'custom-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log('Người dùng đã chọn tiếp tục');
+                        const chatHistoryKey = `chatHistory_${situationId}`;
+                        sessionStorage.removeItem(chatHistoryKey);
+                        window.location.href = `/Mentee/Role-Play/${situationId}`;
+
+                    } else if (result.isDismissed) {
+                        console.log('Người dùng đã hủy hành động');
+                    }
+                });
+        }
+
+        window.addEventListener('DOMContentLoaded', function () {
+
+            // Khôi phục lịch sử trò chuyện khi trang được tải
+            restoreChatHistory();
+
+            // Tự động phát audio của AI nếu có
+            @if (!string.IsNullOrEmpty(ViewBag.InitialAiAudioUrl))
+            {
+                <text>
+                        const audio = new Audio("@ViewBag.InitialAiAudioUrl");
+                        audio.play();
+                </text>
+            }
+            else if (!string.IsNullOrEmpty(ViewBag.InitialAiMessage))
+            {
+                <text>
+                        speak("@ViewBag.InitialAiMessage");
+                </text>
+            }
+
+            const sidebar = document.getElementById('sidebar');
+            const navbar = document.querySelector('.navbar');
+            const content = document.getElementById('content');
+            const sidebarCollapse = document.getElementById('sidebarCollapse');
+            const logoImg = document.querySelector('#sidebar .logo img'); // Lấy phần tử ảnh logo
+
+
+            // Hàm thay đổi logo
+            function updateLogo() {
+                if (sidebar.classList.contains('active')) {
+                    logoImg.src = '/Images/concoc.png'; // Logo mặc định khi sidebar active
+                    logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
+                    logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
+                } else {
+                    logoImg.src = '/Images/FAI-1.png'; // Logo khi sidebar không active
+                    logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
+                    logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
+                }
+            }
+
+
+
+            // Xử lý sự kiện click vào nút toggle sidebar
+            sidebarCollapse.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+
+                sidebar.classList.toggle('active');
+                const isActive = sidebar.classList.contains('active');
+                const width = window.innerWidth;
+
+                if (width >= 991) {
+                    navbar.style.left = isActive ? "80px" : "270px";
+                    navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+                    content.style.marginLeft = isActive ? "80px" : "270px";
+                } else {
+                    navbar.style.left = isActive ? "80px" : "0";
+                    navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
+                    content.style.marginLeft = isActive ? "80px" : "0";
+
+                }
+                updateLogo();
+                setTimeout(adjustListHeight, 300);
+
+            });
+
+        });
+    </script>
+
+}

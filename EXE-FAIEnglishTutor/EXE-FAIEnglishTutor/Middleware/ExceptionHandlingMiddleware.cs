@@ -18,33 +18,45 @@
             }
             catch (KeyNotFoundException ex)
             {
-                _logger.LogWarning(ex, "Resource not found");
-                context.Response.StatusCode = StatusCodes.Status404NotFound;
-                await context.Response.WriteAsJsonAsync(new { message = ex.Message });
+                await HandleError(context, StatusCodes.Status404NotFound, ex, "Resource not found");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                await HandleError(context, StatusCodes.Status401Unauthorized, ex, "Unauthorized access");
             }
             catch (TimeoutException ex)
             {
-                _logger.LogError(ex, "Timeout");
-                context.Response.StatusCode = StatusCodes.Status408RequestTimeout;
-                await context.Response.WriteAsJsonAsync(new { message = "Request timed out." });
+                await HandleError(context, StatusCodes.Status408RequestTimeout, ex, "Request timed out");
             }
             catch (Exception ex)
             {
-                // Ghi log chi tiết hơn
-                _logger.LogError(ex, "Unhandled exception: {Message}\nStackTrace: {StackTrace}", ex.Message, ex.StackTrace);
-                if (ex.InnerException != null)
-                {
-                    _logger.LogError(ex.InnerException, "Inner exception: {Message}\nStackTrace: {StackTrace}",
-                        ex.InnerException.Message, ex.InnerException.StackTrace);
-                }
+                await HandleError(context, StatusCodes.Status500InternalServerError, ex, "An unexpected error occurred");
+            }
+        }
+        private async Task HandleError(HttpContext context, int statusCode, Exception ex, string message)
+        {
+            _logger.LogError(ex, "{Message}\nStackTrace: {StackTrace}", ex.Message, ex.StackTrace);
+            if (ex.InnerException != null)
+            {
+                _logger.LogError(ex.InnerException, "Inner exception: {Message}\nStackTrace: {StackTrace}",
+                    ex.InnerException.Message, ex.InnerException.StackTrace);
+            }
 
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            // Nếu yêu cầu là API (JSON), trả về JSON
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = statusCode;
                 await context.Response.WriteAsJsonAsync(new
                 {
-                    message = "An unexpected error occurred.",
-                    error = ex.Message, // Thêm chi tiết lỗi (cẩn thận với thông tin nhạy cảm trong production)
-                    stackTrace = ex.StackTrace // Thêm stack trace (chỉ dùng trong môi trường dev)
+                    message,
+                    error = ex.Message,
+                    stackTrace = ex.StackTrace // Chỉ dùng trong dev
                 });
+            }
+            else
+            {
+                // Chuyển hướng đến trang lỗi cho các yêu cầu MVC
+                context.Response.Redirect($"/Error/{statusCode}");
             }
         }
     }

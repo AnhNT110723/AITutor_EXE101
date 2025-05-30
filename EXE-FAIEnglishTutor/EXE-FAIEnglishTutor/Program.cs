@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -39,7 +38,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login";         
         options.LogoutPath = "/Account/Logout";         
-        options.AccessDeniedPath = "/Account/AccessDenied"; 
+        options.AccessDeniedPath = "/Error/401"; 
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;             // Gia hạn cookie nếu có request mới
     })
@@ -49,10 +48,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ClientSecret = builder.Configuration["Google:ClientSecret"];
         options.CallbackPath = "/login-google";
 
-        // 👉 Bắt lỗi nếu login Google thất bại
+        // Bắt lỗi nếu login Google thất bại
         options.Events.OnRemoteFailure = context =>
         {
-            context.Response.Redirect("/Account/LoginFailed?message=" + Uri.EscapeDataString(context.Failure?.Message));
+            context.Response.Redirect("/Error/504");
             context.HandleResponse(); // Ngăn chặn lỗi mặc định
             return Task.CompletedTask;
         };
@@ -76,7 +75,20 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler(errorApp =>
+    {
+        errorApp.Run(async context =>
+        {
+            // Lấy mã trạng thái từ context
+            int statusCode = context.Response.StatusCode;
+            context.Response.Redirect($"/Error/{statusCode}");
+        });
+    });
+    app.UseHsts();
+}
+else
+{
+    app.UseDeveloperExceptionPage();
 }
 
 

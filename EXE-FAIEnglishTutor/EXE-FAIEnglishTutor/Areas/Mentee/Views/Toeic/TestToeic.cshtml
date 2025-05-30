@@ -1,130 +1,76 @@
-﻿
-@{
+﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "Test TOEIC";
 }
 
-        <!-- Page Content  -->
-        <div id="content" class="p-4 p-md-5">
+<!-- Page Content -->
+<div id="content" class="p-4 p-md-5">
     <div class="sticky-wrapper-h110">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-
-                    <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
-                        <i class="fa fa-bars"></i>
-                        <span class="sr-only">Toggle Menu</span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" 
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <button class="btn btn-start" style="background-color: #0d6efd;">
-                        <span>Nộp Bài</span>
-                    </button>
-
-                </div>
-            </nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" 
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <button class="btn btn-start" style="background-color: #0d6efd;" onclick="submitExam()">
+                    <span>Nộp Bài</span>
+                </button>
             </div>
+        </nav>
+    </div>
 
-            <!-- Khối lệnh Question -->
-            <div class="content-container">
-                <div class="container mt-4">
-
-                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                    <h4 class="fw-bold text-primary" id="part-name">PART 1</h4>
-                        <button class="btn btn-start " style="margin-bottom: 20px;">
+    <!-- Khối lệnh Question -->
+    <div class="content-container">
+        <div class="container mt-4">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <h4 class="fw-bold text-primary" id="part-name">PART 1</h4>
+                <div style="display:flex;">
+                    <div id="timer-display" class="score-box"></div>
+                    <button class="btn btn-start" style="margin-bottom: 20px;">
                         <span id="progress">0/200</span>
-                        </button>
-                    </div>
-
-                    <div class="row border p-3" id="question-container">
-                        <div class="col-md-6">
-                            <p class="fw-bold">Câu hỏi</p>
-                            <p>LISTENING TEST</p>
-                            </br>
-                            In the Listening test, you will be asked to demonstrate how well you understand spoken English.
-                            The entire Listening test will last approximately 45 minutes.
-                            There are four parts, and directions are given for each part.
-                            You must mark your answers on the separate answer sheet.
-                            Do not write your answers in your test book.
-
-                            </br>
-                            PART 1:
-                            </br>
-                            Directions: For each question in this part, you will hear four statements about a picture in your test book.
-                            When you hear the statements, you must select the one statement that best describes what you see in the picture.
-                            Then find the number of the question on your answer sheet and mark your answer.
-                            The statements will not be printed in your test book and will be spoken only one time.
-                            </br>
-
-                            <img src="https://zenlishtoeic.vn/wp-content/uploads/2022/08/4.jpg" alt="Câu hỏi hình ảnh">
-                        </div>
-                        <div class="col-md-6">
-                            <p class="fw-bold">1.</p>
-                            <form>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer1" id="optionA">
-                                    <label class="form-check-label" for="optionA">A.</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer1" id="optionB">
-                                    <label class="form-check-label" for="optionB">B.</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer1" id="optionC">
-                                    <label class="form-check-label" for="optionC">C.</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer1" id="optionD">
-                                    <label class="form-check-label" for="optionD">D.</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    </button>
                 </div>
             </div>
-
+            <div class="row border p-3" id="question-container"></div>
         </div>
+    </div>
+</div>
 
-
-
-    <!-- Lớp Overlay -->
-    <div class="overlay" id="overlay"></div>
-
+<!-- Lớp Overlay -->
+<div class="overlay" id="overlay"></div>
 
 @section Scripts {
     <style>
         .btn-test-online {
             display: inline-block;
             background-color: #4CAF50;
-            /* Màu xanh lá */
             color: white;
             font-size: 14px;
             font-weight: bold;
             padding: 8px 15px;
             border: none;
             border-radius: 5px;
-            /* Bo góc */
             text-decoration: none;
             text-transform: uppercase;
             transition: 0.3s ease-in-out;
             box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
         }
 
-            .btn-test-online:hover {
-                background-color: #45a049;
-                /* Màu xanh nhạt hơn khi hover */
-                color: white;
-                transform: scale(1.05);
-            }
+        .btn-test-online:hover {
+            background-color: #45a049;
+            color: white;
+            transform: scale(1.05);
+        }
 
         .navbar {
             position: unset;
             border-radius: 10px;
             top: 1 !important;
-            /* Căn với sidebar mặc định */
             width: 100% !important;
             margin-top: -30px;
         }
@@ -180,11 +126,7 @@
         }
 
         .score-box {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #ff6600;
-            color: white;
+            color: black;
             padding: 10px 15px;
             font-weight: bold;
             border-radius: 5px;
@@ -199,119 +141,131 @@
             cursor: pointer;
         }
 
-            .btn-start:hover {
-                background-color: #FFA53A;
-            }
+        .btn-start:hover {
+            background-color: #FFA53A;
+        }
+
+        #hidden-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
     </style>
 
-
     <script>
-        const questions = @Html.Raw(Json.Serialize(Model)); // Truyền danh sách câu hỏi từ Model sang JavaScript
+        const questions = @Html.Raw(Json.Serialize(Model));
         let currentQuestionIndex = 0;
         let audio = new Audio();
-        let answers = {}; // Lưu đáp án người dùng (questionId: selectedAnswer)
+        let answers = {};
+        let startTime = Date.now();
+        let timeLeft;
 
-
-        // Hàm hiển thị câu hỏi hiện tại
         function displayQuestion(index) {
             const question = questions[index];
             const partName = document.getElementById('part-name');
             const progress = document.getElementById('progress');
             const container = document.getElementById('question-container');
 
-            // Cập nhật tiêu đề phần thi và tiến độ
             partName.textContent = question.partName;
             progress.textContent = `${index + 1}/${questions.length}`;
 
-            // Hiển thị câu hỏi và đáp án
             let html = `
-                        <div class="col-md-6">
-                             <p class="fw-bold">Câu hỏi ${index + 1}: </p>
-                                <br>
-                         <p>Directions: ${question.partType === 'Listening'
-                            ? 'For each question in this part, you will hear four statements about a picture. Select the one statement that best describes what you see in the picture.'
-                            : 'For each question in this part, read the text and select the best answer.'
-                         }</p>
-                          <br>
-                        `;
-
-            // Hiển thị hình ảnh nếu có (cho Listening Part 1 hoặc Reading Part 7)
+                <div class="col-md-6">
+                    <p class="fw-bold">Câu hỏi ${index + 1}: </p>
+                    <br>
+            `;
             if (question.imageUrl) {
                 html += `<img src="${question.imageUrl}" alt="Câu hỏi hình ảnh" class="test-image">`;
             }
-
             html += `</div>
-                        <div class="col-md-6">
-                            <p class="fw-bold">${index + 1}.</p>
-                            <form>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionA${index}" value="A" onchange="saveAnswer(${question.questionId}, 'A')">
-                                    <label class="form-check-label" for="optionA${index}">A. ${question.answerA || ''}</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionB${index}" value="B" onchange="saveAnswer(${question.questionId}, 'B')">
-                                    <label class="form-check-label" for="optionB${index}">B. ${question.answerB || ''}</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionC${index}" value="C" onchange="saveAnswer(${question.questionId}, 'C')">
-                                    <label class="form-check-label" for="optionC${index}">C. ${question.answerC || ''}</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="answer${index}" id="optionD${index}" value="D" onchange="saveAnswer(${question.questionId}, 'D')">
-                                    <label class="form-check-label" for="optionD${index}">D. ${question.answerD || ''}</label>
-                                </div>
-                            </form>
-                    `;
-
-            // Nếu là phần Reading, hiển thị nút "Tiếp theo"
+                <div class="col-md-6">
+                    <p class="fw-bold">${index + 1}.</p>
+                    <form>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer${index}" id="optionA${index}" value="A" onchange="saveAnswer(${question.questionId}, 'A')">
+                            <label class="form-check-label" for="optionA${index}">A. ${question.answerA || ''}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer${index}" id="optionB${index}" value="B" onchange="saveAnswer(${question.questionId}, 'B')">
+                            <label class="form-check-label" for="optionB${index}">B. ${question.answerB || ''}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer${index}" id="optionC${index}" value="C" onchange="saveAnswer(${question.questionId}, 'C')">
+                            <label class="form-check-label" for="optionC${index}">C. ${question.answerC || ''}</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="answer${index}" id="optionD${index}" value="D" onchange="saveAnswer(${question.questionId}, 'D')">
+                            <label class="form-check-label" for="optionD${index}">D. ${question.answerD || ''}</label>
+                        </div>
+                    </form>
+            `;
             if (question.partType === 'Reading') {
                 html += `
-                            <button onclick="nextQuestion()" class="btn btn-primary mt-3">Tiếp theo</button>
-                        `;
+                    <button onclick="nextQuestion()" class="btn btn-primary mt-3">Tiếp theo</button>
+                `;
             }
-
             html += `</div>`;
             container.innerHTML = html;
 
-            // Nếu là phần Listening, phát audio
             if (question.partType === 'Listening' && question.audioUrl) {
                 audio.src = question.audioUrl;
                 audio.play();
             }
         }
 
-
-        // Hàm lưu trạng thái vào localStorage
         function saveState() {
-            localStorage.setItem('toeicExamState', JSON.stringify({
-                examId: @ViewData["ExamId"],
-                currentQuestionIndex: currentQuestionIndex,
-                answers: answers
-            }));
-        }
-
-        // Hàm khôi phục trạng thái từ localStorage
-        function restoreState() {
-            const savedState = localStorage.getItem('toeicExamState');
-            if (savedState) {
-                const state = JSON.parse(savedState);
-                // Chỉ khôi phục nếu examId trùng với bài thi hiện tại
-                if (state.examId == @ViewData["ExamId"]) {
-                    currentQuestionIndex = state.currentQuestionIndex || 0;
-                    answers = state.answers || {};
-                }
+            try {
+                localStorage.setItem('toeicExamState', JSON.stringify({
+                    examId: @ViewData["ExamId"],
+                    startTime: startTime,
+                    currentQuestionIndex: currentQuestionIndex,
+                    answers: answers
+                }));
+                console.log('State saved to localStorage');
+            } catch (error) {
+                console.error('Error saving state:', error);
             }
         }
 
+        function restoreState() {
+            try {
+                const savedState = localStorage.getItem('toeicExamState');
+                if (savedState) {
+                    const state = JSON.parse(savedState);
+                    if (state.examId == @ViewData["ExamId"]) {
+                        startTime = state.startTime || Date.now();
+                        currentQuestionIndex = state.currentQuestionIndex || 0;
+                        answers = state.answers || {};
+                        const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                        timeLeft = 7200 - elapsedTime;
+                        if (timeLeft < 0) {
+                            timeLeft = 0;
+                            localStorage.removeItem('toeicExamState');
+                        }
+                        console.log('State restored:', { startTime, currentQuestionIndex, timeLeft });
+                    } else {
+                        localStorage.removeItem('toeicExamState');
+                        startTime = Date.now();
+                        timeLeft = 7200;
+                    }
+                } else {
+                    startTime = Date.now();
+                    timeLeft = 7200;
+                }
+            } catch (error) {
+                console.error('Error restoring state:', error);
+                startTime = Date.now();
+                timeLeft = 7200;
+            }
+        }
 
-        // Lưu đáp án người dùng
         function saveAnswer(questionId, selectedAnswer) {
             answers[questionId] = selectedAnswer;
+            saveState();
             console.log(`Saved answer for question ${questionId}: ${selectedAnswer}`);
         }
 
-
-        // Chuyển sang câu hỏi tiếp theo
         function nextQuestion() {
             currentQuestionIndex++;
             if (currentQuestionIndex < questions.length) {
@@ -322,72 +276,186 @@
             }
         }
 
-
-        // Khi audio kết thúc, tự động chuyển câu hỏi (cho phần Listening)
         audio.onended = function () {
-            // Chỉ chuyển câu hỏi tự động nếu vẫn đang ở phần Listening
             if (questions[currentQuestionIndex].partType === 'Listening') {
                 nextQuestion();
             }
         };
 
-
-        // Gửi kết quả bài thi
         async function submitExam() {
+            // Bước 1: Xác nhận người dùng muốn nộp bài
+            if (!confirm('Bạn có chắc muốn nộp bài không?')) {
+                console.log('User canceled exam submission');
+                return; // Thoát nếu người dùng hủy
+            }
+
+            // Bước 2: Kiểm tra dữ liệu trước khi gửi
+            const examId = @ViewData["ExamId"];
+            if (!examId) {
+                alert('Lỗi: Không tìm thấy ID bài thi. Vui lòng thử lại.');
+                console.error('Exam ID is missing');
+                return;
+            }
+            if (!answers || Object.keys(answers).length === 0) {
+                alert('Bạn chưa trả lời câu hỏi nào. Vui lòng chọn ít nhất một đáp án.');
+                console.warn('No answers provided');
+                return;
+            }
+
+            // Bước 3: Log dữ liệu gửi đi để debug
+            console.log('Submitting exam:', { examId, answers });
+
             try {
+                // Bước 4: Gửi yêu cầu POST đến server
                 const response = await fetch('/Mentee/Toeic/SubmitExam', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        examId: @ViewData["ExamId"],
-                        answers: answers
+                        examId: examId,
+                        answers: answers // answers là object dạng { questionId: answer }
                     })
                 });
 
+                // Bước 5: Kiểm tra phản hồi từ server
                 if (response.ok) {
                     const result = await response.json();
-                    alert('Hoàn thành bài thi! Điểm số: ' + result.score);
-                    window.location.href = '/Mentee/Toeic/Result/' + @ViewData["ExamId"];
+                    // Kiểm tra xem server có trả về score không
+                    if (result && typeof result.score !== 'undefined') {
+                        // Bước 6: Hiển thị điểm số và thông tin bổ sung (nếu có)
+                        const message = `Hoàn thành bài thi! Điểm số: ${result.score}` +
+                            (result.correctCount ? `\nSố câu đúng: ${result.correctCount}/${questions.length}` : '');
+                        alert(message);
+                        console.log('Exam submitted successfully:', result);
+
+                        // Bước 7: Xóa trạng thái lưu trữ
+                        localStorage.removeItem('toeicExamState');
+                        sessionStorage.removeItem('isReloading');
+
+                        // Bước 8: Chuyển hướng đến trang kết quả
+                        window.location.href = `/Mentee/Toeic/Result/${examId}`;
+                    } else {
+                        alert('Lỗi: Server không trả về điểm số hợp lệ.');
+                        console.error('Invalid response from server:', result);
+                    }
                 } else {
-                    alert('Có lỗi khi gửi kết quả. Vui lòng thử lại.');
+                    // Bước 9: Xử lý lỗi từ server
+                    const errorText = await response.text();
+                    alert(`Có lỗi khi gửi kết quả: ${errorText || 'Không rõ nguyên nhân'}. Vui lòng thử lại.`);
+                    console.error('Server error:', response.status, errorText);
                 }
             } catch (error) {
+                // Bước 10: Xử lý lỗi mạng hoặc ngoại lệ
+                alert('Có lỗi xảy ra khi gửi bài thi. Vui lòng kiểm tra kết nối và thử lại.');
                 console.error('Error submitting exam:', error);
-                alert('Có lỗi xảy ra. Vui lòng thử lại.');
             }
         }
 
-        // Khi trang tải, khôi phục trạng thái
-        window.onload = function () {
-            if (questions.length > 0) {
-                restoreState(); // Khôi phục trạng thái
-                displayQuestion(currentQuestionIndex);
-                startTimer(); // Bắt đầu đếm ngược thời gian (sẽ thêm ở phần sau)
+        window.addEventListener('beforeunload', function (e) {
+            if (timeLeft > 0) {
+                // SỬA: Lưu thời gian rời trang để phát hiện reload gần đây
+                sessionStorage.setItem('reloadTimestamp', Date.now());
+                const confirmationMessage = 'Thao tác này có thể không được lưu. Bạn có chắc muốn thoát?';
+                (e || window.event).returnValue = confirmationMessage;
+                return confirmationMessage;
             } else {
+                // SỬA: Xóa reloadTimestamp nếu thời gian hết
+                sessionStorage.removeItem('reloadTimestamp');
+            }
+        });
+
+
+
+
+        window.onload = function () {
+
+            // SỬA: Dùng performance.navigation.type để phát hiện reload
+            const navigationType = performance.navigation.type;
+            console.log('Navigation type:', navigationType); // 0: bình thường, 1: reload
+            const reloadTimestamp = sessionStorage.getItem('reloadTimestamp');
+            const currentTime = Date.now();
+            console.log('reloadTimestamp:', reloadTimestamp, 'Current time:', currentTime);
+
+            // SỬA: Kiểm tra reload (type === 1) và timestamp gần đây (< 5 giây)
+            if (navigationType === 1 && reloadTimestamp && (currentTime - reloadTimestamp < 5000)) {
+                console.log('Detected recent reload, attempting to navigate back');
+                sessionStorage.removeItem('reloadTimestamp');
+                if (window.history.length > 1) {
+                    console.log('History available, navigating back');
+                    window.history.back();
+                } else {
+                    console.log('No history, redirecting to /Mentee/Toeic');
+                    window.location.href = '/Mentee/Toeic';
+                }
+                return;
+            } else {
+                // SỬA: Xóa reloadTimestamp nếu không phải reload hoặc timestamp cũ
+                sessionStorage.removeItem('reloadTimestamp');
+                console.log('Not a reload or stale timestamp, proceeding normally');
+            }
+
+            const hiddenInput = document.createElement('input');
+            hiddenInput.id = 'hidden-input';
+            hiddenInput.type = 'text';
+            document.body.appendChild(hiddenInput);
+            const clickEvent = new Event('click', { bubbles: true });
+            const changeEvent = new Event('change', { bubbles: true });
+            const inputEvent = new Event('input', { bubbles: true });
+            hiddenInput.dispatchEvent(clickEvent);
+            hiddenInput.dispatchEvent(changeEvent);
+            hiddenInput.dispatchEvent(inputEvent);
+            console.log('Simulated interaction by triggering click, change, and input events');
+
+            if (questions && questions.length > 0) {
+                restoreState();
+                console.log('Questions loaded:', questions.length);
+                displayQuestion(currentQuestionIndex);
+                startTimer();
+            } else {
+                console.error('No questions available');
                 document.getElementById('question-container').innerHTML = '<p>Không có câu hỏi nào.</p>';
             }
         };
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('timer-display');
+            console.log('Starting timer, initial timeLeft:', timeLeft);
+            const timer = setInterval(() => {
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                timeLeft = 7200 - elapsedTime;
+                console.log('Timer tick, timeLeft:', timeLeft);
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timeLeft = 0;
+                    timerDisplay.textContent = 'Time: 0:00';
+                    localStorage.removeItem('toeicExamState');
+                    // SỬA: Thêm xóa cờ isReloading khi hết thời gian
+                    sessionStorage.removeItem('isReloading');
+                    alert('Hết thời gian làm bài!');
+                    submitExam();
+                    return;
+                }
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }, 1000);
+        }
     </script>
 
     <script>
-        // Initialize intl-tel-input
         const phoneInput = document.querySelector("#phone");
         const iti = window.intlTelInput(phoneInput, {
             initialCountry: "vn",
             preferredCountries: ["vn", "us", "gb"],
             separateDialCode: true,
-            allowDropdown: true, // Bật dropdown
-            utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
-
+            allowDropdown: true,
+            utilsScript: "static/intl-tel-input/js/utils.js",
         });
 
-
-        // Function to handle submit
         function submitPhone() {
             if (iti.isValidNumber()) {
-                const fullNumber = iti.getNumber(); // Get the full international number
+                const fullNumber = iti.getNumber();
                 document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
             } else {
                 alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");

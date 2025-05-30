@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 
-
     <style>
         .modal-header {
             padding-bottom: 10px !important;
@@ -75,8 +74,8 @@
 
 
 
-
-    <main role="main">
+@* 
+     <main role="main">  *@
         <div class="wrapper d-flex align-items-stretch">
             <nav id="sidebar" class="active">
                 <h1><a asp-area="" asp-controller="home" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
@@ -94,20 +93,20 @@
                         </a>
                     </li>
                     <li class="active">
-                        <a asp-controller="home" class="link-test">
+                        <a asp-area="" asp-controller="home" class="link-test">
                             <span class="fa fa-frog"></span>
                             <span class="menu-text">AI Tutor</span>
 
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="selfStudy" class="link-test">
+                        <a asp-area="" asp-controller="selfStudy" class="link-test">
                             <span class="fas fa-book-open"></span>
                             <span class="menu-text">Tự học</span>
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="ParentCourse" class="link-test">
+                        <a asp-area="" asp-controller="ParentCourse" class="link-test">
                             <span class="bi bi-people-fill"></span>
                             <span class="menu-text">Trang học của cha mẹ</span>
                         </a>
@@ -124,7 +123,7 @@
             </nav>
             @RenderBody()
         </div>
-    </main>
+     @* </main>  *@
 
 
 
@@ -167,45 +166,7 @@
         }
     </script>
 
-    <script>
-
-        //Mới ra mắt
-        document.addEventListener('DOMContentLoaded', function () {
-            const courseList = document.getElementById('course-list-new');
-            const prevBtn = document.getElementById('prev-btn-new');
-            const nextBtn = document.getElementById('next-btn-new');
-
-            // Cuộn sang trái
-            prevBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: -300, behavior: 'smooth' });
-            });
-
-            // Cuộn sang phải
-            nextBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: 300, behavior: 'smooth' });
-            });
-        });
-
-        //Đang thình hành
-        document.addEventListener('DOMContentLoaded', function () {
-            const courseList = document.getElementById('course-list');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-
-            // Cuộn sang trái
-            prevBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: -300, behavior: 'smooth' });
-            });
-
-            // Cuộn sang phải
-            nextBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: 300, behavior: 'smooth' });
-            });
-        });
-
-
-
-    </script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

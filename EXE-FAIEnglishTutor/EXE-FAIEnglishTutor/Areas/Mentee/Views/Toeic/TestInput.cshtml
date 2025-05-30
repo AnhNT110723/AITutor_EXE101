@@ -211,32 +211,102 @@
         .stt {
             background-color: #ffc379 !important;
         }
+
+        /* CSS cho popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .modal-button.yes {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .modal-button.no {
+                background-color: #f44336;
+                color: white;
+            }
     </style>
 
 
 
 
     <script>
-        // Initialize intl-tel-input
-        const phoneInput = document.querySelector("#phone");
-        const iti = window.intlTelInput(phoneInput, {
-            initialCountry: "vn",
-            preferredCountries: ["vn", "us", "gb"],
-            separateDialCode: true,
-            allowDropdown: true, // Bật dropdown
-            utilsScript: "static/intl-tel-input/js/utils.js", // Chỉ dùng nếu offline
-
-        });
-
-
-        // Function to handle submit
-        function submitPhone() {
-            if (iti.isValidNumber()) {
-                const fullNumber = iti.getNumber(); // Get the full international number
-                document.getElementById("result").innerText = `Số điện thoại đã lưu: ${fullNumber}`;
-            } else {
-                alert("Số điện thoại không hợp lệ. Vui lòng kiểm tra lại!");
+        window.onload = function () {
+            const savedState = localStorage.getItem('toeicExamState');
+            if (savedState) {
+                // Hiển thị popup nếu có trạng thái thi chưa hoàn thành
+                showContinueExamPopup();
             }
+        };
+
+        function showContinueExamPopup() {
+            // Tạo modal popup
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'continueExamModal';
+            modal.innerHTML = `
+                        <div class="modal-content">
+                            <h3>Bạn có muốn thi tiếp không?</h3>
+                            <p>Bạn đã rời khỏi bài thi trước đó. Bạn có muốn tiếp tục không?</p>
+                            <button class="modal-button yes" onclick="continueExam()">Có</button>
+                            <button class="modal-button no" onclick="resetExam()">Không</button>
+                        </div>
+                    `;
+            document.body.appendChild(modal);
+
+            // Hiển thị modal
+            modal.style.display = 'block';
         }
+
+        function continueExam() {
+            // SỬA: Tạo URL giống nút "Bắt đầu" với examTypeId và slug
+            const examTypeId = '@ViewData["ExamTypeId"]';
+            const slug = '@ViewData["Slug"]';
+            const url = `/Mentee/Toeic/TestOnline/StartTest/${examTypeId}/${slug}`;
+            console.log('Continuing exam, redirecting to:', url); // Log để debug
+
+            // Đóng modal và chuyển hướng
+            const modal = document.getElementById('continueExamModal');
+            modal.remove();
+            window.location.href = url;
+        }
+
+        function resetExam() {
+            // Xóa trạng thái thi và làm mới trang
+            localStorage.removeItem('toeicExamState');
+            localStorage.removeItem('isReloading');
+            const modal = document.getElementById('continueExamModal');
+            modal.remove();
+            window.location.reload();
+        }
+
+
     </script>
 }

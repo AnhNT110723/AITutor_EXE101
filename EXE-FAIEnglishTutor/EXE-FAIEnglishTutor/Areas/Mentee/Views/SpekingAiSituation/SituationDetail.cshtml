@@ -1,0 +1,170 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // hoặc relative path phù hợp
+}
+
+@model Situation
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5 learn-english-ai">
+            <div class="sticky-wrapper sticky-wrapper-list-courses">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                            <i class="fa fa-bars"></i>
+                            <span class="sr-only">Toggle Menu</span>
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                                data-toggle="collapse" data-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                @*  <li class="nav-item active">
+                                <a class="nav-link" href="home.html">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">Portfolio</a>
+                                </li> *@
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    // Đọc thông tin từ cookie
+                                    var fullName = User.Identity.Name;
+                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                    <li class="nav-item dropdown">
+
+                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div class="nav-img">
+                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                            </div>
+                                        </a>
+                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                            <div class="menu-title">
+                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                                <i class="bi bi-person-circle"></i> View Profile
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                            </a>
+
+                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="list-courses">
+                <div class="container">
+                    <!-- <div class="header">
+                            <button>⬅</button>
+                        </div> -->
+                    <div class="content">
+                        <div class="row">
+
+
+                            <div class="image-section col-lg-6 col-12">
+                                <img src="@Model.ImageUrl"
+                                     alt="Nurse">
+                            </div>
+                            <div class="text-section col-lg-6 col-12">
+                                <span class="badge">@Model.Level.LevelName</span>
+                                <h2 class="title">@Model.SituationName</h2>
+
+                                <div class="role">
+                                    <div id="my_role">👤 Vai trò của tôi</div> <br><span>@Model.RoleUser</span>
+                                </div>
+
+                                <div class="role">
+                                    <div id="ai_role">📋 Vai trò của AI</div> <br> <span>@Model.RoleAi</span>
+                                </div>
+
+                                <div class="icon-text">
+                                    <span>📅</span>
+                                    <p id="situation">
+                                        <strong>Tình huống:</strong> @Model.Description
+                                    </p>
+                                </div>
+
+                                <div class="goals">
+                                    <p><strong>Mục tiêu bài học:</strong></p>
+                                    <ul>
+                                        <li>Bạn nắm cách đặt lịch khám bệnh</li>
+                                        <li>Nắm các từ vựng về chủ đề sức khoẻ</li>
+                                        <li>Thực hành cấu trúc "I want to..."</li>
+                                    </ul>
+                                </div>
+
+                                <div class="button-group">
+                            <a href="#" onclick="back()" class="button button-sample">Quay lại</a>
+                                    <button onclick="practiceAI()" class="button button-ai">Thực hành với AI</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+@section Scripts{
+
+    <style>
+        @@media (max-width: 991px) {
+            .text-section {
+                margin-top: 15px;
+            }
+        }
+
+        .learn-english-ai .sticky-wrapper {
+            height: auto;
+        }
+
+        .image-section {
+            width: 100%;
+            height: 475px;
+        }
+
+            .image-section img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 12px;
+            }
+    </style>
+
+    <script>
+        const situationId = @ViewBag.SituationId;
+        const typeId = @ViewBag.TypeId;
+        const userId = @ViewBag.UserId;
+        // Hàm xóa lịch sử trò chuyện trong sessionStorage và cập nhật giao diện
+        function practiceAI() {
+            const chatHistoryKey = `chatHistory_${userId}_${situationId}_${typeId}`;
+            // Xóa dữ liệu trong sessionStorage
+            sessionStorage.removeItem(chatHistoryKey);
+            window.location.href = `/Mentee/Role-Play/${situationId}/practice`;
+        }
+
+        function back() {
+            window.location.href = '/Mentee/Role-Play';
+        }
+    </script>
+
+}

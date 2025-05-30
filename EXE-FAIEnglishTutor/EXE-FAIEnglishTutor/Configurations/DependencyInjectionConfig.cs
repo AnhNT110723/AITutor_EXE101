@@ -33,7 +33,7 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddTransient<EmailSendVetification>();
 
             // Chat bot - Sử dụng AddHttpClient thay vì AddScoped
-            services.AddHttpClient<IChatBotService, ChatBotService>();
+            services.AddHttpClient<IAIService, AIService>();
 
 
             //Profile
@@ -49,6 +49,10 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<IToeicTestService, ToeicTestService>();
             //Exam
             services.AddScoped<IExamRepositoy,ExamRepository>();
+
+            //Situation
+            services.AddScoped<ISituationService, SituationService>();
+            services.AddScoped<ISituationRepository, SituationRepository>();
 
         }
 
