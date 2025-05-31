@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Reading Practice";
+}
+
+<h1>Reading Practice</h1>
+
+<!-- Form chọn trình độ -->
+<form asp-action="GeneratePassage" method="post">
+    <label for="level">Select CEFR Level:</label>
+    <select name="level" id="level">
+        <option value="A1">A1</option>
+        <option value="B1">B1</option>
+        <option value="C1">C1</option>
+    </select>
+    <button type="submit">Generate Passage</button>
+</form>
+
+<!-- Hiển thị đoạn văn -->
+@if (ViewBag.Passage != null)
+{
+    <h3>Reading Passage (Level: @ViewBag.Level)</h3>
+    <p>@ViewBag.Passage</p>
+
+    <!-- Form tóm tắt -->
+    <form asp-action="Summarize" method="post">
+        <input type="hidden" name="passage" value="@ViewBag.Passage" />
+        <button type="submit">Summarize</button>
+    </form>
+}
+
+<!-- Hiển thị tóm tắt -->
+@if (ViewBag.Summary != null)
+{
+    <h3>Summary</h3>
+    <p>@ViewBag.Summary</p>
+}
+
+<!-- Form giải thích từ vựng -->
+<form asp-action="ExplainVocabulary" method="post">
+    <label for="word">Word:</label>
+    <input type="text" name="word" id="word" />
+    <label for="context">Context:</label>
+    <input type="text" name="context" id="context" />
+    <button type="submit">Explain Vocabulary</button>
+</form>
+
+@if (ViewBag.VocabularyExplanation != null)
+{
+    <h3>Vocabulary Explanation</h3>
+    <p>@ViewBag.VocabularyExplanation</p>
+}
+
+<!-- Form giải thích ngữ pháp -->
+<form asp-action="ExplainGrammar" method="post">
+    <label for="sentence">Sentence:</label>
+    <input type="text" name="sentence" id="sentence" />
+    <button type="submit">Explain Grammar</button>
+</form>
+
+@if (ViewBag.GrammarExplanation != null)
+{
+    <h3>Grammar Explanation</h3>
+    <p>@ViewBag.GrammarExplanation</p>
+}

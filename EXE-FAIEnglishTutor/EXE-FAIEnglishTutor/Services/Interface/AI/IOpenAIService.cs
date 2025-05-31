@@ -1,8 +1,8 @@
 ﻿namespace EXE_FAIEnglishTutor.Services.Interface.AI
 {
-    public interface IAIService
+    public interface IOpenAIService
     {
-        Task<string> GetChatResponseAsync(string userMessage, string situation = null);
+        Task<string> CallOpenAIAsync(object requestBody);
         Task<string> TranscribeAudioAsync(byte[] audioBytes);
     }
 }

@@ -15,19 +15,21 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
     [Area("Mentee")]
     public class SpekingAiSituationController : Controller
     {
-        private readonly IAIService _aiService;
+        private readonly IOpenAIService _aiService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly ISituationService _situationService; 
         private readonly IUserService _userService; 
+        private readonly ISpeakingAIService _speakingAiService; 
         
-        public SpekingAiSituationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IAIService aiService, ISituationService situationService, IUserService userService)
+        public SpekingAiSituationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IOpenAIService aiService, ISituationService situationService, IUserService userService, ISpeakingAIService speakingAIService)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _aiService = aiService;
             _situationService = situationService;
             _userService = userService;
+            _speakingAiService = speakingAIService;
         }
 
         [HttpGet("Mentee/Role-Play/{situationId}/practice")]
@@ -62,7 +64,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             string level = situation.Level.LevelName;
             string situationContext = $"Situation: {situation.SituationName}\nDescription: {situation.Description}\nYou are {roleAi}. The user is {roleUser}. Respond in English at a {level} level (e.g., use simple words and sentences for Beginner, more complex language for Advanced). Maintain your role as {roleAi} throughout the conversation and do not switch roles.";
             string initialPrompt = $"Start the conversation naturally as {roleAi}, greeting the user and offering assistance. Do not summarize the situation, just respond as {roleAi} would.";
-            string aiReply = await _aiService.GetChatResponseAsync(initialPrompt, situationContext);
+            string aiReply = await _speakingAiService.GetChatResponseAsync(initialPrompt, situationContext);
             string audioUrl = await GenerateSpeechAsync(aiReply);
 
             // Truyền câu trả lời mở đầu của AI vào ViewBag
@@ -81,6 +83,8 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             var listSituations = await _situationService.GetListSituationByRolePlay(Constants.ROLE_PLAY);
             return View("ListSituations", listSituations);
         }
+
+
 
         [HttpGet("Mentee/Role-Play/{situationId}")]
         public async Task<IActionResult> GetSituationByIdAsync(int situationId)
@@ -136,7 +140,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 string userMessage = request.Message;
               
 
-                var reply = await _aiService.GetChatResponseAsync(userMessage, situationContext);
+                var reply = await _speakingAiService.GetChatResponseAsync(userMessage, situationContext);
                 if (string.IsNullOrEmpty(reply))
                 {
                     return Json(new { reply = "AI could not generate a response. Please try again." });
@@ -184,32 +188,6 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 return StatusCode(500, new { userMessage = "", error = "An error occurred while processing audio.", details = ex.Message });
             }
         }
-
-
-
-        //// Xử lý file âm thanh (Speech-to-Text)
-        //[HttpPost]
-        //public async Task<IActionResult> SendAudio(IFormFile audio, string situation)
-        //{
-        //    if (audio == null || string.IsNullOrEmpty(situation))
-        //        return Json(new { userMessage = "", reply = "Please select a situation and provide audio." });
-
-        //    // Chuyển file âm thanh thành byte[]
-        //    using var memoryStream = new MemoryStream();
-        //    await audio.CopyToAsync(memoryStream);
-        //    var audioBytes = memoryStream.ToArray();
-
-        //    // Gọi Whisper API qua ChatBotService
-        //    var userMessage = await _aiService.TranscribeAudioAsync(audioBytes);
-        //    if (string.IsNullOrEmpty(userMessage))
-        //        return Json(new { userMessage, reply = "Could not transcribe audio. Please try again." });
-
-        //    // Gọi GPT-3.5 qua ChatBotService
-        //    var reply = await _aiService.GetChatResponseAsync(userMessage, situation);
-        //    var audioUrl = await GenerateSpeechAsync(reply); // Azure TTS (tùy chọn)
-
-        //    return Json(new { userMessage, reply, audioUrl });
-        //}
 
         // Gọi Azure Text-to-Speech (tùy chọn)
         private async Task<string> GenerateSpeechAsync(string text)
