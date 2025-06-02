@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 {
@@ -59,23 +60,65 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             ViewBag.TypeId = situation.TypeId;
 
             // Gọi logic SendMessage để AI nói trước
-            string roleAi = situation.RoleAi;
-            string roleUser = situation.RoleUser;
-            string level = situation.Level.LevelName;
-            string situationContext = $"Situation: {situation.SituationName}\nDescription: {situation.Description}\nYou are {roleAi}. The user is {roleUser}. Respond in English at a {level} level (e.g., use simple words and sentences for Beginner, more complex language for Advanced). Maintain your role as {roleAi} throughout the conversation and do not switch roles.";
-            string initialPrompt = $"Start the conversation naturally as {roleAi}, greeting the user and offering assistance. Do not summarize the situation, just respond as {roleAi} would.";
-            string aiReply = await _speakingAiService.GetChatResponseAsync(initialPrompt, situationContext);
-            string audioUrl = await GenerateSpeechAsync(aiReply);
-
-            // Truyền câu trả lời mở đầu của AI vào ViewBag
-            ViewBag.InitialAiMessage = aiReply;
-            ViewBag.InitialAiAudioUrl = audioUrl;
+            //string roleAi = situation.RoleAi;
+            //string roleUser = situation.RoleUser;
+            //string level = situation.Level.LevelName;
+            //string situationContext = $"Situation: {situation.SituationName}\nDescription: {situation.Description}\nYou are {roleAi}. The user is {roleUser}. Respond in English at a {level} level (e.g., use simple words and sentences for Beginner, more complex language for Advanced). Maintain your role as {roleAi} throughout the conversation and do not switch roles.";
+            //string initialPrompt = $"Start the conversation naturally as {roleAi}, greeting the user and offering assistance. Do not summarize the situation, just respond as {roleAi} would.";
+            //string aiReply = await _speakingAiService.GetChatResponseAsync(initialPrompt, situationContext);
+            //string audioUrl = await GenerateSpeechAsync(aiReply);
+            //// Truyền câu trả lời mở đầu của AI vào ViewBag 
+            //ViewBag.InitialAiMessage = aiReply;
+            //ViewBag.InitialAiAudioUrl = audioUrl;
 
             return View();
         }
 
-       
-      
+
+        [HttpPost("Mentee/SpekingAiSituation/StartConversation")]
+        public async Task<IActionResult> StartConversation([FromBody] StartConversationRequest request)
+        {
+            try
+            {
+                if (request == null || request.SituationId <= 0)
+                {
+                    return BadRequest(new { error = "Invalid situation ID." });
+                }
+
+                var situation = await _situationService.GetSituationByIdAsync(request.SituationId);
+                if (situation == null)
+                {
+                    return Json(new { reply = "Situation not found." });
+                }
+
+                string roleAi = situation.RoleAi;
+                string roleUser = situation.RoleUser;
+                string level = situation.Level.LevelName;
+                string situationContext = $"Situation: \"{situation.SituationName}\"\nDescription: {situation.Description}\r\nYou are a {roleAi}. The user is a {roleUser}. Respond in English at a {level} level (e.g., use simple words and sentences for Beginner, more complex language for Advanced). Maintain your role as a {roleAi} throughout the conversation and do not switch roles.";
+                string initialPrompt = $"Start the conversation naturally as {roleAi}, greeting the user and offering assistance. Do not summarize the situation, just respond as {roleAi} would.";
+
+                string aiReply = await _speakingAiService.GetChatResponseAsync(initialPrompt, situationContext);
+                if (string.IsNullOrEmpty(aiReply))
+                {
+                    return Json(new { reply = "Error: AI could not generate a response." });
+                }
+
+                string voice = string.IsNullOrEmpty(request.Voice) ? "en-US-JennyNeural" : request.Voice;
+                string audioUrl = await GenerateSpeechAsync(aiReply, voice);
+                if (audioUrl == null)
+                {
+                    Console.WriteLine("Failed to generate audio for initial message.");
+                }
+
+                return Json(new { reply = aiReply, audioUrl });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in StartConversation: {ex.Message}");
+                return StatusCode(500, new { error = "Error starting conversation.", details = ex.Message });
+            }
+        }
+
         [HttpGet("Mentee/Role-Play")]
         public async Task<IActionResult> GetListSituationsAsync()
         {
@@ -146,7 +189,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                     return Json(new { reply = "AI could not generate a response. Please try again." });
                 }
 
-                var audioUrl = await GenerateSpeechAsync(reply);
+                var audioUrl = await GenerateSpeechAsync(reply, request.Voice ?? "en-US-JennyNeural");
                 return Json(new { reply, audioUrl });
             }
             catch (Exception ex)
@@ -189,11 +232,39 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
         }
 
-        // Gọi Azure Text-to-Speech (tùy chọn)
-        private async Task<string> GenerateSpeechAsync(string text)
+
+        [HttpPost("Mentee/SpekingAiSituation/GenerateAudio")]
+        public async Task<IActionResult> GenerateAudio([FromBody] GenerateAudioRequest request)
         {
-            var azureKey = _configuration["AzureSpeechKey"];
-            var region = _configuration["AzureSpeechRegion"];
+            if (string.IsNullOrEmpty(request.Text))
+            {
+                return BadRequest("Text is required.");
+            }
+
+            try
+            {
+                var audioUrl = await GenerateSpeechAsync(request.Text, request.Voice);
+                if (audioUrl == null)
+                {
+                    return StatusCode(500, "Failed to generate audio.");
+                }
+                return Ok(new { audioUrl });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error generating audio: {ex.Message}");
+                return StatusCode(500, "Error generating audio.");
+            }
+        }
+
+
+
+
+        // Gọi Azure Text-to-Speech (tùy chọn)
+        private async Task<string> GenerateSpeechAsync(string text, string voiceName)
+        {
+            var azureKey = _configuration["Azure:Speech:SubscriptionKey"];
+            var region = _configuration["Azure:Speech:Region"];
             if (string.IsNullOrEmpty(azureKey) || string.IsNullOrEmpty(region))
             {
                 return null; // Bỏ qua nếu không dùng Azure
@@ -204,11 +275,11 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 var ttsUrl = $"https://{region}.tts.speech.microsoft.com/cognitiveservices/v1";
                 var client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", azureKey);
-                client.DefaultRequestHeaders.Add("Content-Type", "application/ssml+xml");
                 client.DefaultRequestHeaders.Add("X-Microsoft-OutputFormat", "audio-16khz-128kbitrate-mono-mp3");
+                client.DefaultRequestHeaders.Add("User-Agent", "AiTutor/1.0 (AiTutor@example.com)");
 
                 var ssml = $@"<speak version='1.0' xml:lang='en-US'>
-                              <voice name='en-US-JennyNeural'>{text}</voice>
+                              <voice name='{voiceName}'>{text}</voice>
                            </speak>";
                 var content = new StringContent(ssml, Encoding.UTF8, "application/ssml+xml");
 
@@ -217,6 +288,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 {
                     var audioBytes = await response.Content.ReadAsByteArrayAsync();
                     var audioBase64 = Convert.ToBase64String(audioBytes);
+                    Console.WriteLine($"Base64 Length: ${audioBase64.Length}, Preview: {audioBase64.Substring(0, Math.Min(50, audioBase64.Length))}");
                     return $"data:audio/mp3;base64,{audioBase64}";
                 }
 
@@ -225,33 +297,28 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             catch (Exception ex)
             {
                 // XỬ LÝ LỖI: Trả về null nếu Azure TTS thất bại
+                Console.WriteLine($"Lỗi Azure TTS: {ex.Message}");
                 return null;
             }
         }
     }
 
-        public class ChatRequest
+    public class GenerateAudioRequest
+    {
+        public string Text { get; set; }
+        public string Voice { get; set; }
+    }
+    public class ChatRequest
         {
             public string Message { get; set; }
-        public int SituationId { get; set; }
+            public int SituationId { get; set; }
+            public string Voice { get; set; }
     }
 
-        public class WhisperResponse
-        {
-            public string text { get; set; }
-        }
+    public class StartConversationRequest
+    {
+        public int SituationId { get; set; }
+        public string Voice { get; set; }
+    }
 
-        public class OpenAIResponse
-        {
-            public Choice[] choices { get; set; }
-            public class Choice
-            {
-                public Message message { get; set; }
-            }
-            public class Message
-            {
-                public string content { get; set; }
-            }
-
-        }
 }

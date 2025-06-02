@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Text.Encodings.Web
+@{
     Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
 }
 
@@ -109,7 +110,7 @@
         <!-- Right Section -->
         <div class="right-section">
             <div class="nurse-image">
-                <img src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" alt="Nurse">
+                <img id="nurseImage" src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" alt="Nurse">
             </div>
             <div class="bottom-controls">
                 <button id="micButton" onclick="toggleRecording()" class="mic-btn"><i class="bi-mic-fill"></i></button>
@@ -129,6 +130,52 @@
             </div>
         </div>
     </div>
+    <div id="welcomeScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; margin-top:40px;  display: flex; justify-content: center; align-items: center; z-index: 1000;">
+        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 800px; width: 95%;">
+            <h3>Welcome to AI Tutor!</h3>
+            <p style="text-align: center !important">Choose your AI character's voice:</p>
+            <div class="character-carousel" style="position: relative; width: 100%; height: 350px;">
+                <!-- Character Cards -->
+                <div class="character-card" data-voice="en-US-JennyNeural" data-sample="I'm Jenny, nice to meet you!" style="display: none; text-align: center;">
+                    <img src="~/images/jenny.png" alt="Jenny" style="width: 250px; height: 220px; border-radius: 10%; object-fit: cover;">
+                    <div class="character-name-audio">
+                        <p style="font-size: 18px; margin: 10px 0;text-align: center !important">Jenny</p>
+                        <button class="preview-btn" onclick="previewVoice('en-US-JennyNeural', 'I\'m Jenny, nice to meet you!')" style="background-color: #ff9900; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
+                            <i class="bi bi-volume-up-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="character-card" data-voice="en-US-GuyNeural" data-sample="I'm Guy, let's get started!" style="display: none; text-align: center;">
+                    <img src="~/images/guy.png" alt="Guy" style="width: 250px; height: 220px; border-radius: 10%; object-fit: cover;">
+                   
+                    <div class="character-name-audio">
+                        <p style="font-size: 18px; margin: 10px 0;text-align: center !important">Guy</p>
+                        <button class="preview-btn" onclick="previewVoice('en-US-GuyNeural', 'I\'m Guy, let\'s get started!')" style="background-color: #ff9900; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
+                            <i class="bi bi-volume-up-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="character-card" data-voice="en-US-AriaNeural" data-sample="I'm Aria, ready to assist you!" style="display: none; text-align: center;">
+                    <img src="~/images/aria.png" alt="Aria" style="width: 250px; height: 220px; border-radius: 10%; object-fit: cover;">
+                    <div class="character-name-audio">
+                        <p style="font-size: 18px; margin: 10px 0; text-align: center !important">Aria</p>
+                        <button class="preview-btn" onclick="previewVoice('en-US-AriaNeural', 'I\'m Aria, ready to assist you!')" style="background-color: #ff9900; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
+                            <i class="bi bi-volume-up-fill"></i>
+                        </button>
+
+                    </div>
+                </div>
+                <!-- Navigation Buttons -->
+                <button class="carousel-nav prev" onclick="prevCharacter()" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background-color: #ff9900; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="carousel-nav next" onclick="nextCharacter()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background-color: #ff9900; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+            <button onclick="startConversation()" class="btn btn-custom-start">Start</button>
+        </div>
+    </div>
 </div>
 @section Scripts {
 
@@ -136,6 +183,10 @@
     <link rel="stylesheet" href="~/css./talking.css">
 
     <style>
+        #welcomeScreen {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(50, 50, 50, 0.9));
+            backdrop-filter: blur(20px);
+        }
 
         #content {
             margin-top: 100px;
@@ -315,9 +366,169 @@
                 .chat-actions .icon:hover {
                     color: #ff9900;
                 }
+
+
+        .character-name-audio {
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            margin-top: 19px;
+            gap: 10px;
+        }
+
+        .character-carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .character-card {
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-nav {
+            transition: background-color 0.3s ease;
+        }
+
+            .carousel-nav:hover {
+                background-color: #ffaa33;
+            }
+
+        .preview-btn:hover {
+            background-color: #ffaa33;
+        }
+
+        .carousel-nav:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-custom-start {
+            padding: 10px 80px;
+            background: #f79927;
+            border-radius: 10px;
+            color: white;
+        }
     </style>
 
+    <script>
 
+
+
+        let selectedVoice = 'en-US-JennyNeural';
+        let currentCharacterIndex = 0;
+        let selectedCharacterImage = '/images/course2.webp'; // Ảnh mặc định
+        const characters = document.querySelectorAll('.character-card');
+        // Khóa lưu trữ trạng thái
+        const sessionKey = `conversation_${situationId}`;
+
+        function showCharacter(index) {
+            characters.forEach((card, i) => {
+                card.style.display = i === index ? 'block' : 'none';
+            });
+            selectedVoice = characters[index].getAttribute('data-voice');
+            // Lưu URL ảnh của nhân vật được chọn
+            selectedCharacterImage = characters[index].querySelector('img').getAttribute('src');
+            document.querySelector('.prev').disabled = index === 0;
+            document.querySelector('.next').disabled = index === characters.length - 1;
+        }
+
+        function prevCharacter() {
+            if (currentCharacterIndex > 0) {
+                currentCharacterIndex--;
+                showCharacter(currentCharacterIndex);
+            }
+        }
+
+        function nextCharacter() {
+            if (currentCharacterIndex < characters.length - 1) {
+                currentCharacterIndex++;
+                showCharacter(currentCharacterIndex);
+            }
+        }
+
+        function previewVoice(voice, text) {
+            fetch('/Mentee/SpekingAiSituation/GenerateAudio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text, voice: voice })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.audioUrl) {
+                        const audio = new Audio(data.audioUrl);
+                        audio.type = 'audio/mp3';
+                        audio.play().catch(error => {
+                            console.error('Audio play error:', error);
+                            speak(text);
+                        });
+                    } else {
+                        console.error('No audio URL returned');
+                        speak(text);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching preview audio:', error);
+                    speak(text);
+                });
+        }
+
+        async function startConversation() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            const nurseImg = document.getElementById('nurseImage');
+            nurseImg.style.opacity = '0';
+            setTimeout(() => {
+                nurseImg.setAttribute('src', selectedCharacterImage);
+                nurseImg.style.opacity = '1';
+            }, 300);
+            // Gọi API StartConversation để lấy tin nhắn mở đầu với selectedVoice
+            try {
+                const response = await fetch('/Mentee/SpekingAiSituation/StartConversation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ situationId: situationId, voice: selectedVoice })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.reply) {
+                    await typeMessage(data.reply, data.audioUrl);
+                    if (data.audioUrl) {
+                        const audio = new Audio(data.audioUrl);
+                        audio.type = 'audio/mp3';
+                        audio.play().catch(error => {
+                            console.error('🎵 Audio play error:', error);
+                            speak(data.reply);
+                        });
+                    } else {
+                        console.warn('No audio URL returned, falling back to speechSynthesis');
+                        speak(data.reply);
+                    }
+                } else {
+                    console.error('🚨 No reply in response');
+                    chatBox.innerHTML += `<p><strong>Error:</strong> Failed to start conversation.</p>`;
+                }
+            } catch (error) {
+                console.error('🚨 Error starting conversation:', error);
+                chatBox.innerHTML += `<p><strong>Error:</strong> Could not start conversation. Please try again.</p>`;
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+            restoreChatHistory();
+            updateSpeakEventListeners();
+        }
+
+       
+    </script>
 
     <script>
         let mediaRecorder;
@@ -327,7 +538,7 @@
         const typeId = @ViewBag.TypeId;
         const userId = @ViewBag.UserId;
         const chatHistoryKey = `chatHistory_${userId}_${situationId}_${typeId}`; // Key duy nhất cho mỗi situationId
-
+        const audioCache = new Map();
        
         // Hàm hiển thị/ẩn ô nhập liệu khi nhấn icon ⌨
         function toggleInput() {
@@ -427,7 +638,7 @@
                 const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userMessage, situationId: situationId })
+                    body: JSON.stringify({ message: userMessage, situationId: situationId, voice: selectedVoice })
                 });
 
                 if (!response.ok) {
@@ -440,7 +651,7 @@
                 }
 
                 // Hiển thị phản hồi AI từ từ với hiệu ứng đánh chữ
-                await typeMessage(data.reply);
+                await typeMessage(data.reply, data.audioUrl);
                 // Lưu lịch sử sau khi thêm tin nhắn AI
                 saveChatHistory();
                 // Phát âm thanh
@@ -484,7 +695,7 @@
                 const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userInput, situationId: situationId })
+                    body: JSON.stringify({ message: userInput, situationId: situationId, voice: selectedVoice})
                 });
 
                 if (!response.ok) {
@@ -496,11 +707,11 @@
                     throw new Error("Reply not found in response");
                 }
 
-                await typeMessage(data.reply);
+                await typeMessage(data.reply, data.audioUrl);
                 // Lưu lịch sử sau khi thêm tin nhắn AI
                 saveChatHistory();
                 if (data.audioUrl) {
-                    const audio = new Audio(data.audioUrl);
+                    const audio = new Audio(data.audioUrl);       
                     audio.play();
                 } else {
                     speak(data.reply);
@@ -514,11 +725,12 @@
             }
         }
 
-        async function typeMessage(message) {
+        async function typeMessage(message, audioUrl) {
             const chatBox = document.getElementById("chatBox");
 
             let bubble = document.createElement("div");
             bubble.className = "chat-bubble ai";
+            bubble.setAttribute("data-audio-url", audioUrl || ""); // Lưu audio Url
             let p = document.createElement("p");
             bubble.appendChild(p);
 
@@ -561,7 +773,7 @@
             } else if ("@ViewBag.InitialAiMessage") {
                 // Nếu không có lịch sử, hiển thị tin nhắn mở đầu của AI
                 chatBox.innerHTML = `
-                                    <div class="chat-bubble ai">
+                                    <div class="chat-bubble ai" data-audio-url="@JavaScriptEncoder.Default.Encode(ViewBag.InitialAiAudioUrl ?? "")">
                                         <p>@ViewBag.InitialAiMessage</p>
                                         <div class="chat-actions">
                                             <span class="icon">🔈</span>
@@ -574,7 +786,9 @@
         }
 
 
-        // Hàm thêm sự kiện cho các icon 🔈 để phát lại nội dung
+
+
+         // Hàm thêm sự kiện cho các icon 🔈 để phát lại nội dung
         function addSpeakEventListeners() {
             const speakIcons = document.querySelectorAll('.chat-actions .icon');
             speakIcons.forEach(icon => {
@@ -589,15 +803,74 @@
         function handleSpeakClick() {
             const chatBubble = this.closest('.chat-bubble');
             const messageText = chatBubble.querySelector('p').textContent;
-            speak(messageText);
+            let audioUrl = chatBubble.getAttribute('data-audio-url');
+            
+            if (!audioUrl) {
+                audioUrl = getCachedAudio(messageText);
+            }
+            if (audioUrl) {
+                // Phát audio có sẵn
+                const audio = new Audio(audioUrl);
+                audio.type = 'audio/mp3';
+                audio.play().catch(error => {
+                    console.error('Audio play error:', error);
+                });
+            } else {
+                // Gọi API để lấy audio từ Azure TTS
+                fetch('/Mentee/SpekingAiSituation/GenerateAudio', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: messageText , voice: selectedVoice })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.audioUrl) {
+                            const audio = new Audio(data.audioUrl);
+                            audio.type = 'audio/mp3';
+                            audio.play().catch(error => {
+                                console.error('Audio play error:', error);
+                            });
+                            // Lưu audioUrl vào chat bubble để dùng lại
+                            chatBubble.setAttribute('data-audio-url', data.audioUrl);
+                            cacheAudio(messageText, data.audioUrl); //lưu vô cache
+                            saveChatHistory();
+                        } else {
+                            console.error('No audio URL returned');
+                            speak(messageText); // Fallback
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching audio:', error);
+                        speak(messageText); // Fallback
+                    });
+            }
+
         }
         // Gọi hàm để thêm sự kiện sau khi khôi phục lịch sử trò chuyện hoặc thêm tin nhắn mới
         document.addEventListener('DOMContentLoaded', function () {
             addSpeakEventListeners(); // Gọi khi trang tải
+            showCharacter(currentCharacterIndex);
         });
         // Gọi lại hàm sau mỗi lần thêm tin nhắn mới để đảm bảo các icon mới được gán sự kiện
         function updateSpeakEventListeners() {
             addSpeakEventListeners();
+        }
+
+
+        
+        function getCachedAudio(text) {
+            if (audioCache.has(text)) {
+                return audioCache.get(text);
+            }
+            return null;
+        }
+        function cacheAudio(text, audioUrl) {
+            audioCache.set(text, audioUrl);
         }
     </script>
 
@@ -641,21 +914,7 @@
 
             // Khôi phục lịch sử trò chuyện khi trang được tải
             restoreChatHistory();
-
-            // Tự động phát audio của AI nếu có
-            @if (!string.IsNullOrEmpty(ViewBag.InitialAiAudioUrl))
-            {
-                <text>
-                        const audio = new Audio("@ViewBag.InitialAiAudioUrl");
-                        audio.play();
-                </text>
-            }
-            else if (!string.IsNullOrEmpty(ViewBag.InitialAiMessage))
-            {
-                <text>
-                        speak("@ViewBag.InitialAiMessage");
-                </text>
-            }
+           
 
             const sidebar = document.getElementById('sidebar');
             const navbar = document.querySelector('.navbar');
@@ -695,7 +954,6 @@
                     navbar.style.left = isActive ? "80px" : "0";
                     navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
                     content.style.marginLeft = isActive ? "80px" : "0";
-
                 }
                 updateLogo();
                 setTimeout(adjustListHeight, 300);
