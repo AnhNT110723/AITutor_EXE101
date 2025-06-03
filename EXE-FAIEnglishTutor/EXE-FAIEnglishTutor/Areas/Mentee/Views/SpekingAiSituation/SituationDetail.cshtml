@@ -156,7 +156,13 @@
         const userId = @ViewBag.UserId;
         // Hàm xóa lịch sử trò chuyện trong sessionStorage và cập nhật giao diện
         function practiceAI() {
+
             const chatHistoryKey = `chatHistory_${userId}_${situationId}_${typeId}`;
+            const sessionKey = `conversation_${userId}_${situationId}_${typeId}`;
+
+            sessionStorage.removeItem(`${sessionKey}_voice`);
+            sessionStorage.removeItem(`${sessionKey}_image`);
+            sessionStorage.removeItem(`${sessionKey}_started`);
             // Xóa dữ liệu trong sessionStorage
             sessionStorage.removeItem(chatHistoryKey);
             window.location.href = `/Mentee/Role-Play/${situationId}/practice`;
