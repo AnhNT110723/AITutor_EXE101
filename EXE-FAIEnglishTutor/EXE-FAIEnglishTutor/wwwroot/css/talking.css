@@ -10,16 +10,17 @@ body {
     align-items: center;
     overflow: hidden;
 }
-  
 
 
-  .container {
+
+.container {
     display: flex;
     width: 100%;
     max-width: 2000px;
+    flex-wrap: wrap;
     gap: 24px;
     height: 100%;
-  }
+}
   
   /* Left Section */
   .left-section {
@@ -159,53 +160,109 @@ body {
     height: 100%;
     object-fit: cover;
   }
-  
 
-  
-  .controls {
+
+
+.controls {
     display: flex;
     gap: 16px;
-  }
+    align-items: center;
+}
   
   .controls .icon {
     font-size: 20px;
     color: #888;
     cursor: pointer;
   }
-  
-  /* Responsive Design */
-  @media (max-width: 1024px) {
-    .right-section {
-      display: none;
-    }
-  }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
-    .right-section {
-        display: none;
-    }
-
-    .left-section {
-        flex: 1; /* Take full width */
+@media (max-width: 991px) {
+    .chat-container {
+        height: 246px;
+        margin-top: 25px !important;
     }
 }
-.bottom-controls {
-    margin-top: auto; /* Đẩy xuống dưới cùng */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-}
 
-.mic-btn {
-    bottom: 0;
-    margin: 0 auto;
-    background-color: orange;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    font-size: 24px;
-}
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .container {
+            flex-direction: column; /* Xếp left-section và right-section theo cột */
+            height: 100%; /* Đảm bảo container chiếm toàn bộ chiều cao */
+        }
+
+        .left-section {
+            flex: 1; /* Chiếm toàn bộ chiều rộng */
+            width: 100%; /* Đảm bảo full width */
+        }
+
+        .right-section {
+            width: 100%; /* Chiếm toàn bộ chiều rộng */
+            height: auto; /* Chiều cao tự động để chỉ chứa bottom-controls */
+            padding: 10px; /* Giảm padding cho gọn */
+            background: transparent; /* Bỏ nền trắng để giống footer */
+            box-shadow: none; /* Bỏ shadow để giao diện đơn giản */
+            margin-top: auto; /* Đẩy xuống dưới cùng */
+            margin-bottom: 100px
+        }
+
+        .nurse-image {
+            display: none; /* Ẩn hình ảnh y tá */
+        }
+
+        .bottom-controls {
+            width: 100%; /* Chiếm toàn bộ chiều rộng */
+            position: sticky; /* Giữ cố định ở dưới cùng khi cuộn */
+            bottom: 0; /* Dính vào đáy viewport */
+            background: #f8f9fa; /* Nền xám nhạt giống footer */
+            padding: 10px; /* Padding cho giao diện */
+            border-top: 1px solid #ddd; /* Viền trên để giống footer */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
+            display: flex; /* Đảm bảo các nút được căn chỉnh */
+            justify-content: center; /* Căn giữa các nút */
+            align-items: center;
+            gap: 16px;
+        }
+
+        .mic-btn {
+            width: 60px !important; /* Giảm kích thước nút micro cho màn hình nhỏ */
+            height: 60px !important;
+            font-size: 20px !important;
+        }
+
+        .controls .icon {
+            font-size: 18px; /* Giảm kích thước icon cho phù hợp */
+        }
+
+        .sticky-wrapper {
+            margin-top: 95px;
+        }
+
+        .navigation {
+            margin-top: 50px;
+        }
+
+        .chat-container {
+            height: 246px;
+            margin-top: 86px
+        }
+    }
+
+    .bottom-controls {
+        margin-top: auto; /* Đẩy xuống dưới cùng */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .mic-btn {
+        bottom: 0;
+        margin: 0 auto;
+        background-color: orange;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        font-size: 24px;
+    }
