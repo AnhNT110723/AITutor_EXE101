@@ -1,4 +1,5 @@
-﻿using EXE_FAIEnglishTutor.Models;
+﻿using EXE_FAIEnglishTutor.Areas.Mentee.Controllers;
+using EXE_FAIEnglishTutor.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -14,6 +15,8 @@ namespace EXE_FAIEnglishTutor.Configurations
             });
 
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            // Đọc cấu hình Azure Translator
+            services.Configure<AzureTranslatorConfig>(configuration.GetSection("AzureTranslator"));
 
 
         }

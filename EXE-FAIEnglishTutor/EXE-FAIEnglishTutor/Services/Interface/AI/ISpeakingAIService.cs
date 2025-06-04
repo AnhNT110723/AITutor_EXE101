@@ -2,7 +2,7 @@
 {
     public interface ISpeakingAIService
     {
-        Task<string> GetChatResponseAsync(string userMessage, string situation = null);
+        Task<string> GetChatResponseAsync(object messages);
         Task<string> TranscribeAudioAsync(byte[] audioBytes);
     }
 }

@@ -113,11 +113,10 @@
                 <img id="nurseImage" src="https://files.kynaenglish.com/resize/600/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" alt="Nurse">
             </div>
             <div class="bottom-controls">
-                <button id="micButton" onclick="toggleRecording()" class="mic-btn"><i class="bi-mic-fill"></i></button>
                 <div class="controls">
                     <span class="icon">💡</span>
+                    <button id="micButton" onclick="toggleRecording()" class="mic-btn"><i class="bi-mic-fill"></i></button>
                     <span class="icon keyboard-icon" onclick="toggleInput()">⌨</span>
-                    <span class="icon">✏</span>
                 </div>
 
                 <div class="input-wrapper hidden">
@@ -421,6 +420,9 @@
             .chat-actions .translate-icon:hover {
                 color: #ff9900;
             }
+
+
+
     </style>
 
     <script defer>
@@ -512,7 +514,8 @@
                 nurseImg.setAttribute('src', selectedCharacterImage);
                 nurseImg.style.opacity = '1';
             }, 300);
-            // Gọi API StartConversation để lấy tin nhắn mở đầu với selectedVoice
+            restoreChatHistory();
+            // Gọi API StartConversation 
             try {
                 const response = await fetch('/Mentee/SpekingAiSituation/StartConversation', {
                     method: 'POST',
@@ -527,8 +530,8 @@
                 }
 
                 const data = await response.json();
-                if (data.reply) {
-                    await typeMessage(data.reply, data.audioUrl);
+                if (data.reply) {  
+                    await typeMessage(data.reply, data.audioUrl, data.translatedReply);
                     saveChatHistory()
                     if (data.audioUrl) {
                         const audio = new Audio(data.audioUrl);
@@ -551,8 +554,9 @@
             }
 
             chatBox.scrollTop = chatBox.scrollHeight;
-            restoreChatHistory();
+            
             updateSpeakEventListeners();
+            updateTranslateEventListeners();
         }
 
 
@@ -652,11 +656,15 @@
                 chatBox.scrollTop = chatBox.scrollHeight;
                 // Lưu lịch sử sau khi thêm tin nhắn người dùng
                 saveChatHistory();
+                // Lấy lịch sử hội thoại
+                const savedChat = sessionStorage.getItem(chatHistoryKey);
+                const messages = savedChat ? JSON.parse(savedChat) : [];
+                messages.push({ role: 'user', content: userMessage });
                 // Bước 2: Gửi userMessage để lấy phản hồi AI
                 const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userMessage, situationId: situationId, voice: selectedVoice })
+                    body: JSON.stringify({ messages: messages, situationId: situationId, voice: selectedVoice })
                 });
 
                 if (!response.ok) {
@@ -669,7 +677,7 @@
                 }
 
                 // Hiển thị phản hồi AI từ từ với hiệu ứng đánh chữ
-                await typeMessage(data.reply, data.audioUrl);
+                await typeMessage(data.reply, data.audioUrl, data.translatedReply);
                 // Lưu lịch sử sau khi thêm tin nhắn AI
                 saveChatHistory();
                 // Phát âm thanh
@@ -680,6 +688,7 @@
                     speak(data.reply);
                 }
                 updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 mới
+                updateTranslateEventListeners();
             } catch (error) {
                 console.error("Error in sendAudio:", error);
                 chatBox.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
@@ -709,11 +718,18 @@
             chatBox.scrollTop = chatBox.scrollHeight;
             // Lưu lịch sử sau khi thêm tin nhắn người dùng
             saveChatHistory();
+            // Lấy lịch sử hội thoại
+            const savedChat = sessionStorage.getItem(chatHistoryKey);
+            const messages = savedChat ? JSON.parse(savedChat) : [];
+
+            // Thêm tin nhắn hiện tại vào danh sách
+            messages.push({ role: 'user', content: userInput });
+            console.log("mess : ", messages);
             try {
                 const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userInput, situationId: situationId, voice: selectedVoice})
+                    body: JSON.stringify({ messages: messages, situationId: situationId, voice: selectedVoice })
                 });
 
                 if (!response.ok) {
@@ -725,7 +741,7 @@
                     throw new Error("Reply not found in response");
                 }
 
-                await typeMessage(data.reply, data.audioUrl);
+                await typeMessage(data.reply, data.audioUrl, data.translatedReply);
                 // Lưu lịch sử sau khi thêm tin nhắn AI
                 saveChatHistory();
                 if (data.audioUrl) {
@@ -743,12 +759,15 @@
             }
         }
 
-        async function typeMessage(message, audioUrl) {
+        async function typeMessage(message, audioUrl, translatedMessage) {
             const chatBox = document.getElementById("chatBox");
 
             let bubble = document.createElement("div");
             bubble.className = "chat-bubble ai";
             bubble.setAttribute("data-audio-url", audioUrl || ""); // Lưu audio Url
+            bubble.setAttribute("data-original-text", message); // Lưu văn bản gốc
+            bubble.setAttribute("data-translated-text", translatedMessage || ""); // Lưu văn bản dịch
+            bubble.setAttribute("data-is-translated", "false");
             let p = document.createElement("p");
             bubble.appendChild(p);
 
@@ -779,34 +798,72 @@
             utterance.pitch = 1;
             window.speechSynthesis.speak(utterance);
         }
-        // Hàm lưu lịch sử trò chuyện vào sessionStorage
+
+        // Lưu lịch sử hội thoại dưới dạng JSON
         function saveChatHistory() {
             const chatBox = document.getElementById("chatBox");
-            sessionStorage.setItem(chatHistoryKey, chatBox.innerHTML);
+            const messages = [];
+
+            // Lấy tất cả các chat bubbles
+            const bubbles = chatBox.querySelectorAll('.chat-bubble');
+            bubbles.forEach(bubble => {
+                const role = bubble.classList.contains('user') ? 'user' : 'assistant';
+                const content = bubble.querySelector('p').textContent;
+                const translatedText = bubble.getAttribute('data-translated-text') || '';
+                const audioUrl = bubble.getAttribute('data-audio-url') || '';
+                messages.push({ role, content, translatedText, audioUrl });
+            });
+
+            // Lưu vào sessionStorage
+            sessionStorage.setItem(chatHistoryKey, JSON.stringify(messages));
         }
 
-        // Hàm khôi phục lịch sử trò chuyện từ sessionStorage
+        // // Hàm khôi phục lịch sử trò chuyện từ sessionStorage
+        // function restoreChatHistory() {
+        //     const chatBox = document.getElementById("chatBox");
+        //     const savedChat = sessionStorage.getItem(chatHistoryKey);
+        //     if (savedChat) {
+        //         chatBox.innerHTML = savedChat;
+        //     }
+        //     // } else if ("@ViewBag.InitialAiMessage") {
+        //     //     // Nếu không có lịch sử, hiển thị tin nhắn mở đầu của AI
+        //     //     chatBox.innerHTML = `
+        //     //                         <div class="chat-bubble ai" data-audio-url="@JavaScriptEncoder.Default.Encode(ViewBag.InitialAiAudioUrl ?? "")">
+        //     //                             <p>@ViewBag.InitialAiMessage</p>
+        //     //                             <div class="chat-actions">
+        //     //                                 <span class="icon">🔈</span>
+        //     //                             </div>
+        //     //                         </div>
+        //     //                     `;
+        //     // }
+        //     chatBox.scrollTop = chatBox.scrollHeight;
+        //     updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 trong lịch sử
+        // }
+        // Khôi phục lịch sử hội thoại
         function restoreChatHistory() {
             const chatBox = document.getElementById("chatBox");
             const savedChat = sessionStorage.getItem(chatHistoryKey);
-            if (savedChat) {
-                chatBox.innerHTML = savedChat;
-            }
-            // } else if ("@ViewBag.InitialAiMessage") {
-            //     // Nếu không có lịch sử, hiển thị tin nhắn mở đầu của AI
-            //     chatBox.innerHTML = `
-            //                         <div class="chat-bubble ai" data-audio-url="@JavaScriptEncoder.Default.Encode(ViewBag.InitialAiAudioUrl ?? "")">
-            //                             <p>@ViewBag.InitialAiMessage</p>
-            //                             <div class="chat-actions">
-            //                                 <span class="icon">🔈</span>
-            //                             </div>
-            //                         </div>
-            //                     `;
-            // }
-            chatBox.scrollTop = chatBox.scrollHeight;
-            updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 trong lịch sử
-        }
 
+            if (savedChat) {
+                const messages = JSON.parse(savedChat);
+                chatBox.innerHTML = ''; // Xóa nội dung hiện tại
+                messages.forEach(msg => {
+                    const bubbleClass = msg.role === 'user' ? 'user' : 'ai';
+                    chatBox.innerHTML += `
+                             <div class="chat-bubble ${bubbleClass}" data-original-text="${msg.content}" data-translated-text="${msg.translatedText}" data-audio-url="${msg.audioUrl}" data-is-translated="false">
+                            <p>${msg.content}</p>
+                            <div class="chat-actions">
+                                <span class="icon">🔈</span>
+                                ${msg.role === 'assistant' ? '<span class="icon translate-icon" title="Translate">↔</span>' : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+                updateSpeakEventListeners();
+                updateTranslateEventListeners();
+            }
+        }
 
 
 
@@ -895,7 +952,8 @@
                     }
                 }
                 restoreChatHistory();
-                updateSpeakEventListeners();
+                // updateSpeakEventListeners();
+                // updateTranslateEventListeners();
             } else {
                 // Lần đầu, hiển thị welcomeScreen
                 if (savedVoice) {
@@ -937,65 +995,45 @@
             });
         }
 
-        // Hàm xử lý sự kiện click cho icon dịch
-        async function handleTranslateClick() {
+        // Hàm xử lý click icon dịch
+        function handleTranslateClick() {
             const chatBubble = this.closest('.chat-bubble');
             const p = chatBubble.querySelector('p');
-            const originalText = chatBubble.getAttribute('data-original-text') || p.textContent;
+            const originalText = chatBubble.getAttribute('data-original-text');
             const translatedText = chatBubble.getAttribute('data-translated-text');
             const isTranslated = chatBubble.getAttribute('data-is-translated') === 'true';
 
-            // Lưu văn bản gốc nếu chưa có
-            if (!chatBubble.getAttribute('data-original-text')) {
-                chatBubble.setAttribute('data-original-text', originalText);
-            }
+            // Thêm hiệu ứng loading
+            this.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+            this.classList.add('disabled');
 
-            if (isTranslated) {
-                // Nếu đã dịch, quay lại văn bản gốc
-                p.textContent = originalText;
-                chatBubble.setAttribute('data-is-translated', 'false');
-            } else {
-                // Nếu chưa dịch, gửi yêu cầu dịch
-                if (translatedText) {
-                    // Sử dụng văn bản đã dịch từ cache
-                    p.textContent = translatedText;
-                    chatBubble.setAttribute('data-is-translated', 'true');
+            setTimeout(() => {
+                if (isTranslated) {
+                    // Quay lại văn bản gốc
+                    p.textContent = originalText;
+                    chatBubble.setAttribute('data-is-translated', 'false');
                 } else {
-                    try {
-                        const response = await fetch('/Mentee/SpekingAiSituation/TranslateText', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ text: originalText, targetLang: 'vi' })
-                        });
-
-                        if (!response.ok) {
-                            throw new Error(`Translation error! Status: ${response.status}`);
-                        }
-
-                        const data = await response.json();
-                        if (data.translatedText) {
-                            p.textContent = data.translatedText;
-                            chatBubble.setAttribute('data-translated-text', data.translatedText);
-                            chatBubble.setAttribute('data-is-translated', 'true');
-                            saveChatHistory(); // Lưu lịch sử với văn bản đã dịch
-                        } else {
-                            console.error('No translated text returned');
-                        }
-                    } catch (error) {
-                        console.error('Error translating text:', error);
-                        p.textContent = originalText; // Fallback về văn bản gốc nếu lỗi
+                    // Hiển thị văn bản dịch
+                    if (translatedText) {
+                        p.textContent = translatedText;
+                        chatBubble.setAttribute('data-is-translated', 'true');
+                    } else {
+                        p.textContent = originalText; // Fallback nếu không có bản dịch
+                        alert('Translation not available.');
                     }
                 }
-            }
-        }
 
+                // Khôi phục icon
+                this.innerHTML = '↔';
+                this.classList.remove('disabled');
+
+                saveChatHistory(); // Lưu lịch sử với trạng thái hiện tại
+            }, 300); // Giả lập delay cho UX
+        }
         // Cập nhật sự kiện cho các icon dịch mới
         function updateTranslateEventListeners() {
             addTranslateEventListeners();
         }
-
-
-
 
     </script>
 
