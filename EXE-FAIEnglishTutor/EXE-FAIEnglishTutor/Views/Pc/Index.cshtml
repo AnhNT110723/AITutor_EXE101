@@ -1,0 +1,1025 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronunciation Practice - FAI English</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/course-gen.css">
+    <style>
+        :root {
+            --primary-color: #FF6B6B;
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFE66D;
+            --text-color: #2C3E50;
+            --background-color: #F7F9FC;
+        }
+
+        body {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+        }
+
+        #sidebar {
+            background: #fff;
+            border-right: 1px solid #eee;
+            min-width: 250px;
+            max-width: 250px;
+            padding: 2rem 1rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.04);
+        }
+
+            #sidebar .logo img {
+                width: 60px;
+                margin-bottom: 1rem;
+            }
+
+            #sidebar ul li {
+                margin-bottom: 1.2rem;
+            }
+
+                #sidebar ul li a {
+                    color: #475467;
+                    font-weight: 500;
+                    font-size: 1.1rem;
+                    border-radius: 8px;
+                    padding: 0.7rem 1rem;
+                    display: flex;
+                    align-items: center;
+                    transition: background 0.2s;
+                }
+
+                    #sidebar ul li.active a,
+                    #sidebar ul li a:hover {
+                        background: var(--accent-color);
+                        color: var(--primary-color);
+                    }
+
+            #sidebar .footer {
+                font-size: 0.9rem;
+                margin-top: 2rem;
+                color: #aaa;
+            }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(120deg, #f7f9fc 60%, #ffe66d 100%);
+        }
+
+        .postcard {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 3.5rem 3rem 3rem 3rem; /* Increased padding */
+            max-width: 800px; /* Increased max-width */
+            width: 100%; /* Ensures it scales with the container */
+            position: relative;
+            overflow: hidden;
+            margin: 2rem auto;
+        }
+
+        .postcard-header h2 {
+            font-family: 'Pacifico', cursive, sans-serif;
+            color: #ff6701;
+            font-size: 2.5rem; /* Slightly larger header */
+            margin-bottom: 0.5rem;
+        }
+
+        .postcard-header p {
+            color: #888;
+            font-size: 1.2rem; /* Slightly larger text */
+        }
+
+        .audio-visualizer {
+            width: 100%;
+            height: 50px; /* Slightly taller visualizer */
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .bar {
+            width: 10px; /* Slightly wider bars */
+            height: 15px; /* Initial height to match the animation */
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            animation: bounce 1s infinite;
+            opacity: 0.7;
+        }
+
+            .bar:nth-child(1) {
+                animation-delay: 0s;
+            }
+
+            .bar:nth-child(2) {
+                animation-delay: 0.1s;
+            }
+
+            .bar:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+
+            .bar:nth-child(4) {
+                animation-delay: 0.3s;
+            }
+
+            .bar:nth-child(5) {
+                animation-delay: 0.4s;
+            }
+
+            .bar:nth-child(6) {
+                animation-delay: 0.5s;
+            }
+
+            .bar:nth-child(7) {
+                animation-delay: 0.6s;
+            }
+
+            .bar:nth-child(8) {
+                animation-delay: 0.7s;
+            }
+
+        @@keyframes bounce {
+            0%, 100%
+
+        {
+            height: 15px;
+        }
+
+        50% {
+            height: 50px; /* Adjusted to match taller visualizer */
+        }
+
+        }
+
+        @@keyframes highlight {
+            0%
+
+        {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        100% {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        }
+
+        /* Animation for left-to-right scrolling */
+        @@keyframes slideLeftToRight {
+            0%
+
+        {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+
+        }
+
+        .subtitle-word {
+            animation: slideLeftToRight 0.5s ease-out forwards;
+        }
+
+        .audio-player-custom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .postcard-image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .postcard-decor {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .custom-audio-player {
+            background: #f5f7fa;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+
+        .player-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .audio-btn {
+            background: transparent;
+            border: none;
+            color: #4f8cff;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+            .audio-btn:hover {
+                background: rgba(79, 140, 255, 0.1);
+            }
+
+        .audio-btn.main-control {
+            background: #4f8cff;
+            color: white;
+            width: 48px;
+            height: 48px;
+            font-size: 20px;
+        }
+
+        .audio-btn.main-control:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .progress-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+        }
+
+        .audio-progress {
+            width: 100% !important;
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e8f0;
+            cursor: pointer;
+        }
+
+            .audio-progress::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #4f8cff;
+                cursor: pointer;
+                border: none;
+                margin-top: -4px;
+            }
+
+        .player-center {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .audio-player-custom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: none;
+            pointer-events: none;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+        }
+
+        .playlist-container {
+            position: fixed;
+            right: -340px;
+            top: 0;
+            width: 340px;
+            height: 100vh;
+            background: #fffbea;
+            box-shadow: -4px 0 24px rgba(255,107,107,0.10);
+            border-top-left-radius: 24px;
+            border-bottom-left-radius: 24px;
+            transition: right 0.3s cubic-bezier(.4,2,.6,1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .playlist-container.active {
+                right: 0;
+            }
+
+        .playlist-header {
+            padding: 20px 24px 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffe66d;
+            background: #fffbea;
+            border-top-left-radius: 24px;
+        }
+
+            .playlist-header h3 {
+                font-size: 1.3rem;
+                color: var(--primary-color);
+                font-weight: bold;
+                margin: 0;
+                letter-spacing: 1px;
+            }
+
+        .close-btn {
+            background: #ffe66d;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+            .close-btn:hover {
+                background: #ff6b6b;
+                color: #fff;
+            }
+
+        .playlist-items {
+            padding: 16px 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .playlist-item {
+            padding: 14px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.08rem;
+            color: #475467;
+            margin-bottom: 8px;
+            background: #fff;
+            border: 1px solid #ffe66d;
+            box-shadow: 0 2px 8px rgba(255,230,109,0.04);
+        }
+
+            .playlist-item:last-child {
+                margin-bottom: 0;
+            }
+
+            .playlist-item:hover {
+                background: #ffe66d;
+                color: #ff6b6b;
+                border-color: #ff6b6b;
+            }
+
+            .playlist-item.active {
+                background: linear-gradient(90deg, #ff6b6b 60%, #ffe66d 100%);
+                color: #fff;
+                font-weight: bold;
+                border-color: #ff6b6b;
+            }
+
+            .playlist-item i {
+                font-size: 1.2em;
+            }
+
+        @@media (max-width: 768px) {
+            .playlist-container
+
+        {
+            width: 100vw;
+            right: -100vw;
+            border-radius: 0;
+        }
+
+        .playlist-container.active {
+            right: 0;
+        }
+
+        .playlist-header {
+            border-radius: 0;
+        }
+
+        }
+
+        {
+            min-width: 70px;
+            max-width: 70px;
+            padding: 1rem 0.3rem;
+        }
+
+        #sidebar .logo img {
+            width: 40px;
+        }
+
+        #sidebar ul li a {
+            padding: 0.5rem;
+            justify-content: center;
+        }
+
+            #sidebar ul li a .menu-text {
+                display: none; /* Hide text on small screens */
+            }
+
+            #sidebar ul li a .fa, #sidebar ul li a .fas, #sidebar ul li a .bi {
+                margin-right: 0; /* Remove margin since text is hidden */
+            }
+
+        .main-content {
+            padding: 0.5rem;
+        }
+
+        .postcard {
+            padding: 1.5rem 1rem; /* Adjusted padding for smaller screens */
+            max-width: 90%; /* Responsive max-width */
+        }
+
+        .postcard-header h2 {
+            font-size: 1.8rem; /* Smaller header on mobile */
+        }
+
+        .postcard-header p {
+            font-size: 1rem; /* Smaller text on mobile */
+        }
+
+        .audio-visualizer {
+            height: 40px; /* Adjusted height for mobile */
+        }
+
+        .bar {
+            width: 8px; /* Adjusted bar width for mobile */
+        }
+
+        @@keyframes bounce {
+            0%, 100%
+
+        {
+            height: 15px;
+        }
+
+        50% {
+            height: 40px; /* Adjusted to match mobile visualizer height */
+        }
+
+        }
+
+        .subtitle-word {
+            font-size: 1.2rem;
+        }
+
+            .postcard-decor {
+                width: 100%;
+                max-width: 800px;
+                height: auto;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+        .audio-progress {
+            width: 150px; /* Adjusted progress bar width for mobile */
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader" style="display:flex;justify-content:center;align-items:center;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);z-index:9999;">
+        <div class="spinner-border text-warning" style="width:4rem;height:4rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div class="wrapper d-flex">
+        <nav id="sidebar" class="active">
+            <h1><a asp-controller="home" asp-action="index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a asp-controller="Ielts" asp-action="index" class="link-test">
+                        <span class="fa fa-users"></span>
+                        <span class="menu-text">Học Ielts</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Toeic" asp-action="index" class="link-test">
+                        <span class="fas fa-graduation-cap icon"></span>
+                        <span class="menu-text">Học Toeic</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a asp-controller="home" asp-action="index" class="link-test">
+                        <span class="fa fa-frog"></span>
+                        <span class="menu-text">AI Tutor</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="selfStudy" asp-action="index" class="link-test">
+                        <span class="fas fa-book-open"></span>
+                        <span class="menu-text">Tự học</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="ParentCourse" asp-action="index" class="link-test">
+                        <span class="bi bi-people-fill"></span>
+                        <span class="menu-text">Trang học của cha mẹ</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="footer">
+                <p style="color: #667085;">
+                    Copyright ©
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
+                </p>
+            </div>
+        </nav>
+        <div class="main-content">
+            <div class="postcard shadow-lg position-relative">
+                <div class="postcard-header text-center mb-3">
+                    <h2 class="fw-bold text-primary">Podcast của bạn</h2>
+                    <p class="text-muted">Phụ đề và âm thanh dành cho bạn!</p>
+                </div>
+                <div class="audio-player-custom">
+                    <div class="postcard-image-container">
+                        <img src="~/Images/in-buu-thiep-postcard-13.jpg" alt="Decor" class="postcard-decor">
+                    </div>
+                    
+                    <div id="customAudioPlayer" class="custom-audio-player">
+                        <div class="player-controls">
+                            <button id="prevPostcard" class="audio-btn" title="Previous postcard">
+                                <i class="fas fa-step-backward"></i>
+                            </button>
+                            <button id="skipBackward" class="audio-btn" title="Skip 15s backward">
+                                <i class="fas fa-backward"></i>
+                            </button>
+                            <button id="playPauseBtn" class="audio-btn main-control">
+                                <i class="fa fa-play"></i>
+                            </button>
+                            <button id="skipForward" class="audio-btn" title="Skip 15s forward">
+                                <i class="fas fa-forward"></i>
+                            </button>
+                            <button id="nextPostcard" class="audio-btn" title="Next postcard">
+                                <i class="fas fa-step-forward"></i>
+                            </button>
+                        </div>
+                        <div class="player-center">
+                            <span id="currentTime" class="audio-time">00:00</span>
+                            <div class="progress-container">
+                                <input type="range" id="audioProgress" value="0" min="0" max="100" step="1" class="audio-progress" />
+                                <div class="progress-tooltip">00:00</div>
+                            </div>
+                            <span id="duration" class="audio-time">00:00</span>
+                        </div>
+                        <div class="player-right">
+                            <button id="togglePlaylist" class="audio-btn" title="Toggle playlist">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <div class="volume-control">
+                                <button id="toggleMute" class="audio-btn" title="Toggle mute">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                                <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider" />
+                            </div>
+                        </div>
+                        <audio id="audioPlayer" style="display:none;">
+                            <source id="audioSource" src="" type="audio/mpeg" />
+                            Trình duyệt của bạn không hỗ trợ phát âm thanh.
+                        </audio>
+                    </div>
+                </div>
+                <div id="playlist" class="playlist-container">
+                    <div class="playlist-header">
+                        <h3>Danh sách phát</h3>
+                        <button id="closePlaylist" class="close-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div id="playlistItems" class="playlist-items">
+                        <!-- Playlist items will be added here dynamically -->
+                    </div>
+                </div>
+                <div class="audio-visualizer" id="audioVisualizer">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <div class="subtitle-container" id="subtitleContainer">
+                    <!-- Subtitle words will be injected here -->
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        // Simple audio visualizer animation (bars bounce when playing)
+        function setVisualizerPlaying(isPlaying) {
+            const bars = document.querySelectorAll('.audio-visualizer .bar');
+            bars.forEach(bar => {
+                bar.style.animationPlayState = isPlaying ? 'running' : 'paused';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            const loader = document.getElementById('loader');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audioSource = document.getElementById('audioSource');
+            const subtitleContainer = document.getElementById('subtitleContainer');
+
+            try {
+                loader.style.display = 'flex';
+
+                // 1. Fetch postcard content
+                const postcardResponse = await fetch('http://localhost:5037/api/Postcard/generate-postcard', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (!postcardResponse.ok) throw new Error('Failed to fetch postcard content');
+                const postcardData = await postcardResponse.json();
+                const postcardContent = postcardData.postcard;
+
+                // 2. Generate audio
+                const formData = new FormData();
+                formData.append('text', postcardContent);
+                const audioResponse = await fetch('/api/audio/generate-english', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!audioResponse.ok) throw new Error('Failed to generate audio');
+                const audioBlob = await audioResponse.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioSource.src = audioUrl;
+                audioPlayer.load();
+
+                // 3. Prepare subtitles (split by sentences)
+                const sentences = postcardContent.match(/[^.!?]+[.!?]+/g) || [postcardContent];
+                
+                // Initialize subtitle container with all sentences
+                subtitleContainer.innerHTML = sentences.map((sentence, idx) => 
+                    `<div class="subtitle-sentence" data-index="${idx}">${sentence.trim()}</div>`
+                ).join('');
+                
+                const subtitleSentences = subtitleContainer.querySelectorAll('.subtitle-sentence');
+                let currentIndex = 0;
+                let animationFrameId = null;
+
+                // Add CSS for sentence styling
+                const style = document.createElement('style');
+                style.textContent = `
+                    .subtitle-sentence {
+                        display: none;
+                        padding: 10px 20px;
+                        margin: 10px 0;
+                        border-radius: 8px;
+                        font-size: 1.2em;
+                        line-height: 1.5;
+                        opacity: 0;
+                        transition: opacity 0.3s ease-in-out;
+                        text-align: center;
+                    }
+                    .subtitle-sentence.active {
+                        display: block;
+                        opacity: 1;
+                        background: var(--primary-color);
+                        color: white;
+                    }
+                    .subtitle-container {
+                        padding: 1rem;
+                        overflow-y: hidden;
+                        text-align: center;
+                        height: auto;
+                        min-height: 100px;
+                    }
+                `;
+                document.head.appendChild(style);
+
+                function updateSubtitleDisplay(currentIdx) {
+                    // Hide all sentences
+                    subtitleSentences.forEach(sentence => {
+                        sentence.classList.remove('active');
+                    });
+                    
+                    // Show current sentence
+                    if (currentIdx >= 0 && currentIdx < subtitleSentences.length) {
+                        subtitleSentences[currentIdx].classList.add('active');
+                    }
+                }
+
+                function animateSubtitles(timestamp) {
+                    if (!audioPlayer.paused && !audioPlayer.ended) {
+                        const currentTime = audioPlayer.currentTime;
+                        const duration = audioPlayer.duration;
+                        
+                        // Calculate time per sentence
+                        const sentenceDuration = duration / sentences.length;
+                        const newIndex = Math.min(
+                            sentences.length - 1, 
+                            Math.floor(currentTime / sentenceDuration)
+                        );
+                        
+                        if (newIndex !== currentIndex) {
+                            currentIndex = newIndex;
+                            updateSubtitleDisplay(currentIndex);
+                        }
+                        
+                        animationFrameId = requestAnimationFrame(animateSubtitles);
+                    }
+                }
+
+                audioPlayer.onplay = function() {
+                    setVisualizerPlaying(true);
+                    currentIndex = 0;
+                    updateSubtitleDisplay(currentIndex);
+                    animationFrameId = requestAnimationFrame(animateSubtitles);
+                };
+
+                audioPlayer.onpause = function() {
+                    setVisualizerPlaying(false);
+                    if (animationFrameId) {
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                };
+
+                audioPlayer.onended = function() {
+                    setVisualizerPlaying(false);
+                    if (animationFrameId) {
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                    updateSubtitleDisplay(sentences.length - 1);
+                };
+
+            } catch (error) {
+                subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải nội dung hoặc âm thanh: ' + error.message + '</span>';
+            } finally {
+                loader.style.display = 'none';
+            }
+        });
+
+        const audio = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playPauseIcon = playPauseBtn.querySelector('i');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const audioProgress = document.getElementById('audioProgress');
+        const audioSource = document.getElementById('audioSource');
+
+        // Đặt đường dẫn file audio ở đây
+        audioSource.src = '/path/to/your/audio.mp3';
+        audio.load();
+
+        // Định dạng thời gian
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // Khi audio đã load xong metadata
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+            audioProgress.max = Math.floor(audio.duration);
+        });
+
+        // Cập nhật progress và thời gian hiện tại
+        audio.addEventListener('timeupdate', () => {
+            audioProgress.value = Math.floor(audio.currentTime);
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        // Play/Pause
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseIcon.classList.remove('fa-play');
+                playPauseIcon.classList.add('fa-pause');
+            } else {
+                audio.pause();
+                playPauseIcon.classList.remove('fa-pause');
+                playPauseIcon.classList.add('fa-play');
+            }
+        });
+
+        // Seek khi kéo thanh progress
+        audioProgress.addEventListener('input', () => {
+            audio.currentTime = audioProgress.value;
+        });
+
+        // Khi audio kết thúc
+        audio.addEventListener('ended', () => {
+            playPauseIcon.classList.remove('fa-pause');
+            playPauseIcon.classList.add('fa-play');
+            audio.currentTime = 0;
+            audioProgress.value = 0;
+            currentTimeEl.textContent = '00:00';
+        });
+
+        const skipBackward = document.getElementById('skipBackward');
+        const skipForward = document.getElementById('skipForward');
+        const prevPostcard = document.getElementById('prevPostcard');
+        const nextPostcard = document.getElementById('nextPostcard');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const toggleMute = document.getElementById('toggleMute');
+        const togglePlaylist = document.getElementById('togglePlaylist');
+        const closePlaylist = document.getElementById('closePlaylist');
+        const playlist = document.getElementById('playlist');
+        const playlistItems = document.getElementById('playlistItems');
+        const progressContainer = document.querySelector('.progress-container');
+        const progressTooltip = document.querySelector('.progress-tooltip');
+        
+        let currentPostcardIndex = 0;
+        let postcardsList = [];
+        let previousVolume = 1;
+
+        // Skip 15 seconds backward
+        skipBackward.addEventListener('click', () => {
+            audio.currentTime = Math.max(0, audio.currentTime - 15);
+        });
+
+        // Skip 15 seconds forward
+        skipForward.addEventListener('click', () => {
+            audio.currentTime = Math.min(audio.duration, audio.currentTime + 15);
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            audio.volume = volume;
+            updateVolumeIcon(volume);
+        });
+
+        // Toggle mute
+        toggleMute.addEventListener('click', () => {
+            if (audio.volume > 0) {
+                previousVolume = audio.volume;
+                audio.volume = 0;
+                volumeSlider.value = 0;
+            } else {
+                audio.volume = previousVolume;
+                volumeSlider.value = previousVolume * 100;
+            }
+            updateVolumeIcon(audio.volume);
+        });
+
+        function updateVolumeIcon(volume) {
+            const icon = toggleMute.querySelector('i');
+            icon.className = volume === 0 
+                ? 'fas fa-volume-mute'
+                : volume < 0.5 
+                    ? 'fas fa-volume-down' 
+                    : 'fas fa-volume-up';
+        }
+
+        // Progress bar tooltip
+        progressContainer.addEventListener('mousemove', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            const time = pos * audio.duration;
+            progressTooltip.textContent = formatTime(time);
+            progressTooltip.style.display = 'block';
+            progressTooltip.style.left = `${e.clientX - rect.left}px`;
+        });
+
+        progressContainer.addEventListener('mouseleave', () => {
+            progressTooltip.style.display = 'none';
+        });
+
+        // Playlist toggle
+        togglePlaylist.addEventListener('click', () => {
+            playlist.classList.toggle('active');
+        });
+
+        closePlaylist.addEventListener('click', () => {
+            playlist.classList.remove('active');
+        });
+
+        // Load postcards list
+        // async function loadPostcardsList() {
+        //     try {
+        //         const response = await fetch('http:localhost:5037/api/Postcard/get-postcards-list');
+        //         if (!response.ok) throw new Error('Failed to fetch postcards list');
+        //         postcardsList = await response.json();
+        //         updatePlaylist();
+        //     } catch (error) {
+        //         console.error('Error loading postcards list:', error);
+        //     }
+        // }
+
+        // function updatePlaylist() {
+        //     playlistItems.innerHTML = postcardsList.map((postcard, index) => `
+        //         <div class="playlist-item ${index === currentPostcardIndex ? 'active' : ''}" 
+        //              data-index="${index}">
+        //             <i class="fas ${index === currentPostcardIndex ? 'fa-play' : 'fa-music'}"></i>
+        //             <span>Postcard ${index + 1}</span>
+        //         </div>
+        //     `).join('');
+
+        //     Add click handlers to playlist items
+        //     document.querySelectorAll('.playlist-item').forEach(item => {
+        //         item.addEventListener('click', () => {
+        //             const index = parseInt(item.dataset.index);
+        //             if (index !== currentPostcardIndex) {
+        //                 currentPostcardIndex = index;
+        //                 loadPostcard(index);
+        //             }
+        //         });
+        //     });
+        // }
+
+        // async function loadPostcard(index) {
+        //     ... existing postcard loading code ...
+        //     updatePlaylist(); Update playlist to show new active item
+        // }
+
+        // Previous/Next postcard handlers
+        // prevPostcard.addEventListener('click', () => {
+        //     if (currentPostcardIndex > 0) {
+        //         currentPostcardIndex--;
+        //         loadPostcard(currentPostcardIndex);
+        //     }
+        // });
+
+        // nextPostcard.addEventListener('click', () => {
+        //     if (currentPostcardIndex < postcardsList.length - 1) {
+        //         currentPostcardIndex++;
+        //         loadPostcard(currentPostcardIndex);
+        //     }
+        // });
+
+        // Initialize
+        // await loadPostcardsList();
+    </script>
+</body>
+</html>
