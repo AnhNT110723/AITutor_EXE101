@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-    
+builder.Services.AddScoped<IPodcastService, PodcastService>();
 builder.Services.AddHttpClient<SpeechService>(client =>
 {
     client.BaseAddress = new Uri("https://api.openai.com/v1/");
