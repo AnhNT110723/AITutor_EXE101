@@ -14,7 +14,8 @@ public partial class Feeback
     public int? Rating { get; set; }
 
     public string? Comment { get; set; }
-
+    
+    
     public DateTime? CreatedAt { get; set; }
 
     public virtual Course? Course { get; set; }
