@@ -17,6 +17,61 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
             _httpClient.BaseAddress = new Uri("https://api.openai.com/v1/");
         }
+        public async Task<string> GeneratePostcardAsync(string prompt)
+        {
+            try
+            {
+                var requestBody = new
+                {
+                    model = "gpt-3.5-turbo",
+                    messages = new[]
+                    {
+                    new { role = "user", content = prompt }
+                },
+                    max_tokens = 500,
+                    temperature = 0.7
+                };
+
+                var response = await _httpClient.PostAsJsonAsync("chat/completions", requestBody);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"OpenAI API Error: {response.StatusCode} - {errorContent}");
+                    return null;
+                }
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var jsonDoc = JsonDocument.Parse(jsonResponse);
+                var content = jsonDoc.RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString();
+
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    Console.WriteLine("Error: Empty content received from API.");
+                    return null;
+                }
+
+                return content;
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP Error: {ex.Message}");
+                return null;
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"JSON Parsing Error: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected Error: {ex.Message}");
+                return null;
+            }
+        }
 
         public async Task<string> TranscribeAudioAsync(string audioPath, string language = "en")
         {
