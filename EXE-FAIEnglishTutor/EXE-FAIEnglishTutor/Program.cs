@@ -3,16 +3,31 @@ using EXE_FAIEnglishTutor.Middleware;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Repositories;
 using EXE_FAIEnglishTutor.Services;
+using EXE_FAIEnglishTutor.Services.Implementaion.AI;
+using EXE_FAIEnglishTutor.Services.Interface.AI;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+    
+builder.Services.AddHttpClient<SpeechService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.openai.com/v1/");
+}).AddTypedClient<SpeechService>(client =>
+    new SpeechService(client, builder.Configuration["OpenAI:ApiKey"])); // Store API key in appsettings.json
 
 //Thêm dbcontext vào web server
 builder.Services.AddDbContextConfiguration(builder.Configuration);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
 
 //cau hinh view areas
 builder.Services.ConfigureRazorViewEngine();
@@ -66,7 +81,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 	});
 
 var app = builder.Build();
-
+app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
