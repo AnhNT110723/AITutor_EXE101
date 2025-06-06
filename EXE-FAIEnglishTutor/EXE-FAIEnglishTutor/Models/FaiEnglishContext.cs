@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EXE_FAIEnglishTutor.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EXE_FAIEnglishTutor.Models;
@@ -400,7 +401,10 @@ public partial class FaiEnglishContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Provider).HasMaxLength(50);
             entity.Property(e => e.ProviderId).HasMaxLength(255);
-            entity.Property(e => e.Status).HasMaxLength(10);
+            entity.Property(e => e.Status).HasMaxLength(10).HasConversion(
+            v => v.ToString(),                  // Chuyển enum thành chuỗi khi lưu vào DB
+            v => (AccountStatus)Enum.Parse(typeof(AccountStatus), v) // Chuyển chuỗi từ DB thành enum
+        );
 
             entity.HasMany(d => d.Roles).WithMany(p => p.Users)
                 .UsingEntity<Dictionary<string, object>>(
