@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +30,7 @@
         }
 
         .wrapper {
+            display: flex;
             min-height: 100vh;
         }
 
@@ -40,38 +41,114 @@
             max-width: 250px;
             padding: 2rem 1rem;
             box-shadow: 2px 0 10px rgba(0,0,0,0.04);
+            transition: min-width 0.3s, max-width 0.3s;
         }
+
+            #sidebar.collapsed {
+                min-width: 70px;
+                max-width: 70px;
+                padding: 1rem 0.3rem;
+            }
 
             #sidebar .logo img {
                 width: 60px;
                 margin-bottom: 1rem;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
             }
 
-            #sidebar ul li {
-                margin-bottom: 1.2rem;
+            #sidebar.collapsed .logo img {
+                width: 40px;
             }
 
-                #sidebar ul li a {
-                    color: #475467;
-                    font-weight: 500;
-                    font-size: 1.1rem;
-                    border-radius: 8px;
-                    padding: 0.7rem 1rem;
-                    display: flex;
-                    align-items: center;
-                    transition: background 0.2s;
+            #sidebar ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+                #sidebar ul li {
+                    margin-bottom: 1.2rem;
                 }
 
-                    #sidebar ul li.active a,
-                    #sidebar ul li a:hover {
-                        background: var(--accent-color);
-                        color: var(--primary-color);
+                    #sidebar ul li a {
+                        color: #475467;
+                        font-weight: 500;
+                        font-size: 1.1rem;
+                        border-radius: 8px;
+                        padding: 0.7rem 1rem;
+                        display: flex;
+                        align-items: center;
+                        text-decoration: none;
+                        transition: background 0.2s;
                     }
+
+                        #sidebar ul li a .fa,
+                        #sidebar ul li a .fas,
+                        #sidebar ul li a .bi {
+                            margin-right: 0.5rem;
+                        }
+
+            #sidebar.collapsed ul li a {
+                padding: 0.5rem;
+                justify-content: center;
+            }
+
+                #sidebar.collapsed ul li a .menu-text {
+                    display: none;
+                }
+
+                #sidebar.collapsed ul li a .fa,
+                #sidebar.collapsed ul li a .fas,
+                #sidebar.collapsed ul li a .bi {
+                    margin-right: 0;
+                }
+
+            #sidebar ul li.active a,
+            #sidebar ul li a:hover {
+                background: var(--accent-color, #FFE66D);
+                color: var(--primary-color, #FF6B6B);
+            }
 
             #sidebar .footer {
                 font-size: 0.9rem;
                 margin-top: 2rem;
                 color: #aaa;
+                text-align: center;
+            }
+
+            #sidebar.collapsed .footer {
+                display: none;
+            }
+
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        .btn-sidebar-custom {
+            background: var(--accent-color, #FFE66D);
+            color: var(--primary-color, #FF6B6B);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+
+            .btn-sidebar-custom:hover {
+                background: var(--primary-color, #FF6B6B);
+                color: #fff;
             }
 
         .main-content {
@@ -80,6 +157,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            padding: 0.5rem;
             background: linear-gradient(120deg, #f7f9fc 60%, #ffe66d 100%);
         }
 
@@ -87,29 +165,29 @@
             background: #fff;
             border-radius: 24px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-            padding: 3.5rem 3rem 3rem 3rem; /* Increased padding */
-            max-width: 800px; /* Increased max-width */
-            width: 100%; /* Ensures it scales with the container */
+            padding: 2rem 1.5rem;
+            max-width: 800px;
+            width: 100%;
             position: relative;
             overflow: hidden;
-            margin: 2rem auto;
+            margin: 1rem auto;
         }
 
         .postcard-header h2 {
             font-family: 'Pacifico', cursive, sans-serif;
             color: #ff6701;
-            font-size: 2.5rem; /* Slightly larger header */
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
         }
 
         .postcard-header p {
             color: #888;
-            font-size: 1.2rem; /* Slightly larger text */
+            font-size: 1.2rem;
         }
 
         .audio-visualizer {
             width: 100%;
-            height: 50px; /* Slightly taller visualizer */
+            height: 50px;
             margin: 2rem 0 1rem 0;
             display: flex;
             align-items: flex-end;
@@ -118,8 +196,8 @@
         }
 
         .bar {
-            width: 10px; /* Slightly wider bars */
-            height: 15px; /* Initial height to match the animation */
+            width: 10px;
+            height: 15px;
             background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
             border-radius: 4px;
             animation: bounce 1s infinite;
@@ -166,7 +244,7 @@
         }
 
         50% {
-            height: 50px; /* Adjusted to match taller visualizer */
+            height: 50px;
         }
 
         }
@@ -184,24 +262,6 @@
             color: #fff;
         }
 
-        }
-
-        /* Animation for left-to-right scrolling */
-        @@keyframes slideLeftToRight {
-            0%
-
-        {
-            transform: translateX(-100%);
-        }
-
-        100% {
-            transform: translateX(0);
-        }
-
-        }
-
-        .subtitle-word {
-            animation: slideLeftToRight 0.5s ease-out forwards;
         }
 
         .audio-player-custom {
@@ -249,7 +309,6 @@
             gap: 16px;
         }
 
-
         .player-right {
             display: flex;
             align-items: center;
@@ -275,18 +334,18 @@
                 background: rgba(79, 140, 255, 0.1);
             }
 
-        .audio-btn.main-control {
-            background: #4f8cff;
-            color: white;
-            width: 48px;
-            height: 48px;
-            font-size: 20px;
-        }
+            .audio-btn.main-control {
+                background: #4f8cff;
+                color: white;
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
 
-        .audio-btn.main-control:hover {
-            background: #2563eb;
-            transform: scale(1.05);
-        }
+                .audio-btn.main-control:hover {
+                    background: #2563eb;
+                    transform: scale(1.05);
+                }
 
         .progress-container {
             flex: 1;
@@ -318,16 +377,6 @@
             align-items: center;
             gap: 12px;
             width: 100%;
-        }
-
-        .audio-player-custom {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
         }
 
         .progress-tooltip {
@@ -454,23 +503,7 @@
             }
 
         @@media (max-width: 768px) {
-            .playlist-container
-
-        {
-            width: 100vw;
-            right: -100vw;
-            border-radius: 0;
-        }
-
-        .playlist-container.active {
-            right: 0;
-        }
-
-        .playlist-header {
-            border-radius: 0;
-        }
-
-        }
+            #sidebar
 
         {
             min-width: 70px;
@@ -488,36 +521,65 @@
         }
 
             #sidebar ul li a .menu-text {
-                display: none; /* Hide text on small screens */
+                display: none;
             }
 
-            #sidebar ul li a .fa, #sidebar ul li a .fas, #sidebar ul li a .bi {
-                margin-right: 0; /* Remove margin since text is hidden */
+            #sidebar ul li a .fa,
+            #sidebar ul li a .fas,
+            #sidebar ul li a .bi {
+                margin-right: 0;
             }
+
+        #sidebar .footer {
+            display: none;
+        }
+
+        .navbar {
+            padding: 1rem;
+        }
+
+        .btn-sidebar-custom {
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+
+        .playlist-container {
+            width: 100vw;
+            right: -100vw;
+            border-radius: 0;
+        }
+
+            .playlist-container.active {
+                right: 0;
+            }
+
+        .playlist-header {
+            border-radius: 0;
+        }
 
         .main-content {
             padding: 0.5rem;
         }
 
         .postcard {
-            padding: 1.5rem 1rem; /* Adjusted padding for smaller screens */
-            max-width: 90%; /* Responsive max-width */
+            padding: 1.5rem 1rem;
+            max-width: 90%;
         }
 
         .postcard-header h2 {
-            font-size: 1.8rem; /* Smaller header on mobile */
+            font-size: 1.8rem;
         }
 
         .postcard-header p {
-            font-size: 1rem; /* Smaller text on mobile */
+            font-size: 1rem;
         }
 
         .audio-visualizer {
-            height: 40px; /* Adjusted height for mobile */
+            height: 40px;
         }
 
         .bar {
-            width: 8px; /* Adjusted bar width for mobile */
+            width: 8px;
         }
 
         @@keyframes bounce {
@@ -528,25 +590,21 @@
         }
 
         50% {
-            height: 40px; /* Adjusted to match mobile visualizer height */
+            height: 40px;
         }
 
         }
 
-        .subtitle-word {
-            font-size: 1.2rem;
+        .postcard-decor {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
-            .postcard-decor {
-                width: 100%;
-                max-width: 800px;
-                height: auto;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            }
 
         .audio-progress {
-            width: 150px; /* Adjusted progress bar width for mobile */
+            width: 150px;
         }
 
         }
@@ -559,132 +617,179 @@
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
-    <div class="wrapper d-flex">
-        <nav id="sidebar" class="active">
-            <h1><a asp-controller="home" asp-action="index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
-            <ul class="list-unstyled components mb-5">
-                <li>
-                    <a asp-controller="Ielts" asp-action="index" class="link-test">
-                        <span class="fa fa-users"></span>
-                        <span class="menu-text">Học Ielts</span>
-                    </a>
-                </li>
-                <li>
-                    <a asp-controller="Toeic" asp-action="index" class="link-test">
-                        <span class="fas fa-graduation-cap icon"></span>
-                        <span class="menu-text">Học Toeic</span>
-                    </a>
-                </li>
-                <li class="active">
-                    <a asp-controller="home" asp-action="index" class="link-test">
-                        <span class="fa fa-frog"></span>
-                        <span class="menu-text">AI Tutor</span>
-                    </a>
-                </li>
-                <li>
-                    <a asp-controller="selfStudy" asp-action="index" class="link-test">
-                        <span class="fas fa-book-open"></span>
-                        <span class="menu-text">Tự học</span>
-                    </a>
-                </li>
-                <li>
-                    <a asp-controller="ParentCourse" asp-action="index" class="link-test">
-                        <span class="bi bi-people-fill"></span>
-                        <span class="menu-text">Trang học của cha mẹ</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="footer">
-                <p style="color: #667085;">
-                    Copyright ©
-                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
-                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib.com</a>
-                </p>
-            </div>
-        </nav>
-        <div class="main-content">
-            <div class="postcard shadow-lg position-relative">
-                <div class="postcard-header text-center mb-3">
-                    <h2 class="fw-bold text-primary">Podcast của bạn</h2>
-                    <p class="text-muted">Phụ đề và âm thanh dành cho bạn!</p>
-                </div>
-                <div class="audio-player-custom">
-                    <div class="postcard-image-container">
-                        <img src="~/Images/in-buu-thiep-postcard-13.jpg" alt="Decor" class="postcard-decor">
-                    </div>
-                    
-                    <div id="customAudioPlayer" class="custom-audio-player">
-                        <div class="player-controls">
-                            <button id="prevPostcard" class="audio-btn" title="Previous postcard">
-                                <i class="fas fa-step-backward"></i>
-                            </button>
-                            <button id="skipBackward" class="audio-btn" title="Skip 15s backward">
-                                <i class="fas fa-backward"></i>
-                            </button>
-                            <button id="playPauseBtn" class="audio-btn main-control">
-                                <i class="fa fa-play"></i>
-                            </button>
-                            <button id="skipForward" class="audio-btn" title="Skip 15s forward">
-                                <i class="fas fa-forward"></i>
-                            </button>
-                            <button id="nextPostcard" class="audio-btn" title="Next postcard">
-                                <i class="fas fa-step-forward"></i>
-                            </button>
-                        </div>
-                        <div class="player-center">
-                            <span id="currentTime" class="audio-time">00:00</span>
-                            <div class="progress-container">
-                                <input type="range" id="audioProgress" value="0" min="0" max="100" step="1" class="audio-progress" />
-                                <div class="progress-tooltip">00:00</div>
-                            </div>
-                            <span id="duration" class="audio-time">00:00</span>
-                        </div>
-                        <div class="player-right">
-                            <button id="togglePlaylist" class="audio-btn" title="Toggle playlist">
-                                <i class="fas fa-list"></i>
-                            </button>
-                            <div class="volume-control">
-                                <button id="toggleMute" class="audio-btn" title="Toggle mute">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                                <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider" />
-                            </div>
-                        </div>
-                        <audio id="audioPlayer" style="display:none;">
-                            <source id="audioSource" src="" type="audio/mpeg" />
-                            Trình duyệt của bạn không hỗ trợ phát âm thanh.
-                        </audio>
-                    </div>
-                </div>
-                <div id="playlist" class="playlist-container">
-                    <div class="playlist-header">
-                        <h3>Danh sách phát</h3>
-                        <button id="closePlaylist" class="close-btn">
-                            <i class="fas fa-times"></i>
+    
+
+    <div class="wrapper d-flex align-items-stretch">
+        
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5 learn-english-ai">
+            <div class="sticky-wrapper sticky-wrapper-list-courses">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                            <i class="fa fa-bars"></i>
+                            <span class="sr-only">Toggle Menu</span>
                         </button>
+                        <!-- Nút Back -->
+                        <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                                data-toggle="collapse" data-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                @*  <li class="nav-item active">
+                                <a class="nav-link" href="home.html">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                                </li>
+                                <li class="nav-item">
+                                <a class="nav-link" href="#">Portfolio</a>
+                                </li> *@
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    // Đọc thông tin từ cookie
+                                    var fullName = User.Identity.Name;
+                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                    <li class="nav-item dropdown">
+
+                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div class="nav-img">
+                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                            </div>
+                                        </a>
+                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                            <div class="menu-title">
+                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                                <i class="bi bi-person-circle"></i> View Profile
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                            </a>
+
+                                            <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                }
+                            </ul>
+                        </div>
                     </div>
-                    <div id="playlistItems" class="playlist-items">
-                        <!-- Playlist items will be added here dynamically -->
+                </nav>
+            </div>
+            <div class="main-content">
+
+                <div class="postcard shadow-lg position-relative">
+                    <div class="postcard-header text-center mb-3">
+                        <h2 class="fw-bold text-primary">Podcast của bạn</h2>
+                        <p class="text-muted">Phụ đề và âm thanh dành cho bạn!</p>
                     </div>
+                    <div class="audio-player-custom">
+                        <div class="postcard-image-container">
+                            <img src="~/Images/in-buu-thiep-postcard-13.jpg" alt="Decor" class="postcard-decor">
+                        </div>
+
+                        <div id="customAudioPlayer" class="custom-audio-player">
+                            <div class="player-controls">
+                                <button id="prevPostcard" class="audio-btn" title="Previous postcard">
+                                    <i class="fas fa-step-backward"></i>
+                                </button>
+                                <button id="skipBackward" class="audio-btn" title="Skip 15s backward">
+                                    <i class="fas fa-backward"></i>
+                                </button>
+                                <button id="playPauseBtn" class="audio-btn main-control">
+                                    <i class="fa fa-play"></i>
+                                </button>
+                                <button id="skipForward" class="audio-btn" title="Skip 15s forward">
+                                    <i class="fas fa-forward"></i>
+                                </button>
+                                <button id="nextPostcard" class="audio-btn" title="Next postcard">
+                                    <i class="fas fa-step-forward"></i>
+                                </button>
+                            </div>
+                            <div class="player-center">
+                                <span id="currentTime" class="audio-time">00:00</span>
+                                <div class="progress-container">
+                                    <input type="range" id="audioProgress" value="0" min="0" max="100" step="1" class="audio-progress" />
+                                    <div class="progress-tooltip">00:00</div>
+                                </div>
+                                <span id="duration" class="audio-time">00:00</span>
+                            </div>
+                            <div class="player-right">
+                                <button id="togglePlaylist" class="audio-btn" title="Toggle playlist">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                                <div class="volume-control">
+                                    <button id="toggleMute" class="audio-btn" title="Toggle mute">
+                                        <i class="fas fa-volume-up"></i>
+                                    </button>
+                                    <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider" />
+                                </div>
+                            </div>
+                            <audio id="audioPlayer" style="display:none;">
+                                <source id="audioSource" src="" type="audio/mpeg" />
+                                Trình duyệt của bạn không hỗ trợ phát âm thanh.
+                            </audio>
+                        </div>
+                    </div>
+                    <div id="playlist" class="playlist-container">
+                        <div class="playlist-header">
+                            <h3>Danh sách phát</h3>
+                            <button id="closePlaylist" class="close-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div id="playlistItems" class="playlist-items">
+                            <!-- Playlist items will be added here dynamically -->
+                        </div>
+                    </div>
+                    <div class="audio-visualizer" id="audioVisualizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <div class="subtitle-container" id="subtitleContainer">
+                        <!-- Subtitle words will be injected here -->
+                    </div>
+
                 </div>
-                <div class="audio-visualizer" id="audioVisualizer">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                </div>
-                <div class="subtitle-container" id="subtitleContainer">
-                    <!-- Subtitle words will be injected here -->
-                </div>
-                
             </div>
         </div>
     </div>
+
     <script>
+                $(document).ready(function () {
+            // Sidebar toggle functionality
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('collapsed');
+            });
+        });
+        </script>
+
+    <script>
+             
         // Simple audio visualizer animation (bars bounce when playing)
         function setVisualizerPlaying(isPlaying) {
             const bars = document.querySelectorAll('.audio-visualizer .bar');
@@ -698,134 +803,208 @@
             const audioPlayer = document.getElementById('audioPlayer');
             const audioSource = document.getElementById('audioSource');
             const subtitleContainer = document.getElementById('subtitleContainer');
+            let podcasts = []; // Store all podcasts
+            let currentPodcastIndex = 0;
+
+            // Setup initial audio event listeners
+            setupAudioEventListeners();
 
             try {
                 loader.style.display = 'flex';
 
-                // 1. Fetch postcard content
-                const postcardResponse = await fetch('http://localhost:5037/api/Postcard/generate-postcard', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (!postcardResponse.ok) throw new Error('Failed to fetch postcard content');
-                const postcardData = await postcardResponse.json();
-                const postcardContent = postcardData.postcard;
-
-                // 2. Generate audio
-                const formData = new FormData();
-                formData.append('text', postcardContent);
-                const audioResponse = await fetch('/api/audio/generate-english', {
-                    method: 'POST',
-                    body: formData
-                });
-                if (!audioResponse.ok) throw new Error('Failed to generate audio');
-                const audioBlob = await audioResponse.blob();
-                const audioUrl = URL.createObjectURL(audioBlob);
-                audioSource.src = audioUrl;
-                audioPlayer.load();
-
-                // 3. Prepare subtitles (split by sentences)
-                const sentences = postcardContent.match(/[^.!?]+[.!?]+/g) || [postcardContent];
+                // 1. Fetch all podcasts
+                const response = await fetch('http://localhost:5037/api/Postcard/get-all-podcasts');
+                if (!response.ok) throw new Error('Failed to fetch podcasts');
+                podcasts = await response.json();
                 
-                // Initialize subtitle container with all sentences
-                subtitleContainer.innerHTML = sentences.map((sentence, idx) => 
-                    `<div class="subtitle-sentence" data-index="${idx}">${sentence.trim()}</div>`
-                ).join('');
-                
-                const subtitleSentences = subtitleContainer.querySelectorAll('.subtitle-sentence');
-                let currentIndex = 0;
-                let animationFrameId = null;
-
-                // Add CSS for sentence styling
-                const style = document.createElement('style');
-                style.textContent = `
-                    .subtitle-sentence {
-                        display: none;
-                        padding: 10px 20px;
-                        margin: 10px 0;
-                        border-radius: 8px;
-                        font-size: 1.2em;
-                        line-height: 1.5;
-                        opacity: 0;
-                        transition: opacity 0.3s ease-in-out;
-                        text-align: center;
-                    }
-                    .subtitle-sentence.active {
-                        display: block;
-                        opacity: 1;
-                        background: var(--primary-color);
-                        color: white;
-                    }
-                    .subtitle-container {
-                        padding: 1rem;
-                        overflow-y: hidden;
-                        text-align: center;
-                        height: auto;
-                        min-height: 100px;
-                    }
-                `;
-                document.head.appendChild(style);
-
-                function updateSubtitleDisplay(currentIdx) {
-                    // Hide all sentences
-                    subtitleSentences.forEach(sentence => {
-                        sentence.classList.remove('active');
-                    });
-                    
-                    // Show current sentence
-                    if (currentIdx >= 0 && currentIdx < subtitleSentences.length) {
-                        subtitleSentences[currentIdx].classList.add('active');
-                    }
+                if (podcasts && podcasts.length > 0) {
+                    // Update playlist
+                    updatePlaylist(podcasts);
+                    // Load first podcast
+                    await loadPodcast(0);
+                } else {
+                    throw new Error('No podcasts available');
                 }
-
-                function animateSubtitles(timestamp) {
-                    if (!audioPlayer.paused && !audioPlayer.ended) {
-                        const currentTime = audioPlayer.currentTime;
-                        const duration = audioPlayer.duration;
-                        
-                        // Calculate time per sentence
-                        const sentenceDuration = duration / sentences.length;
-                        const newIndex = Math.min(
-                            sentences.length - 1, 
-                            Math.floor(currentTime / sentenceDuration)
-                        );
-                        
-                        if (newIndex !== currentIndex) {
-                            currentIndex = newIndex;
-                            updateSubtitleDisplay(currentIndex);
-                        }
-                        
-                        animationFrameId = requestAnimationFrame(animateSubtitles);
-                    }
-                }
-
-                audioPlayer.onplay = function() {
-                    setVisualizerPlaying(true);
-                    currentIndex = 0;
-                    updateSubtitleDisplay(currentIndex);
-                    animationFrameId = requestAnimationFrame(animateSubtitles);
-                };
-
-                audioPlayer.onpause = function() {
-                    setVisualizerPlaying(false);
-                    if (animationFrameId) {
-                        cancelAnimationFrame(animationFrameId);
-                    }
-                };
-
-                audioPlayer.onended = function() {
-                    setVisualizerPlaying(false);
-                    if (animationFrameId) {
-                        cancelAnimationFrame(animationFrameId);
-                    }
-                    updateSubtitleDisplay(sentences.length - 1);
-                };
 
             } catch (error) {
-                subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải nội dung hoặc âm thanh: ' + error.message + '</span>';
+                subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải nội dung: ' + error.message + '</span>';
             } finally {
                 loader.style.display = 'none';
             }
+
+            function setupAudioEventListeners() {
+                // Time update event for progress bar
+                audioPlayer.addEventListener('timeupdate', () => {
+                    audioProgress.value = Math.floor(audioPlayer.currentTime);
+                    currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+                });
+
+                // When metadata is loaded
+                audioPlayer.addEventListener('loadedmetadata', () => {
+                    durationEl.textContent = formatTime(audioPlayer.duration);
+                    audioProgress.max = Math.floor(audioPlayer.duration);
+                });
+
+                // When audio ends
+                audioPlayer.addEventListener('ended', () => {
+                    playPauseIcon.classList.remove('fa-pause');
+                    playPauseIcon.classList.add('fa-play');
+                    audioProgress.value = 0;
+                    currentTimeEl.textContent = '00:00';
+                    setVisualizerPlaying(false);
+                });
+            }
+
+            // Function to load a specific podcast
+            async function loadPodcast(index) {
+                try {
+                    loader.style.display = 'flex';
+                    const podcast = podcasts[index];
+                    currentPodcastIndex = index;
+
+                    // Update playlist active state
+                    updatePlaylistActiveState(index);
+
+                    // Split content into sentences and store them
+                    const sentences = podcast.content.match(/[^.!?]+[.!?]+/g) || [podcast.content];
+                    
+                    // Create a single container for the active sentence
+                    subtitleContainer.innerHTML = '<div class="subtitle-sentence active"></div>';
+                    const subtitleElement = subtitleContainer.querySelector('.subtitle-sentence');
+                    let currentSentenceIndex = 0;
+                    let animationFrameId = null;
+
+                    function updateSubtitle(currentTime, duration) {
+                        // Calculate which sentence should be shown based on current time
+                        const sentenceDuration = duration / sentences.length;
+                        const newIndex = Math.min(
+                            sentences.length - 1,
+                            Math.floor(currentTime / sentenceDuration)
+                        );
+
+                        if (newIndex !== currentSentenceIndex) {
+                            currentSentenceIndex = newIndex;
+                            // Animate out the old text
+                            subtitleElement.style.opacity = '0';
+                            subtitleElement.style.transform = 'translateY(20px)';
+                            
+                            // After fade out, update text and fade in
+                            setTimeout(() => {
+                                subtitleElement.textContent = sentences[currentSentenceIndex].trim();
+                                subtitleElement.style.opacity = '1';
+                                subtitleElement.style.transform = 'translateY(0)';
+                            }, 300);
+                        }
+                    }
+
+                    // Audio event handlers for subtitles
+                    audioPlayer.onplay = function() {
+                        setVisualizerPlaying(true);
+                        
+                        function animate() {
+                            if (!audioPlayer.paused && !audioPlayer.ended) {
+                                updateSubtitle(audioPlayer.currentTime, audioPlayer.duration);
+                                animationFrameId = requestAnimationFrame(animate);
+                            }
+                        }
+                        animationFrameId = requestAnimationFrame(animate);
+                    };
+
+                    audioPlayer.onpause = function() {
+                        setVisualizerPlaying(false);
+                        if (animationFrameId) {
+                            cancelAnimationFrame(animationFrameId);
+                        }
+                    };
+
+                    audioPlayer.onended = function() {
+                        setVisualizerPlaying(false);
+                        if (animationFrameId) {
+                            cancelAnimationFrame(animationFrameId);
+                        }
+                    };
+
+                    // Set initial subtitle
+                    subtitleElement.textContent = sentences[0].trim();
+
+                    // Generate audio for the podcast content
+                    const formData = new FormData();
+                    formData.append('text', podcast.content);
+                    const audioResponse = await fetch('/api/audio/generate-english', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!audioResponse.ok) throw new Error('Failed to generate audio');
+                    const audioBlob = await audioResponse.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioSource.src = audioUrl;
+                    audioPlayer.load();
+
+                    // Reset player state
+                    playPauseIcon.classList.remove('fa-pause');
+                    playPauseIcon.classList.add('fa-play');
+                    setVisualizerPlaying(false);
+
+                } catch (error) {
+                    console.error('Error loading podcast:', error);
+                    subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải podcast: ' + error.message + '</span>';
+                } finally {
+                    loader.style.display = 'none';
+                }
+            }
+
+            // Function to update playlist UI
+            function updatePlaylist(podcasts) {
+                playlistItems.innerHTML = podcasts.map((podcast, index) => `
+                    <div class="playlist-item ${index === currentPodcastIndex ? 'active' : ''}" 
+                         data-index="${index}">
+                        <i class="fas ${index === currentPodcastIndex ? 'fa-play' : 'fa-music'}"></i>
+                        <span>${podcast.title || `Podcast ${index + 1}`}</span>
+                    </div>
+                `).join('');
+
+                // Add click handlers to playlist items
+                document.querySelectorAll('.playlist-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const index = parseInt(item.dataset.index);
+                        if (index !== currentPodcastIndex) {
+                            loadPodcast(index);
+                        }
+                    });
+                });
+            }
+
+            // Function to update active state in playlist
+            function updatePlaylistActiveState(activeIndex) {
+                document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                    const icon = item.querySelector('i');
+                    if (index === activeIndex) {
+                        item.classList.add('active');
+                        icon.classList.remove('fa-music');
+                        icon.classList.add('fa-play');
+                    } else {
+                        item.classList.remove('active');
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-music');
+                    }
+                });
+            }
+
+            // Previous/Next podcast handlers
+            prevPostcard.addEventListener('click', () => {
+                if (currentPodcastIndex > 0) {
+                    loadPodcast(currentPodcastIndex - 1);
+                }
+            });
+
+            nextPostcard.addEventListener('click', () => {
+                if (currentPodcastIndex < podcasts.length - 1) {
+                    loadPodcast(currentPodcastIndex + 1);
+                }
+            });
+
+            // ... rest of your existing audio player code ...
         });
 
         const audio = document.getElementById('audioPlayer');
@@ -965,61 +1144,47 @@
             playlist.classList.remove('active');
         });
 
-        // Load postcards list
-        // async function loadPostcardsList() {
-        //     try {
-        //         const response = await fetch('http:localhost:5037/api/Postcard/get-postcards-list');
-        //         if (!response.ok) throw new Error('Failed to fetch postcards list');
-        //         postcardsList = await response.json();
-        //         updatePlaylist();
-        //     } catch (error) {
-        //         console.error('Error loading postcards list:', error);
-        //     }
-        // }
+        // Add CSS styles for subtitles
+        const style = document.createElement('style');
+        style.textContent = `
+            .subtitle-container {
+                padding: 2rem;
+                min-height: 120px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 15px;
+                backdrop-filter: blur(10px);
+                margin: 20px 0;
+                position: relative;
+                overflow: hidden;
+            }
 
-        // function updatePlaylist() {
-        //     playlistItems.innerHTML = postcardsList.map((postcard, index) => `
-        //         <div class="playlist-item ${index === currentPostcardIndex ? 'active' : ''}" 
-        //              data-index="${index}">
-        //             <i class="fas ${index === currentPostcardIndex ? 'fa-play' : 'fa-music'}"></i>
-        //             <span>Postcard ${index + 1}</span>
-        //         </div>
-        //     `).join('');
+            .subtitle-sentence {
+                width: 90%;
+                padding: 20px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, rgba(255, 107, 107, 0.95), rgba(255, 107, 107, 0.8));
+                color: white;
+                font-size: 1.3rem;
+                line-height: 1.6;
+                text-align: center;
+                opacity: 1;
+                transform: translateY(0);
+                transition: all 0.3s ease-out;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            }
 
-        //     Add click handlers to playlist items
-        //     document.querySelectorAll('.playlist-item').forEach(item => {
-        //         item.addEventListener('click', () => {
-        //             const index = parseInt(item.dataset.index);
-        //             if (index !== currentPostcardIndex) {
-        //                 currentPostcardIndex = index;
-        //                 loadPostcard(index);
-        //             }
-        //         });
-        //     });
-        // }
-
-        // async function loadPostcard(index) {
-        //     ... existing postcard loading code ...
-        //     updatePlaylist(); Update playlist to show new active item
-        // }
-
-        // Previous/Next postcard handlers
-        // prevPostcard.addEventListener('click', () => {
-        //     if (currentPostcardIndex > 0) {
-        //         currentPostcardIndex--;
-        //         loadPostcard(currentPostcardIndex);
-        //     }
-        // });
-
-        // nextPostcard.addEventListener('click', () => {
-        //     if (currentPostcardIndex < postcardsList.length - 1) {
-        //         currentPostcardIndex++;
-        //         loadPostcard(currentPostcardIndex);
-        //     }
-        // });
-
-        // Initialize
-        // await loadPostcardsList();
+            @@media (max-width: 768px) {
+                .subtitle-sentence {
+                    font-size: 1.1rem;
+                    padding: 15px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
