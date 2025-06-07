@@ -335,49 +335,69 @@
     </style>
 </head>
 <body>
-    <div class="wrapper d-flex align-items-stretch">
-        <nav id="sidebar" class="active">
-            <h1><a asp-controller="home" asp-action="index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
-            <ul class="list-unstyled components mb-5">
-                <li>
-                    <a asp-controller="Ielts" asp-action="index" class="link-test">
-                        <span class="fa fa-users"></span>
-                        <span class="menu-text">Học Ielts</span>
-                    </a>
-                </li>
-                <li>
-                    <a asp-controller="Toeic" asp-action="index" class="link-test">
-                        <span class="fas fa-graduation-cap icon"></span>
-                        <span class="menu-text">Học Toeic</span>
-                    </a>
-                </li>
-                <li class="active">
-                    <a asp-controller="home" asp-action="index" class="link-test">
-                        <span class="fa fa-frog"></span>
-                        <span class="menu-text">AI Tutor</span>
+    <div id="content" class="p-4 p-md-5 home">
 
-                    </a>
-                </li>
-                <li>
-                    <a asp-controller="selfStudy" asp-action="index" class="link-test">
-                        <span class="fas fa-book-open"></span>
-                        <span class="menu-text">Tự học</span>
-                    </a>
-                </li>
-                <li>
-                    <a asp-controller="ParentCourse" asp-action="index" class="link-test">
-                        <span class="bi bi-people-fill"></span>
-                        <span class="menu-text">Trang học của cha mẹ</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="footer">
-                <p style="color: #667085;">
-                    Copyright &copy;
-                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
-                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                                                                                  target="_blank">Colorlib.com</a>
-                </p>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        @*  <li class="nav-item active">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            // Đọc thông tin từ cookie
+                            var fullName = User.Identity.Name;
+                            var avatarUrl = User.FindFirst("Avatar")?.Value;
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                   data-toggle="dropdown" aria-expanded="false">
+                                    <div class="nav-img">
+                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                    </div>
+                                </a>
+                                <div class=" menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
+                                    <div class="menu-title">
+                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
+                                        <i class="bi bi-person-circle"></i> View Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                    </a>
+
+                                    <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                        }
+                    </ul>
+                </div>
             </div>
         </nav>
         <div id="content" class="p-4 p-md-5">
@@ -465,7 +485,7 @@
                     <h1>🎧 Listening Practice 🎧</h1>
                     <div class="timer-section">
                         <i class="fas fa-clock"></i>
-                        <span id="timer">30:00</span>
+                        <span id="timer">5:00</span>
                     </div>
                 </div>
 
@@ -503,6 +523,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/handle-sidbar/home-sidebar.js"></script>
     <script>
                 document.getElementById('newTestBtn').addEventListener('click', async () => {
             const newTestBtn = document.getElementById('newTestBtn');
@@ -528,7 +549,7 @@
 
         function startTimer() {
             clearInterval(timerInterval);
-            timeLeft = 1800;
+            timeLeft = 300;
             updateTimerDisplay();
 
             timerInterval = setInterval(() => {
