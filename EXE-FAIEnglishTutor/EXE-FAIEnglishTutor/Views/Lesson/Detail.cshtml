@@ -1,0 +1,108 @@
+@model EXE_FAIEnglishTutor.Models.Lesson
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8">
+            @if (!string.IsNullOrEmpty(Model.VideoUrl))
+            {
+                <div class="video-container mb-4">
+                    <iframe src="@Model.VideoUrl" frameborder="0" allowfullscreen class="w-100"></iframe>
+                </div>
+            }
+            else if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="image-container mb-4">
+                    <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid rounded">
+                </div>
+            }
+
+            <div class="lesson-content">
+                <h1 class="mb-4">@Model.Title</h1>
+                <div class="situation-box p-4 mb-4 bg-light rounded">
+                    <h4 class="mb-3">Situation</h4>
+                    <p class="mb-0">@Model.Situation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Course Information</h5>
+                    @if (Model.Course != null)
+                    {
+                        <p class="mb-2"><strong>Course:</strong> @Model.Course.CourseName</p>
+                        <p class="mb-2"><strong>Duration:</strong> @Model.Course.Duration minutes</p>
+                        @if (!string.IsNullOrEmpty(Model.Course.Description))
+                        {
+                            <p class="mb-0"><strong>Description:</strong> @Model.Course.Description</p>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">This lesson is not part of any course.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="@Url.Action("Index")" class="btn btn-outline-primary w-100 mb-3">
+                    <i class="bi bi-arrow-left"></i> Back to Lessons
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+        overflow: hidden;
+    }
+
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+    }
+
+    .image-container img {
+        max-height: 400px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .lesson-content h1 {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .situation-box {
+        background-color: #f8f9fa;
+        border-left: 4px solid #007bff;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn-outline-primary {
+        border-color: #007bff;
+        color: #007bff;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: white;
+    }
+</style> 

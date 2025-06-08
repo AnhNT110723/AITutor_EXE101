@@ -9,7 +9,7 @@ namespace EXE_FAIEnglishTutor.Services.Interface.AI
         double CalculateSequenceMatchScore(string source, string target);
         int CountSyllables(string text);
         Task TextToSpeechAsync(string text, string outputPath, string language);
-        Task<WordResult> GetRandomWordAsync(string topic);
+        Task<List<WordResult>> GetRandomWordsAsync(string topic);
         Task<string> GeneratePostcardAsync(string prompt);
     }
     public class WordResult

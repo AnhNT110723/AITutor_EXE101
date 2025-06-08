@@ -1,0 +1,321 @@
+﻿@model List<EXE_FAIEnglishTutor.Models.Lesson>
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
+}
+<div id="content" class="p-4 p-md-5 home">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    @*  <li class="nav-item active">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        // Đọc thông tin từ cookie
+                        var fullName = User.Identity.Name;
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <div class="nav-img">
+                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                </div>
+                            </a>
+                            <div class=" menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
+                                <div class="menu-title">
+                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
+                                    <i class="bi bi-person-circle"></i> View Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                </a>
+
+                                <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4 text-orange">Lessons</h2>
+            </div>
+        </div>
+        <div class="row flex-column gap-3">
+            @foreach (var lesson in Model)
+            {
+                <div class="col-12 px-0 mb-3">
+                    <div class="card lesson-row-card shadow-sm d-flex flex-row align-items-center w-100 lesson-row-card-long" style="min-height:130px; height:130px;">
+                        <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="card-link"></a>
+                        @if (!string.IsNullOrEmpty(lesson.ImageUrl))
+                        {
+                            <img src="@lesson.ImageUrl" class="lesson-img rounded-start" alt="@lesson.Title">
+                        }
+                        else
+                        {
+                            <img src="/images/default-lesson.jpg" class="lesson-img rounded-start" alt="Default Lesson Image">
+                        }
+                        <div class="card-body flex-grow-1 d-flex flex-column justify-content-center">
+                            <h5 class="card-title text-orange mb-2 animate-title">@lesson.Title</h5>
+                            <p class="card-text fs-5 text-dark mb-2 animate-desc">@lesson.Situation</p>
+                            @if (!string.IsNullOrEmpty(lesson.VideoUrl))
+                            {
+                                <div class="mb-2 text-orange">
+                                    <i class="bi bi-camera-video"></i> Video Available
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 border-0 d-flex align-items-center">
+                            <div class="btn btn-orange w-100 animate-btn">
+                                <i class="bi bi-play-circle"></i> Start Lesson
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <style>
+        .text-orange {
+            color: #ff8800 !important;
+        }
+
+        .btn-orange {
+            background: linear-gradient(90deg, #ff8800 0%, #ffb347 100%);
+            border: none;
+            color: #fff;
+            padding: 12px 32px;
+            font-weight: 600;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(255,136,0,0.08);
+            transition: background 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none; /* Giữ để ngăn nút nhận click trực tiếp */
+        }
+
+            .btn-orange:hover {
+                background: linear-gradient(90deg, #e06d00 0%, #ff8800 100%);
+                color: #fff;
+                transform: scale(1.04);
+            }
+
+        .lesson-row-card {
+            border: none;
+            border-radius: 18px;
+            background: #fff7f0;
+            min-height: 130px;
+            height: 130px;
+            margin: 0 auto;
+            padding: 0;
+            box-shadow: 0 2px 12px rgba(255,136,0,0.06);
+            transition: box-shadow 0.2s, transform 0.2s;
+            position: relative; /* Đảm bảo thẻ a có thể kiểm soát z-index */
+        }
+
+        /* Điều chỉnh chiều dài thẻ con thành 80% thẻ cha */
+        .lesson-row-card-long {
+            width: 80% !important;
+            max-width: 80% !important;
+            margin: 0 auto; /* Căn giữa nếu cần */
+        }
+
+        @@media (max-width: 1400px) {
+            .lesson-row-card-long {
+                width: 90% !important;
+                max-width: 90% !important;
+            }
+        }
+
+        @@media (max-width: 1200px) {
+            .lesson-row-card-long {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
+        .lesson-row-card:hover {
+            box-shadow: 0 6px 24px rgba(255,136,0,0.13);
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .lesson-img {
+            width: 150px;
+            height: 130px;
+            object-fit: cover;
+            border-top-left-radius: 18px;
+            border-bottom-left-radius: 18px;
+            margin-right: 0;
+            transition: transform 0.2s;
+        }
+
+        .lesson-row-card:hover .lesson-img {
+            transform: scale(1.04) rotate(-2deg);
+        }
+
+        .card-link {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: block;
+            text-decoration: none;
+            pointer-events: auto;
+        }
+
+        .card-body {
+            padding: 1rem 1.5rem;
+            min-width: 0;
+            pointer-events: none;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #ff8800;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 8px rgba(255,136,0,0.07);
+            animation: fadeInLeft 0.7s;
+            pointer-events: none;
+        }
+
+        .card-text {
+            color: #333;
+            font-size: 1.07rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.7s;
+            pointer-events: none;
+        }
+
+        .card-footer {
+            min-width: 160px;
+            padding: 1rem;
+            border-radius: 0 18px 18px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            pointer-events: none;
+        }
+
+        @@media (max-width: 992px) {
+            .lesson-row-card {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                min-height: 160px;
+                height: auto;
+            }
+
+            .lesson-img {
+                width: 100%;
+                height: 160px;
+                border-radius: 18px 18px 0 0;
+            }
+
+            .card-footer {
+                border-radius: 0 0 18px 18px;
+                min-width: 0;
+                padding: 1rem 1.5rem;
+            }
+
+            .lesson-row-card-long {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .lesson-row-card .card-body {
+                padding: 0.8rem 1rem;
+            }
+
+            .lesson-img {
+                height: 120px;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .card-text {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animations for more lively UI */
+        @@keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-title {
+            animation: fadeInLeft 0.7s;
+        }
+
+        .animate-desc {
+            animation: fadeInUp 0.7s;
+        }
+
+        .animate-btn {
+            animation: fadeInUp 0.8s;
+        }
+    </style>

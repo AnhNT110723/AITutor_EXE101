@@ -124,45 +124,45 @@ namespace EXE_FAIEnglishTutor.Controllers
             }
         }
         [HttpPost("generate-ielts-listening")]
-        public async Task<IActionResult> GenerateIeltsListening()
-        {
-            try
-            {
-                // Lấy bài tập nghe IELTS
-                var listeningExercise = await _speechService.GenerateIeltsListeningExerciseAsync();
+public async Task<IActionResult> GenerateIeltsListening([FromBody] string topic)
+{
+    try
+    {
+        // Generate IELTS listening exercise based on topic
+        var listeningExercise = await _speechService.GenerateIeltsListeningExerciseAsync(topic);
 
-                // Trả về dữ liệu JSON
-                return Ok(listeningExercise);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Lỗi khi tạo bài tập nghe IELTS", error = ex.Message });
-            }
-        }
-        [HttpPost("generate-random-word")]
-        public async Task<IActionResult> GenerateRandomWord([FromForm] string topic)
+        // Return JSON data
+        return Ok(listeningExercise);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { message = "Error generating IELTS listening exercise", error = ex.Message });
+    }
+}
+        [HttpPost("generate-random-words")]
+        public async Task<IActionResult> GenerateRandomWords([FromForm] string topic)
         {
             if (string.IsNullOrWhiteSpace(topic))
                 return BadRequest("Topic is missing.");
 
             try
             {
-                var wordResult = await _speechService.GetRandomWordAsync(topic.ToLower());
-                if (wordResult == null)
+                var wordResults = await _speechService.GetRandomWordsAsync(topic.ToLower());
+                if (wordResults == null || !wordResults.Any())
                     return BadRequest("No words found for the specified topic.");
 
-                return Ok(new
+                return Ok(wordResults.Select(w => new
                 {
-                    word = wordResult.Word,
-                    meaning = wordResult.Meaning,
-                    phonetic = wordResult.Phonetic
-                });
+                    word = w.Word,
+                    meaning = w.Meaning,
+                    phonetic = w.Phonetic
+                }));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new
                 {
-                    error = "Error generating random word.",
+                    error = "Error generating random words.",
                     detail = ex.Message
                 });
             }
