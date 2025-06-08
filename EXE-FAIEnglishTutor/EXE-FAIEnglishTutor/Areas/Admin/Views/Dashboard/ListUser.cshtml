@@ -1,0 +1,186 @@
+﻿
+@model List<User>
+@{
+    Layout = "_LayoutAdmin";
+}
+
+ <style>
+    .table-actions i {
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .fa-check {
+        color: green;
+    }
+
+    .fa-edit {
+        color: #007bff;
+    }
+
+    .fa-trash {
+        color: red;
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+<div class="container-fluid">
+    <div class=" mt-4">
+        <h5>User List</h5>
+
+
+        <div class="d-flex justify-content-between my-3">
+            <div></div>
+            <div>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by name or email">
+            </div>
+        </div>
+
+        <table class="table table-bordered table-hover align-middle text-center" id="userTable">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Is Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@Model[i].FullName</td>
+                        <td>@Model[i].Email</td>
+                        <td>@Model[i].PhoneNumber</td>
+                        <td>@string.Join(", ", Model[i].Roles.Select(r => r.RoleName))</td>
+                        <td class="icon">
+                            @if (@Model[i].Status == EXE_FAIEnglishTutor.Enums.AccountStatus.ACTIVATED)
+                            {
+                                <i class="fas fa-check text-success" title="Active"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-times text-danger" title="Inactive"></i>
+                            }
+                        </td>
+                        <td class="table-actions">
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="EditUser" asp-route-id="@Model[i].UserId">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="BlockUser" asp-route-id="@Model[i].UserId"
+                               onclick="return confirm('Are you sure you want to block this user?');">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+                <!-- Thêm các dòng khác tương tự -->
+            </tbody>
+
+
+        </table>
+        <div id="pagination" class="d-flex justify-content-center mt-3"></div>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        console.log("Trang con đã load JS thành công!");
+    </script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+
+}
+
+
+
+<script>
+    // Phân trang bằng JavaScript
+    document.addEventListener("DOMContentLoaded", function () {
+        let table = document.getElementById("userTable").getElementsByTagName("tbody")[0];
+        let rows = table.getElementsByTagName("tr");
+        let rowsPerPage = 10;
+        let currentPage = 1;
+
+        function displayTablePage(page) {
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = (i >= start && i < end) ? "table-row" : "none";
+            }
+        }
+
+        function createPagination() {
+            let totalPages = Math.ceil(rows.length / rowsPerPage);
+            let paginationDiv = document.getElementById("pagination");
+            paginationDiv.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                let btn = document.createElement("button");
+                btn.innerText = i;
+                btn.classList.add("btn", "btn-primary", "mx-1");
+                btn.addEventListener("click", function () {
+                    currentPage = i;
+                    displayTablePage(currentPage);
+                });
+                paginationDiv.appendChild(btn);
+            }
+        }
+
+        displayTablePage(currentPage);
+        createPagination();
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+
+<script>
+    function showToast(type, title, message) {
+        iziToast[type]({
+            title: title,
+            message: message,
+            position: 'topRight'
+        });
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var successMessage = '@TempData["Success"]';
+        if (successMessage) {
+            showToast('success', 'Success', successMessage);
+        }
+    });
+</script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("searchInput");
+            const table = document.getElementById("userTable");
+            const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+            searchInput.addEventListener("keyup", function () {
+                const filter = searchInput.value.toLowerCase();
+                for (let i = 0; i < rows.length; i++) {
+                    const name = rows[i].cells[1].textContent.toLowerCase();
+                    const email = rows[i].cells[2].textContent.toLowerCase();
+                    if (name.includes(filter) || email.includes(filter)) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            });
+        });
+    </script>
+

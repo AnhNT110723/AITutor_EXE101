@@ -7,6 +7,7 @@ using EXE_FAIEnglishTutor.Services.Implementaion.AI;
 using EXE_FAIEnglishTutor.Services.Interface.AI;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login";         
         options.LogoutPath = "/Account/Logout";         
-        options.AccessDeniedPath = "/Error/401"; 
+        options.AccessDeniedPath = "/Error/401";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;             // Gia hạn cookie nếu có request mới
     })

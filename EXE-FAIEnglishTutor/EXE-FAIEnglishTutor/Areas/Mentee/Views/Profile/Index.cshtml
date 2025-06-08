@@ -1,48 +1,47 @@
-﻿@{
+﻿﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml"; // hoặc relative path phù hợp
 }
 
 @model ProfileDto
 
 
-        <!-- Page Content  -->
-        <div id="content" class="p-4 p-md-5">
-            <div class="sticky-wrapper">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+    <div class="sticky-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
 
-                        <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
-                            <i class="fa fa-bars"></i>
-                            <span class="sr-only">Toggle Menu</span>
-                        </button>
-                        <!-- Nút Back -->
-                        <!-- <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
-                            <i class="fa fa-arrow-left"></i> Back
-                        </button> -->
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
-                                data-bs-target="#navbarSupportedContent"
-                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fa fa-bars"></i>
-                        </button>
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <!-- Nút Back -->
+                <!-- <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button> -->
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="nav navbar-nav ml-auto">
-                                @*  <li class="nav-item active">
-                                <a class="nav-link" href="home.html">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                <a class="nav-link" href="#">About</a>
-                                </li>
-                                <li class="nav-item">
-                                <a class="nav-link" href="#">Portfolio</a>
-                                </li> *@
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    // Đọc thông tin từ cookie
-                                    var fullName = User.Identity.Name;
-                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
-                                    <li class="nav-item dropdown">
-
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        @*  <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            // Đọc thông tin từ cookie
+                            var fullName = User.Identity.Name;
+                            var avatarUrl = User.FindFirst("Avatar")?.Value;
+                            <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
                                            data-bs-toggle="dropdown" aria-expanded="false">
                                             <div class="nav-img">
@@ -77,7 +76,7 @@
                 </nav>
 
 
-                <div class="head-info">
+@*                 <div class="head-info">
                     <div class="">
                         <h4 id="title">Thông tin tài khoản</h4>
                     </div>
@@ -93,212 +92,248 @@
                                     <a class="dropdown-item" href="#" data-lang="vi">
                                         <img src="~/Images/Co-Vietnam.png" alt="Vietnam Flag" class="flag-icon" /> Tiếng Việt
                                     </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#" data-lang="en">
-                                        <img src="~/Images/co-england.png" alt="England Flag" class="flag-icon" /> English
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
                                     </a>
-                                </li>
-                            </ul>
-                        </div>
+
+                                    <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                        }
+                    </ul>
+                </div>
+            </div>
+ *@        </nav>
 
 
-
-                    </div>
+        <div class="head-info">
+            <div class="">
+                <h4 id="title">Thông tin tài khoản</h4>
+            </div>
+            <div>
+                <!-- Tạo dropdown tùy chỉnh -->
+                <div class="dropdown position-relative" style="width: 200px;">
+                    <button class="btn btn-light dropdown-toggle" type="button" style="width: 100%;"
+                            id="languageDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                        <img src="~/Images/Co-Vietnam.png" alt="Flag" class="flag-icon" /> Tiếng Việt
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li>
+                            <a class="dropdown-item" href="#" data-lang="vi">
+                                <img src="~/Images/Co-Vietnam.png" alt="Vietnam Flag" class="flag-icon" /> Tiếng Việt
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" data-lang="en">
+                                <img src="~/Images/co-england.png" alt="England Flag" class="flag-icon" /> English
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-            </div>
-            <div class="scrollContent">
-                <form asp-controller="Profile" asp-action="SaveChange" asp-area="Mentee" method="post" enctype="multipart/form-data">
-                    <h5 id="accountRe">Tài khoản đăng ký</h5>
-                    <div class="content-source">
-                        <div class="container-fluid" style="height: auto;">
-                            <div class="body-container">
-                                <input type="hidden" asp-for="UserId" />
-                                <input type="hidden" asp-for="AvatarStr" id="hiddenAvatarStr" /> <!-- Thêm input ẩn -->
-                                <input type="file" asp-for="Avatar" id="hiddenAvatar" style="display: none;" accept="image/*">
-                                <div class="row">
-                                    <!-- Avatar -->
-                                    <div class="col-lg-2 col-12">
-                                        <div class="avatar-change position-relative avatar-border">
-                                            <img src="@Url.Content(Model.AvatarStr)" id="avatarDisplay" alt="">
-                                            <!-- Biểu tượng máy ảnh -->
-                                            <button class="camera-icon" id="avatarEditBtn" type="button">
-                                                <i class="fa fa-camera"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <!-- Thông tin tài khoản -->
-
-                                    <div class="col-lg-10 col-12">
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <p id="inputName">Họ và tên</p>
-                                                <input type="text" asp-for="FullName" class="form-control" id="fullName"
-                                                       placeholder="Nhập họ và tên">
-                                                <span asp-validation-for="FullName" class="text-danger"></span>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p id="inputDate">Năm sinh</p>
-                                                <input type="date" asp-for="Dob" class="form-control" id="birthYear" oninput="validateDate()">
-                                                <span asp-validation-for="Dob" class="text-danger"></span>
-                                                <div id="dateError" class="err" style="color: red"></div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <p id="inputPhone">Số điện thoại</p>
-                                                <div class="input-group custom-input-group">
-                                                    <div style="width: 100%;">
-                                                        <input type="tel" class="form-control" placeholder="Nhập số điện thoại" asp-for="Phone" id="phoneNumber"
-                                                               oninput="validatePhone1()">
-                                                        <span asp-validation-for="Phone" class="text-danger"></span>
-                                                        <div id="phoneError" class="err" style="color: red"></div>
-
-                                                        @if (TempData["PhoneExist"] != null)
-                                                        {
-                                                            <div class="err" id="PhoneExist" style="color: red">Số điện thoại này đã tồn tại, vui lòng nhập số điện thoại khác</div>
-                                                        }
-                                                        @if (TempData["PhoneErr"] != null)
-                                                        {
-                                                            <div class="err" id="PhoneErr" style="color: red">Lỗi định dạng số điện thoại</div>
-                                                        }
-                                                    </div>
-                                                    <div>
-                                                        <input type="hidden" asp-for="CountryCode" id="countryCode" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <p id="inputEmail">Email</p>
-                                                <input type="email" asp-for="Email" class="form-control" id="email"
-                                                       placeholder="Nhập email" disabled>
-                                                <div id="emailError" class="err" style="color: red"></div>
-
-                                                @* <span asp-validation-for="Email" class="text-danger"></span> *@
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <p id="inputDistrict">Tỉnh thành sinh sống</p>
-                                                <select id="provinceSelect" class="form-select" asp-for="Province">
-                                                    <option value="0">-- Chọn tỉnh/thành phố --</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
 
-                    @if (Model.Provider == "Local")
-                    {
-                        <h5 class="text-change-password" id="changePassword">Thay đổi mật khẩu</h5>
-                        <div class="propose-course" style="margin-top: 10px !important;">
-                            <div class="container-fluid">
-                                <div class="body-container">
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <p id="inputOldpass">Nhập mật khẩu cũ</p>
-                                            <input type="password" asp-for="OldPassword" id="OldPassword" class="form-control" oninput="validateOldPassword()"
-                                                   placeholder="Nhập mật khẩu cũ">
-                                            @if (TempData["OldPassErr"] != null)
-                                            {
-                                                <div class="err" id="OldPassErrBE" style="color: red">@TempData["OldPassErr"]</div>
-
-                                            }
-                                            <span asp-validation-for="OldPassword" class="text-danger"></span>
-                                            <div id="OldPasswordError" class="err" style="color: red"></div>
-
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p id="inputPassword">Mật khẩu mới</p>
-                                            <input type="password" asp-for="Password" class="form-control" id="password"
-                                                   placeholder="Nhập mật khẩu" oninput="validatePassword()">
-                                            <span asp-validation-for="Password" class="text-danger"></span>
-                                            <div id="passwordError" class="err" style="color: red"></div>
-
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p id="inputRepass" style="margin-top: 20px !important  ;">
-                                                Nhập lại mật khẩu mới
-                                            </p>
-                                            <input type="password" asp-for="RePassword" class="form-control"
-                                                   id="re_pass" placeholder="Nhập lại mật khẩu" oninput="validateConfirmPassword()">
-                                            <span asp-validation-for="RePassword" class="text-danger"></span>
-                                            <div id="confirmPasswordError" class="err" style="color: red"></div>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-
-
-                    <div class="div-button-save-change">
-                        <button id="btnSaveChange" type="submit">Lưu thay đổi</button>
-                    </div>
-
-
-                </form>
             </div>
         </div>
 
+    </div>
+    <div class="scrollContent">
+        <form asp-controller="Profile" asp-action="SaveChange" asp-area="Mentee" method="post" enctype="multipart/form-data">
+            <h5 id="accountRe">Tài khoản đăng ký</h5>
+            <div class="content-source">
+                <div class="container-fluid" style="height: auto;">
+                    <div class="body-container">
+                        <input type="hidden" asp-for="UserId" />
+                        <input type="hidden" asp-for="AvatarStr" id="hiddenAvatarStr" /> <!-- Thêm input ẩn -->
+                        <input type="file" asp-for="Avatar" id="hiddenAvatar" style="display: none;" accept="image/*">
+                        <div class="row">
+                            <!-- Avatar -->
+                            <div class="col-lg-2 col-12">
+                                <div class="avatar-change position-relative avatar-border">
+                                    <img src="@Url.Content(Model.AvatarStr)" id="avatarDisplay" alt="">
+                                    <!-- Biểu tượng máy ảnh -->
+                                    <button class="camera-icon" id="avatarEditBtn" type="button">
+                                        <i class="fa fa-camera"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Thông tin tài khoản -->
 
+                            <div class="col-lg-10 col-12">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p id="inputName">Họ và tên</p>
+                                        <input type="text" asp-for="FullName" class="form-control" id="fullName"
+                                               placeholder="Nhập họ và tên">
+                                        <span asp-validation-for="FullName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p id="inputDate">Năm sinh</p>
+                                        <input type="date" asp-for="Dob" class="form-control" id="birthYear" oninput="validateDate()">
+                                        <span asp-validation-for="Dob" class="text-danger"></span>
+                                        <div id="dateError" class="err" style="color: red"></div>
+                                    </div>
+                                </div>
 
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p id="inputPhone">Số điện thoại</p>
+                                        <div class="input-group custom-input-group">
+                                            <div style="width: 100%;">
+                                                <input type="tel" class="form-control" placeholder="Nhập số điện thoại" asp-for="Phone" id="phoneNumber"
+                                                       oninput="validatePhone1()">
+                                                <span asp-validation-for="Phone" class="text-danger"></span>
+                                                <div id="phoneError" class="err" style="color: red"></div>
 
-    <!-- Popup chọn avatar -->
-    <div class="modal" id="avatarModal" tabindex="-1" role="dialog" aria-labelledby="avatarModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="avatarModalLabel">Chọn ảnh đại diện</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="img-normal d-flex gap-2">
-                        <!-- Các ảnh mặc định -->
-                        <div class="default-avatar">
-                            <img src="~/Images/avatar.jpg" alt="Ảnh 1" class="avatar-option" data-url="~/Images/avatar.jpg">
-                        </div>
-                        <div class="default-avatar">
-                            <img src="~/Images/user_icon.webp" alt="Ảnh 2" class="avatar-option" data-url="~/Images/user_icon.webp">
-                        </div>
-                        <div class="default-avatar">
-                            <img src="~/Images/CHAT.png" alt="Ảnh 3" class="avatar-option" data-url="~/Images/CHAT.png">
-                        </div>
-                        <div class="default-avatar">
-                            <img src="~/Images/concoc.png" alt="Ảnh 4" class="avatar-option" data-url="~/Images/concoc.png">
+                                                @if (TempData["PhoneExist"] != null)
+                                                {
+                                                    <div class="err" id="PhoneExist" style="color: red">Số điện thoại này đã tồn tại, vui lòng nhập số điện thoại khác</div>
+                                                }
+                                                @if (TempData["PhoneErr"] != null)
+                                                {
+                                                    <div class="err" id="PhoneErr" style="color: red">Lỗi định dạng số điện thoại</div>
+                                                }
+                                            </div>
+                                            <div>
+                                                <input type="hidden" asp-for="CountryCode" id="countryCode" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <p id="inputEmail">Email</p>
+                                        <input type="email" asp-for="Email" class="form-control" id="email"
+                                               placeholder="Nhập email" disabled>
+                                        <div id="emailError" class="err" style="color: red"></div>
+
+                                        @* <span asp-validation-for="Email" class="text-danger"></span> *@
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p id="inputDistrict">Tỉnh thành sinh sống</p>
+                                        <select id="provinceSelect" class="form-select" asp-for="Province">
+                                            <option value="0">-- Chọn tỉnh/thành phố --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <!-- Ô input file -->
-                    <label for="uploadAvatar" class="custom-file-input-label">
-                        <input type="file" id="uploadAvatar" accept="image/*" class="form-control custom-file-input" onchange="previewAvatar(this)">
-                        <span class="text-danger" id="avatarError"></span>
-                        <div id="filePreview" class="file-preview">
-                            <span id="titleModalImg">Tải ảnh lên từ thiết bị</span>
-                            <img id="avatarPreview" style="display: none; max-width: 100%; margin-top: 10px;" alt="Avatar Preview">
+                </div>
+            </div>
+
+
+            @if (Model.Provider == "Local")
+            {
+                <h5 class="text-change-password" id="changePassword">Thay đổi mật khẩu</h5>
+                <div class="propose-course" style="margin-top: 10px !important;">
+                    <div class="container-fluid">
+                        <div class="body-container">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p id="inputOldpass">Nhập mật khẩu cũ</p>
+                                    <input type="password" asp-for="OldPassword" id="OldPassword" class="form-control" oninput="validateOldPassword()"
+                                           placeholder="Nhập mật khẩu cũ">
+                                    @if (TempData["OldPassErr"] != null)
+                                    {
+                                        <div class="err" id="OldPassErrBE" style="color: red">@TempData["OldPassErr"]</div>
+
+                                    }
+                                    <span asp-validation-for="OldPassword" class="text-danger"></span>
+                                    <div id="OldPasswordError" class="err" style="color: red"></div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <p id="inputPassword">Mật khẩu mới</p>
+                                    <input type="password" asp-for="Password" class="form-control" id="password"
+                                           placeholder="Nhập mật khẩu" oninput="validatePassword()">
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                    <div id="passwordError" class="err" style="color: red"></div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <p id="inputRepass" style="margin-top: 20px !important  ;">
+                                        Nhập lại mật khẩu mới
+                                    </p>
+                                    <input type="password" asp-for="RePassword" class="form-control"
+                                           id="re_pass" placeholder="Nhập lại mật khẩu" oninput="validateConfirmPassword()">
+                                    <span asp-validation-for="RePassword" class="text-danger"></span>
+                                    <div id="confirmPasswordError" class="err" style="color: red"></div>
+
+                                </div>
+                            </div>
+
                         </div>
-                    </label>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="saveAvatarBtn">Lưu</button>
+            }
+
+
+
+            <div class="div-button-save-change">
+                <button id="btnSaveChange" type="submit">Lưu thay đổi</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+
+
+<!-- Popup chọn avatar -->
+<div class="modal" id="avatarModal" tabindex="-1" role="dialog" aria-labelledby="avatarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="avatarModalLabel">Chọn ảnh đại diện</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-normal d-flex gap-2">
+                    <!-- Các ảnh mặc định -->
+                    <div class="default-avatar">
+                        <img src="~/Images/avatar.jpg" alt="Ảnh 1" class="avatar-option" data-url="~/Images/avatar.jpg">
+                    </div>
+                    <div class="default-avatar">
+                        <img src="~/Images/user_icon.webp" alt="Ảnh 2" class="avatar-option" data-url="~/Images/user_icon.webp">
+                    </div>
+                    <div class="default-avatar">
+                        <img src="~/Images/CHAT.png" alt="Ảnh 3" class="avatar-option" data-url="~/Images/CHAT.png">
+                    </div>
+                    <div class="default-avatar">
+                        <img src="~/Images/concoc.png" alt="Ảnh 4" class="avatar-option" data-url="~/Images/concoc.png">
+                    </div>
                 </div>
+                <hr>
+                <!-- Ô input file -->
+                <label for="uploadAvatar" class="custom-file-input-label">
+                    <input type="file" id="uploadAvatar" accept="image/*" class="form-control custom-file-input" onchange="previewAvatar(this)">
+                    <span class="text-danger" id="avatarError"></span>
+                    <div id="filePreview" class="file-preview">
+                        <span id="titleModalImg">Tải ảnh lên từ thiết bị</span>
+                        <img id="avatarPreview" style="display: none; max-width: 100%; margin-top: 10px;" alt="Avatar Preview">
+                    </div>
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">Đóng</button>
+                <button type="button" class="btn btn-primary" id="saveAvatarBtn">Lưu</button>
             </div>
         </div>
     </div>
+</div>
 @section Scripts {
     <link href="~/css/mentee/profile.css" rel="stylesheet" />
 

@@ -8,5 +8,20 @@ namespace EXE_FAIEnglishTutor.Services.Interface
         User? AuthenticateUser(string email, string password);
 
         Task<User?> GetUserById(int id);
+
+        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<User> GetUserByIdAsync(int id);
+
+        Task UpdateUser(User user);
+
+        Task AddUserAsync(User user);
+
+        Task DeleteUserAsync(int id);
+
+        Task BlockUserAsync(int id);
+
+        Task<int> GetTotalUsersAsync();
+
+
     }
 }

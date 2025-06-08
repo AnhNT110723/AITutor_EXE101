@@ -16,14 +16,31 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
             return await _context.Users.FirstOrDefaultAsync(u => u.Provider == provider && u.ProviderId == providerId);
         }
 
+        public async Task<IEnumerable<User>> GetAllUserAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Roles).ToListAsync();
+        }
+
+        public async Task<int> GetTotalUsersAsync()
+        {
+            return await _context.Users.CountAsync();
+        }
+
         public User? GetUserByEmail(string email)
         {
-            return _context.Users.FirstOrDefault(u => u.Email.Equals(email));
+            return _context.Users.Include(x => x.Roles).FirstOrDefault(u => u.Email.Equals(email));
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+        }
+
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            return await _context.Users
+                .Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserId == id);
         }
 
         public async Task<bool> IsPhoneNumberExists(string phoneNumber)
@@ -54,5 +71,6 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
+
     }
 }
