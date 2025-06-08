@@ -57,6 +57,9 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<ISituationService, SituationService>();
             services.AddScoped<ISituationRepository, SituationRepository>();
 
+            //Podcast
+            services.AddScoped<IPodcastService, PodcastService>();
+
         }
 
 
