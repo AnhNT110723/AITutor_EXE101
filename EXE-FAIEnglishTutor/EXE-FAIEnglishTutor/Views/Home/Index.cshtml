@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
 }
+@model IEnumerable<EXE_FAIEnglishTutor.Models.Situation?>
 
         <!-- Modal -->
 
@@ -160,6 +161,7 @@
                         // Đọc thông tin từ cookie
                         var fullName = User.Identity.Name;
                         var avatarUrl = User.FindFirst("Avatar")?.Value;
+                       
                             <li class="nav-item dropdown">
           
                                 <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
@@ -172,10 +174,27 @@
                                     <div class="menu-title">
                                     <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
                                     </div>
+
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
                                         <i class="bi bi-person-circle"></i> View Profile
                                     </a>
+                                @if(User.Identity.IsAuthenticated)
+                                {
+
+
+                                @if (User.IsInRole("admin"))
+                                    {
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
+                                            <i class="bi bi-speedometer2"></i> Dashboard
+                                        </a>
+                                    }
+                                    
+                                }
+
+                                    
+
                                     <div class="dropdown-divider"></div>
                                     <a id="logout-link" class="dropdown-item text-danger" href="#" >
                                         <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
@@ -282,120 +301,24 @@
 
 
                 <div class="d-flex overflow-hidden" id="course-list-new" style="scroll-behavior: smooth; ">
-                    <a href="learningAI.html">
 
-                        <div class="flex-shrink-0" style="min-width: 164px; max-width: 230px;">
-                            <div class="card" style="width: 200px; height: 250px;">
-                                <img src="https://r2.erweima.ai/i/2noVCCJuRLmDuQw1AHHpWg.png" class="card-img-top" alt="Course 1">
-                                <div class="card-title-overlay position-absolute">Học qua hình</div>
-                                <div class="overlay-home"></div>
-                                <div class="card-body">
-                                    <!-- <h5 class="card-title">Khóa học 1</h5> -->
-                                    <p class="card-text">Mô tả ngắn gọn về khóa học 1.</p>
+                @foreach (var situation in Model.OrderByDescending(s => s.CreatedAt).Take(8))
+                {
+                        <a href="learningAI.html">
+                            <div class="flex-shrink-0" style="min-width: 164px; max-width: 230px;">
+                                <div class="card" style="width: 200px; height: 250px;">
+                                <img src="@situation?.ImageUrl" class="card-img-top" alt="@situation?.SituationName ?? " No Title"">
+                                <div class="card-title-overlay position-absolute">@situation.Type.TypeName</div>
+                                     <div class="overlay-home"></div>
+                                    <div class="card-body">
+                                        <!-- <h5 class="card-title">Khóa học 1</h5> -->
+                                    <p class="card-text">@situation?.SituationName</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                    <a href="learningAI.html">
-                        <div class="flex-shrink-0" style="min-width: 164px; max-width: 230px;">
-                            <div class="card" style="width: 200px; height: 250px;">
-                                <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png"
-                                     class="card-img-top" alt="Course 2">
-                                <div class="card-title-overlay position-absolute">Nhập vai</div>
-                                <div class="overlay-home"></div>
-                                <div class="card-body">
-                                    <p class="card-text">Making a Doctor's Appointment. </p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="learningAI.html">
-                        <div class="flex-shrink-0" style="min-width: 164px; max-width: 230px;">
-                            <div class="card" style="width: 200px; height: 250px;">
-                                <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1efd1876-a7b8-6932-922e-42004e494300-1736756500.png"
-                                     class="card-img-top" alt="Course 3">
-                                <div class="card-title-overlay position-absolute">Nhập vai</div>
-                                <div class="overlay-home"></div>
-
-
-                                <div class="card-body">
-
-                                    <p class="card-text">New Year just feels more complete with everyone here.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                <a asp-controller="Pronunciation">
-                        <div class="flex-shrink-0" style="min-width: 164px; max-width: 230px;">
-                            <div class="card" style="width: 200px; height: 250px;">
-                                <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/168/1efd17ab-451b-6520-9a58-42004e494300-1736751041.png"
-                                     class="card-img-top" alt="Course 2">
-                                <div class="card-title-overlay position-absolute">Phát âm</div>
-                                <div class="overlay-home"></div>
-
-
-                                <div class="card-body">
-
-                                    <p class="card-text">Daily Routines.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card" style="width: 200px; height: 250px;">
-                            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1efc6999-c822-6e84-ac92-42004e494300-1735554852.png"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="card-title">Khóa học 3</div>
-                            <div class="overlay-home"></div>
-
-
-                            <div class="card-body">
-
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card" style="width: 200px; height: 250px;">
-                            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1efc6999-a26a-6340-a8ed-42004e494300-1735554849.png"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="card-title">Khóa học 3</div>
-                            <div class="overlay-home"></div>
-
-
-                            <div class="card-body">
-
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card" style="width: 200px; height: 250px;">
-                            <img src="https://www.edufirstschool.com/english/wp-content/uploads/2019/03/learn-english-phonics-for-kids-edufirst-school.jpg"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="card-title">Khóa học 3</div>
-                            <div class="overlay-home"></div>
-
-
-                            <div class="card-body">
-
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card" style="width: 200px; height: 250px;">
-                            <img src="https://khcdn41b3c457ef.b-cdn.net/assets/general/_sq680/74330/teaching-primary-children.webp?v=1674925909"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="overlay-home"></div>
-
-
-                            <div class="card-body">
-                                <h5 class="card-title">Khóa học 2</h5>
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
+                        </a>
+                    }
+                
                 </div>
 
 
@@ -417,109 +340,23 @@
 
 
                 <div class="d-flex overflow-hidden" id="course-list" style="scroll-behavior: smooth; ">
+                @foreach (var situation in Model)
+                {
+                     <a href="learningAI.html">
                     <div class="flex-shrink-0 " style="min-width: 164px; max-width: 250px;">
                         <div class="card">
                             <div class="img-container">
-                                <img src="https://westlink.edu.vn/wp-content/uploads/2023/11/be-hoc-tieng-anh-qua-hinh-anh-4-2.jpg"
-                                     class="card-img-top" alt="Course 1">
-                                <div class="card-title-overlay position-absolute">Khóa học 1</div>
+                                <img src="@situation?.ImageUrl" class="card-img-top" alt="@situation?.SituationName ?? " No Title"">
+                                    <div class="card-title-overlay position-absolute">@situation.Type.TypeName</div>
                                 <div class="overlay-home"></div>
-
                             </div>
                             <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 1.</p>
+                                <p class="card-text">@situation?.SituationName</p>
                             </div>
                         </div>
                     </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card">
-                            <img src="https://png.pngtree.com/element_our/20190530/ourmid/pngtree-english-class-study-class-image_1260036.jpg"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-                            <div class="overlay-home"></div>
-
-
-                            <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2 dnfjnjndjdjdndj.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card">
-                            <img src="static/images/fighter-jet-3286728_1920.jpg" class="card-img-top" alt="Course 3">
-                            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-                            <div class="overlay-home"></div>
-
-                            <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 3.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card">
-                            <img src="static/images/cv-1639898315592.jpg.webp" class="card-img-top" alt="Course 2">
-                            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-                            <div class="overlay-home"></div>
-
-                            <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card">
-                            <img src="https://cdn.venngage.com/template/thumbnail/small/8e6afacd-504c-4258-9d10-8c82acc156ae.webp"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-                            <div class="overlay-home"></div>
-
-                            <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAZ1do5reZYxV0ZhF8X_OsPLKh8fndDECuRQ&s"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-                            <div class="overlay-home"></div>
-
-                            <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCYo2wZPbcoeH1Wisr6gg8ELMxq0bgf-2qWw&s"
-                                 class="card-img-top" alt="Course 2">
-                            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-                            <div class="overlay-home"></div>
-
-                            <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 " style="min-width: 164px; max-width: 230px;">
-                        <div class="card">
-                            <img src="course2.jpg" class="card-img-top" alt="Course 2">
-                            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-                            <div class="overlay-home"></div>
-
-                            <div class="card-body">
-                                <p class="card-text">Mô tả ngắn gọn về khóa học 2.</p>
-                            </div>
-                        </div>
-                    </div>
+                    </a>
+                }
                 </div>
 
 

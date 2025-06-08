@@ -12,6 +12,11 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.Mentee
             _situationRepository = situationRepository;
         }
 
+        public async Task<IEnumerable<Situation?>> GetAllSituation()
+        {
+            return await _situationRepository.GetAllSituation();
+        }
+
         public async Task<List<Level?>> GetAllLevelAsync()
         {
             var levels = await _situationRepository.GetAllLevelAsync();
@@ -49,6 +54,11 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.Mentee
         {
             var situation = await _situationRepository.GetSituationByIdAsync(situationId);
             return situation;
+        }
+
+        public async Task<IEnumerable<Situation?>> GetTop8Situation()
+        {
+            return await _situationRepository.GetTop8Situation();
         }
     }
 }

@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\Mentee\Data\" />
     <Folder Include="Areas\Mentee\Models\" />
     <Folder Include="Areas\Mentee\Views\ToeicTest\" />

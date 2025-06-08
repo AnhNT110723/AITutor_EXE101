@@ -6,6 +6,10 @@ namespace EXE_FAIEnglishTutor.Repositories.Interface.Mentee
     {
         Task<List<Situation>> GetListSituationByRolePlay(int rolePlay);
         Task<Situation?> GetSituationByIdAsync(int situationId);
+
+        Task<IEnumerable<Situation?>> GetAllSituation();
+
+        Task<IEnumerable<Situation?>> GetTop8Situation();
         Task<List<Level?>> GetAllLevelAsync();
     }
 }
