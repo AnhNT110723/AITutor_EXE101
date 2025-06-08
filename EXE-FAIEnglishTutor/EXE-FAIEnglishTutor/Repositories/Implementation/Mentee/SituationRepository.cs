@@ -12,6 +12,20 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation.Mentee
         {
         }
 
+        public async Task<IEnumerable<Situation?>> GetAllSituation()
+        {
+            return await _context.Situations
+                .Include(s => s.Type)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Situation?>> GetTop8Situation()
+        {
+            return await _context.Situations
+                          .OrderByDescending(s => s.CreatedAt)
+                          .Take(8)
+                          .ToListAsync();
+        }
+
         public async Task<List<Situation>> GetListSituationByRolePlay(int rolePlay)
         {
             var x = await _context.Situations.Include(x => x.Level).Where(t => t.TypeId == rolePlay).ToListAsync();

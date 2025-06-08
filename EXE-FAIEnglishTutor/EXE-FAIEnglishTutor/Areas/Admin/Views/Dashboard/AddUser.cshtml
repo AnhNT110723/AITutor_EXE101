@@ -1,0 +1,136 @@
+﻿@model Admin_AddUserDto
+
+@{
+    Layout = "_LayoutAdmin";
+}
+<link rel="stylesheet" href="~/lib/intl-tel-input/css/intlTelInput.min.css" />
+
+<div class="container-fluid">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5>Add New User</h5>
+    </div>
+    <div class="card-body">
+
+        <form method="post" enctype="multipart/form-data" asp-area="Admin" asp-controller="Dashboard" asp-action="AddUser">
+            <div class="row">
+                <!-- Left Column -->
+                <input type="hidden" class="form-control" asp-for="UserId">
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter full name" asp-for="FullName">
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" asp-for="Email">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter password" asp-for="Password">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">RePassword</label>
+                        <input type="password" class="form-control" id="password" placeholder="Return password" asp-for="RePassword">
+                        <span asp-validation-for="RePassword" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6">
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="tel" class="form-control w-100" id="phoneNumber" asp-for="PhoneNumber"
+                                       placeholder="Nhập số điện thoại" oninput="validatePhone1()">
+                                <input type="hidden" asp-for="CountryCode" id="countryCode" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <div id="phoneError" class="err" style="color: red"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob" asp-for="Dob">
+                        <span asp-validation-for="Dob" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Avatar</label>
+                        <input type="file" class="form-control" id="avatar" accept=".jpg,.jpeg,.png" asp-for="Avatar" onchange="previewAvatar()">
+                        <span asp-validation-for="Avatar" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select asp-for="RoleId" asp-items="@(new SelectList(ViewBag.Roles, "RoleId", "RoleName", Model.RoleId))"
+                                class="form-control" id="role">
+                            <option value="">Select role</option>
+                        </select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Submit -->
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Add User</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewAvatar() {
+            var fileInput = document.getElementById('avatar');
+            var preview = document.getElementById('avatarPreview');
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.innerHTML = '<img src="' + reader.result + '" alt="Avatar Preview" style="max-width: 100px; max-height: 100px;" />';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = "";
+            }
+        }
+    </script>
+
+
+    <script src="~/lib/intl-tel-input/js/intlTelInput.min.js"></script>
+    <script src="~/lib/intl-tel-input/js/utils.js"></script>
+
+    <script>
+        const phoneInput = document.querySelector("#phoneNumber");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "vn",  // Việt Nam
+            separateDialCode: true,
+            utilsScript: "~/lib/intl-tel-input/js/utils.js"
+        });
+
+        phoneInput.addEventListener('countrychange', function () {
+            const dialCode = '+' + iti.getSelectedCountryData().dialCode;
+            document.querySelector('#countryCode').value = dialCode;
+        });
+
+        // Ngoài ra: set luôn giá trị ban đầu nếu cần
+        document.querySelector('#countryCode').value = '+' + iti.getSelectedCountryData().dialCode;
+    </script>
+
+}

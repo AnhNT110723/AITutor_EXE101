@@ -13,7 +13,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
     public class ProfileController : Controller
     {
         private readonly IProfileService _profileService;
-        public ProfileController (IProfileService profileService)
+        public ProfileController(IProfileService profileService)
         {
             _profileService = profileService;
         }
@@ -44,7 +44,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
         //POST Profile/SaveChangeAsync
         [HttpPost]
-        public async Task<IActionResult> SaveChangeAsync(ProfileDto model) 
+        public async Task<IActionResult> SaveChangeAsync(ProfileDto model)
         {
 
             // Bỏ qua lỗi [Required] của Password và RePassword nếu để trống
@@ -103,7 +103,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                     case "Phone Exist":
                         TempData["PhoneExist"] = "The phone number is exist!";
                         break;
-                    
+
                 }
                 return await ReturnProfileViewAsync(model);
             }

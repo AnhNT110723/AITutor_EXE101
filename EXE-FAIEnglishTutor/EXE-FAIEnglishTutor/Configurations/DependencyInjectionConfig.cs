@@ -57,6 +57,10 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<ISituationService, SituationService>();
             services.AddScoped<ISituationRepository, SituationRepository>();
 
+            //Role
+            services.AddScoped<IRoleRepository, RoleRepositoryImpl>();
+            services.AddScoped<IRoleService, RoleService>();
+
         }
 
 
