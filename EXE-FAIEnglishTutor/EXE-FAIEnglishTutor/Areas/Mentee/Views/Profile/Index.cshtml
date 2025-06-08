@@ -62,14 +62,14 @@
                                                 <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
                                             </a>
 
-                                            <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
 
                                         </div>
                                     </li>
                                 }
                                 else
                                 {
-                                    <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                    <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Đăng nhập</a>
                                 }
                             </ul>
                         </div>
