@@ -132,13 +132,11 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 {
                     Lesson = lesson,
                     Script = exercise.Script,
-                    Questions = exercise.Questions.Take(2).ToList(),
+                    Questions = exercise.Questions,
                     Words = new List<WordResult>(),
                     AudioData = $"data:audio/mp3;base64,{audioBase64}" // Store as data URL
                 };
 
-
-                
                 return View(viewModel);
             }
             catch (HttpRequestException ex)
@@ -175,7 +173,356 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 });
             }
         }
-        
+
+        private string[] regrex = { ". ", "! ", "? " };
+        [HttpPost]
+        public async Task<IActionResult> Step3(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Split script into sentences for line-by-line display
+                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim() + ".")
+                    .ToList();
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions) 
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions) 
+                    : new List<IeltsQuestion>();
+
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Sentences = sentences,
+                    Questions = questionsList
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Step3(int id)
+        {
+            // Redirect to Step2 if accessed directly via GET
+            return RedirectToAction("Step2", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Step2Pre(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions) 
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions) 
+                    : new List<IeltsQuestion>();
+
+                // Create view model with the data from Step3
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Questions = questionsList,
+                    Words = new List<WordResult>(), // Initialize empty list
+                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim() + ".")
+                        .ToList()
+                };
+
+                return View("Step2", viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Step4(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Split script into sentences for line-by-line display
+                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim() + ".")
+                    .ToList();
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Sentences = sentences,
+                    Questions = questionsList
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Step4(int id)
+        {
+            // Redirect to Step2 if accessed directly via GET
+            return RedirectToAction("Step3", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Step3Pre(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                // Create view model with the data from Step3
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Questions = questionsList,
+                    Words = new List<WordResult>(), // Initialize empty list
+                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim() + ".")
+                        .ToList()
+                };
+
+                return View("Step3", viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Step5(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Split script into sentences for line-by-line display
+                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim() + ".")
+                    .ToList();
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Sentences = sentences,
+                    Questions = questionsList
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Step5(int id)
+        {
+            // Redirect to Step4 if accessed directly via GET
+            return RedirectToAction("Step4", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Step4Pre(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                // Create view model with the data from Step3
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Questions = questionsList,
+                    Words = new List<WordResult>(), // Initialize empty list
+                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim() + ".")
+                        .ToList()
+                };
+
+                return View("Step3", viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Step6(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Split script into sentences for line-by-line display
+                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim() + ".")
+                    .ToList();
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Sentences = sentences,
+                    Questions = questionsList
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Step6(int id)
+        {
+            // Redirect to Step4 if accessed directly via GET
+            return RedirectToAction("Step4", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Step5Pre(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                // Create view model with the data from Step3
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Questions = questionsList,
+                    Words = new List<WordResult>(), // Initialize empty list
+                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim() + ".")
+                        .ToList()
+                };
+
+                return View("Step3", viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
     }
     public class LessonViewModel
     {
@@ -188,4 +535,9 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
     }
     
     public class Step2ViewModel { }
+
+    public class ErrorViewModel
+    {
+        public string Message { get; set; }
+    }
 }
