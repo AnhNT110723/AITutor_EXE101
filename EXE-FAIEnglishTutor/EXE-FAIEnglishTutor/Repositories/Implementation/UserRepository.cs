@@ -18,7 +18,7 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
 
         public User? GetUserByEmail(string email)
         {
-            return _context.Users.FirstOrDefault(u => u.Email.Equals(email));
+            return _context.Users.Include(r => r.Roles).FirstOrDefault(u => u.Email.Equals(email));
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
