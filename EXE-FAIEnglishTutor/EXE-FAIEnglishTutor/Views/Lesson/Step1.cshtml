@@ -222,17 +222,53 @@
     .word-main {
         text-align: center;
         margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 2rem;
     }
 
     .word {
         font-size: 3rem;
         color: #2c3e50;
         margin-bottom: 0.5rem;
+        font-weight: 600;
+        text-transform: capitalize;
     }
 
     .phonetic {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         color: #7f8c8d;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #ff9838 0%, #ffb347 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        white-space: nowrap;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .phonetic::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -20px;
+        width: 10px;
+        height: 2px;
+        background: #ff9838;
+        transform: translateY(-50%);
+    }
+
+    .phonetic::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -20px;
+        width: 10px;
+        height: 2px;
+        background: #ff9838;
+        transform: translateY(-50%);
     }
 
     .audio-section {

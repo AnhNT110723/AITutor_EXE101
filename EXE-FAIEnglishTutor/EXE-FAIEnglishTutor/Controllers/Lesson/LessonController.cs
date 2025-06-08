@@ -523,6 +523,107 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> Step7(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Split script into sentences for line-by-line display
+                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim() + ".")
+                    .ToList();
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                // Extract words from the script for vocabulary practice
+                var words = new List<WordResult>();
+                if (!string.IsNullOrEmpty(script))
+                {
+                    var uniqueWords = script.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(w => w.Trim().ToLower())
+                        .Distinct()
+                        .Where(w => w.Length > 3) // Only words longer than 3 characters
+                        .Take(10); // Limit to 10 words
+
+                    words = uniqueWords.Select(w => new WordResult { Word = w }).ToList();
+                }
+
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Sentences = sentences,
+                    Questions = questionsList,
+                    Words = words
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Step7(int id)
+        {
+            // Redirect to Step4 if accessed directly via GET
+            return RedirectToAction("Step4", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Step6Pre(int id, string script, string audioData, string questions)
+        {
+            try
+            {
+                var lesson = await _context.Lessons
+                    .Include(l => l.Course)
+                    .FirstOrDefaultAsync(l => l.LessonId == id);
+
+                if (lesson == null)
+                {
+                    return NotFound("Lesson not found");
+                }
+
+                // Deserialize questions with null check
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
+                    : new List<IeltsQuestion>();
+
+                // Create view model with the data from Step3
+                var viewModel = new LessonViewModel
+                {
+                    Lesson = lesson,
+                    Script = script,
+                    AudioData = audioData,
+                    Questions = questionsList,
+                    Words = new List<WordResult>(), // Initialize empty list
+                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim() + ".")
+                        .ToList()
+                };
+
+                return View("Step5", viewModel);
+            }
+            catch (Exception ex)
+            {
+                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
     }
     public class LessonViewModel
     {

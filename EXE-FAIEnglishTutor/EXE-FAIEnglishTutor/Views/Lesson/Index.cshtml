@@ -68,44 +68,155 @@
         </div>
     </nav>
 
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-5">
         <div class="row">
             <div class="col-12">
-                <h2 class="mb-4 text-orange">Lessons</h2>
+                <h2 class="mb-5 text-orange animate-title">Lessons</h2>
             </div>
         </div>
-        <div class="row flex-column gap-3">
-            @foreach (var lesson in Model)
-            {
-                <div class="col-12 px-0 mb-3">
-                    <div class="card lesson-row-card shadow-sm d-flex flex-row align-items-center w-100 lesson-row-card-long" style="min-height:130px; height:130px;">
-                        <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="card-link"></a>
-                        @if (!string.IsNullOrEmpty(lesson.ImageUrl))
-                        {
-                            <img src="@lesson.ImageUrl" class="lesson-img rounded-start" alt="@lesson.Title">
-                        }
-                        else
-                        {
-                            <img src="/images/default-lesson.jpg" class="lesson-img rounded-start" alt="Default Lesson Image">
-                        }
-                        <div class="card-body flex-grow-1 d-flex flex-column justify-content-center">
-                            <h5 class="card-title text-orange mb-2 animate-title">@lesson.Title</h5>
-                            <p class="card-text fs-5 text-dark mb-2 animate-desc">@lesson.Situation</p>
-                            @if (!string.IsNullOrEmpty(lesson.VideoUrl))
-                            {
-                                <div class="mb-2 text-orange">
-                                    <i class="bi bi-camera-video"></i> Video Available
+
+        <!-- Beginner Section -->
+        <div class="level-section mb-5">
+            <div class="d-flex align-items-center mb-4">
+                <div class="level-badge beginner">
+                    <i class="bi bi-star"></i>
+                </div>
+                <h3 class="level-title">Beginner</h3>
+            </div>
+            <div class="row g-4">
+                @foreach (var lesson in Model.Where(l => l.CourseId == 1))
+                {
+                    <div class="col-12 col-md-3 px-3">
+                        <div class="lesson-container">
+                            <div class="card lesson-row-card shadow-sm">
+                                <div class="aspect-ratio-container">
+                                    @if (!string.IsNullOrEmpty(lesson.ImageUrl))
+                                    {
+                                        <img src="@lesson.ImageUrl" class="lesson-img" alt="@lesson.Title">
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/default-lesson.jpg" class="lesson-img" alt="Default Lesson Image">
+                                    }
+                                    <div class="card-overlay">
+                                        <h5 class="lesson-title animate-title">@lesson.Title</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (!string.IsNullOrEmpty(lesson.VideoUrl))
+                                        {
+                                            <div class="text-white animate-desc" style="font-size: 1rem;">
+                                                <i class="bi bi-camera-video"></i> Video Available
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="btn btn-orange animate-btn">
+                                            <i class="bi bi-play-circle"></i> Start Lesson
+                                        </a>
+                                    </div>
+                                    <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="card-link"></a>
                                 </div>
-                            }
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 border-0 d-flex align-items-center">
-                            <div class="btn btn-orange w-100 animate-btn">
-                                <i class="bi bi-play-circle"></i> Start Lesson
                             </div>
                         </div>
                     </div>
+                }
+            </div>
+        </div>
+
+        <!-- Elementary Section -->
+        <div class="level-section mb-5">
+            <div class="d-flex align-items-center mb-4">
+                <div class="level-badge elementary">
+                    <i class="bi bi-stars"></i>
                 </div>
-            }
+                <h3 class="level-title">Elementary</h3>
+            </div>
+            <div class="row g-4">
+                @foreach (var lesson in Model.Where(l => l.CourseId == 2))
+                {
+                    <div class="col-12 col-md-3 px-3">
+                        <div class="lesson-container">
+                            <div class="card lesson-row-card shadow-sm">
+                                <div class="aspect-ratio-container">
+                                    <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="card-link"></a>
+                                    @if (!string.IsNullOrEmpty(lesson.ImageUrl))
+                                    {
+                                        <img src="@lesson.ImageUrl" class="lesson-img" alt="@lesson.Title">
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/default-lesson.jpg" class="lesson-img" alt="Default Lesson Image">
+                                    }
+                                    <div class="card-overlay">
+                                        <h5 class="lesson-title animate-title">@lesson.Title</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (!string.IsNullOrEmpty(lesson.VideoUrl))
+                                        {
+                                            <div class="text-white animate-desc" style="font-size: 1rem;">
+                                                <i class="bi bi-camera-video"></i> Video Available
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="btn btn-orange animate-btn">
+                                            <i class="bi bi-play-circle"></i> Start Lesson
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Advanced Section -->
+        <div class="level-section">
+            <div class="d-flex align-items-center mb-4">
+                <div class="level-badge advanced">
+                    <i class="bi bi-award"></i>
+                </div>
+                <h3 class="level-title">Advanced</h3>
+            </div>
+            <div class="row g-4">
+                @foreach (var lesson in Model.Where(l => l.CourseId == 3))
+                {
+                    <div class="col-12 col-md-3 px-3">
+                        <div class="lesson-container">
+                            <div class="card lesson-row-card shadow-sm">
+                                <div class="aspect-ratio-container">
+                                    <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="card-link"></a>
+                                    @if (!string.IsNullOrEmpty(lesson.ImageUrl))
+                                    {
+                                        <img src="@lesson.ImageUrl" class="lesson-img" alt="@lesson.Title">
+                                    }
+                                    else
+                                    {
+                                        <img src="/images/default-lesson.jpg" class="lesson-img" alt="Default Lesson Image">
+                                    }
+                                    <div class="card-overlay">
+                                        <h5 class="lesson-title animate-title">@lesson.Title</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (!string.IsNullOrEmpty(lesson.VideoUrl))
+                                        {
+                                            <div class="text-white animate-desc" style="font-size: 1rem;">
+                                                <i class="bi bi-camera-video"></i> Video Available
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="@Url.Action("Step1", "Lesson", new { id = lesson.LessonId })" class="btn btn-orange animate-btn">
+                                            <i class="bi bi-play-circle"></i> Start Lesson
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 
@@ -114,7 +225,90 @@
             color: #ff8800 !important;
         }
 
+        .level-section {
+            position: relative;
+        }
+
+        .level-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.4rem;
+            color: white;
+        }
+
+        .level-badge.beginner {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .level-badge.elementary {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+        }
+
+        .level-badge.advanced {
+            background: linear-gradient(135deg, #FF5722, #FF9800);
+        }
+
+        .level-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .lesson-container {
+            padding: 0;
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.2rem;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .lesson-row-card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .lesson-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+            padding: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-height: 1.3;
+        }
+
+        .lesson-row-card:hover .lesson-title {
+            transform: translateY(0);
+        }
+
         .btn-orange {
+            position: relative;
+            z-index: 4;
             background: linear-gradient(90deg, #ff8800 0%, #ffb347 100%);
             border: none;
             color: #fff;
@@ -122,71 +316,83 @@
             font-weight: 600;
             border-radius: 8px;
             font-size: 1.1rem;
-            box-shadow: 0 2px 8px rgba(255,136,0,0.08);
+            box-shadow: 0 3px 10px rgba(255, 136, 0, 0.15);
             transition: background 0.2s, transform 0.2s;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            pointer-events: none; /* Giữ để ngăn nút nhận click trực tiếp */
         }
 
-            .btn-orange:hover {
-                background: linear-gradient(90deg, #e06d00 0%, #ff8800 100%);
-                color: #fff;
-                transform: scale(1.04);
-            }
+        .btn-orange:hover {
+            background: linear-gradient(90deg, #e06d00 0%, #ff8800 100%);
+            color: #fff;
+            transform: scale(1.03);
+        }
 
         .lesson-row-card {
             border: none;
-            border-radius: 18px;
+            border-radius: 12px;
             background: #fff7f0;
-            min-height: 130px;
-            height: 130px;
+            width: 100%;
             margin: 0 auto;
-            padding: 0;
-            box-shadow: 0 2px 12px rgba(255,136,0,0.06);
+            box-shadow: 0 4px 16px rgba(255, 136, 0, 0.1);
             transition: box-shadow 0.2s, transform 0.2s;
-            position: relative; /* Đảm bảo thẻ a có thể kiểm soát z-index */
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Điều chỉnh chiều dài thẻ con thành 80% thẻ cha */
-        .lesson-row-card-long {
-            width: 80% !important;
-            max-width: 80% !important;
-            margin: 0 auto; /* Căn giữa nếu cần */
-        }
-
-        @@media (max-width: 1400px) {
-            .lesson-row-card-long {
-                width: 90% !important;
-                max-width: 90% !important;
-            }
-        }
-
-        @@media (max-width: 1200px) {
-            .lesson-row-card-long {
-                width: 100% !important;
-                max-width: 100% !important;
-            }
+        .aspect-ratio-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
         }
 
         .lesson-row-card:hover {
-            box-shadow: 0 6px 24px rgba(255,136,0,0.13);
-            transform: translateY(-2px) scale(1.01);
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(255, 136, 0, 0.2);
         }
 
         .lesson-img {
-            width: 150px;
-            height: 130px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-top-left-radius: 18px;
-            border-bottom-left-radius: 18px;
-            margin-right: 0;
-            transition: transform 0.2s;
+            transition: transform 0.3s;
         }
 
         .lesson-row-card:hover .lesson-img {
-            transform: scale(1.04) rotate(-2deg);
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            position: absolute;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            padding: 1.2rem;
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .card-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            z-index: 3;
         }
 
         .card-link {
@@ -195,100 +401,38 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 10;
-            display: block;
+            z-index: 1;
             text-decoration: none;
-            pointer-events: auto;
+            cursor: pointer;
         }
 
-        .card-body {
-            padding: 1rem 1.5rem;
-            min-width: 0;
-            pointer-events: none;
-        }
-
-        .card-title {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: #ff8800;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 8px rgba(255,136,0,0.07);
-            animation: fadeInLeft 0.7s;
-            pointer-events: none;
-        }
-
-        .card-text {
-            color: #333;
-            font-size: 1.07rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            animation: fadeInUp 0.7s;
-            pointer-events: none;
-        }
-
-        .card-footer {
-            min-width: 160px;
-            padding: 1rem;
-            border-radius: 0 18px 18px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            pointer-events: none;
+        @@media (max-width: 1200px) {
+            .lesson-title {
+                font-size: 1.2rem;
+            }
         }
 
         @@media (max-width: 992px) {
-            .lesson-row-card {
-                flex-direction: column !important;
-                align-items: stretch !important;
-                min-height: 160px;
-                height: auto;
-            }
-
-            .lesson-img {
-                width: 100%;
-                height: 160px;
-                border-radius: 18px 18px 0 0;
-            }
-
-            .card-footer {
-                border-radius: 0 0 18px 18px;
-                min-width: 0;
-                padding: 1rem 1.5rem;
-            }
-
-            .lesson-row-card-long {
-                width: 100% !important;
-                max-width: 100% !important;
+            .lesson-title {
+                font-size: 1.1rem;
             }
         }
 
         @@media (max-width: 576px) {
-            .lesson-row-card .card-body {
-                padding: 0.8rem 1rem;
+            .lesson-title {
+                font-size: 1.3rem;
             }
-
-            .lesson-img {
-                height: 120px;
-            }
-
-            .card-title {
-                font-size: 1.1rem;
-            }
-
-            .card-text {
-                font-size: 1rem;
+            .card-overlay {
+                padding: 1rem;
             }
         }
 
-        /* Animations for more lively UI */
+        /* Animations */
         @@keyframes fadeInLeft {
             from {
                 opacity: 0;
                 transform: translateX(-30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -300,7 +444,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -308,14 +451,14 @@
         }
 
         .animate-title {
-            animation: fadeInLeft 0.7s;
+            animation: fadeInLeft 0.7s ease-out;
         }
 
         .animate-desc {
-            animation: fadeInUp 0.7s;
+            animation: fadeInUp 0.7s ease-out;
         }
 
         .animate-btn {
-            animation: fadeInUp 0.8s;
+            animation: fadeInUp 0.8s ease-out;
         }
     </style>
