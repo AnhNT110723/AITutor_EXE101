@@ -14,24 +14,16 @@
                 _openAIClient = openAIClient;
             }
 
-            public async Task<string> GetChatResponseAsync(string userMessage, string situation = null)
+            public async Task<string> GetChatResponseAsync(object messages)
             {
-                var systemPrompt = situation != null
-                    ? $"{situation}\nProvide a concise, natural, and conversational response in English suitable for speaking practice. Do not summarize the situation, just respond naturally as the specified role."
-                    : "You are a helpful assistant. Provide a concise and conversational response in English suitable for speaking practice.";
+            var requestBody = new
+            {
+                model = "gpt-3.5-turbo",
+                messages = messages,
+                max_tokens = 100
+            };
 
-                var requestBody = new
-                {
-                    model = "gpt-3.5-turbo",
-                    messages = new[]
-                    {
-                        new { role = "system", content = systemPrompt },
-                        new { role = "user", content = userMessage }
-                    },
-                    max_tokens = 100
-                };
-
-                return await _openAIClient.CallOpenAIAsync(requestBody);
+            return await _openAIClient.CallOpenAIAsync(requestBody);
             }
 
             public async Task<string> TranscribeAudioAsync(byte[] audioBytes)

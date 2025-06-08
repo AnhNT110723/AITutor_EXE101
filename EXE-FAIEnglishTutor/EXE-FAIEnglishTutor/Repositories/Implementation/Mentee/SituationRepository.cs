@@ -25,6 +25,11 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation.Mentee
                           .Take(8)
                           .ToListAsync();
         }
+        public async Task<List<Level?>> GetAllLevelAsync()
+        {
+            var x = await _context.Levels.ToListAsync();
+            return x;
+        }
 
         public async Task<List<Situation>> GetListSituationByRolePlay(int rolePlay)
         {

@@ -26,6 +26,10 @@ namespace EXE_FAIEnglishTutor.Controllers
         {
             return View();
         }
+        public IActionResult LearningAI()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -34,3 +38,4 @@ namespace EXE_FAIEnglishTutor.Controllers
         }
     }
 }
+

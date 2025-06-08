@@ -17,9 +17,36 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.Mentee
             return await _situationRepository.GetAllSituation();
         }
 
-        public async Task<List<Situation>> GetListSituationByRolePlay(int rolePlay)
+        public async Task<List<Level?>> GetAllLevelAsync()
         {
+            var levels = await _situationRepository.GetAllLevelAsync();
+            return levels;
+        }
+
+        public async Task<List<Situation>> GetListSituationByRolePlay(int rolePlay, string keyword = "", string category = "")
+        {
+
             var listSituations = await _situationRepository.GetListSituationByRolePlay(rolePlay);
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                listSituations = listSituations
+                        .Where(s => s.SituationName.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                if (int.TryParse(category, out int categoryId))
+                {
+                    listSituations = listSituations
+                        .Where(s => s.Level.LevelId == categoryId)
+                        .ToList();
+                }
+                else
+                {
+                    // Optional: nếu không parse được thì bỏ lọc hoặc trả về rỗng
+                    listSituations = new List<Situation>(); // hoặc giữ nguyên không lọc
+                }
+            }
             return listSituations;
         }
 

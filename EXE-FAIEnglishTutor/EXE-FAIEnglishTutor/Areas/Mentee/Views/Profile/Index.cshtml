@@ -42,20 +42,55 @@
                             var fullName = User.Identity.Name;
                             var avatarUrl = User.FindFirst("Avatar")?.Value;
                             <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div class="nav-img">
+                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                            </div>
+                                        </a>
+                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                            <div class="menu-title">
+                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                                <i class="bi bi-person-circle"></i> View Profile
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                            </a>
 
-                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="nav-img">
-                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                    </div>
-                                </a>
-                                <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                    <div class="menu-title">
-                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                        <i class="bi bi-person-circle"></i> View Profile
+                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+
+                <div class="head-info">
+                    <div class="">
+                        <h4 id="title">Thông tin tài khoản</h4>
+                    </div>
+                    <div>
+                        <!-- Tạo dropdown tùy chỉnh -->
+                        <div class="dropdown position-relative" style="width: 200px;">
+                            <button class="btn btn-light dropdown-toggle" type="button" style="width: 100%;"
+                                    id="languageDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                <img src="~/Images/Co-Vietnam.png" alt="Flag" class="flag-icon" /> Tiếng Việt
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#" data-lang="vi">
+                                        <img src="~/Images/Co-Vietnam.png" alt="Vietnam Flag" class="flag-icon" /> Tiếng Việt
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a id="logout-link" class="dropdown-item text-danger" href="#">

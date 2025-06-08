@@ -96,7 +96,7 @@ namespace EXE_FAIEnglishTutor.Controllers
                 return RedirectToAction("Index", "Home");
 
             }
-            ViewBag.ErrorMessage = "Tên đăng nhập hoặc mật khẩu không chính xác";
+            ViewBag.ErrorMessage = "Incorrect username or password";
             return View("Login", model);
         }
 
@@ -141,18 +141,18 @@ namespace EXE_FAIEnglishTutor.Controllers
 
                 if (ex.Message == "Email gửi thất bại")
                 {
-                    ViewData["EmailError"] = "Không thể gửi email xác nhận. Vui lòng kiểm tra email của bạn.";
+                    ViewData["EmailError"] = "The confirmation email could not be sent. Please check your email.";
                 }
                 switch (ex.Message)
                 {
                     case "Email exist":
-                        ViewData["EmailExist"] = "Email đã tồn tại";
+                        ViewData["EmailExist"] = "Email already exists";
                         break;
                     case "Phone err":
-                        ViewData["PhoneErr"] = "Lỗi định dạng số điện thoại";
+                        ViewData["PhoneErr"] = "Phone number format error";
                         break;
                     case "Phone exist":
-                        ViewData["PhoneExist"] = "Số điện thoại đã tồn tại";
+                        ViewData["PhoneExist"] = "Phone number already exists";
                         break;
                 }
             }
@@ -206,16 +206,16 @@ namespace EXE_FAIEnglishTutor.Controllers
                 switch (ex.Message)
                 {
                     case "NotFoundTokenByUserId":
-                        return Json(new { success = false, message = "Email này chưa được đăng kí!" });
+                        return Json(new { success = false, message = "This email is not registered!" });
                     case "NotFound":
-                        return Json(new { success = false, message = "Không tìm thấy tài khoản của bạn!" });
+                        return Json(new { success = false, message = "Your account not found!" });
                     case "Account Locked":
-                        return Json(new { success = false, message = "Tài khoản của bạn đã bị khóa!" });
+                        return Json(new { success = false, message = "Your account has been locked!" });
                     case "Account activated":
-                        return Json(new { success = false, message = "Tài khoản của bạn đã được kích hoạt!" });
+                        return Json(new { success = false, message = "Your account has been activated!" });
                 }
             }
-            return Json(new { success = true, message = "Mail kích hoạt đã được gửi thành công, vui lòng kiểm tra mail của bạn và kích hoạt tài khoản!" });
+            return Json(new { success = true, message = "Activation mail has been sent successfully, please check your mail and activate your account!" });
         }
 
         //GET: /Account/ForgotPassword
@@ -245,16 +245,16 @@ namespace EXE_FAIEnglishTutor.Controllers
                 switch (ex.Message)
                 {
                     case "NotFoundAccount":
-                        ViewData["NotFoundAccount"] = "Email này của bạn chưa được đăng kí";
+                        ViewData["NotFoundAccount"] = "Your email is not registered yet.";
                         break;
                     case "Account Locked":
-                        ViewData["AccountLocked"] = "Tài khoản này của bạn đã bị khóa, vui lòng liên hệ lại với nhân viên chăm sóc khách hàng để được hỗ trợ.";
+                        ViewData["AccountLocked"] = "Your account has been locked, please contact customer service for assistance.";
                         break;
                     case "Account not activate":
-                        ViewData["AccountNotActivate"] = "Tài khoản của bạn chưa được kích hoạt";
+                        ViewData["AccountNotActivate"] = "Your account is not activated yet.";
                         break; 
                     case "NotFoundTokenByUserId":
-                        ViewData["NotFoundTokenByUserId"] = "Tài khoản của bạn không được đăng kí local, nên không thể sử dụng được chức năng này. Xin cảm ơn.";
+                        ViewData["NotFoundTokenByUserId"] = "Your account is not registered locally, so you cannot use this function. Thank you.";
                         break;
                 }
             }
@@ -322,12 +322,12 @@ namespace EXE_FAIEnglishTutor.Controllers
         {
             if (status == AccountStatus.LOCKED)
             {
-                ViewBag.ErrorLockedAcc = "Tài khoản của bạn đã bị khóa.";
+                ViewBag.ErrorLockedAcc = "Your account has been locked.";
                 return true; // Trả về true để báo hiệu cần dừng xử lý
             }
             if (status == AccountStatus.PENDING)
             {
-                ViewBag.ErrorPendingAcc = "Tài khoản của bạn chưa được kích hoạt";
+                ViewBag.ErrorPendingAcc = "Your account is not activated yet.";
                 return true; // Trả về true để báo hiệu cần dừng xử lý
             }
             return false; // Tài khoản hợp lệ, tiếp tục xử lý

@@ -10,5 +10,6 @@ namespace EXE_FAIEnglishTutor.Repositories.Interface.Mentee
         Task<IEnumerable<Situation?>> GetAllSituation();
 
         Task<IEnumerable<Situation?>> GetTop8Situation();
+        Task<List<Level?>> GetAllLevelAsync();
     }
 }

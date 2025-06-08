@@ -9,5 +9,11 @@
         public const int LEARN_BY_IMAGE = 2;
         public const int PRONOUNCE = 3;
 
+
+
+        public const string TARGET_LANG = "vi";
+
+
+
     }
 }

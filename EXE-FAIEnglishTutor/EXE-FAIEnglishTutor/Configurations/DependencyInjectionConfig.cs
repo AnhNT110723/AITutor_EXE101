@@ -60,6 +60,8 @@ namespace EXE_FAIEnglishTutor.Configurations
             //Role
             services.AddScoped<IRoleRepository, RoleRepositoryImpl>();
             services.AddScoped<IRoleService, RoleService>();
+            //Podcast
+            services.AddScoped<IPodcastService, PodcastService>();
 
         }
 

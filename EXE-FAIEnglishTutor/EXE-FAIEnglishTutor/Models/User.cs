@@ -24,7 +24,7 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
-    public AccountStatus Status { get; set; }
+    public AccountStatus Status { get; set; } 
 
     public DateTime? ExpiryDate { get; set; }
 
@@ -37,6 +37,8 @@ public partial class User
     public virtual ICollection<Feeback> Feebacks { get; set; } = new List<Feeback>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+    public virtual ICollection<Podcast> Podcasts { get; set; } = new List<Podcast>();
 
     public virtual ICollection<Progress> Progresses { get; set; } = new List<Progress>();
 

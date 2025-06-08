@@ -1,0 +1,686 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Listening Practice - FAI English</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css">
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #50E3C2;
+            --accent-color: #F5A623;
+            --text-color: #2C3E50;
+            --background-color: #F7F9FC;
+            --success-color: #7ED321;
+            --error-color: #D0021B;
+        }
+
+        body {
+            background: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            min-height: 100vh;
+        }
+
+        .listening-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border: 8px solid var(--accent-color);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+            .header-section h1 {
+                color: var(--primary-color);
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            }
+
+        .timer-section {
+            background: linear-gradient(45deg, var(--primary-color), #5C9CE6);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+
+            .timer-section i {
+                margin-right: 10px;
+            }
+
+        .audio-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 4px solid var(--secondary-color);
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        audio {
+            width: 80%;
+            height: 50px;
+            border-radius: 30px;
+            background: var(--background-color);
+        }
+
+        .questions-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 4px solid var(--secondary-color);
+        }
+
+        .question-card {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+            .question-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            }
+
+        .question-number {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option-item {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+            .option-item:hover {
+                background: #E3F2FD;
+                border-color: var(--primary-color);
+            }
+
+            .option-item.selected {
+                background: #E3F2FD;
+                border-color: var(--primary-color);
+            }
+
+            .option-item.correct {
+                background: #E8F5E9;
+                border-color: var(--success-color);
+            }
+
+            .option-item.incorrect {
+                background: #FFEBEE;
+                border-color: var(--error-color);
+            }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-custom {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-new-test {
+            background: linear-gradient(45deg, var(--accent-color), #FFB74D);
+            color: white;
+        }
+
+        .btn-submit {
+            background: linear-gradient(45deg, var(--primary-color), #5C9CE6);
+            color: white;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .results-section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 4px solid var(--success-color);
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feedback-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+        }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid var(--background-color);
+            border-top: 8px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+        }
+
+        .loading-text {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            text-align: center;
+        }
+
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @@keyframes fadeInOut {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        .loading-text p {
+            margin: 0.5rem 0;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        .decoration {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            left: 20px;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234A90E2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+        }
+
+        .decoration-2 {
+            bottom: 20px;
+            right: 20px;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2350E3C2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+            .floating-element:nth-child(1) {
+                top: 10%;
+                left: 5%;
+                animation-delay: 0s;
+            }
+
+            .floating-element:nth-child(2) {
+                top: 20%;
+                right: 5%;
+                animation-delay: 1s;
+            }
+
+            .floating-element:nth-child(3) {
+                bottom: 20%;
+                left: 5%;
+                animation-delay: 2s;
+            }
+
+            .floating-element:nth-child(4) {
+                bottom: 10%;
+                right: 5%;
+                animation-delay: 3s;
+            }
+
+       
+        {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar" class="active">
+            <h1><a asp-controller="home" asp-action="index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a asp-controller="Ielts" asp-action="index" class="link-test">
+                        <span class="fa fa-users"></span>
+                        <span class="menu-text">Học Ielts</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Toeic" asp-action="index" class="link-test">
+                        <span class="fas fa-graduation-cap icon"></span>
+                        <span class="menu-text">Học Toeic</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a asp-controller="home" asp-action="index" class="link-test">
+                        <span class="fa fa-frog"></span>
+                        <span class="menu-text">AI Tutor</span>
+
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="selfStudy" asp-action="index" class="link-test">
+                        <span class="fas fa-book-open"></span>
+                        <span class="menu-text">Tự học</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="ParentCourse" asp-action="index" class="link-test">
+                        <span class="bi bi-people-fill"></span>
+                        <span class="menu-text">Trang học của cha mẹ</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="footer">
+                <p style="color: #667085;">
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                                                                                  target="_blank">Colorlib.com</a>
+                </p>
+            </div>
+        </nav>
+        <div id="content" class="p-4 p-md-5">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            @*  <li class="nav-item active">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                // Đọc thông tin từ cookie
+                                var fullName = User.Identity.Name;
+                                var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                <li class="nav-item dropdown">
+
+                                    <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                       data-toggle="dropdown" aria-expanded="false">
+                                        <div class="nav-img">
+                                            <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                        </div>
+                                    </a>
+                                    <div class=" menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
+                                        <div class="menu-title">
+                                            <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
+                                            <i class="bi bi-person-circle"></i> View Profile
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                            <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                        </a>
+
+                                        <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">
+                    <p>🎵 Creating your listening test...</p>
+                    <p>Please wait while we prepare everything for you!</p>
+                </div>
+            </div>
+
+            <div class="listening-container">
+                <div class="decoration decoration-1"></div>
+                <div class="decoration decoration-2"></div>
+                <div class="floating-element">🎧</div>
+                <div class="floating-element">📝</div>
+                <div class="floating-element">🎯</div>
+                <div class="floating-element">⭐</div>
+
+                <div class="header-section">
+                    <h1>🎧 Listening Practice 🎧</h1>
+                    <div class="timer-section">
+                        <i class="fas fa-clock"></i>
+                        <span id="timer">30:00</span>
+                    </div>
+                </div>
+
+                <div class="audio-section">
+                    <h3 class="text-center mb-4">🎵 Listen to the audio and answer the questions below</h3>
+                    <div class="audio-controls">
+                        <audio id="listeningAudio" controls></audio>
+                    </div> 
+                </div>
+
+                <div class="questions-section" id="questionsContainer">
+                    <!-- Questions will be dynamically added here -->
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-custom btn-new-test" id="newTestBtn">
+                        <i class="fas fa-plus"></i> New Test
+                    </button>
+                    <button class="btn-custom btn-submit" id="submitBtn">
+                        <i class="fas fa-check"></i> Submit Answers
+                    </button>
+                </div>
+
+                <div class="results-section" id="resultsSection">
+                    <div class="score-display">
+                        Your Score: <span id="finalScore">0</span>/4
+                    </div>
+                    <div class="feedback-message" id="feedbackMessage">
+                        <!-- Feedback will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+                document.getElementById('newTestBtn').addEventListener('click', async () => {
+            const newTestBtn = document.getElementById('newTestBtn');
+            if (newTestBtn.disabled) return; // Ngăn chặn nhấn nhiều lần
+            newTestBtn.disabled = true; // Vô hiệu hóa nút
+            showLoading(); // Hiển thị loading
+            await loadNewTest();
+            newTestBtn.disabled = false; // Kích hoạt lại sau khi tải xong
+            hideLoading(); // Ẩn loading
+        });
+        let timeLeft = 1800; // 30 minutes in seconds
+        let timerInterval;
+        let currentTest = null;
+        let currentAudioUrl = null;
+
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 1800;
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+                        async function loadNewTest() {
+            try {
+                console.log('Sending request for JSON...');
+                const jsonResponse = await fetch('/api/audio/generate-ielts-listening', {
+                    method: 'POST'
+                });
+                console.log('JSON response status:', jsonResponse.status);
+                if (!jsonResponse.ok) throw new Error(`Failed to generate test JSON: ${jsonResponse.status}`);
+
+                const data = await jsonResponse.json();
+                console.log('JSON data:', data);
+                currentTest = {
+                    script: data.script,
+                    questions: data.questions.map(q => ({
+                        question: q.question,
+                        options: q.options,
+                        answer: q.answer,
+                        correctAnswer: q.options.indexOf(q.answer)
+                    }))
+                };
+
+                console.log('Sending request for audio...');
+                const formData = new FormData();
+                formData.append('text', currentTest.script);
+
+                const audioResponse = await fetch('/api/audio/generate-english', {
+                    method: 'POST',
+                    body: formData
+                });
+                console.log('Audio response status:', audioResponse.status);
+                if (!audioResponse.ok) throw new Error(`Failed to load audio: ${audioResponse.status}`);
+
+                const audioBlob = await audioResponse.blob();
+                console.log('Audio blob size:', audioBlob.size);
+                if (audioBlob.size === 0) throw new Error('Audio blob is empty');
+
+                currentAudioUrl = URL.createObjectURL(audioBlob);
+                const audioElement = document.getElementById('listeningAudio');
+                audioElement.src = currentAudioUrl;
+                audioElement.load();
+                audioElement.play().catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+
+                displayQuestions(currentTest.questions);
+                document.getElementById('resultsSection').style.display = 'none';
+                startTimer();
+            } catch (error) {
+                console.error('Error loading test:', error);
+                alert('Error loading test. Please try again.');
+                hideLoading(); // Ẩn loading nếu có lỗi
+            }
+        }
+
+        function displayQuestions(questions) {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.innerHTML = `
+                    <div class="question-number">Question ${index + 1}</div>
+                    <p>${question.question}</p>
+                    <ul class="options-list">
+                        ${question.options.map((option, optIndex) => `
+                            <li class="option-item" data-index="${optIndex}">
+                                ${option}
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                container.appendChild(questionCard);
+            });
+
+            // Thêm sự kiện click cho các lựa chọn
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const questionCard = this.closest('.question-card');
+                    questionCard.querySelectorAll('.option-item').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                });
+            });
+        }
+
+        function submitTest() {
+            if (!currentTest) return;
+
+            const answers = [];
+            document.querySelectorAll('.question-card').forEach((card, index) => {
+                const selected = card.querySelector('.option-item.selected');
+                answers.push(selected ? parseInt(selected.dataset.index) : -1);
+            });
+
+            // Tính điểm
+            let score = 0;
+            answers.forEach((answer, index) => {
+                if (answer === currentTest.questions[index].correctAnswer) {
+                    score++;
+                }
+            });
+
+            // Hiển thị kết quả
+            const resultsSection = document.getElementById('resultsSection');
+            document.getElementById('finalScore').textContent = score;
+
+            // Thêm phản hồi
+            let feedback = '';
+            if (score >= 4) {
+                feedback = '🎉 Excellent! You\'re ready for the real IELTS test!';
+            } else if (score >= 3) {
+                feedback = '👍 Good job! Keep practicing to improve your score.';
+            } else {
+                feedback = '💪 Don\'t worry! Practice makes perfect. Try another test!';
+            }
+            document.getElementById('feedbackMessage').textContent = feedback;
+
+            // Hiển thị phần kết quả
+            resultsSection.style.display = 'block';
+
+            // Dừng đếm giờ
+            clearInterval(timerInterval);
+        }
+
+        // Sự kiện
+        document.getElementById('newTestBtn').addEventListener('click', loadNewTest);
+        document.getElementById('submitBtn').addEventListener('click', submitTest);
+
+        // Tải bài kiểm tra đầu tiên khi trang được tải
+        document.addEventListener('DOMContentLoaded', loadNewTest);
+    </script>
+</body>
+</html>
