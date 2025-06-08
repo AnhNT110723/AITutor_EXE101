@@ -70,6 +70,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AppId = builder.Configuration["Facebook:AppId"];
         options.AppSecret = builder.Configuration["Facebook:AppSecret"];
         options.CallbackPath = "/signin-facebook"; // Phải khớp với Redirect URI ở Facebook
+
+        // Thêm các trường thông tin cần lấy từ Facebook
+        options.Fields.Add("email");
+        options.Fields.Add("name");
+        // Lưu access token để có thể gọi API Facebook nếu cần
+        options.SaveTokens = true;
     })
     .AddTwitter("Twitter", options =>
     {
@@ -80,6 +86,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 	});
 
 var app = builder.Build();
+
+// Thêm middleware xử lý lỗi trạng thái trước các middleware khác
+app.UseStatusCodePagesWithRedirects("~/Error/{0}");
+
 app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -98,6 +108,7 @@ if (!app.Environment.IsDevelopment())
 else
 {
     app.UseDeveloperExceptionPage();
+    app.UseStatusCodePagesWithRedirects("~/Error/{0}"); 
 }
 
 

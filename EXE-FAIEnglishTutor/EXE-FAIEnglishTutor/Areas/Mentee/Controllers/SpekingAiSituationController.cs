@@ -115,7 +115,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 }
 
                 // Dịch AI reply sang tiếng Việt (dùng Azure Translator)
-                string translatedReply = await TranslateTextAsync(aiReply, "vi");
+                string translatedReply = await TranslateTextAsync(aiReply, Constants.TARGET_LANG);
                 
                 string voice = string.IsNullOrEmpty(request.Voice) ? "en-US-JennyNeural" : request.Voice;
                 string audioUrl = await GenerateSpeechAsync(aiReply, voice);
@@ -136,9 +136,44 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         [HttpGet("Mentee/Role-Play")]
         public async Task<IActionResult> GetListSituationsAsync()
         {
-
+            var levels = await _situationService.GetAllLevelAsync();
             var listSituations = await _situationService.GetListSituationByRolePlay(Constants.ROLE_PLAY);
+            ViewBag.levels= levels;
+
             return View("ListSituations", listSituations);
+        }
+
+        [HttpGet("Mentee/Role-Play/ListPartial")]
+        public async Task<IActionResult> GetListSituationsPartialAsync(string keyword = "", string category = "")
+        {
+            try
+            {
+              
+                keyword = string.IsNullOrWhiteSpace(keyword) ? "" : keyword.Trim();
+                category = string.IsNullOrWhiteSpace(category) ? "" : category.Trim();
+
+                
+                var listSituations = await _situationService.GetListSituationByRolePlay(Constants.ROLE_PLAY, keyword, category);
+
+                // Chọn chỉ các thuộc tính cần thiết
+                var result = listSituations.Select(s => new
+                { 
+                    situationId = s.SituatuonId,
+                    situationName = s.SituationName,
+                    imageUrl = s.ImageUrl,
+                    level = new
+                    {
+                        levelName = s.Level?.LevelName ?? "Unknown"
+                    }
+                }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                // Ghi log lỗi nếu cần (tùy thuộc vào hệ thống logging của bạn)
+                return StatusCode(500, new { error = "Đã xảy ra lỗi khi tải danh sách tình huống." });
+            }
         }
 
 
@@ -207,7 +242,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                     return Json(new { reply = "AI could not generate a response. Please try again." });
                 }
                 // Dịch AI reply sang tiếng Việt
-                string translatedReply = await TranslateTextAsync(reply, "vi");
+                string translatedReply = await TranslateTextAsync(reply, Constants.TARGET_LANG);
                 var audioUrl = await GenerateSpeechAsync(reply, request.Voice ?? "en-US-JennyNeural");
                 return Json(new { reply, translatedReply, audioUrl });
             }
@@ -277,7 +312,66 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         }
 
 
+        [HttpPost("Mentee/SpekingAiSituation/GetSuggestion")]
+        public async Task<IActionResult> GetSuggestion([FromBody] SuggestionRequest request)
+        {
+            try
+            {
+                if (request == null || request.SituationId <= 0)
+                {
+                    return BadRequest(new { error = "Invalid situation ID." });
+                }
 
+                string suggestion = await GenerateSuggestion(request.SituationId, request.Messages);
+                // Dịch gợi ý sang tiếng Việt nếu cần
+               // string translatedSuggestion = await TranslateTextAsync(suggestion, "vi");
+                return Ok(new { suggestion });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetSuggestion: {ex.Message}");
+                return StatusCode(500, new { error = "Could not generate suggestion.", details = ex.Message });
+            }
+        }
+
+        private async Task<string> GenerateSuggestion(int situationId, List<Message> messages)
+        {
+            // Lấy thông tin tình huống
+            var situation = await _situationService.GetSituationByIdAsync(situationId);
+            if (situation == null)
+            {
+                throw new Exception("Situation not found.");
+            }
+
+            // Tạo ngữ cảnh cho AI
+            string roleAi = situation.RoleAi;
+            string roleUser = situation.RoleUser;
+            string level = situation.Level.LevelName;
+            string situationContext = $"Situation: \"{situation.SituationName}\"\nDescription: {situation.Description}\r\nYou are a {roleAi}. The user is a {roleUser}. Respond in English at a {level} level (e.g., use simple words and sentences for Beginner, more complex language for Advanced). Maintain your role as a {roleAi} throughout the conversation and do not switch roles.";
+
+            // Tạo prompt để yêu cầu gợi ý
+            string conversation = messages.Any()
+                ? string.Join("\n", messages.Select(m => $"{m.Role}: {m.Content}"))
+                : "No conversation yet.";
+            string prompt = $@" Provide a concise suggestion (1 sentence) for what the user (as {roleUser}) could say next to continue the conversation naturally, based on the following context and conversation:
+            Context: {situationContext} Conversation:{conversation}";
+
+            // Chuẩn bị messages cho AI
+            var aiMessages = new List<object>
+            {
+                new { role = "system", content = situationContext },
+                new { role = "user", content = prompt }
+            };
+
+            // Gọi AI để tạo gợi ý
+            string suggestion = await _speakingAiService.GetChatResponseAsync(aiMessages);
+            if (string.IsNullOrEmpty(suggestion))
+            {
+                throw new Exception("AI could not generate a suggestion.");
+            }
+
+            return suggestion.Trim();
+        }
 
         // Gọi Azure Text-to-Speech (tùy chọn)
         private async Task<string> GenerateSpeechAsync(string text, string voiceName)
@@ -379,6 +473,11 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         public List<Message> Messages { get; set; }
         public int SituationId { get; set; }
         public string Voice { get; set; }
+    }
+    public class SuggestionRequest
+    {
+        public int SituationId { get; set; }
+        public List<Message> Messages { get; set; }
     }
 
     public class Message
