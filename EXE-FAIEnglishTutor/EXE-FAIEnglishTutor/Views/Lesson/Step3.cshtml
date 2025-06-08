@@ -1,4 +1,5 @@
-﻿@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
+﻿@using Newtonsoft.Json
+@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
     ViewData["Title"] = $"Step 3 - {Model.Lesson.Title}";
@@ -97,69 +98,226 @@
                 <!-- Lesson Header -->
                 <div class="lesson-header">
                     <h2 class="lesson-title">@Model.Lesson.Title</h2>
-                    <div class="situation-box">
-                        <i class="fas fa-quote-left"></i>
-                        <p>@Model.Lesson.Situation</p>
-                    </div>
+                    
                 </div>
 
                 <!-- Audio Player Section -->
                 <div class="audio-player-container">
-                    <audio id="listeningAudio" class="custom-audio-player audio-progress audio-progress-bar" controls style="display: none;"></audio>
-                    <div class="audio-controls">
-                        <button id="playPauseBtn" class="control-btn pulse">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="progress-container">
-                            <div id="audioProgress" class="audio-progress">
-                                <div id="audioProgressBar" class="audio-progress-bar"></div>
+                    <audio id="listeningAudio" class="custom-audio-player" controls style="display: none;"></audio>
+                    <div class="podcast-player">
+                        <div class="player-artwork">
+                            <img src="/images/podcast-default.jpg" alt="Lesson Cover" />
                             </div>
+                        <div class="player-controls">
                             <div class="time-display">
                                 <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                            </div>
+                            <div class="progress-container">
+                                <div id="audioProgress" class="audio-progress">
+                                    <div id="audioProgressBar" class="audio-progress-bar"></div>
+                                </div>
+                            </div>
+                            <div class="control-buttons">
+                                <button class="control-btn" onclick="audioPlayer.currentTime -= 10">
+                                    <i class="fas fa-backward"></i>
+                                </button>
+                                <button id="playPauseBtn" class="control-btn play-btn pulse">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="control-btn" onclick="audioPlayer.currentTime += 10">
+                                    <i class="fas fa-forward"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Transcript Controls -->
-                <div class="transcript-controls">
-                    <button id="toggleTranscript" class="btn btn-primary">
-                        <i class="fas fa-closed-captioning"></i> Toggle Transcript
-                    </button>
-                    <button id="toggleLineByLine" class="btn btn-primary">
-                        <i class="fas fa-list"></i> Line by Line Mode
-                    </button>
-                    <button id="highlightMode" class="btn btn-primary">
-                        <i class="fas fa-highlighter"></i> Highlight Mode
-                    </button>
+                <div class="learning-tools">
+                    <div class="tool-buttons">
+                        <button id="toggleTranscript" class="tool-btn">
+                            <i class="fas fa-closed-captioning"></i>
+                            <span>Transcript</span>
+                        </button>
+                        <button id="toggleLineByLine" class="tool-btn">
+                            <i class="fas fa-list"></i>
+                            <span>Line by Line</span>
+                        </button>
+                        <button id="highlightMode" class="tool-btn">
+                            <i class="fas fa-highlighter"></i>
+                            <span>Highlight</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Transcript Section -->
                 <div id="transcriptContainer" class="transcript-container" style="display: none;">
                     <div id="fullTranscript" class="full-transcript">
-                        @Model.Script
+                        @foreach (var sentence in Model.Script.Split(new[] { ". ", "! ", "? " }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim() + "."))
+                        {
+                            <span class="transcript-sentence">@sentence</span>
+                        }
                     </div>
                     <div id="lineByLineTranscript" class="line-by-line-transcript" style="display: none;">
-                        @foreach (var sentence in Model.Script.Split("."))
+                        @for (int i = 0; i < Model.Sentences?.Count; i++)
                         {
-                            <p class="transcript-line" data-start-time="0">@sentence</p>
+                            var startTime = i * 5.0;
+                            <div class="transcript-line" data-start-time="@startTime">
+                                <span class="line-number">@(i + 1)</span>
+                                <span class="line-text">@Model.Sentences[i]</span>
+                            </div>
                         }
                     </div>
                 </div>
-
+                
                 <div class="bottom-navigation">
-                    <a href="@Url.Action("Step2", "Lesson", new { id = Model.Lesson.LessonId })" class="nav-btn prev">
+                    <form id="prevStepForm" method="post" action="@Url.Action("Step2Pre", "Lesson")" style="display: inline;">
+                        <input type="hidden" name="id" value="@Model.Lesson.LessonId" />
+                        <input type="hidden" name="script" value="@Model.Script" />
+                        <input type="hidden" name="audioData" value="@Model.AudioData" />
+                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
+                        <button type="submit" class="nav-btn prev">
                         <i class="fas fa-arrow-left"></i> Previous
-                    </a>
-                    <a href="@Url.Action("Step4", "Lesson", new { id = Model.Lesson.LessonId })" class="nav-btn next">
+                        </button>
+                    </form>
+                    <form id="nextStepForm" method="post" action="@Url.Action("Step4", "Lesson")" style="display: inline;">
+                        <input type="hidden" name="id" value="@Model.Lesson.LessonId" />
+                        <input type="hidden" name="script" value="@Model.Script" />
+                        <input type="hidden" name="audioData" value="@Model.AudioData" />
+                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
+                        <button type="submit" class="nav-btn next">
                         Next <i class="fas fa-arrow-right"></i>
-                    </a>
+                        </button>
+                    </form>
                 </div>
 
             </div>
      </div>
 </div>
     <style>
+        .listening-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(255, 152, 56, 0.1);
+        }
+
+        .podcast-player {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(255, 152, 56, 0.1);
+        }
+
+        .player-artwork {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-right: 2rem;
+        }
+
+            .player-artwork img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .player-controls {
+            flex: 1;
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .tool-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tool-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: none;
+            background: #fff;
+            border-radius: 12px;
+            color: #ff9838;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(255, 152, 56, 0.1);
+        }
+
+            .tool-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(255, 152, 56, 0.2);
+            }
+
+            .tool-btn i {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+        .transcript-line {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #fff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .line-number {
+            min-width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ff9838;
+            color: white;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+
+        .line-text {
+            flex: 1;
+        }
+
+        .transcript-line:hover {
+            background: #fff1e6;
+            transform: translateX(5px);
+        }
+
+        .transcript-line.active {
+            background: #ff9838;
+            color: white;
+        }
+
+            .transcript-line.active .line-number {
+                background: white;
+                color: #ff9838;
+            }
         .audio-player-container {
             width: 70%;
             margin: 0 auto;
@@ -282,7 +440,7 @@
         }
 
         .progress-fill {
-            width: 14.28%; /* 1/7 of the total width */
+            width: 42.85%; /* 1/7 of the total width */
             height: 100%;
             background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
             border-radius: 2px;
@@ -535,6 +693,37 @@
         .highlight-mode {
             cursor: pointer;
         }
+
+        .transcript-sentence {
+            display: inline-block;
+            padding: 2px 5px;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .transcript-sentence:hover {
+            background-color: rgba(255, 152, 56, 0.1);
+        }
+
+        .transcript-sentence.active {
+            background-color: rgba(255, 152, 56, 0.2);
+            color: #ff9838;
+        }
+
+        .transcript-line {
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .transcript-line::before {
+            content: attr(data-start-time) 's';
+            position: absolute;
+            left: 10px;
+            color: #999;
+            font-size: 0.8em;
+            }
     </style>
 
     @section Scripts {
@@ -614,7 +803,7 @@
 
                 } catch (error) {
                     console.error('Error loading audio:', error);
-                    alert('Error loading the audio. Please try again.');
+                    
                 }
             }
 
@@ -670,8 +859,49 @@
                     highlightModeBtn.classList.toggle('active', isHighlightMode);
                 });
 
+                // Full transcript sentence interaction
+                const sentences = document.querySelectorAll('.transcript-sentence');
+                let lastClickedSentence = null;
+                let totalDuration = 0;
+
+                audioPlayer.addEventListener('loadedmetadata', () => {
+                    totalDuration = audioPlayer.duration;
+                    updateSentenceTimings();
+                });
+
+                function updateSentenceTimings() {
+                    const avgTimePerSentence = totalDuration / sentences.length;
+                    sentences.forEach((sentence, index) => {
+                        sentence.setAttribute('data-start-time', (index * avgTimePerSentence).toFixed(1));
+                    });
+                }
+
+                sentences.forEach((sentence, index) => {
+                    sentence.addEventListener('click', () => {
+                        if (isHighlightMode) {
+                            const selection = window.getSelection();
+                            const range = selection.getRangeAt(0);
+                            const span = document.createElement('span');
+                            span.className = 'highlighted';
+                            range.surroundContents(span);
+                        } else {
+                            if (lastClickedSentence) {
+                                lastClickedSentence.classList.remove('active');
+                            }
+                            sentence.classList.add('active');
+                            lastClickedSentence = sentence;
+
+                            const startTime = parseFloat(sentence.getAttribute('data-start-time'));
+                            audioPlayer.currentTime = startTime;
+                            audioPlayer.play();
+                        }
+                    });
+                });
+
                 // Line-by-line transcript interaction
                 const transcriptLines = document.querySelectorAll('.transcript-line');
+                let lastClickedLine = null;
+
                 transcriptLines.forEach(line => {
                     line.addEventListener('click', () => {
                         if (isHighlightMode) {
@@ -681,14 +911,72 @@
                             span.className = 'highlighted';
                             range.surroundContents(span);
                         } else {
-                            // Remove active class from all lines
-                            transcriptLines.forEach(l => l.classList.remove('active'));
-                            // Add active class to clicked line
+                            if (lastClickedLine) {
+                                lastClickedLine.classList.remove('active');
+                            }
                             line.classList.add('active');
-                            // Play the corresponding audio segment
-                            const startTime = parseFloat(line.dataset.startTime);
+                            lastClickedLine = line;
+
+                            const startTime = parseFloat(line.getAttribute('data-start-time'));
                             audioPlayer.currentTime = startTime;
                             audioPlayer.play();
+                        }
+                    });
+                });
+
+                // Update active sentence/line based on current time
+                audioPlayer.addEventListener('timeupdate', () => {
+                    const currentTime = audioPlayer.currentTime;
+                    
+                    // Update full transcript
+                    sentences.forEach(sentence => {
+                        const sentenceTime = parseFloat(sentence.getAttribute('data-start-time'));
+                        const nextSentence = sentence.nextElementSibling;
+                        const nextTime = nextSentence ? parseFloat(nextSentence.getAttribute('data-start-time')) : totalDuration;
+
+                        if (currentTime >= sentenceTime && currentTime < nextTime) {
+                            if (lastClickedSentence !== sentence) {
+                                if (lastClickedSentence) {
+                                    lastClickedSentence.classList.remove('active');
+                                }
+                                sentence.classList.add('active');
+                                lastClickedSentence = sentence;
+                                
+                                // Scroll sentence into view if needed
+                                const container = sentence.closest('.transcript-container');
+                                const sentenceRect = sentence.getBoundingClientRect();
+                                const containerRect = container.getBoundingClientRect();
+                                
+                                if (sentenceRect.top < containerRect.top || sentenceRect.bottom > containerRect.bottom) {
+                                    sentence.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            }
+                        }
+                    });
+
+                    // Update line-by-line transcript
+                    transcriptLines.forEach(line => {
+                        const lineTime = parseFloat(line.getAttribute('data-start-time'));
+                        const nextLine = line.nextElementSibling;
+                        const nextTime = nextLine ? parseFloat(nextLine.getAttribute('data-start-time')) : totalDuration;
+
+                        if (currentTime >= lineTime && currentTime < nextTime) {
+                            if (lastClickedLine !== line) {
+                                if (lastClickedLine) {
+                                    lastClickedLine.classList.remove('active');
+                                }
+                                line.classList.add('active');
+                                lastClickedLine = line;
+                                
+                                // Scroll line into view if needed
+                                const container = line.closest('.transcript-container');
+                                const lineRect = line.getBoundingClientRect();
+                                const containerRect = container.getBoundingClientRect();
+                                
+                                if (lineRect.top < containerRect.top || lineRect.bottom > containerRect.bottom) {
+                                    line.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }
+                            }
                         }
                     });
                 });

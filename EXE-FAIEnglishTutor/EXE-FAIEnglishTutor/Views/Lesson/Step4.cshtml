@@ -1,5 +1,923 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Newtonsoft.Json
+@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
 @{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    ViewData["Title"] = $"Step 4 - {Model.Lesson.Title}";
 }
+
+<div id="content" class="p-4 p-md-5 home">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var fullName = User.Identity.Name;
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <div class="nav-img">
+                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                </div>
+                            </a>
+                            <div class="menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
+                                <div class="menu-title">
+                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
+                                    <i class="bi bi-person-circle"></i> View Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                </a>
+                                <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <a class="btn-login-custom btn" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-4 p-md-5">
+        <!-- Progress Bar -->
+        <div class="lesson-progress">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Pronunciation</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">2</div>
+                        <div class="step-label">First Listening </div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Second Listening </div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Check Understanding </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Speaking Practice </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-label">Shadowing </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-label">Review & Practice</div>
+                    </div>
+                </div>
+            </div>
+            <div class="listening-container">
+                <!-- Lesson Header -->
+                <div class="lesson-header">
+                    <h2 class="lesson-title">@Model.Lesson.Title</h2>
+                    
+                </div>
+
+                <!-- Audio Player Section -->
+                <div class="audio-player-container">
+                    <audio id="listeningAudio" class="custom-audio-player" controls style="display: none;"></audio>
+                    <div class="podcast-player">
+                        <div class="player-artwork">
+                            <img src="/images/podcast-default.jpg" alt="Lesson Cover" />
+                        </div>
+                        <div class="player-controls">
+                            <div class="time-display">
+                                <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                            </div>
+                            <div class="progress-container">
+                                <div id="audioProgress" class="audio-progress">
+                                    <div id="audioProgressBar" class="audio-progress-bar"></div>
+                                </div>
+                            </div>
+                            <div class="control-buttons">
+                                <button class="control-btn" onclick="audioPlayer.currentTime -= 10">
+                                    <i class="fas fa-backward"></i>
+                                </button>
+                                <button id="playPauseBtn" class="control-btn play-btn pulse">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="control-btn" onclick="audioPlayer.currentTime += 10">
+                                    <i class="fas fa-forward"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Quiz Section -->
+                <div class="quiz-section">
+                    <h3><i class="fas fa-question-circle"></i> Comprehension Check</h3>
+                    <div class="quiz-container">
+                        @if (Model.Questions != null)
+                        {
+                            var displayQuestions = Model.Questions.Skip(2).ToList();
+                            for (int i = 0; i < displayQuestions.Count; i++)
+                            {
+                                var question = displayQuestions[i];
+                                <div class="question-card">
+                                    <p class="question-text">@(i + 1). @question.Question</p>
+                                    <div class="options-container">
+                                        @for (int j = 0; j < question.Options.Count; j++)
+                                        {
+                                            <div class="option">
+                                                <input type="radio" id="q@(i)_@(j)" name="question@(i)" value="@question.Options[j]">
+                                                <label for="q@(i)_@(j)">@question.Options[j]</label>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="feedback" style="display: none;">
+                                        <div class="correct-feedback">
+                                            <i class="fas fa-check-circle"></i> Correct!
+                                        </div>
+                                        <div class="incorrect-feedback">
+                                            <i class="fas fa-times-circle"></i> Incorrect. The correct answer is: <span class="correct-answer"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <button id="submitQuiz" class="btn-primary">Check Answers</button>
+
+                            <div id="scoreSummary" class="score-summary" style="display: none;">
+                                <h4><i class="fas fa-star"></i> Your Results <i class="fas fa-star"></i></h4>
+                                <div class="score-details">
+                                    <div class="total-score">
+                                        Score: <span id="totalScore">0</span>/<span id="totalQuestions">2</span>
+                                    </div>
+                                    <div class="score-percentage">
+                                        (<span id="scorePercentage">0</span>%)
+                                    </div>
+                                    <div class="feedback-message">
+                                        <p id="feedbackMessage"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <!-- Navigation -->
+                <div class="bottom-navigation">
+                    <form id="prevStepForm" method="post" action="@Url.Action("Step3Pre", "Lesson")" style="display: inline;">
+                        <input type="hidden" name="id" value="@Model.Lesson.LessonId" />
+                        <input type="hidden" name="script" value="@Model.Script" />
+                        <input type="hidden" name="audioData" value="@Model.AudioData" />
+                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
+                        <button type="submit" class="nav-btn prev">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                    </form>
+                    <form id="nextStepForm" method="post" action="@Url.Action("Step5", "Lesson")" style="display: inline;">
+                        <input type="hidden" name="id" value="@Model.Lesson.LessonId" />
+                        <input type="hidden" name="script" value="@Model.Script" />
+                        <input type="hidden" name="audioData" value="@Model.AudioData" />
+                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
+                        <button type="submit" class="nav-btn next">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+</div>
+    <style>
+        .listening-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(255, 152, 56, 0.1);
+        }
+
+        .podcast-player {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(255, 152, 56, 0.1);
+        }
+
+        .player-artwork {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-right: 2rem;
+        }
+
+            .player-artwork img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .player-controls {
+            flex: 1;
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .tool-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tool-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: none;
+            background: #fff;
+            border-radius: 12px;
+            color: #ff9838;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(255, 152, 56, 0.1);
+        }
+
+            .tool-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(255, 152, 56, 0.2);
+            }
+
+            .tool-btn i {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+        .transcript-line {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #fff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .line-number {
+            min-width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ff9838;
+            color: white;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+
+        .line-text {
+            flex: 1;
+        }
+
+        .transcript-line:hover {
+            background: #fff1e6;
+            transform: translateX(5px);
+        }
+
+        .transcript-line.active {
+            background: #ff9838;
+            color: white;
+        }
+
+            .transcript-line.active .line-number {
+                background: white;
+                color: #ff9838;
+            }
+
+        .audio-player-container {
+            width: 70%;
+            margin: 0 auto;
+            padding: 1rem;
+            background: rgba(255, 152, 56, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+            .audio-player-container:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(255, 152, 56, 0.2);
+            }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: #ff9838;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+            .control-btn.pulse::before {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: rgba(255, 152, 56, 0.4);
+                animation: pulse 2s infinite;
+            }
+
+        @@keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            70% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        .progress-container {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .audio-progress {
+            height: 8px;
+            background: rgba(255, 152, 56, 0.2);
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .audio-progress-bar {
+            height: 100%;
+            background: #ff9838;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+            position: relative;
+        }
+
+            .audio-progress-bar::after {
+                content: '';
+                position: absolute;
+                right: -2px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 12px;
+                height: 12px;
+                background: #ff9838;
+                border-radius: 50%;
+                box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            }
+
+        .time-display {
+            color: #ff9838;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        /* Progress Bar Styles */
+        .lesson-progress {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .progress-container {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            position: absolute;
+            top: 50px;
+            z-index: 1;
+        }
+
+        .progress-fill {
+            width: 57.14%; /* 1/7 of the total width */
+            height: 100%;
+            background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            position: relative;
+        }
+
+            .step.active {
+                color: #ff9838;
+            }
+
+                .step.active .step-number {
+                    background: #ff9838;
+                    color: white;
+                }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        :root {
+            --primary-color: #ff9838;
+            --primary-dark: #ff8108;
+            --primary-light: #ffb347;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        .listening-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .lesson-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .situation-box {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem auto;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .audio-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 2rem 0;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary-color);
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .control-btn:hover {
+                background: var(--primary-dark);
+                transform: scale(1.05);
+            }
+
+        .audio-progress {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-light);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .audio-progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        .question-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .option {
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            border-radius: 8px;
+            background: var(--bg-light);
+            transition: all 0.3s ease;
+        }
+
+            .option:hover {
+                background: #fff1e6;
+            }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background: var(--primary-dark);
+                transform: translateY(-2px);
+            }
+
+        .score-summary {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .bottom-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .nav-btn.prev {
+                background: var(--bg-light);
+                color: var(--text-dark);
+            }
+
+            .nav-btn.next {
+                background: var(--primary-color);
+                color: var(--white);
+            }
+
+            .nav-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+        .transcript-controls {
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .transcript-container {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .full-transcript {
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .line-by-line-transcript .transcript-line {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .line-by-line-transcript .transcript-line:hover {
+                background: #fff1e6;
+            }
+
+            .line-by-line-transcript .transcript-line.active {
+                background: var(--primary-light);
+                color: var(--white);
+            }
+
+        .highlighted {
+            background-color: #ffeb3b;
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        .highlight-mode {
+            cursor: pointer;
+        }
+
+        .transcript-sentence {
+            display: inline-block;
+            padding: 2px 5px;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+            .transcript-sentence:hover {
+                background-color: rgba(255, 152, 56, 0.1);
+            }
+
+            .transcript-sentence.active {
+                background-color: rgba(255, 152, 56, 0.2);
+                color: #ff9838;
+            }
+
+        .transcript-line {
+            position: relative;
+            padding-left: 50px;
+        }
+
+            .transcript-line::before {
+                content: attr(data-start-time) 's';
+                position: absolute;
+                left: 10px;
+                color: #999;
+                font-size: 0.8em;
+            }
+    </style>
+
+    @section Scripts {
+        <script>
+            let audioPlayer;
+            let playPauseBtn;
+            let progressBar;
+            let currentTimeSpan;
+            let durationSpan;
+            let isHighlightMode = false;
+
+            document.addEventListener('DOMContentLoaded', function() {
+                initializeAudio();
+                loadListeningAudio();
+                initializeTranscriptControls();
+            });
+
+            function initializeAudio() {
+                audioPlayer = document.getElementById('listeningAudio');
+                playPauseBtn = document.getElementById('playPauseBtn');
+                progressBar = document.getElementById('audioProgressBar');
+                currentTimeSpan = document.getElementById('currentTime');
+                durationSpan = document.getElementById('duration');
+
+                // Play/Pause button
+                playPauseBtn.addEventListener('click', togglePlay);
+
+                // Audio event listeners
+                audioPlayer.addEventListener('play', updatePlayButton);
+                audioPlayer.addEventListener('pause', updatePlayButton);
+                audioPlayer.addEventListener('timeupdate', updateProgress);
+                audioPlayer.addEventListener('loadedmetadata', () => {
+                    durationSpan.textContent = formatTime(audioPlayer.duration);
+                });
+                audioPlayer.addEventListener('ended', () => {
+                    ;
+                });
+
+                // Progress bar click
+                document.getElementById('audioProgress').addEventListener('click', function(e) {
+                    const percent = e.offsetX / this.offsetWidth;
+                    audioPlayer.currentTime = percent * audioPlayer.duration;
+                });
+            }
+
+            async function loadListeningAudio() {
+                try {
+                    const audioData = @Html.Raw(Json.Serialize(Model.AudioData));
+                    if (!audioData) {
+                        throw new Error('Audio data is not available');
+                    }
+
+                    // Convert Base64 to Blob
+                    const base64Data = audioData.split(',')[1];
+                    const byteCharacters = atob(base64Data);
+                    const byteNumbers = new Array(byteCharacters.length);
+
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'audio/mp3' });
+                    const audioUrl = URL.createObjectURL(blob);
+
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.load();
+
+                    // Show audio controls after loading
+                    audioPlayer.style.display = 'none'; // Keep the native audio element hidden
+                    document.querySelector('.audio-controls').style.display = 'flex';
+
+                    // Clean up the URL when the audio is loaded
+                    audioPlayer.onload = () => {
+                        URL.revokeObjectURL(audioUrl);
+                    };
+
+                } catch (error) {
+                    console.error('Error loading audio:', error);
+                }
+            }
+
+            function togglePlay() {
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                } else {
+                    audioPlayer.pause();
+                }
+            }
+
+            function updatePlayButton() {
+                playPauseBtn.innerHTML = audioPlayer.paused ?
+                    '<i class="fas fa-play"></i>' :
+                    '<i class="fas fa-pause"></i>';
+            }
+
+            function updateProgress() {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = percent + '%';
+                currentTimeSpan.textContent = formatTime(audioPlayer.currentTime);
+            }
+
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                seconds = Math.floor(seconds % 60);
+                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+                // Quiz handling
+            document.getElementById('submitQuiz')?.addEventListener('click', function() {
+                const questions = @Html.Raw(Json.Serialize(Model.Questions.Skip(2).Take(2)));
+                let score = 0;
+                const totalQuestions = 2;
+
+                questions.forEach((question, index) => {
+                    const selectedOption = document.querySelector(`input[name="question${index}"]:checked`)?.value;
+                    const questionCard = document.querySelectorAll('.question-card')[index];
+                    const feedback = questionCard.querySelector('.feedback');
+                    const correctFeedback = questionCard.querySelector('.correct-feedback');
+                    const incorrectFeedback = questionCard.querySelector('.incorrect-feedback');
+
+                    feedback.style.display = 'block';
+                    if (selectedOption === question.answer) {
+                        score++;
+                        correctFeedback.style.display = 'block';
+                        incorrectFeedback.style.display = 'none';
+                    } else {
+                        correctFeedback.style.display = 'none';
+                        incorrectFeedback.style.display = 'block';
+                        questionCard.querySelector('.correct-answer').textContent = question.answer;
+                    }
+                });
+
+                // Calculate percentage
+                const percentage = Math.round((score / totalQuestions) * 100);
+
+                // Update score summary
+                document.getElementById('totalScore').textContent = score;
+                document.getElementById('totalQuestions').textContent = totalQuestions;
+                document.getElementById('scorePercentage').textContent = percentage;
+
+                // Generate feedback message based on score
+                let feedbackMessage = '';
+                if (percentage === 100) {
+                    feedbackMessage = '🎉 Perfect! Your listening comprehension is excellent!';
+                } else if (percentage >= 80) {
+                    feedbackMessage = '👏 Great job! You have a strong understanding of the content.';
+                } else if (percentage >= 60) {
+                    feedbackMessage = '👍 Good effort! Keep practicing to improve your listening skills.';
+                } else if (percentage >= 40) {
+                    feedbackMessage = '💪 You\'re making progress! Try listening to the audio again and focus on the details.';
+                } else {
+                    feedbackMessage = '📚 Keep practicing! Try listening to the audio multiple times and take notes.';
+                }
+
+                document.getElementById('feedbackMessage').textContent = feedbackMessage;
+                document.getElementById('scoreSummary').style.display = 'block';
+                this.disabled = true;
+
+                // Save state to localStorage
+                const lessonState = {
+                    lessonId: @Model.Lesson.LessonId,
+                    step: 4,
+                    completed: true,
+                    score: score,
+                    percentage: percentage
+                };
+                localStorage.setItem('lessonState', JSON.stringify(lessonState));
+            });
+
+            document.getElementById('nextStep').addEventListener('click', function(e) {
+                e.preventDefault();
+                // Save all necessary data to localStorage before navigation
+                const lessonState = {
+                    lessonId: @Model.Lesson.LessonId,
+                    audioData: @Html.Raw(Json.Serialize(Model.AudioData)),
+                    script: @Html.Raw(Json.Serialize(Model.Script)),
+                    questions: @Html.Raw(Json.Serialize(Model.Questions))
+                };
+                localStorage.setItem('lessonState', JSON.stringify(lessonState));
+                window.location.href = this.href;
+            });
+           
+        </script>
+    }
