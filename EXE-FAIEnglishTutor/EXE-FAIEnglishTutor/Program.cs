@@ -1,4 +1,5 @@
 ﻿using EXE_FAIEnglishTutor.Configurations;
+using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Middleware;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Repositories;
@@ -31,6 +32,10 @@ builder.Services.AddCors(options =>
 
 //cau hinh view areas
 builder.Services.ConfigureRazorViewEngine();
+
+// feat/noitudo
+builder.Services.AddHttpClient();
+
 
 // Cấu hình DI
 builder.Services.AddDependencyInjectionConfiguration();
