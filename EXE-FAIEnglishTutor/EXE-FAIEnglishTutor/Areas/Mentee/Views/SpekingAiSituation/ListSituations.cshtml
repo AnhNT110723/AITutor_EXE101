@@ -15,9 +15,9 @@
                     <span class="sr-only">Toggle Menu</span>
                 </button>
                 <!-- Nút Back -->
-                <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                <a href="/" class="btn btn-outline-secondary ml-2" >
                     <i class="fa fa-arrow-left"></i> Back
-                </button>
+                </a>
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
                         data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
                                         <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
                                     </div>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                    <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
                                         <i class="bi bi-person-circle"></i> View Profile
                                     </a>
                                     <div class="dropdown-divider"></div>
@@ -69,7 +69,7 @@
                         }
                         else
                         {
-                            <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Đăng nhập</a>
                         }
                     </ul>
                 </div>
