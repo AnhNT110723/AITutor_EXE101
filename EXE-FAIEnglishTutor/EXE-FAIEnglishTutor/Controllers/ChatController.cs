@@ -23,8 +23,11 @@ namespace EXE_FAIEnglishTutor.Controllers
             {
                 return Json(new { success = false, response = "Vui lòng nhập tin nhắn!" });
             }
-
-            var response = await _chatBotService.GetChatResponseAsync(message);
+            var messages = new[]
+{
+                new { role = "user", content = message }
+            };
+            var response = await _chatBotService.GetChatResponseAsync(messages);
             return Json(new { success = true, response });
         }
     }
