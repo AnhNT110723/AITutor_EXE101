@@ -853,7 +853,9 @@
              const keyword = document.getElementById("searchCourse").value;
              const dynamicContainer = document.getElementById("situation-list");
 
+
              fetch(`/Mentee/Listening/ListPartial?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(selectedCategory)}`)
+
                  .then(response => {
                      if (!response.ok) {
                          throw new Error('Lỗi khi tải danh sách tình huống');
@@ -871,7 +873,9 @@
                      data.forEach(item => {
                          const html = `
                              <div class="course">
+
                                  <a href="/Lesson/Step1/${item.situationId}" class="card-link">
+
                                      <div class="flex-shrink-0">
                                          <div class="card">
                                              <img src="${item.imageUrl}" alt="Image of ${item.situationName}" class="card-img-top">

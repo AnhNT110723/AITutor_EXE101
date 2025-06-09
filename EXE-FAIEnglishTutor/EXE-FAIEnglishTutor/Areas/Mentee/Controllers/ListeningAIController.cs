@@ -39,6 +39,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
             return View("ListSituation", listSituations);
         }
+
         [HttpGet("Mentee/Listening/ListPartial")]       
         public async Task<IActionResult> GetListSituationsPartialAsync(string keyword = "", string category = "")
         {
@@ -71,5 +72,6 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 return StatusCode(500, new { error = "Đã xảy ra lỗi khi tải danh sách tình huống." });
             }
         }
+
     }
 }
