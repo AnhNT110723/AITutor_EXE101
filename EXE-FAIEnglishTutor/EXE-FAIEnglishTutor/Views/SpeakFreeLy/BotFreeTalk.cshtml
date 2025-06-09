@@ -1,0 +1,282 @@
+﻿
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+
+        .chat-box {
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 60px;
+        }
+
+        .message {
+            max-width: 75%;
+            border-radius: 15px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+        }
+
+        .bot-msg {
+            background-color: #F4CA7A;
+            color: white;
+            align-self: flex-start;
+        }
+
+        .user-msg {
+            background-color: #ffffff;
+            color: #000;
+            align-self: flex-end;
+            border: 1px solid #ccc;
+        }
+
+        .chat-avatar {
+            width: 400px;
+            border-radius: 10px;
+        }
+
+        .right-panel {
+            text-align: center;
+        }
+
+        .circle-avatar {
+            width: 250px;
+            height: 250px;
+            background-color: #F4CA7A;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+
+        .typing-box {
+            border-top: 1px solid #ccc;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row">
+            <!-- Chat Section -->
+             <div class="col-md-8 d-flex flex-column chat-box" id="chatBox">
+                <div id="chat-container"></div>
+            </div>
+
+            <!-- Avatar / Profile Section -->
+            <div class="col-md-4 right-panel py-4">
+
+            <div class="d-flex flex-column">
+                <!-- Jessica -->
+                <div >
+                    <img src="https://learning.kynaforkids.vn/images/dashboard/kid/chatBot/models/kyna-female1.png"
+                         alt="Jessica" style="height: 280px; width: 100%; object-fit: cover;">
+                    <p class="mb-0 fw-bold">Jessica</p>
+                </div>
+
+                <!-- Người dùng -->
+                <div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        var fullName = User.Identity.Name;
+                        <img src="@avatarUrl" alt="Avatar"
+                             style="height: 280px; width: 100%; object-fit: cover;">
+                        <p class="mb-0 fw-bold">@fullName</p>
+                    }
+                </div>
+            </div>
+
+
+
+                <!-- Typing area -->
+                <div class="row typing-box p-3">
+                    <div class="col-2">
+                        <i class="bi bi-mic-mute mt-2" id="micIcon" style="font-size: 24px;cursor: pointer;"></i>
+                    </div>
+                    <div class="col-10">
+                        <input type="text" class="form-control" placeholder="Typing..." id="userInput">
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+
+   
+    </div>
+
+    <!-- Bootstrap Icons CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<script>
+    // ✅ Hàm thêm tin nhắn vào khung chat
+    function appendUserMessage(text, suggestion = "") {
+        const chatBox = document.getElementById("chatBox");
+        const userMessageDiv = document.createElement("div");
+        userMessageDiv.className = "message user-msg align-self-end";
+
+        const uniqueId = `suggestion-${Date.now()}`; // đảm bảo ID duy nhất
+        userMessageDiv.innerHTML = `
+            ${text}
+            <br>
+            <a href="#" style="text-decoration: none;" onclick="toggleSuggestion('${uniqueId}')">Xem đánh giá</a>
+            <div id="${uniqueId}" style="display: none; margin-top: 5px; color: #555;">
+                <strong>Đánh giá:</strong> ${suggestion}
+            </div>
+        `;
+
+        chatBox.appendChild(userMessageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function toggleSuggestion(id) {
+        const suggestionDiv = document.getElementById(id);
+        if (suggestionDiv.style.display === "none") {
+            suggestionDiv.style.display = "block";
+        } else {
+            suggestionDiv.style.display = "none";
+        }
+    }
+
+
+    // ✅ Hàm gửi tin nhắn đến server (mock)
+    function sendMessage(text) {
+        console.log("📤 Gửi tin nhắn đến server:", text);
+        fetch("/api/FreeTalk", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text })
+        })
+            .then(response => response.json())
+            .then(data => {
+                showBotMessage(data.reply);
+                appendUserMessage(text, data.suggestion || "Không có đánh giá nào.");
+            })
+            .catch(error => console.error("❌ Lỗi khi gọi API:", error));
+    }
+
+
+
+    // ✅ Mic: Nhận diện giọng nói
+    const micIcon = document.getElementById("micIcon");
+    let recognizing = false;
+    let recognition;
+
+    if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+
+        recognition.onstart = function () {
+            recognizing = true;
+            micIcon.classList.remove("bi-mic-mute");
+            micIcon.classList.add("bi-mic-fill");
+        };
+
+        recognition.onend = function () {
+            recognizing = false;
+            micIcon.classList.remove("bi-mic-fill");
+            micIcon.classList.add("bi-mic-mute");
+        };
+
+        recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript.trim();
+            if (transcript.length === 0) return;
+
+            appendUserMessage(transcript);
+            sendMessage(transcript);
+        };
+    } else {
+        console.warn("⚠️ Trình duyệt không hỗ trợ webkitSpeechRecognition.");
+    }
+
+    micIcon.onclick = function () {
+        if (!recognition) return;
+        if (recognizing) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    };
+
+    // ✅ Gửi tin nhắn khi nhấn Enter
+    document.getElementById("userInput").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault(); // Không xuống dòng
+            const message = this.value.trim();
+            if (message.length === 0) return;
+
+            appendUserMessage(message);
+            sendMessage(message);
+            this.value = ""; // Xóa input
+        }
+    });
+
+    
+
+</script>
+
+
+
+
+
+
+<script>
+    let selectedFemaleVoice = null;
+
+    // ✅ Chờ voice list sẵn sàng
+    window.speechSynthesis.onvoiceschanged = function () {
+        const voices = window.speechSynthesis.getVoices();
+
+        // Ưu tiên chọn giọng nữ
+        selectedFemaleVoice = voices.find(
+            voice => voice.lang === 'en-US' &&
+            (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('zira'))
+        ) || voices.find(
+            voice => voice.lang === 'en-US' && voice.name.toLowerCase().includes('google')
+        );
+
+        // Sau khi có giọng, gọi lời chào
+        const greetingText = "Hi there, I'm Jessica, nice to meet you. What's your name? How was your day today?";
+        showBotMessage(greetingText);
+    };
+
+    function speakBot(message) {
+        const utterance = new SpeechSynthesisUtterance(message);
+
+        if (selectedFemaleVoice) {
+            utterance.voice = selectedFemaleVoice;
+        }
+
+        utterance.pitch = 1.2;    // Giọng cao nữ tính
+        utterance.rate = 1;
+        utterance.volume = 1;
+        utterance.lang = 'en-US';
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function showBotMessage(text) {
+        const chatBox = document.getElementById("chatBox");
+        const botMessageDiv = document.createElement("div");
+        botMessageDiv.className = "message bot-msg align-self-start";
+        botMessageDiv.innerText = text;
+        chatBox.appendChild(botMessageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        speakBot(text);
+    }
+
+    function showSuggestion(text) {
+        const chatBox = document.getElementById("chatBox");
+        const suggestionDiv = document.createElement("div");
+        suggestionDiv.className = "message bot-msg align-self-start";
+        suggestionDiv.innerHTML = `<strong>📝 Suggestion:</strong> ${text}`;
+        chatBox.appendChild(suggestionDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
