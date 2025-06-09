@@ -470,6 +470,12 @@
                 background-color: #ffaa33;
             }
 
+        .chat-actions .evaluate-icon:hover {
+            color: #ffaa00; /* Màu khi hover */
+        }
+
+
+
     </style>
 
     <script defer>
@@ -692,11 +698,13 @@
                 const userMessage = transcribeData.userMessage;
                 // chatBox.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
                 chatBox.innerHTML += `
-                    <div class="chat-bubble user">
+                    <div class="chat-bubble user" data-message-id="${Date.now()}" data-is-evaluated="false">
                         <p>${userMessage}</p>
                         <div class="chat-actions">
                             <span class="icon">🔈</span>
+                            <span class="icon evaluate-icon" title="Evaluate grammar" onclick="handleEvaluateClick(this, '${encodeURIComponent(userMessage)}', '${Date.now()}')">⭐</span>                   
                         </div>
+                        <div class="evaluation-container"></div>
                     </div>
                 `;
 
@@ -754,11 +762,13 @@
 
             // chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
             chatBox.innerHTML += `
-                            <div class="chat-bubble user">
-                                        <p>${userInput}</p>
+                            <div class="chat-bubble user" data-message-id="${Date.now()}" data-is-evaluated="false">
+                                <p>${userInput}</p>
                                 <div class="chat-actions">
                                     <span class="icon">🔈</span>
+                                   <span class="icon evaluate-icon" title="Evaluate grammar" onclick="handleEvaluateClick(this, '${encodeURIComponent(userInput)}', '${Date.now()}')">⭐</span>
                                 </div>
+                                <div class="evaluation-container"></div>
                             </div>
                         `;
             document.getElementById("userInput").value = "";
@@ -858,9 +868,19 @@
                 const content = bubble.querySelector('p').textContent;
                 const translatedText = bubble.getAttribute('data-translated-text') || '';
                 const audioUrl = bubble.getAttribute('data-audio-url') || '';
-                messages.push({ role, content, translatedText, audioUrl });
+                const messageId = bubble.getAttribute('data-message-id') || '';
+                const isEvaluated = bubble.getAttribute('data-is-evaluated') || 'false';
+                const evaluation = bubble.querySelector('.evaluation-container')?.innerHTML || '';
+                messages.push({ role, content, translatedText, audioUrl, messageId, isEvaluated, evaluation });
             });
 
+            // Giới hạn 100 tin nhắn
+            if (messages.length > 100) {
+                messages.splice(0, messages.length - 100);
+                // Xóa đánh giá cũ
+                const oldMessageIds = messages.slice(0, messages.length - 100).map(msg => msg.messageId);
+                oldMessageIds.forEach(id => sessionStorage.removeItem(`evaluation_${userId}_${situationId}_${typeId}_${id}`));
+            }
             // Lưu vào sessionStorage
             sessionStorage.setItem(chatHistoryKey, JSON.stringify(messages));
         }
@@ -886,6 +906,7 @@
         //     chatBox.scrollTop = chatBox.scrollHeight;
         //     updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 trong lịch sử
         // }
+      
         // Khôi phục lịch sử hội thoại
         function restoreChatHistory() {
             const chatBox = document.getElementById("chatBox");
@@ -896,13 +917,16 @@
                 chatBox.innerHTML = ''; // Xóa nội dung hiện tại
                 messages.forEach(msg => {
                     const bubbleClass = msg.role === 'user' ? 'user' : 'ai';
+                    const evaluationContainer = msg.role === 'user' ? `<div class="evaluation-container">${msg.evaluation || ''}</div>` : '';
+                    const evaluationIcon = msg.role === 'user' ? `<span class="icon evaluate-icon${msg.isEvaluated === 'true' ? ' active' : ''}" title="${msg.isEvaluated === 'true' ? 'Hide evaluation' : 'Evaluate grammar'}" onclick="handleEvaluateClick(this, '${encodeURIComponent(msg.content)}', '${msg.messageId}')">${msg.isEvaluated === 'true' ? '⬇' : '⭐'}</span>` : '';
                     chatBox.innerHTML += `
                              <div class="chat-bubble ${bubbleClass}" data-original-text="${msg.content}" data-translated-text="${msg.translatedText}" data-audio-url="${msg.audioUrl}" data-is-translated="false">
                             <p>${msg.content}</p>
                             <div class="chat-actions">
                                 <span class="icon">🔈</span>
-                                ${msg.role === 'assistant' ? '<span class="icon translate-icon" title="Translate">↔</span>' : ''}
+                                        ${msg.role === 'assistant' ? '<span class="icon translate-icon" title="Translate">↔</span>' : evaluationIcon}
                             </div>
+                            ${evaluationContainer}
                         </div>
                     `;
                 });
@@ -925,6 +949,7 @@
                 }
             });
         }
+       
         // Hàm xử lý sự kiện click cho 🔈
         function handleSpeakClick() {
             const chatBubble = this.closest('.chat-bubble');
@@ -978,6 +1003,7 @@
 
         }
         // Gọi hàm để thêm sự kiện sau khi khôi phục lịch sử trò chuyện hoặc thêm tin nhắn mới
+        
         document.addEventListener('DOMContentLoaded', function () {
             addSpeakEventListeners(); // Gọi khi trang tải
             addTranslateEventListeners();
@@ -1130,6 +1156,81 @@
             document.getElementById('suggestionBox').classList.add('hidden');
         }
 
+
+        async function handleEvaluateClick(iconElement, encodedMessage, messageId) {
+            const chatBubble = iconElement.closest('.chat-bubble');
+            const evaluationContainer = chatBubble.querySelector('.evaluation-container');
+            const isEvaluated = chatBubble.getAttribute('data-is-evaluated') === 'true';
+            const chatBox = document.getElementById("chatBox");
+
+            // Thêm hiệu ứng loading
+            iconElement.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+            iconElement.classList.add('disabled');
+
+            setTimeout(async () => {
+                if (isEvaluated) {
+                    // Nếu đang hiển thị đánh giá, ẩn nó đi
+                    evaluationContainer.innerHTML = '';
+                    chatBubble.setAttribute('data-is-evaluated', 'false');
+                    iconElement.textContent = '⭐';
+                    iconElement.title = 'Evaluate grammar';
+                } else {
+                    // Nếu chưa hiển thị, lấy đánh giá
+                    const evaluationText = await evaluateMessage(decodeURIComponent(encodedMessage), messageId);
+                    if (evaluationText) {
+                        evaluationContainer.innerHTML = `
+                            <div class="evaluation">
+                                <p><strong>Grammar Suggestion:</strong> ${evaluationText}</p>
+                            </div>
+                        `;
+                        chatBubble.setAttribute('data-is-evaluated', 'true');
+                        iconElement.textContent = '⬇';
+                        iconElement.title = 'Hide evaluation';
+                    } else {
+                        evaluationContainer.innerHTML = `<p><strong>Error:</strong> Could not fetch evaluation.</p>`;
+                    }
+                }
+
+                // Khôi phục icon
+                iconElement.innerHTML = isEvaluated ? '⭐' : '⬇';
+                iconElement.classList.remove('disabled');
+                chatBox.scrollTop = chatBox.scrollHeight;
+                saveChatHistory(); // Lưu trạng thái
+            }, 300); // Giả lập delay cho UX
+        }
+
+        async function evaluateMessage(message, messageId) {
+            const evaluationCacheKey = `evaluation_${userId}_${situationId}_${typeId}_${messageId}`;
+            const savedEvaluation = sessionStorage.getItem(evaluationCacheKey);
+
+            if (savedEvaluation) {
+                return savedEvaluation; // Trả về đánh giá từ cache
+            }
+
+            try {
+                const response = await fetch('/Mentee/SpekingAiSituation/EvaluateMessage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Evaluation error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (!data.suggestion) {
+                    throw new Error("No evaluation provided");
+                }
+
+                // Lưu đánh giá vào sessionStorage
+                sessionStorage.setItem(evaluationCacheKey, data.suggestion);
+                return data.suggestion;
+            } catch (error) {
+                console.error("Error in evaluateMessage:", error);
+                return null;
+            }
+        }
     </script>
 
 
