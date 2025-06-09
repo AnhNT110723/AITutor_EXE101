@@ -25,15 +25,14 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
 
         public IActionResult Index()
         {
-            var lessons = _context.Lessons.ToList();
+            var lessons = _context.Situations.ToList();
             return View(lessons); // Gửi danh sách bài học ra view
         }
 
         public async Task<IActionResult> Step1(int id)
         {
-            var lesson = await _context.Lessons
-                .Include(l => l.Course)
-                .FirstOrDefaultAsync(l => l.LessonId == id);
+            var lesson = await _context.Situations
+                .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
             if (lesson == null)
             {
@@ -45,7 +44,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 // Call the API to get random words
                 var formData = new FormUrlEncodedContent(new[]
                 {
-                    new KeyValuePair<string, string>("topic", lesson.Title)
+                    new KeyValuePair<string, string>("topic", lesson.SituationName)
                 });
 
                 var response = await _httpClient.PostAsync($"{_apiBaseUrl}/api/audio/generate-random-words", formData);
@@ -74,9 +73,9 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         }
         public async Task<IActionResult> Step2(int id)
         {
-            var lesson = await _context.Lessons
-                .Include(l => l.Course)
-                .FirstOrDefaultAsync(l => l.LessonId == id);
+            var lesson = await _context.Situations
+               
+                .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
             if (lesson == null)
             {
@@ -89,7 +88,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 var apiUrl = $"{_apiBaseUrl}/api/audio/generate-ielts-listening";
 
                 // Create request with raw string topic
-                var jsonContent = $"\"{lesson.Title.Replace("\"", "\\\"")}\"";
+                var jsonContent = $"\"{lesson.SituationName.Replace("\"", "\\\"")}\"";
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 // Make API call
@@ -180,9 +179,9 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -228,9 +227,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -267,9 +265,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -315,9 +312,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -354,9 +350,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -402,9 +397,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -441,9 +435,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -489,9 +482,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -528,9 +520,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -590,9 +581,8 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Lessons
-                    .Include(l => l.Course)
-                    .FirstOrDefaultAsync(l => l.LessonId == id);
+                var lesson = await _context.Situations
+                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
                 {
@@ -627,7 +617,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
     }
     public class LessonViewModel
     {
-        public Models.Lesson Lesson { get; set; }
+        public Models.Situation Lesson { get; set; }
         public List<WordResult> Words { get; set; }
         public List<IeltsQuestion> Questions { get; set; }
         public string Script { get; set; }
