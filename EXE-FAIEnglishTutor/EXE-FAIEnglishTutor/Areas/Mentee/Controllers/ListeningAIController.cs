@@ -40,5 +40,38 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             return View("ListSituation", listSituations);
         }
 
+        [HttpGet("Mentee/Listening/ListPartial")]       
+        public async Task<IActionResult> GetListSituationsPartialAsync(string keyword = "", string category = "")
+        {
+            try
+            {
+
+                keyword = string.IsNullOrWhiteSpace(keyword) ? "" : keyword.Trim();
+                category = string.IsNullOrWhiteSpace(category) ? "" : category.Trim();
+
+
+                var listSituations = await _situationService.GetListSituationByRolePlay(Constants.LISTENING, keyword, category);
+
+                // Chọn chỉ các thuộc tính cần thiết
+                var result = listSituations.Select(s => new
+                {
+                    situationId = s.SituatuonId,
+                    situationName = s.SituationName,
+                    imageUrl = s.ImageUrl,
+                    level = new
+                    {
+                        levelName = s.Level?.LevelName ?? "Unknown"
+                    }
+                }).ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                // Ghi log lỗi nếu cần (tùy thuộc vào hệ thống logging của bạn)
+                return StatusCode(500, new { error = "Đã xảy ra lỗi khi tải danh sách tình huống." });
+            }
+        }
+
     }
 }
