@@ -1,0 +1,922 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // hoặc relative path phù hợp
+}
+
+@model List<Situation>
+
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+    <div class="sticky-wrapper sticky-wrapper-list-courses">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <!-- Nút Back -->
+                <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        @*  <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            // Đọc thông tin từ cookie
+                            var fullName = User.Identity.Name;
+                            var avatarUrl = User.FindFirst("Avatar")?.Value;
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="nav-img">
+                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                    </div>
+                                </a>
+                                <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                    <div class="menu-title">
+                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                        <i class="bi bi-person-circle"></i> View Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                    </a>
+
+                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="head-info">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between">
+                    <!-- Phần đầu: Dropdown list hiển thị category -->
+                    <div class="d-flex align-items-center level-container">
+                        <div class="dropdown" style="width: 200px;">
+                            <!-- Nhãn Level -->
+                            <label for="categoryDropdown" class="form-label text-muted text-level"
+                                   onclick="toggleDropdown()">
+                                Level
+                            </label>
+                            <!-- Nút dropdown -->
+                            <button class="btn btn-light dropdown-toggle w-100 dropdown-btn" type="button"
+                                    id="categoryDropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                ALL
+                            </button>
+                            <!-- Danh sách dropdown -->
+                            <div class="dropdown-menu" aria-labelledby="categoryDropdown">
+                                <a class="dropdown-item" href="#" data-category="">ALL</a>
+                                @foreach (var level in ViewBag.levels)
+                                {
+                                    <a class="dropdown-item" href="#" data-category="@level.LevelId">@level.LevelName</a>
+                                }
+                            </div>
+
+                        </div>
+
+                        <!-- Gạch dọc -->
+                        <div class="vertical-divider mx-3"></div>
+                    </div>
+
+
+                    <!-- Phần giữa: Ô tìm kiếm -->
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <div class="input-group rounded-pill">
+                            <input type="text" class="form-control no-border" id="searchCourse"
+                                   placeholder="Vui lòng nhập từ khóa bằng tiếng anh" aria-label="Search">
+                            <button class="btn  no-border ms-2" type="button">
+                                <i class="fas fa-search"></i> <!-- Icon kính lúp -->
+                            </button>
+                        </div>
+
+                        <!-- Gạch dọc -->
+                        <div class="vertical-divider mx-3"></div>
+                    </div>
+
+                    <!-- Phần cuối: Icon switch -->
+                    <div>
+                        <button class="btn btn-light">
+                            <i class="fas fa-user-circle"></i> <!-- Icon người dùng -->
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="list-courses">
+
+        <div class="container-fluid" id="situation-list">
+            <div class="course">
+                <a href="#" class="card-link" id="openPopup" data-bs-toggle="modal" data-bs-target="#situationModal">
+                    <div class="flex-shrink-0  ">
+                        <div class="card">
+                            <img src="~/Images/create-situation.png" class="card-img-top"
+                                 alt="Course 3">
+
+                            <div class="card-body">
+                                <p id="titleListCourse" style="font-weight: 35px;">Tạo nhân vật và tình huống theo cách cá nhân hóa.</p>
+                                <button class="btn btn-create-situation">Tạo tình huống</button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            @{
+                foreach (var situation in Model)
+                {
+                    <div class="course">
+                        <a href="@(
+                            User.Identity.IsAuthenticated
+                            ? $"/Lesson/Step1/{situation.SituatuonId}"
+                            : "javascript:void(0)"
+                                    )" class="card-link situation-link"
+                           data-login="@(!User.Identity.IsAuthenticated)"
+                           data-url="/Mentee/Role-Play/@situation.SituatuonId">
+
+                            <div class="flex-shrink-0">
+                                <div class="card">
+                                    <img src="@situation.ImageUrl"
+                                         alt="Image of @situation.SituationName">
+                                    <div class="card-title-overlay position-absolute">@situation.Level.LevelName</div>
+
+                                    <div class="overlay-home"></div>
+
+                                    <div class="card-body">
+                                        <p class="card-text" style="color: #fff;">@situation.SituationName</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+            @*  <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-21c3-622e-aa19-0242ac110002-1723465683.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-4b1e-62cc-8ab5-0242ac110002-1723465688.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef58a65-7f9b-68f6-a031-0242ac110002-1723465693.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef58a65-be00-6358-9fb6-0242ac110002-1723465700.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef58a65-f008-66ca-be5c-0242ac110002-1723465705.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef612be-0b43-65a8-9dc5-0242ac110002-1724402655.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef612be-57bf-6bd4-a4f2-0242ac110002-1724402663.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef612be-8436-632a-b23b-0242ac110002-1724402667.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef65ed9-88c0-6bc2-ac1c-0242ac110003-1724925661.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef65eda-841b-6576-9299-0242ac110003-1724925687.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef65eda-f1bf-63a2-a405-0242ac110003-1724925699.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ee-21f4-649a-87e1-0242ac110003-1729063126.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ed-dc1e-6e0c-87af-0242ac110003-1729063119.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ed-86c5-6802-8277-0242ac110003-1729063110.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef81600-2a0d-6172-9567-0242ac110005-1727943483.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ed-4664-6af6-b063-0242ac110003-1729063103.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef8b8ed-00e8-6d9c-8acd-0242ac110003-1729063096.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef81601-946f-6866-9d59-0242ac110005-1727943521.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef81601-946f-6866-9d59-0242ac110005-1727943521.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef81600-6a61-6700-8654-0242ac110005-1727943490.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef81600-9159-6380-ae4c-0242ac110005-1727943494.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef81601-0b85-633e-9e8d-0242ac110005-1727943506.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div>
+            <div class="course">
+            <a asp-controller="Course" asp-action="Detail" class="card-link">
+            <div class="flex-shrink-0  ">
+            <div class="card">
+            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef81600-b2a1-659c-b6f8-0242ac110005-1727943497.png" class="card-img-top"
+            alt="Course 3">
+            <div class="card-title-overlay position-absolute">Khóa học 1</div>
+
+            <div class="overlay-home"></div>
+
+            <div class="card-body">
+            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
+            </div>
+            </div>
+            </div>
+            </a>
+            </div> *@
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Popup  -->
+
+<div class="modal fade" id="situationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="situationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="situationModalLabel">Tạo tình huống</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="myRole" class="form-label">Vai trò của tôi</label>
+                        <input type="text" class="form-control" id="myRole" placeholder="Ví dụ: Nhân viên bán quần áo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="aiRole" class="form-label">AI's Role</label>
+                        <input type="text" class="form-control" id="aiRole" placeholder="Ví dụ: Khách hàng nữ">
+                    </div>
+                    <div class="mb-3">
+                        <label for="situation" class="form-label">Situation</label>
+                        <textarea class="form-control" id="situation" rows="3" placeholder="Trong cửa hàng quần áo, tôi đang tư vấn cho khách hàng mua quần jean"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="margin: 0 auto;">
+                <button type="button" class="btn btn-save-crate-situation" style="text-align: center;">Gửi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <style>
+        .head-info {
+            background-color: #fff;
+            border-radius: 12px;
+        }
+
+
+        .input-group .form-control {
+            border-right: none;
+        }
+
+        .input-group .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .vertical-divider {
+            width: 1px;
+            height: 24px;
+            background-color: #ccc;
+        }
+
+        .no-border {
+            border: none !important;
+            box-shadow: none;
+        }
+
+            .no-border:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+
+        .search-group .form-control {
+            background-color: transparent;
+        }
+
+        .dropdown-btn {
+            text-align: start;
+            background: #fff;
+            border: none;
+            z-index: 1 !important;
+            margin-bottom: 3px;
+            margin-top: -10px;
+            position: unset;
+        }
+
+            .dropdown-btn:hover {
+                background: #fff !important;
+                border: none;
+            }
+
+            .dropdown-btn:focus {
+                background: #fff !important;
+                border: none;
+            }
+
+        .text-level {
+            position: relative;
+            width: 100%;
+            z-index: 2 !important;
+            font-size: 13px;
+            font-weight: bolder;
+            margin: 10px 0 -0px 10px;
+            cursor: pointer;
+        }
+
+
+        .list-courses .container-fluid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            /* justify-content: space-between; /* Căn chỉnh khoảng cách giữa các phần tử */ */ padding: 0 !important;
+        }
+
+        @@media (max-width: 768px) {
+            .list-courses .container-fluid {
+                margin-top: 42px !important;
+            }
+        }
+
+        @@media (max-width: 991px) {
+            .list-courses .container-fluid {
+                margin-top: 20px;
+            }
+        }
+
+        .list-courses .card {
+            width: 100% !important;
+            height: 270px;
+        }
+
+        .list-courses .course {
+            flex: 1 1 calc(20% - 10px);
+            /* Chiều rộng mỗi phần tử chiếm 20% trừ đi khoảng cách */
+            max-width: calc(20% - 10px);
+            /* Đảm bảo không vượt quá 20% */
+            box-sizing: border-box;
+            /* Đảm bảo padding không làm tăng kích thước */
+        }
+
+        .sticky-wrapper-list-courses {
+            height: 200px;
+        }
+
+        @@media (max-width: 1200px) {
+            .list-courses .course {
+                flex: 1 1 calc(25% - 10px);
+                /* Chiều rộng 4 cột */
+                max-width: calc(25% - 10px);
+            }
+        }
+
+        @@media (max-width: 900px) {
+            .list-courses .course {
+                flex: 1 1 calc(33.33% - 10px);
+                /* Chiều rộng 3 cột */
+                max-width: calc(33.33% - 10px);
+            }
+        }
+
+        @@media (max-width: 600px) {
+            .list-courses .course {
+                flex: 1 1 calc(50% - 10px);
+                /* Chiều rộng 2 cột */
+                max-width: calc(50% - 10px);
+            }
+
+            .level-container {
+                width: 40%;
+            }
+        }
+
+        @@media (max-width: 400px) {
+            .list-courses .course {
+                flex: 1 1 100%;
+                /* Chiều rộng 1 cột */
+                max-width: 100%;
+            }
+        }
+
+        .btn-create-situation {
+            background: #fff;
+            margin: 0 20px 10px 20px;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-weight: bold;
+        }
+
+        .btn-save-crate-situation {
+            padding-left: 70px;
+            padding-right: 70px;
+            background: orangered;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+            .btn-save-crate-situation:hover {
+                background: orange;
+                color: #fff;
+            }
+
+        .form-label {
+            font-weight: bolder;
+        }
+
+        .card-text {
+            justify-content: start !important;
+        }
+
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const situationLinks = document.querySelectorAll(".situation-link");
+
+            situationLinks.forEach(link => {
+                link.addEventListener("click", function (e) {
+                    const requiresLogin = link.getAttribute("data-login") === "True";
+                    const redirectUrl = link.getAttribute("data-url");
+
+                    if (requiresLogin) {
+                        e.preventDefault();
+
+                        if (confirm("Bạn cần đăng nhập để truy cập nội dung này. Bạn có muốn đăng nhập ngay bây giờ?")) {
+                            window.location.href = "/Account/Login"; // hoặc route login thực tế của bạn
+                        }
+                    } else {
+                        // Người đã đăng nhập thì chuyển trang như bình thường
+                        window.location.href = redirectUrl;
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+             let selectedCategory = "";
+
+             // Khi chọn category
+             document.querySelectorAll('.dropdown-item').forEach(item => {
+                 item.addEventListener('click', function (e) {
+                     e.preventDefault();
+                     selectedCategory = this.dataset.category;
+                     document.getElementById("categoryDropdown").innerText = this.innerText;
+                     fetchSituations(); // gọi API khi đổi category
+                 });
+             });
+
+             // Khi nhập từ khóa
+             document.getElementById('searchCourse').addEventListener('input', function () {
+                 fetchSituations(); // gọi API khi gõ
+             });
+
+        // Hàm gọi API và hiển thị kết quả
+         function fetchSituations() {
+             const keyword = document.getElementById("searchCourse").value;
+             const dynamicContainer = document.getElementById("situation-list");
+
+             fetch(`/Mentee/Role-Play/ListPartial?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(selectedCategory)}`)
+                 .then(response => {
+                     if (!response.ok) {
+                         throw new Error('Lỗi khi tải danh sách tình huống');
+                     }
+                     return response.json();
+                 })
+                 .then(data => {
+                     dynamicContainer.innerHTML = ""; // Xóa nội dung cũ trong container động
+
+                     if (data.length === 0) {
+                         dynamicContainer.innerHTML = "<p>Không có tình huống nào phù hợp.</p>";
+                         return;
+                     }
+
+                     data.forEach(item => {
+                         const html = `
+                             <div class="course">
+                                 <a href="/Mentee/Role-Play/${item.situationId}" class="card-link">
+                                     <div class="flex-shrink-0">
+                                         <div class="card">
+                                             <img src="${item.imageUrl}" alt="Image of ${item.situationName}" class="card-img-top">
+                                             <div class="card-title-overlay position-absolute">${item.level.levelName}</div>
+                                             <div class="overlay-home"></div>
+                                             <div class="card-body">
+                                                 <p class="card-text" style="color: #fff;">${item.situationName}</p>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </a>
+                             </div>
+                         `;
+                         dynamicContainer.insertAdjacentHTML('beforeend', html);
+                     });
+                 })
+                 .catch(error => {
+                     console.error('Error:', error);
+                     dynamicContainer.innerHTML = "<p>Đã xảy ra lỗi khi tải danh sách. Vui lòng thử lại.</p>";
+                 });
+         }
+
+
+    </script>
+
+
+
+    <script>
+
+
+
+        function toggleDropdown() {
+            const dropdownButton = document.getElementById('categoryDropdown'); // Nút dropdown
+            const dropdownMenu = dropdownButton.nextElementSibling; // Menu dropdown
+
+            // Kiểm tra trạng thái của menu
+            if (dropdownMenu.classList.contains('show')) {
+                // Nếu menu đang mở -> đóng lại
+                dropdownButton.click(); // Giả lập click vào nút để đóng dropdown
+            } else {
+                // Nếu menu đang đóng -> mở ra
+                dropdownButton.click(); // Giả lập click vào nút để mở dropdown
+            }
+        }
+
+
+    </script>
+}
