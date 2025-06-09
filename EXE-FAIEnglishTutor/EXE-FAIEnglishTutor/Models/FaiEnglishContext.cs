@@ -59,6 +59,8 @@ public partial class FaiEnglishContext : DbContext
     public virtual DbSet<UserExamResult> UserExamResults { get; set; }
 
     public virtual DbSet<VerificationToken> VerificationTokens { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Answer>(entity =>
