@@ -236,7 +236,29 @@ public async Task<IActionResult> GenerateIeltsListening([FromBody] string topic)
                 });
             }
         }
+        [HttpPost("generate-random-word")]
+        public async Task<IActionResult> GenerateRandomWord([FromForm] string topic)
+        {
+            if (string.IsNullOrWhiteSpace(topic))
+                return BadRequest("Topic is missing.");
 
+            try
+            {
+                var wordResults = await _speechService.GetRandomWordAsync(topic.ToLower());
+                if (wordResults == null)
+                    return BadRequest("No words found for the specified topic.");
+
+                return Ok(wordResults);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Error generating random words.",
+                    detail = ex.Message
+                });
+            }
+        }
 
     }
 }

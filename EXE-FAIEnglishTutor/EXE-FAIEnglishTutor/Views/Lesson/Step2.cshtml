@@ -2,7 +2,7 @@
 @model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
-    ViewData["Title"] = $"Step 2 - {Model.Lesson.Title}";
+    ViewData["Title"] = $"Step 2 - {Model.Lesson.SituationName}";
 }
 
 <div id="content" class="p-4 p-md-5 home">
@@ -99,7 +99,7 @@
         <div class="listening-container">
             <!-- Lesson Header -->
             <div class="lesson-header">
-            <h2 class="lesson-title">@Model.Lesson.Title</h2>
+                <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
             
             </div>
 
@@ -187,11 +187,11 @@
 
             <!-- Navigation -->
             <div class="bottom-navigation">
-                <a href="@Url.Action("Step1", "Lesson", new { id = Model.Lesson.LessonId })" class="nav-btn prev">
+                <a href="@Url.Action("Step1", "Lesson", new { id = Model.Lesson.SituatuonId })" class="nav-btn prev">
                     <i class="fas fa-arrow-left"></i> Previous
                 </a>
                 <form id="nextStepForm" method="post" action="@Url.Action("Step3", "Lesson")" style="display: inline;">
-                    <input type="hidden" name="id" value="@Model.Lesson.LessonId" />
+                    <input type="hidden" name="id" value="@Model.Lesson.SituatuonId" />
                     <input type="hidden" name="script" value="@Model.Script" />
                     <input type="hidden" name="audioData" value="@Model.AudioData" />
                     <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
@@ -584,7 +584,7 @@
             const savedState = localStorage.getItem('lessonState');
             if (savedState) {
                 const state = JSON.parse(savedState);
-                if (state.lessonId === @Model.Lesson.LessonId && state.step === 2) {
+                if (state.lessonId === @Model.Lesson.SituatuonId && state.step === 2) {
                     // Disable submit button if quiz was completed
                     if (state.completed) {
                         document.getElementById('submitQuiz').disabled = true;
@@ -738,7 +738,7 @@
 
             // Save state to localStorage
             const lessonState = {
-                lessonId: @Model.Lesson.LessonId,
+                lessonId: @Model.Lesson.SituatuonId,
                 step: 2,
                 completed: true,
                 score: score,
@@ -751,7 +751,7 @@
             e.preventDefault();
             // Save all necessary data to localStorage before navigation
             const lessonState = {
-                lessonId: @Model.Lesson.LessonId,
+                lessonId: @Model.Lesson.SituatuonId,
                 audioData: @Html.Raw(Json.Serialize(Model.AudioData)),
                 script: @Html.Raw(Json.Serialize(Model.Script)),
                 questions: @Html.Raw(Json.Serialize(Model.Questions))

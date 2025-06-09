@@ -1,7 +1,7 @@
 ﻿@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
-    ViewData["Title"] = $"Step 1 - {Model.Lesson.Title}";
+    ViewData["Title"] = $"Step 1 - {Model.Lesson.SituationName}";
 }
 
 <div id="content" class="p-4 p-md-5 home">
@@ -98,7 +98,7 @@
         <div class="pronunciation-container">
             <!-- Lesson Header -->
             <div class="lesson-header">
-                <h2 class="lesson-title">@Model.Lesson.Title</h2>
+                <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
                 
             </div>
 
@@ -164,7 +164,7 @@
                 <a href="@Url.Action("Index", "Lesson")" class="action-btn back">
                     <i class="fas fa-arrow-left"></i> Back to Lessons
                 </a>
-                <a href="@Url.Action("Step2", "Lesson", new { id = Model.Lesson.LessonId })" class="action-btn next">
+                <a href="@Url.Action("Step2", "Lesson", new { id = Model.Lesson.SituatuonId })" class="action-btn next">
                     Continue <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
