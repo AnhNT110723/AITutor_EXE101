@@ -10,6 +10,7 @@ using EXE_FAIEnglishTutor.Repositories.Interface.Mentee;
 using EXE_FAIEnglishTutor.Repositories.Implementation.Mentee;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using EXE_FAIEnglishTutor.Services.Implementaion.Mentee;
+using EXE_FAIEnglishTutor.Services.Implementaion.AI;
 
 namespace EXE_FAIEnglishTutor.Configurations
 {
@@ -33,7 +34,9 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddTransient<EmailSendVetification>();
 
             // Chat bot - Sử dụng AddHttpClient thay vì AddScoped
-            services.AddHttpClient<IAIService, AIService>();
+            services.AddHttpClient<IOpenAIService, OpenAIService>();
+            services.AddScoped<ISpeakingAIService, SpeakingAIService>();
+            services.AddScoped<IReadingAIService, ReadingAIService>();
 
 
             //Profile
@@ -53,6 +56,9 @@ namespace EXE_FAIEnglishTutor.Configurations
             //Situation
             services.AddScoped<ISituationService, SituationService>();
             services.AddScoped<ISituationRepository, SituationRepository>();
+
+            //Podcast
+            services.AddScoped<IPodcastService, PodcastService>();
 
         }
 

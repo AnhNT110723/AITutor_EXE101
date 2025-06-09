@@ -143,7 +143,7 @@
                     <div class="card-body">
                         <img src="~/Images/FAI-2.png" alt="Logo" class="mb-4 logo" />
                         <h3 class="mb-4 text-center fw-bold" style="color: #333">
-                            Đăng nhập
+                            Login
                         </h3>
 
                         @if (ViewBag.ErrorLockedAcc != null)
@@ -161,7 +161,7 @@
 
                         <form asp-controller="Account" asp-action="Login" method="post">
                             <div class="mb-3">
-                                <p asp-for="Email" class="form-label">Email hoặc số điện thoại đăng nhập</p>
+                                <p asp-for="Email" class="form-label">Email </p>
                                 <input type="email" asp-for="Email" class="form-control" id="email" name="email" />
                                 <span asp-validation-for="Email" class="validation-message"></span>
                             </div>
@@ -169,7 +169,7 @@
                             <span asp-validation-for="Email" class="validation-message"></span>
                             </div> *@
                             <div class="mb-3 position-relative">
-                                <p class="form-label">Mật khẩu</p>
+                                <p class="form-label">Password</p>
                                 <input type="password" asp-for="Password" class="form-control pe-5" id="password" name="Password" />
                                 <i class="bi bi-eye-slash position-absolute end-0 pe-3" style="cursor: pointer; top: 55%" ; id="togglePassword"></i>
 
@@ -180,7 +180,7 @@
 
                             @if (ViewBag.ErrorMessage != null)
                             {
-                                <p class="text-danger">Tên đăng nhập hoặc mật khẩu không chính xác</p>
+                                <p class="text-danger">Incorrect username or password.</p>
                             }
 
                             <script>
@@ -203,20 +203,20 @@
                                     <input class="form-check-input"
                                            type="checkbox" name="RememberMe" asp-for="RememberMe"
                                            id="remember" />
-                                    <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>
+                                    <label class="form-check-label" for="remember">Remember Me</label>
                                 </div>
                                 <div class="mb-3">
-                                    <a class="link-login" asp-controller="Account" asp-action="ForgotPassword" asp-route-email="@Model.Email">Quên mật khẩu?</a>
+                                    <a class="link-login" asp-controller="Account" asp-action="ForgotPassword" asp-route-email="@Model.Email">Forgot password?</a>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn login-btn text-white w-100">
-                                Đăng nhập
+                            <button type="submit" id="btn_login" class="btn login-btn text-white w-100">
+                                Login
                             </button>
                         </form>
 
                         <div>
-                            <span class="d-flex justify-content-center align-items-center mt-4">Hoặc</span>
+                            <span class="d-flex justify-content-center align-items-center mt-4">Or</span>
                             <div class="social">
                                 <div class="social-inner">
                                     <a class="btn btn-danger" asp-controller="Auth" asp-action="LoginWithGoogle">
@@ -232,8 +232,8 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center align-items-center mt-3">
-                            Bạn chưa có tài khoản?
-                            <a class="link-login link-navigate" asp-controller="Account" asp-action="Register"> Đăng ký <strong class="strong">miễn phí</strong> ngay!</a>
+                            Don't have an account?
+                            <a class="link-login link-navigate" asp-controller="Account" asp-action="Register"> Sign up for <strong class="strong">free</strong> now!</a>
                         </div>
                     </div>
                 </div>
@@ -247,10 +247,9 @@
                      data-bs-ride="carousel">
                     <div class="d-flex flex-column justify-content-center align-items-center pading_custome p-5">
                         <!-- Tiêu đề -->
-                        <h2 class="mb-3 text-center">Tất cả khóa học tiếng Anh bạn cần</h2>
+                        <h2 class="mb-3 text-center">All the English courses you need</h2>
                         <p class="text-center mb-4" style="max-width: 500px">
-                            Trẻ em hay người lớn, Giao tiếp, Luyện thi hay phát triển 4 kỹ
-                            năng...
+                            Children or adults, Communication, Exam preparation or skill development...
                         </p>
 
                         <!-- Carousel (trình chiếu ảnh) -->
@@ -262,12 +261,12 @@
                                     <div class="img-wrapper">
                                         <img src="~/Images/slide5.png"
                                              class="d-block"
-                                             alt="Tiếng Anh cho bé (4-12 tuổi)"
+                                             alt="English for kids (4-12 years old)"
                                              style="max-height: 400px" />
                                         <div class="overlay-home"></div>
                                     </div>
                                     <div class="card-body-second">
-                                        <p class="mt-2 text-center">Tiếng Anh cho bé (4-12 tuổi)</p>
+                                        <p class="mt-2 text-center">English for kids (4-12 years old)</p>
                                     </div>
                                 </div>
                             </div>
@@ -275,15 +274,15 @@
                             <div class="carousel-item">
                                 <div class="d-flex flex-column align-items-center">
                                     <div class="img-wrapper">
-                                        <img src="~/Images/Co-Vietnam.png"
+                                        <img src="~/Images/slide3.png"
                                              class="d-block"
-                                             alt="Tiếng Anh trung học (13-18 tuổi)"
+                                             alt="Secondary English (13-18 years old)"
                                              style="max-height: 400px" />
                                         <div class="overlay-home"></div>
                                     </div>
                                     <div class="card-body-second">
                                         <p class="mt-2 text-center">
-                                            Tiếng Anh trung học (13-18 tuổi)
+                                            Secondary English (13-18 years old)
                                         </p>
                                     </div>
                                 </div>
@@ -292,14 +291,14 @@
                             <div class="carousel-item">
                                 <div class="d-flex flex-column align-items-center">
                                     <div class="img-wrapper">
-                                        <img src="~/Images/co-england.png"
+                                        <img src="~/Images/slide4.png"
                                              class="d-block"
                                              alt="Tiếng Anh người lớn"
                                              style="max-height: 400px" />
                                         <div class="overlay-home"></div>
                                     </div>
                                     <div class="card-body-second">
-                                        <p class="mt-2 text-center">Tiếng Anh người lớn</p>
+                                        <p class="mt-2 text-center">English for adults</p>
                                     </div>
                                 </div>
                             </div>
@@ -325,19 +324,19 @@
                     </div>
 
                     <!-- Link tải app (nếu cần) -->
-                    <div class="text-center mt-3">
-                        <p class="mb-3">Tải ứng dụng FAI English Tutor</p>
-                        <a class="me-3">
-                            <img src="https://learning.kynaforkids.vn/images/guest/google-play.png"
-                                 alt="Google Play"
-                                 style="height: 40px" />
-                        </a>
-                        <a>
-                            <img src="https://learning.kynaforkids.vn/images/guest/app-store.png"
-                                 alt="App Store"
-                                 style="height: 40px" />
-                        </a>
-                    </div>
+                     @* <div class="text-center mt-3">
+                         <p class="mb-3">Tải ứng dụng FAI English Tutor</p>
+                         <a class="me-3">
+                             <img src="https://learning.kynaforkids.vn/images/guest/google-play.png"
+                                  alt="Google Play"
+                                  style="height: 40px" />
+                         </a>
+                         <a>
+                             <img src="https://learning.kynaforkids.vn/images/guest/app-store.png"
+                                  alt="App Store"
+                                  style="height: 40px" />
+                         </a>
+                     </div> *@
                 </div>
             </div>
         </div>

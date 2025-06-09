@@ -12,6 +12,12 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation.Mentee
         {
         }
 
+        public async Task<List<Level?>> GetAllLevelAsync()
+        {
+            var x = await _context.Levels.ToListAsync();
+            return x;
+        }
+
         public async Task<List<Situation>> GetListSituationByRolePlay(int rolePlay)
         {
             var x = await _context.Situations.Include(x => x.Level).Where(t => t.TypeId == rolePlay).ToListAsync();
