@@ -7,5 +7,5 @@ bin/
 obj/
 *.csproj.user
 .config/
-Properties/PublishProfiles/
-Properties/ServiceDependencies/
+**/Properties/PublishProfiles/
+**/Properties/ServiceDependencies/
