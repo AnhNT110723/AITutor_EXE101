@@ -1,6 +1,7 @@
 ﻿using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 namespace EXE_FAIEnglishTutor.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "admin")]
     public class DashboardController : Controller
     {
         private readonly IUserService _userService;
