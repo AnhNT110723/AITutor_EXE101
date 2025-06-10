@@ -62,7 +62,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion
             var emailModel = new EmailVerificationDto
             {
                 FullName = user.FullName,
-                VerificationLink = "http://localhost:5037/Account/ResetPassword?token=" + token + "&Email=" + user.Email,
+                VerificationLink = "https://faienglish.xyz/Account/ResetPassword?token=" + token + "&Email=" + user.Email,
                 ExpirationTime = DateTime.UtcNow.AddMinutes(Constants.EXPIRATION_FORGOTPASSWORD),
                 isResendPassword = true,
                 isVertification = false,
