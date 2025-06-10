@@ -43,37 +43,37 @@
 <nav id="sidebar" class="active">
                 <h1><a asp-area="" asp-controller="home" asp-action="Index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
             <ul class="list-unstyled components mb-5">
-                <li>
+             @*    <li>
                     <a asp-area="" asp-controller="Ielts" class="link-test">
                         <span class="fa fa-users"></span>
                         <span class="menu-text">Học Ielts</span>
                     </a>
-                </li>
+                </li> *@
                 <li>
-                    <a asp-area="Mentee" asp-controller="Toeic" asp-action="Index" class="link-test">
+                        <a asp-area="Mentee" asp-controller="Toeic" asp-action="Index" class="link-test" data-action="toeic">
                         <span class="fas fa-graduation-cap icon"></span>
                         <span class="menu-text">Học Toeic</span>
                     </a>
                 </li>
-                <li class="active">
-                    <a asp-area="" asp-controller="home" asp-action="Index" class="link-test">
+                <li >
+                        <a asp-area="" asp-controller="home" asp-action="Index" class="link-test" data-action="home">
                         <span class="fa fa-frog"></span>
                         <span class="menu-text">AI Tutor</span>
 
                     </a>
                 </li>
                 <li>
-                        <a asp-area="" asp-controller="Pc" asp-action="index" class="link-test">
+                        <a asp-area="" asp-controller="Pc" asp-action="index" class="link-test" data-action="podcast">
                         <span class="fas fa-book-open"></span>
                         <span class="menu-text">Podcast</span>
                     </a>
                 </li>
-                <li>
-                        <a asp-area="" asp-controller="ParentCourse" asp-action="index" class="link-test">
+             @*    <li>
+                        <a  asp-area="" asp-controller="Pronunciation"  class="link-test" data-action="pronunciation">
                         <span class="bi bi-people-fill"></span>
-                        <span class="menu-text">Trang học của cha mẹ</span>
+                        <span class="menu-text">Phat am</span>
                     </a>
-                </li>
+                </li> *@
             </ul>
 
             <div class="footer">
@@ -102,7 +102,34 @@
     <script src="~/js/main.js" asp-append-version="true"></script>
     <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
 
+    <script>
+        // Lấy URL hiện tại
+        const currentPath = window.location.pathname.toLowerCase();
+        console.log('Current Path:', currentPath); // Debug URL
 
+        // Lấy tất cả các mục trong sidebar
+        const sidebarLinks = document.querySelectorAll('#sidebar .link-test');
+
+        // Duyệt qua từng liên kết
+        sidebarLinks.forEach(link => {
+            const li = link.parentElement; // Lấy thẻ <li> cha
+            const action = link.getAttribute('data-action');
+
+            // Kiểm tra xem URL hiện tại có khớp với action tương ứng không
+            if (
+                (action === 'home' && (currentPath === '/' || currentPath.includes('/home/index') || currentPath.includes('/home'))) ||
+                (action === 'lesson' && currentPath.includes('/lesson')) ||
+                (action === 'toeic' && currentPath.includes('/toeic')) ||
+                (action === 'podcast' && (currentPath.includes('/pc/index') || currentPath.includes('/pc'))) ||
+                (action === 'pronunciation' && currentPath.includes('/pronunciation'))
+            ) {
+                console.log(`Active item: ${action}`); // Debug mục đang active
+                li.classList.add('active');
+            } else {
+                li.classList.remove('active');
+            }
+        });
+    </script>
     <script>
 
         // Sidebar toggle functionality

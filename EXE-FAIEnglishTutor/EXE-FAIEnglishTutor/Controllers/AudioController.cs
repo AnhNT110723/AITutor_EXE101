@@ -123,20 +123,117 @@ namespace EXE_FAIEnglishTutor.Controllers
                 return StatusCode(500, $"Error generating speech: {ex.Message}");
             }
         }
-        [HttpPost("generate-ielts-listening")]
-        public async Task<IActionResult> GenerateIeltsListening()
+        [HttpPost("compare-audio")]
+        public async Task<IActionResult> CompareAudio([FromForm] IFormFile userAudio, [FromForm] IFormFile referenceAudio)
         {
+            if (userAudio == null || referenceAudio == null)
+                return BadRequest("Both audio files are required.");
+
+            var userAudioPath = Path.Combine(Path.GetTempPath(), "user_" + userAudio.FileName);
+            var refAudioPath = Path.Combine(Path.GetTempPath(), "ref_" + referenceAudio.FileName);
+
             try
             {
-                // Lấy bài tập nghe IELTS
-                var listeningExercise = await _speechService.GenerateIeltsListeningExerciseAsync();
+                // Save both audio files
+                using (var stream = new FileStream(userAudioPath, FileMode.Create))
+                {
+                    await userAudio.CopyToAsync(stream);
+                }
+                using (var stream = new FileStream(refAudioPath, FileMode.Create))
+                {
+                    await referenceAudio.CopyToAsync(stream);
+                }
 
-                // Trả về dữ liệu JSON
-                return Ok(listeningExercise);
+                // Transcribe both using Whisper API
+                var userText = await _speechService.TranscribeAudioAsync(userAudioPath, "en");
+                var refText = await _speechService.TranscribeAudioAsync(refAudioPath, "en");
+
+                // Calculate text-based scores
+                var pronunciationScore = _speechService.CalculateLevenshteinScore(userText.ToLower(), refText.ToLower());
+                var sequenceScore = _speechService.CalculateSequenceMatchScore(userText.ToLower(), refText.ToLower());
+
+                // Syllable comparison
+                var userSyllables = _speechService.CountSyllables(userText);
+                var refSyllables = _speechService.CountSyllables(refText);
+                var syllableScore = 100 * (1 - Math.Abs(userSyllables - refSyllables) / (double)Math.Max(refSyllables, 1));
+
+                // Stress score placeholder
+                var stressScore = sequenceScore * 0.9;
+
+                var result = new AudioProcessingResult
+                {
+                    TranscribedText = userText,
+                    ReferenceText = refText,
+                    PronunciationScore = Math.Round(pronunciationScore, 2),
+                    StressScore = Math.Round(stressScore, 2),
+                    SyllableScore = Math.Round(syllableScore, 2)
+                };
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Lỗi khi tạo bài tập nghe IELTS", error = ex.Message });
+                return StatusCode(500, $"Error processing audio: {ex.Message}");
+            }
+            finally
+            {
+                if (System.IO.File.Exists(userAudioPath)) System.IO.File.Delete(userAudioPath);
+                if (System.IO.File.Exists(refAudioPath)) System.IO.File.Delete(refAudioPath);
+            }
+        }
+
+
+        [HttpPost("generate-ielts-listening")]
+public async Task<IActionResult> GenerateIeltsListening([FromBody] string topic)
+{
+    try
+    {
+        // Generate IELTS listening exercise based on topic
+        var listeningExercise = await _speechService.GenerateIeltsListeningExerciseAsync(topic);
+
+        // Return JSON data
+        return Ok(listeningExercise);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { message = "Error generating IELTS listening exercise", error = ex.Message });
+    }
+}
+        public class AudioProcessingResult
+        {
+            public string TranscribedText { get; set; }
+            public string ReferenceText { get; set; }
+            public double PronunciationScore { get; set; } // 0–100%
+            public double StressScore { get; set; }
+            public double SyllableScore { get; set; }
+        }
+
+        [HttpPost("generate-random-words")]
+        public async Task<IActionResult> GenerateRandomWords([FromForm] string topic)
+        {
+            if (string.IsNullOrWhiteSpace(topic))
+                return BadRequest("Topic is missing.");
+
+            try
+            {
+                var wordResults = await _speechService.GetRandomWordsAsync(topic.ToLower());
+                if (wordResults == null || !wordResults.Any())
+                    return BadRequest("No words found for the specified topic.");
+
+                return Ok(wordResults.Select(w => new
+                {
+                    word = w.Word,
+                    meaning = w.Meaning,
+                    phonetic = w.Phonetic
+                }));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Error generating random words.",
+                    detail = ex.Message
+                });
             }
         }
         [HttpPost("generate-random-word")]
@@ -147,27 +244,21 @@ namespace EXE_FAIEnglishTutor.Controllers
 
             try
             {
-                var wordResult = await _speechService.GetRandomWordAsync(topic.ToLower());
-                if (wordResult == null)
+                var wordResults = await _speechService.GetRandomWordAsync(topic.ToLower());
+                if (wordResults == null)
                     return BadRequest("No words found for the specified topic.");
 
-                return Ok(new
-                {
-                    word = wordResult.Word,
-                    meaning = wordResult.Meaning,
-                    phonetic = wordResult.Phonetic
-                });
+                return Ok(wordResults);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new
                 {
-                    error = "Error generating random word.",
+                    error = "Error generating random words.",
                     detail = ex.Message
                 });
             }
         }
-
 
     }
 }

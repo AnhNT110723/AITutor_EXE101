@@ -1,0 +1,633 @@
+﻿@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    ViewData["Title"] = $"Step 1 - {Model.Lesson.SituationName}";
+}
+
+<div id="content" class="p-4 p-md-5 home">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var fullName = User.Identity.Name;
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <div class="nav-img">
+                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                </div>
+                            </a>
+                            <div class="menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
+                                <div class="menu-title">
+                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
+                                    <i class="bi bi-person-circle"></i> View Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                </a>
+                                <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <a class="btn-login-custom btn" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-4 p-md-5">
+        <!-- Progress Bar -->
+        <div class="lesson-progress">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Pronunciation</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-label">First Listening </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Second Listening </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Check Understanding </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Speaking Practice </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <div class="step-label">Shadowing </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">7</div>
+                        <div class="step-label">Review & Practice</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pronunciation-container">
+            <!-- Lesson Header -->
+            <div class="lesson-header">
+                <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
+                
+            </div>
+
+            <div class="words-container">
+                @foreach (var word in Model.Words)
+                {
+                    <div class="word-item mb-4" data-word="@word.Word" data-phonetic="@word.Phonetic" style="display: none;">
+                        <!-- Word Card -->
+                        <div class="word-card">
+                            <div class="word-main">
+                                <h3 class="word">@word.Word</h3>
+                                <p class="phonetic">@word.Phonetic</p>
+                            </div>
+
+                            <!-- Audio Controls Section -->
+                            <div class="audio-section">
+                                <div class="sample-audio-container">
+                                    <audio class="sample-audio" controls></audio>
+                                </div>
+                                <button class="record-btn" onclick="startRecording(this)">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
+
+                            <!-- Score Display -->
+                            <div class="score-display" style="display: none;">
+                                <h4><i class="fas fa-star"></i> Pronunciation Results <i class="fas fa-star"></i></h4>
+                                <div class="score-grid">
+                                    <div class="score-item">
+                                        <div class="score-label">Pronunciation</div>
+                                        <div class="score-value pronunciation-score">-</div>
+                                    </div>
+                                    <div class="score-item">
+                                        <div class="score-label">Stress</div>
+                                        <div class="score-value stress-score">-</div>
+                                    </div>
+                                    <div class="score-item">
+                                        <div class="score-label">Syllable</div>
+                                        <div class="score-value syllable-score">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- Navigation Controls -->
+                <div class="word-navigation">
+                    <button class="nav-btn prev" onclick="previousWord()" id="prevWordBtn" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <div class="word-counter">
+                        Word <span id="currentWordIndex">1</span> / <span id="totalWords">@Model.Words.Count()</span>
+                    </div>
+                    <button class="nav-btn next" onclick="nextWord()" id="nextWordBtn">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-navigation">
+                <a href="/Mentee/Listening" class="action-btn back">
+                    <i class="fas fa-arrow-left"></i> Back to Lessons
+                </a>
+                <a href="@Url.Action("Step2", "Lesson", new { id = Model.Lesson.SituatuonId })" class="action-btn next">
+                    Continue <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pronunciation-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 2rem;
+    }
+
+    .lesson-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .lesson-title {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(45deg, #2c3e50, #ff9838);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .situation-box {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin: 1rem auto;
+        max-width: 600px;
+        position: relative;
+        border-left: 5px solid #ff9838;
+    }
+
+    .word-card {
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .word-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .word-main {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 2rem;
+    }
+
+    .word {
+        font-size: 3rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .phonetic {
+        font-size: 1.8rem;
+        color: #7f8c8d;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #ff9838 0%, #ffb347 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        white-space: nowrap;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .phonetic::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -20px;
+        width: 10px;
+        height: 2px;
+        background: #ff9838;
+        transform: translateY(-50%);
+    }
+
+    .phonetic::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -20px;
+        width: 10px;
+        height: 2px;
+        background: #ff9838;
+        transform: translateY(-50%);
+    }
+
+    .audio-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        margin: 1.5rem 0;
+    }
+
+    .record-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(45deg, #ff9838, #ff8108);
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .record-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(255,152,56,0.3);
+    }
+
+    .score-display {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .score-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .score-item {
+        text-align: center;
+        padding: 1rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .score-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ff9838;
+    }
+
+    .word-navigation {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .nav-btn {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        background: #ff9838;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+        background: #ff8108;
+        transform: translateY(-2px);
+    }
+
+    .nav-btn:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+    }
+
+    .word-counter {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+    }
+
+    .bottom-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+    }
+
+    .action-btn {
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .action-btn.back {
+        background: #ecf0f1;
+        color: #2c3e50;
+    }
+
+    .action-btn.next {
+        background: #ff9838;
+        color: white;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Progress Bar Styles */
+    .lesson-progress {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .progress-container {
+        position: relative;
+        padding: 20px 0;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        position: absolute;
+        top: 50px;
+        z-index: 1;
+    }
+
+    .progress-fill {
+        width: 14.28%; /* 1/7 of the total width */
+        height: 100%;
+        background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
+        border-radius: 2px;
+        transition: width 0.5s ease;
+        position: relative;
+    }
+
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #999;
+        position: relative;
+    }
+
+    .step.active {
+        color: #ff9838;
+    }   
+
+    .step.active .step-number {
+        background: #ff9838;
+        color: white;
+    }
+
+    .step-number {
+        width: 30px;
+        height: 30px;
+        background: #e0e0e0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .step-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let currentWordIndex = 0;
+        const wordItems = document.querySelectorAll('.word-item');
+        const totalWords = wordItems.length;
+        let currentAbortController = null;
+
+        // Show first word when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            showWord(0);
+            loadAllAudio();
+
+            // Add event listener for Back to Lessons button
+            document.querySelector('.action-btn.back').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentAbortController) {
+                    // Abort any ongoing API calls
+                    currentAbortController.abort();
+                }
+                // Navigate to Lessons page
+                window.location.href = '/Mentee/Listening';
+            });
+        });
+
+        function showWord(index) {
+            // Hide all words
+            wordItems.forEach(item => item.style.display = 'none');
+            
+            // Show current word
+            wordItems[index].style.display = 'block';
+            
+            // Update navigation buttons
+            document.getElementById('prevWordBtn').disabled = index === 0;
+            document.getElementById('nextWordBtn').disabled = index === totalWords - 1;
+            
+            // Update word counter
+            document.getElementById('currentWordIndex').textContent = index + 1;
+            
+            // Reset recording state if needed
+            if (isRecording) {
+                const recordBtn = wordItems[currentWordIndex].querySelector('.record-btn');
+                mediaRecorder.stop();
+                isRecording = false;
+                recordBtn.classList.remove('recording');
+                recordBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+            
+            currentWordIndex = index;
+        }
+
+        function nextWord() {
+            if (currentWordIndex < totalWords - 1) {
+                showWord(currentWordIndex + 1);
+            }
+        }
+
+        function previousWord() {
+            if (currentWordIndex > 0) {
+                showWord(currentWordIndex - 1);
+            }
+        }
+
+        // Load audio for all words in background
+        async function loadAllAudio() {
+            for (const wordItem of wordItems) {
+                const word = wordItem.dataset.word;
+                const sampleAudio = wordItem.querySelector('.sample-audio');
+                
+                try {
+                    // Create new AbortController for this request
+                    currentAbortController = new AbortController();
+                    
+                    const formData = new FormData();
+                    formData.append('text', word);
+
+                    const response = await fetch('/api/audio/generate-english', {
+                        method: 'POST',
+                        body: formData,
+                        signal: currentAbortController.signal
+                    });
+
+                    if (!response.ok) throw new Error('Failed to generate audio');
+
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    sampleAudio.src = audioUrl;
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        console.log('Audio generation cancelled');
+                        return;
+                    }
+                    console.error('Error generating audio:', error);
+                }
+            }
+            currentAbortController = null;
+        }
+
+        async function startRecording(button) {
+            const wordItem = button.closest('.word-item');
+            const word = wordItem.dataset.word;
+            const scoreDisplay = wordItem.querySelector('.score-display');
+            
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (event) => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob, 'recording.wav');
+                        formData.append('standardSentence', word);
+
+                        try {
+                            // Create new AbortController for this request
+                            currentAbortController = new AbortController();
+
+                            const response = await fetch('/api/audio/process', {
+                                method: 'POST',
+                                body: formData,
+                                signal: currentAbortController.signal
+                            });
+
+                            if (!response.ok) throw new Error('Failed to process audio');
+
+                            const result = await response.json();
+
+                            // Display scores
+                            wordItem.querySelector('.pronunciation-score').textContent = result.pronunciationScore + '%';
+                            wordItem.querySelector('.stress-score').textContent = result.stressScore + '%';
+                            wordItem.querySelector('.syllable-score').textContent = result.syllableScore + '%';
+                            scoreDisplay.style.display = 'block';
+                        } catch (error) {
+                            if (error.name === 'AbortError') {
+                                console.log('Audio processing cancelled');
+                                return;
+                            }
+                            console.error('Error processing audio:', error);
+                            alert('Error processing your pronunciation');
+                        } finally {
+                            currentAbortController = null;
+                        }
+                    };
+
+                    mediaRecorder.start();
+                    isRecording = true;
+                    button.classList.add('recording');
+                    button.innerHTML = '<i class="fas fa-stop"></i>';
+                } catch (error) {
+                    console.error('Error accessing microphone:', error);
+                    alert('Error accessing microphone');
+                }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                button.classList.remove('recording');
+                button.innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        }
+    </script>
+}

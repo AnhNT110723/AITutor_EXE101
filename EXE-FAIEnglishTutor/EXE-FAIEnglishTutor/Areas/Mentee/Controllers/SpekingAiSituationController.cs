@@ -142,7 +142,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
             return View("ListSituations", listSituations);
         }
-
+       
         [HttpGet("Mentee/Role-Play/ListPartial")]
         public async Task<IActionResult> GetListSituationsPartialAsync(string keyword = "", string category = "")
         {
@@ -334,6 +334,41 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
         }
 
+        [HttpPost("Mentee/SpekingAiSituation/EvaluateMessage")]
+        public async Task<IActionResult> EvaluateMessage([FromBody] EvaluateMessageRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Message))
+                {
+                    return BadRequest(new { error = "Message is required." });
+                }
+
+                // Tạo prompt để yêu cầu AI đánh giá ngữ pháp
+                string prompt = $@"Please evaluate the following sentence for grammar and suggest a corrected version if needed. If the sentence is already correct, confirm it. Provide a concise explanation and a corrected sentence (if applicable) in the format:
+                                Explanation: [Your explanation]
+                                Corrected: [Corrected sentence or original if correct]
+                                Sentence: {request.Message}";
+
+                var messages = new List<object>
+        {
+            new { role = "user", content = prompt }
+        };
+
+                string suggestion = await _speakingAiService.GetChatResponseAsync(messages);
+                if (string.IsNullOrEmpty(suggestion))
+                {
+                    return Json(new { suggestion = "Could not evaluate the message." });
+                }
+
+                return Json(new { suggestion });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in EvaluateMessage: {ex.Message}");
+                return StatusCode(500, new { error = "Error evaluating message.", details = ex.Message });
+            }
+        }
         private async Task<string> GenerateSuggestion(int situationId, List<Message> messages)
         {
             // Lấy thông tin tình huống
@@ -515,5 +550,10 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         public string Text { get; set; }
         public string To { get; set; }
     }
+
+    public class EvaluateMessageRequest
+{
+    public string Message { get; set; }
+}
 
 }

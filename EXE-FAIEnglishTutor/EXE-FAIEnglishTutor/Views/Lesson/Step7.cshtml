@@ -1,0 +1,1095 @@
+﻿@using Newtonsoft.Json
+@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    ViewData["Title"] = $"Step 7 - {Model.Lesson.SituationName}";
+}
+
+<div id="content" class="p-4 p-md-5 home">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var fullName = User.Identity.Name;
+                        var avatarUrl = User.FindFirst("Avatar")?.Value;
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <div class="nav-img">
+                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                </div>
+                            </a>
+                            <div class="menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
+                                <div class="menu-title">
+                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
+                                    <i class="bi bi-person-circle"></i> View Profile
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                </a>
+                                <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <a class="btn-login-custom btn" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="p-4 p-md-5">
+        <!-- Progress Bar -->
+        <div class="lesson-progress">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Pronunciation</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">2</div>
+                        <div class="step-label">First Listening </div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Second Listening </div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Check Understanding </div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Speaking Practice </div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">6</div>
+                        <div class="step-label">Shadowing </div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">7</div>
+                        <div class="step-label">Review & Practice</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review & Practice Container -->
+        <div class="review-container">
+            <div class="lesson-header">
+                <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
+                <p class="lesson-subtitle">Review what you've learned and practice your skills</p>
+            </div>
+
+            <!-- Practice Sections -->
+            <div class="practice-sections">
+                <!-- Blind Listening Section -->
+                <div class="practice-section" id="blindListening">
+                    <div class="section-header">
+                        <h3><i class="fas fa-headphones"></i> Blind Listening</h3>
+                        <p>Listen to the audio without transcript and test your comprehension</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="audio-player">
+                            <div class="audio-controls">
+                                <button id="playPauseBtn" class="control-btn">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button id="rewindBtn" class="control-btn">
+                                    <i class="fas fa-backward"></i> 5s
+                                </button>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                    <div class="time-display">
+                                        <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                                    </div>
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.AudioData))
+                                {
+                                    <audio id="audioPlayer" src="@Model.AudioData"></audio>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Writing Section -->
+                <div class="practice-section" id="summaryWriting">
+                    <div class="section-header">
+                        <h3><i class="fas fa-pen"></i> Write a Summary</h3>
+                        <p>Write a brief summary of what you understood</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="summary-editor">
+                            <textarea id="summaryText" placeholder="Write your summary here..." rows="5"></textarea>
+                            <div class="word-count">
+                                <span id="wordCount">0</span> words
+                            </div>
+                            <button id="saveSummaryBtn" class="action-btn">
+                                <i class="fas fa-save"></i> Save Summary
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Recording Section -->
+                <div class="practice-section" id="personalRecording">
+                    <div class="section-header">
+                        <h3><i class="fas fa-microphone"></i> Personal Recording</h3>
+                        <p>Record your own version of the topic</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="recording-controls">
+                            <button id="recordBtn" class="record-btn">
+                                <i class="fas fa-microphone"></i>
+                                <span>Start Recording</span>
+                            </button>
+                            <div id="recordingTimer" class="recording-timer">00:00</div>
+                        </div>
+                        <div id="recordingsList" class="recordings-list">
+                            <!-- Recordings will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sentence Creation Section -->
+                <div class="practice-section" id="sentenceCreation">
+                    <div class="section-header">
+                        <h3><i class="fas fa-pencil-alt"></i> Create New Sentences</h3>
+                        <p>Practice using the words and phrases you've learned</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="vocabulary-list">
+                            @if (Model.Words?.Any() == true)
+                            {
+                                @foreach (var word in Model.Words)
+                                {
+                                    <div class="vocab-item">
+                                        <span class="word">@word.Word</span>
+                                        <button class="show-example-btn" data-word="@word.Word">
+                                            <i class="fas fa-lightbulb"></i>
+                                        </button>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p class="no-words-message">No vocabulary words available for this lesson.</p>
+                            }
+                        </div>
+                        <div class="sentence-input">
+                            <textarea id="newSentence" placeholder="Write your sentence here..." rows="3"></textarea>
+                            <button id="saveSentenceBtn" class="action-btn">
+                                <i class="fas fa-plus"></i> Add Sentence
+                            </button>
+                        </div>
+                        <div id="sentencesList" class="sentences-list">
+                            <!-- Created sentences will be added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="bottom-navigation">
+                <div class="completion-status">
+                    <div class="completion-progress">
+                        <div class="progress-circle">
+                            <span id="completionPercentage">0%</span>
+                        </div>
+                        <h4>Lesson Progress</h4>
+                    </div>
+                    <div class="completion-details">
+                        <div class="completion-item">
+                            <i class="fas fa-headphones"></i>
+                            <span>Blind Listening</span>
+                            <span id="listeningScore" class="score">0/25</span>
+                        </div>
+                        <div class="completion-item">
+                            <i class="fas fa-pen"></i>
+                            <span>Summary Writing</span>
+                            <span id="summaryScore" class="score">0/25</span>
+                        </div>
+                        <div class="completion-item">
+                            <i class="fas fa-microphone"></i>
+                            <span>Personal Recording</span>
+                            <span id="recordingScore" class="score">0/25</span>
+                        </div>
+                        <div class="completion-item">
+                            <i class="fas fa-pencil-alt"></i>
+                            <span>Sentence Creation</span>
+                            <span id="sentenceScore" class="score">0/25</span>
+                        </div>
+                    </div>
+                </div>
+                <form id="prevStepForm" method="post" action="@Url.Action("Step6Pre", "Lesson")" style="display: inline;">
+                    <input type="hidden" name="id" value="@Model.Lesson.SituatuonId" />
+                    <input type="hidden" name="script" value="@Model.Script" />
+                    <input type="hidden" name="audioData" value="@Model.AudioData" />
+                    <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions)" />
+                    <button type="submit" class="nav-btn prev">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                </form>
+                <button id="finishLessonBtn" class="nav-btn finish" disabled onclick="window.location.href='@Url.Action("Index", "Listening", new { area = "Mentee" })'">
+                    <i class="fas fa-check"></i> Complete Lesson
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #ff9838;
+        --primary-dark: #ff8108;
+        --primary-light: #ffb347;
+        --text-dark: #2c3e50;
+        --text-light: #7f8c8d;
+        --bg-light: #f8f9fa;
+        --white: #ffffff;
+    }
+
+    /* Progress Bar Styles */
+    .lesson-progress {
+        max-width: 800px;
+        margin: 0 auto 2rem;
+    }
+
+    .progress-container {
+        position: relative;
+        padding: 20px 0;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        position: absolute;
+        top: 50px;
+        z-index: 1;
+    }
+
+    .progress-fill {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
+        border-radius: 2px;
+        transition: width 0.5s ease;
+        position: relative;
+    }
+
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #999;
+        position: relative;
+    }
+
+        .step.active {
+            color: #ff9838;
+        }
+
+            .step.active .step-number {
+                background: #ff9838;
+                color: white;
+            }
+
+    .step-number {
+        width: 30px;
+        height: 30px;
+        background: #e0e0e0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .step-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* Review Container */
+    .review-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .lesson-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .lesson-title {
+        font-size: 2.2rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .lesson-subtitle {
+        color: var(--text-light);
+        font-size: 1.1rem;
+    }
+
+    /* Practice Sections */
+    .practice-sections {
+        display: grid;
+        gap: 2rem;
+    }
+
+    .practice-section {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 15px rgba(255, 152, 56, 0.1);
+    }
+
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header h3 {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .section-header p {
+        color: var(--text-light);
+        font-size: 1rem;
+    }
+
+    /* Audio Player */
+    .audio-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .control-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: none;
+        background: var(--primary-color);
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .control-btn:hover {
+        background: var(--primary-dark);
+        transform: scale(1.05);
+    }
+
+    .progress-container {
+        flex-grow: 1;
+        margin: 0 1rem;
+    }
+
+    /* Summary Editor */
+    .summary-editor {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+        resize: vertical;
+        transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+        border-color: var(--primary-color);
+        outline: none;
+    }
+
+    .word-count {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        text-align: right;
+    }
+
+    /* Recording Controls */
+    .recording-controls {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .record-btn {
+        padding: 1rem 2rem;
+        border-radius: 30px;
+        border: none;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: white;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .record-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 152, 56, 0.2);
+    }
+
+    .record-btn.recording {
+        background: linear-gradient(135deg, #ff4d4d 0%, #ff6b6b 100%);
+        animation: pulse 1.5s infinite;
+    }
+
+    .recording-timer {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+
+    /* Vocabulary and Sentences */
+    .vocabulary-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .vocab-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--bg-light);
+        border-radius: 20px;
+    }
+
+    .show-example-btn {
+        background: none;
+        border: none;
+        color: var(--primary-color);
+        cursor: pointer;
+        padding: 0.2rem;
+    }
+
+    .sentence-input {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Action Buttons */
+    .action-btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        border: none;
+        background: var(--primary-color);
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    /* Lists */
+    .recordings-list, .sentences-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Navigation */
+    .bottom-navigation {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+
+    .nav-btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        border: none;
+        background: var(--primary-color);
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .nav-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .nav-btn.finish:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    @@keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .no-words-message {
+        color: var(--text-light);
+        text-align: center;
+        font-style: italic;
+        padding: 1rem;
+    }
+
+    .completion-status {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(255, 152, 56, 0.1);
+        width: 100%;
+    }
+
+    .completion-progress {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .progress-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .completion-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .completion-item {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        background: var(--bg-light);
+        border-radius: 10px;
+    }
+
+    .completion-item i {
+        color: var(--primary-color);
+    }
+
+    .score {
+        margin-left: auto;
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+
+    .recording-item {
+        background: var(--bg-light);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .recording-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .recording-transcript {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .recording-score {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .score-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        background: var(--bg-light);
+        border-radius: 6px;
+    }
+
+    .score-label {
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+
+    .score-value {
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        let audioPlayer;
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let recordingTimer;
+        let recordingTime = 0;
+        let scores = {
+            listening: 0,
+            summary: 0,
+            recording: 0,
+            sentence: 0
+        };
+        let originalScript = "@Model.Script"; // Get the original script from the model
+
+        document.addEventListener('DOMContentLoaded', function() {
+            audioPlayer = document.getElementById('audioPlayer');
+            setupAudioPlayer();
+            setupSummaryEditor();
+            setupRecording();
+            setupSentenceCreation();
+            setupScoring();
+            initializeSpeechRecognition();
+        });
+
+        function initializeSpeechRecognition() {
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            return recognition;
+        }
+
+        function setupRecording() {
+            const recordBtn = document.getElementById('recordBtn');
+            const recordingTimer = document.getElementById('recordingTimer');
+            const recordingsList = document.getElementById('recordingsList');
+            let recognition = initializeSpeechRecognition();
+            let transcriptText = '';
+
+            recordBtn.addEventListener('click', async () => {
+                if (!isRecording) {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        mediaRecorder = new MediaRecorder(stream);
+                        audioChunks = [];
+                        transcriptText = '';
+
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            addRecordingToList(audioUrl, transcriptText);
+                            analyzeRecording(transcriptText);
+                        };
+
+                        // Start speech recognition
+                        recognition.start();
+                        recognition.onresult = (event) => {
+                            const transcript = Array.from(event.results)
+                                .map(result => result[0].transcript)
+                                .join('');
+                            transcriptText = transcript;
+                        };
+
+                        mediaRecorder.start();
+                        isRecording = true;
+                        recordBtn.classList.add('recording');
+                        recordBtn.innerHTML = '<i class="fas fa-stop"></i><span>Stop Recording</span>';
+                        startRecordingTimer();
+                    } catch (error) {
+                        console.error('Error accessing microphone:', error);
+                        alert('Error accessing microphone');
+                    }
+                } else {
+                    mediaRecorder.stop();
+                    recognition.stop();
+                    isRecording = false;
+                    recordBtn.classList.remove('recording');
+                    recordBtn.innerHTML = '<i class="fas fa-microphone"></i><span>Start Recording</span>';
+                    stopRecordingTimer();
+                }
+            });
+        }
+
+        function addRecordingToList(audioUrl, transcript) {
+            const recordingsList = document.getElementById('recordingsList');
+            const recordingItem = document.createElement('div');
+            recordingItem.className = 'recording-item';
+            recordingItem.innerHTML = `
+                <div class="recording-content">
+                    <audio controls src="${audioUrl}"></audio>
+                    <div class="recording-transcript">
+                        <p><strong>Your Speech:</strong></p>
+                        <p>${transcript}</p>
+                    </div>
+                    <div class="recording-score">
+                        <div class="score-detail">
+                            <span class="score-label">Pronunciation:</span>
+                            <span class="score-value" id="pronunciation-${Date.now()}">-</span>
+                        </div>
+                        <div class="score-detail">
+                            <span class="score-label">Intonation:</span>
+                            <span class="score-value" id="intonation-${Date.now()}">-</span>
+                        </div>
+                        <div class="score-detail">
+                            <span class="score-label">Fluency:</span>
+                            <span class="score-value" id="fluency-${Date.now()}">-</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="delete-btn"><i class="fas fa-trash"></i></button>
+            `;
+            recordingsList.appendChild(recordingItem);
+
+            // Add delete functionality
+            const deleteBtn = recordingItem.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', () => {
+                recordingItem.remove();
+                updateRecordingScore();
+            });
+        }
+
+        function analyzeRecording(transcript) {
+            // Compare with original script using text similarity
+            const similarity = calculateTextSimilarity(transcript.toLowerCase(), originalScript.toLowerCase());
+            
+            // Calculate scores based on different aspects
+            const pronunciationScore = Math.round(similarity * 100);
+            const intonationScore = calculateIntonationScore(transcript);
+            const fluencyScore = calculateFluencyScore(transcript);
+
+            // Update the latest recording's scores
+            const recordings = document.querySelectorAll('.recording-item');
+            const latestRecording = recordings[recordings.length - 1];
+            
+            if (latestRecording) {
+                latestRecording.querySelector('[id^="pronunciation-"]').textContent = `${pronunciationScore}%`;
+                latestRecording.querySelector('[id^="intonation-"]').textContent = `${intonationScore}%`;
+                latestRecording.querySelector('[id^="fluency-"]').textContent = `${fluencyScore}%`;
+            }
+
+            // Update overall recording score
+            updateRecordingScore();
+        }
+
+        function calculateTextSimilarity(str1, str2) {
+            const words1 = str1.split(' ');
+            const words2 = str2.split(' ');
+            const intersection = words1.filter(word => words2.includes(word));
+            return intersection.length / Math.max(words1.length, words2.length);
+        }
+
+        function calculateIntonationScore(transcript) {
+            // Simple intonation scoring based on punctuation and sentence structure
+            const sentences = transcript.split(/[.!?]+/).filter(s => s.length > 0);
+            let score = 0;
+            
+            if (sentences.length > 0) {
+                // Check for question marks, exclamation marks, and commas
+                const hasQuestions = transcript.includes('?');
+                const hasEmphasis = transcript.includes('!');
+                const hasCommas = transcript.includes(',');
+                
+                score += hasQuestions ? 30 : 0;
+                score += hasEmphasis ? 30 : 0;
+                score += hasCommas ? 40 : 0;
+            }
+            
+            return Math.min(100, score);
+        }
+
+        function calculateFluencyScore(transcript) {
+            // Calculate fluency based on word count and potential hesitations
+            const words = transcript.split(' ').filter(w => w.length > 0);
+            const hesitations = (transcript.match(/um|uh|eh|ah/gi) || []).length;
+            
+            let score = 100;
+            // Deduct points for hesitations
+            score -= hesitations * 10;
+            // Bonus points for longer sentences without hesitations
+            score += Math.min(20, words.length / 5);
+            
+            return Math.max(0, Math.min(100, score));
+        }
+
+        function updateRecordingScore() {
+            const recordings = document.querySelectorAll('.recording-item');
+            if (recordings.length === 0) {
+                scores.recording = 0;
+                updateScores();
+                return;
+            }
+
+            // Calculate average scores from all recordings
+            let totalPronunciation = 0;
+            let totalIntonation = 0;
+            let totalFluency = 0;
+
+            recordings.forEach(recording => {
+                totalPronunciation += parseInt(recording.querySelector('[id^="pronunciation-"]').textContent) || 0;
+                totalIntonation += parseInt(recording.querySelector('[id^="intonation-"]').textContent) || 0;
+                totalFluency += parseInt(recording.querySelector('[id^="fluency-"]').textContent) || 0;
+            });
+
+            const avgScore = (totalPronunciation + totalIntonation + totalFluency) / (3 * recordings.length);
+            scores.recording = Math.round(avgScore * 0.25); // Convert to 25-point scale
+            updateScores();
+        }
+
+        function setupAudioPlayer() {
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const rewindBtn = document.getElementById('rewindBtn');
+            const progressBar = document.querySelector('.progress-bar');
+            const progressFill = document.querySelector('.progress-fill');
+            const currentTimeDisplay = document.getElementById('currentTime');
+            const durationDisplay = document.getElementById('duration');
+
+            playPauseBtn.addEventListener('click', togglePlay);
+            rewindBtn.addEventListener('click', () => {
+                audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 5);
+            });
+
+            progressBar.addEventListener('click', (e) => {
+                const rect = progressBar.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audioPlayer.currentTime = pos * audioPlayer.duration;
+            });
+
+            audioPlayer.addEventListener('timeupdate', () => {
+                const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressFill.style.width = `${progress}%`;
+                currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+            });
+
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                durationDisplay.textContent = formatTime(audioPlayer.duration);
+            });
+
+            audioPlayer.addEventListener('ended', () => {
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            });
+        }
+
+        function setupSummaryEditor() {
+            const summaryText = document.getElementById('summaryText');
+            const wordCount = document.getElementById('wordCount');
+            const saveSummaryBtn = document.getElementById('saveSummaryBtn');
+
+            summaryText.addEventListener('input', () => {
+                const words = summaryText.value.trim().split(/\s+/).filter(word => word.length > 0);
+                wordCount.textContent = words.length;
+            });
+
+            saveSummaryBtn.addEventListener('click', () => {
+                // Save summary logic here
+                alert('Summary saved successfully!');
+            });
+        }
+
+        function setupSentenceCreation() {
+            const newSentence = document.getElementById('newSentence');
+            const saveSentenceBtn = document.getElementById('saveSentenceBtn');
+            const sentencesList = document.getElementById('sentencesList');
+            const exampleBtns = document.querySelectorAll('.show-example-btn');
+
+            saveSentenceBtn.addEventListener('click', () => {
+                const sentence = newSentence.value.trim();
+                if (sentence) {
+                    addSentenceToList(sentence);
+                    newSentence.value = '';
+                }
+            });
+
+            exampleBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const word = btn.dataset.word;
+                    // Show example sentence for the word
+                    alert(`Example sentence with "${word}" will be shown here`);
+                });
+            });
+        }
+
+        function addSentenceToList(sentence) {
+            const sentencesList = document.getElementById('sentencesList');
+            const sentenceItem = document.createElement('div');
+            sentenceItem.className = 'sentence-item';
+            sentenceItem.innerHTML = `
+                <p>${sentence}</p>
+                <button class="delete-btn"><i class="fas fa-trash"></i></button>
+            `;
+            sentencesList.appendChild(sentenceItem);
+        }
+
+        function startRecordingTimer() {
+            recordingTime = 0;
+            recordingTimer = setInterval(() => {
+                recordingTime++;
+                document.getElementById('recordingTimer').textContent = formatTime(recordingTime);
+            }, 1000);
+        }
+
+        function stopRecordingTimer() {
+            clearInterval(recordingTimer);
+            recordingTime = 0;
+            document.getElementById('recordingTimer').textContent = '00:00';
+        }
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audioPlayer.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function setupScoring() {
+            const finishButton = document.getElementById('finishLessonBtn');
+            
+            // Update scores when audio is played
+            audioPlayer.addEventListener('ended', () => {
+                scores.listening = 25;
+                updateScores();
+            });
+
+            // Minimum requirements for completion
+            const MINIMUM_WORDS = 50;
+            const MINIMUM_RECORDINGS = 1;
+            const MINIMUM_SENTENCES = 3;
+
+            function updateScores() {
+                // Update UI
+                document.getElementById('listeningScore').textContent = `${scores.listening}/25`;
+                document.getElementById('summaryScore').textContent = `${scores.summary}/25`;
+                document.getElementById('recordingScore').textContent = `${scores.recording}/25`;
+                document.getElementById('sentenceScore').textContent = `${scores.sentence}/25`;
+
+                // Calculate total percentage
+                const totalScore = scores.listening + scores.summary + scores.recording + scores.sentence;
+                const percentage = Math.round((totalScore / 100) * 100);
+                document.getElementById('completionPercentage').textContent = `${percentage}%`;
+
+                // Enable/disable finish button
+                finishButton.disabled = totalScore < 0; // Changed back to 70% requirement
+            }
+
+            // Summary scoring
+            const summaryText = document.getElementById('summaryText');
+            summaryText.addEventListener('input', () => {
+                const words = summaryText.value.trim().split(/\s+/).filter(word => word.length > 0);
+                scores.summary = words.length >= MINIMUM_WORDS ? 25 : Math.round((words.length / MINIMUM_WORDS) * 25);
+                updateScores();
+            });
+
+            // Recording scoring
+            const recordingsList = document.getElementById('recordingsList');
+            const observer = new MutationObserver(() => {
+                const recordings = recordingsList.children.length;
+                scores.recording = recordings >= MINIMUM_RECORDINGS ? 25 : 0;
+                updateScores();
+            });
+            observer.observe(recordingsList, { childList: true });
+
+            // Sentence scoring
+            const sentencesList = document.getElementById('sentencesList');
+            const sentenceObserver = new MutationObserver(() => {
+                const sentences = sentencesList.children.length;
+                scores.sentence = sentences >= MINIMUM_SENTENCES ? 25 : Math.round((sentences / MINIMUM_SENTENCES) * 25);
+                updateScores();
+            });
+            sentenceObserver.observe(sentencesList, { childList: true });
+
+            // Initial score update
+            updateScores();
+        }
+    </script>
+}

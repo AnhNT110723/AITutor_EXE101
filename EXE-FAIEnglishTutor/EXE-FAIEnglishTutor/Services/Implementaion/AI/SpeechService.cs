@@ -183,21 +183,28 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
             await stream.CopyToAsync(fileStream);
         }
 
-        public async Task<WordResult> GetRandomWordAsync(string topic)
+        public async Task<List<WordResult>> GetRandomWordsAsync(string topic)
         {
             try
             {
-                // Updated prompt to emphasize raw JSON
-                var prompt = $@"Generate a single random English word related to the topic '{topic}'. Provide:
-                - The word
-                - Its meaning in English (a short definition, max 10 words)
-                - Its phonetic transcription in IPA format
-                Return the response as a raw JSON object, without markdown, code blocks, or any additional text. Example:
-                {{
-                    ""word"": ""example"",
-                    ""meaning"": ""A sample or instance"",
-                    ""phonetic"": ""/ɪɡˈzæmpəl/""
-                }}";
+                // Prompt yêu cầu 10 từ tiếng Anh liên quan đến topic
+                var prompt = $@"Generate exactly 10 random English words related to the topic '{topic}'. For each word, provide:
+        - The word
+        - Its meaning in English (a short definition, max 10 words)
+        - Its phonetic transcription in IPA format
+        Return the response as a raw JSON array of objects, without markdown, code blocks, or any additional text. Example:
+        [
+            {{
+                ""word"": ""example"",
+                ""meaning"": ""A sample or instance"",
+                ""phonetic"": ""/ɪɡˈzæmpəl/""
+            }},
+            {{
+                ""word"": ""test"",
+                ""meaning"": ""An examination or trial"",
+                ""phonetic"": ""/tɛst/""
+            }}
+        ]";
 
                 var requestBody = new
                 {
@@ -206,11 +213,11 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                     {
                 new { role = "user", content = prompt }
             },
-                    max_tokens = 100,
+                    max_tokens = 500, // Tăng max_tokens để chứa 10 từ
                     temperature = 0.7
                 };
 
-                // Set Accept header to enforce JSON response
+                // Set Accept header để đảm bảo phản hồi là JSON
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -225,7 +232,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Raw Response: {jsonResponse}");
 
-                // Parse the response as JSON
+                // Parse phản hồi JSON
                 var jsonDoc = JsonDocument.Parse(jsonResponse);
                 var content = jsonDoc.RootElement
                     .GetProperty("choices")[0]
@@ -242,16 +249,16 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                 content = content.Trim();
                 Console.WriteLine($"Content Before Parsing: {content}");
 
-                // Clean up markdown or stray characters if necessary
+                // Loại bỏ markdown hoặc ký tự thừa nếu có
                 if (content.StartsWith("```json") && content.EndsWith("```"))
                 {
                     content = content.Substring(7, content.Length - 10).Trim();
                     Console.WriteLine($"Cleaned Content: {content}");
                 }
-                else if (!content.StartsWith("{") || !content.EndsWith("}"))
+                else if (!content.StartsWith("[") || !content.EndsWith("]"))
                 {
-                    var startIndex = content.IndexOf("{");
-                    var endIndex = content.LastIndexOf("}");
+                    var startIndex = content.IndexOf("[");
+                    var endIndex = content.LastIndexOf("]");
                     if (startIndex >= 0 && endIndex > startIndex)
                     {
                         content = content.Substring(startIndex, endIndex - startIndex + 1);
@@ -259,12 +266,12 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                     }
                     else
                     {
-                        Console.WriteLine($"Error: Content is not valid JSON: {content}");
+                        Console.WriteLine($"Error: Content is not valid JSON array: {content}");
                         return null;
                     }
                 }
 
-                // Deserialize with options to handle relaxed JSON escaping
+                // Deserialize với tùy chọn hỗ trợ JSON linh hoạt
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
@@ -272,14 +279,125 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                     ReadCommentHandling = JsonCommentHandling.Skip
                 };
 
-                var wordResult = JsonSerializer.Deserialize<WordResult>(content, options);
-                if (wordResult?.Word == null || wordResult.Meaning == null || wordResult.Phonetic == null)
+                var wordResults = JsonSerializer.Deserialize<List<WordResult>>(content, options);
+                if (wordResults == null || wordResults.Count == 0 || wordResults.Any(w => w?.Word == null || w.Meaning == null || w.Phonetic == null))
                 {
                     Console.WriteLine($"Error: Invalid JSON format from OpenAI response: {content}");
                     return null;
                 }
 
-                return wordResult;
+                return wordResults;
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"HTTP Error: {ex.Message}");
+                return null;
+            }
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"JSON Parsing Error: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected Error: {ex.Message}");
+                return null;
+            }
+        }
+        public async Task<WordResult> GetRandomWordAsync(string topic)
+        {
+            try
+            {
+                // Prompt yêu cầu 1 từ tiếng Anh liên quan đến topic
+                var prompt = $@"Generate exactly one random English word related to the topic '{topic}'. Provide:
+- The word
+- Its meaning in English (a short definition, max 10 words)
+- Its phonetic transcription in IPA format
+Return the response as a raw JSON array of objects, without markdown, code blocks, or any additional text. Example:
+[
+    {{
+        ""word"": ""example"",
+        ""meaning"": ""A sample or instance"",
+        ""phonetic"": ""/ɪɡˈzæmpəl/""
+    }}
+]";
+
+                var requestBody = new
+                {
+                    model = "gpt-3.5-turbo",
+                    messages = new[]
+                    {
+                new { role = "user", content = prompt }
+            },
+                    max_tokens = 100, // Giảm max_tokens cho 1 từ
+                    temperature = 0.7
+                };
+
+                // Set Accept header để đảm bảo phản hồi là JSON
+                _httpClient.DefaultRequestHeaders.Accept.Clear();
+                _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = await _httpClient.PostAsJsonAsync("chat/completions", requestBody);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"OpenAI API Error: {response.StatusCode} - {errorContent}");
+                    return null;
+                }
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Raw Response: {jsonResponse}");
+
+                // Parse phản hồi JSON
+                var jsonDoc = JsonDocument.Parse(jsonResponse);
+                var content = jsonDoc.RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString();
+
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    Console.WriteLine("Error: Empty content received from API.");
+                    return null;
+                }
+
+                content = content.Trim();
+                Console.WriteLine($"Content Before Parsing: {content}");
+
+                // Loại bỏ ký tự thừa nếu có
+                if (!content.StartsWith("[") || !content.EndsWith("]"))
+                {
+                    var startIndex = content.IndexOf("[");
+                    var endIndex = content.LastIndexOf("]");
+                    if (startIndex >= 0 && endIndex > startIndex)
+                    {
+                        content = content.Substring(startIndex, endIndex - startIndex + 1);
+                        Console.WriteLine($"Extracted JSON: {content}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: Content is not valid JSON array: {content}");
+                        return null;
+                    }
+                }
+
+                // Deserialize với tùy chọn hỗ trợ JSON linh hoạt
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    AllowTrailingCommas = true,
+                    ReadCommentHandling = JsonCommentHandling.Skip
+                };
+
+                var wordResults = JsonSerializer.Deserialize<List<WordResult>>(content, options);
+                if (wordResults == null || wordResults.Count == 0 || wordResults[0].Word == null || wordResults[0].Meaning == null || wordResults[0].Phonetic == null)
+                {
+                    Console.WriteLine($"Error: Invalid JSON format from OpenAI response: {content}");
+                    return null;
+                }
+
+                return wordResults[0];
             }
             catch (HttpRequestException ex)
             {
@@ -298,28 +416,29 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
             }
         }
         // Generate IELTS listening exercise using ChatGPT API
-        public async Task<IeltsListeningExercise> GenerateIeltsListeningExerciseAsync()
+        public async Task<IeltsListeningExercise> GenerateIeltsListeningExerciseAsync(string topic)
         {
-            var prompt = @"Generate an IELTS listening practice exercise in English. Provide:
-                - A short script (1000-1350 words, suitable for IELTS listening, e.g., a conversation or announcement).
-                - 4 multiple-choice questions with 4 options each and the correct answer.
-                Return the response as a raw JSON object, without markdown or additional text. Example:
-                {
-                    ""script"": ""A conversation between two people about a topic..."",
-                    ""questions"": [
-                        {
-                            ""question"": ""What is the main topic?"",
-                            ""options"": [""Option A"", ""Option B"", ""Option C"", ""Option D""],
-                            ""answer"": ""Option A""
-                        }
-                    ]
-                }";
+            var prompt = $@"Generate an IELTS listening practice exercise in English based on the topic: '{topic}'. Provide:
+            - A conversation script (20000-23500 words, suitable for IELTS listening, featuring a dialogue between two or more speakers).
+            - Exactly 14 multiple-choice questions, each with 4 options and one correct answer. Questions should increase in difficulty, starting with basic comprehension (e.g., main ideas, explicit details) and progressing to inference-based or detail-oriented questions (e.g., speaker intent, implied meanings).
+            Return the response as a raw JSON object, without markdown, code fences (```), or additional text. Ensure all strings are properly escaped to avoid JSON parsing errors (e.g., use \ to escape quotes or special characters). The response must contain exactly 14 multiple-choice questions. Example:
+            {{
+                ""script"": ""A conversation between two people about {topic.Replace("\"", "\\\"")}..."",
+                ""questions"": [
+                    {{
+                        ""type"": ""multiple-choice"",
+                        ""question"": ""What is the main topic of the conversation?"",
+                        ""options"": [""Option A"", ""Option B"", ""Option C"", ""Option D""],
+                        ""answer"": ""Option A""
+                    }}
+                ]
+            }}";
 
             var requestBody = new
             {
                 model = "gpt-3.5-turbo",
                 messages = new[] { new { role = "user", content = prompt } },
-                max_tokens = 500,
+                max_tokens = 2000, // Increased to accommodate 14 questions
                 temperature = 0.7
             };
 
@@ -357,7 +476,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
             };
 
             var exercise = JsonSerializer.Deserialize<IeltsListeningExercise>(content, options);
-            if (exercise == null || string.IsNullOrEmpty(exercise.Script) || exercise.Questions == null || !exercise.Questions.Any())
+            if (exercise == null || string.IsNullOrEmpty(exercise.Script) || exercise.Questions == null || exercise.Questions.Count() != 14)
             {
                 throw new JsonException($"Invalid IELTS listening exercise format: {content}");
             }

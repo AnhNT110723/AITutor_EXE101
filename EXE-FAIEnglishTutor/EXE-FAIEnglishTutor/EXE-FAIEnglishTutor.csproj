@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>EXE_FAIEnglishTutor</RootNamespace>
+    <UserSecretsId>cd37832a-5cac-476e-8a91-84f2759dbee8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
