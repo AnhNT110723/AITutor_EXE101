@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,8 +164,8 @@
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
-           
-       
+
+
 
         </ul>
         <!-- End of Sidebar -->
@@ -183,7 +183,7 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-             
+
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -339,18 +339,18 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                              @if (User.Identity.IsAuthenticated)
-                                {
-                                    // Đọc thông tin từ cookie
-                                    var fullName = User.Identity.Name;
-                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
-                                    <a class="nav-link dropdown-toggle" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                // Đọc thông tin từ cookie
+                                var fullName = User.Identity.Name;
+                                var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                <a class="nav-link dropdown-toggle" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">@fullName</span>
-                                        <img class="img-profile rounded-circle"
+                                    <img class="img-profile rounded-circle"
                                          src="@avatarUrl">
-                                    </a>
-                                }
+                                </a>
+                            }
 
                         </li>
 
