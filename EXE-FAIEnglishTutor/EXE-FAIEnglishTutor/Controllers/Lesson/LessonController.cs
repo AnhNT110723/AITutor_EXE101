@@ -14,7 +14,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         public LessonViewModel viewModel1 { get; set; }
         private readonly FaiEnglishContext _context;
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "http://localhost:5037"; // Update with your actual API base URL
+        private readonly string _apiBaseUrl = "https://faienglish.xyz"; // Update with your actual API base URL
 
         public LessonController(FaiEnglishContext context, IHttpClientFactory httpClientFactory)
         {

@@ -7,7 +7,7 @@
     <title>FAI English</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link rel="icon" type="image/png" href="~/images/favicon/con_coc_icon.png" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
@@ -41,10 +41,19 @@
             }
 
         .btn-login-custom {
-            background-color: black;
+            background-color: black !important;
             color: white;
-            border-color:aqua;
+            border-color: aqua;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+            background: url(../Images/effect-1.gif);
         }
+
+            .btn-login-custom:hover {
+                color: white;
+                transform: scale(1.05);
+               
+            }
 
     </style>
 </head>

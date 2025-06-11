@@ -135,6 +135,16 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
         }
 
+        [HttpGet("api/provinces")]
+        public async Task<IActionResult> GetProvinces()
+        {
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync("https://provinces.open-api.vn/api/p/");
+                var data = await response.Content.ReadAsStringAsync();
+                return Content(data, "application/json");
+            }
+        }
         private async Task<ProfileDto> LoadUserProfileAsync()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);

@@ -68,7 +68,7 @@
                                 }
                                 else
                                 {
-                                    <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                    <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
                                 }
                             </ul>
                         </div>
@@ -411,7 +411,7 @@
             }
 
             // Fetch provinces and set initial value
-            fetch("https:provinces.open-api.vn/api/p/")
+            fetch("/api/provinces")
                 .then(res => res.json())
                 .then(data => {
                     data.forEach(province => {

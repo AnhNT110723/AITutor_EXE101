@@ -258,6 +258,11 @@
 
 
     <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+            alert("This feature is still under development.")
+        })
+
         window.onload = function () {
             const savedState = localStorage.getItem('toeicExamState');
             if (savedState) {
@@ -306,6 +311,7 @@
             modal.remove();
             window.location.reload();
         }
+
 
 
     </script>
