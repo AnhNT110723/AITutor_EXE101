@@ -68,7 +68,7 @@
                     }
                     else
                     {
-                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Login now</a>
                     }
                 </ul>
             </div>
@@ -498,6 +498,7 @@
         const chatHistoryKey = `chatHistory_${userId}_${situationId}_${typeId}`; // Key duy nhất cho mỗi situationId
         // Khóa lưu trữ trạng thái
         const sessionKey = `conversation_${userId}_${situationId}_${typeId}`;
+
         function showCharacter(index) {
             characters.forEach((card, i) => {
                 card.style.display = i === index ? 'block' : 'none';
@@ -696,13 +697,14 @@
 
                 // Hiển thị câu hỏi của người dùng ngay lập tức
                 const userMessage = transcribeData.userMessage;
+                const messageId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                 // chatBox.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
                 chatBox.innerHTML += `
-                    <div class="chat-bubble user" data-message-id="${Date.now()}" data-is-evaluated="false">
+                    <div class="chat-bubble user" data-message-id="${messageId}" data-is-evaluated="false">
                         <p>${userMessage}</p>
                         <div class="chat-actions">
                             <span class="icon">🔈</span>
-                            <span class="icon evaluate-icon" title="Evaluate grammar" onclick="handleEvaluateClick(this, '${encodeURIComponent(userMessage)}', '${Date.now()}')">⭐</span>                   
+                            <span class="icon evaluate-icon" title="Evaluate grammar" onclick="handleEvaluateClick(this, '${encodeURIComponent(userMessage)}', '${messageId}')">⭐</span>                   
                         </div>
                         <div class="evaluation-container"></div>
                     </div>
@@ -757,16 +759,16 @@
             const userInput = document.getElementById("userInput").value;
             // const situation = document.getElementById("situation").value;
             const chatBox = document.getElementById("chatBox");
-
+            const messageId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
             if (!userInput) return;
 
             // chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
             chatBox.innerHTML += `
-                            <div class="chat-bubble user" data-message-id="${Date.now()}" data-is-evaluated="false">
+                            <div class="chat-bubble user" data-message-id="${messageId}" data-is-evaluated="false">
                                 <p>${userInput}</p>
                                 <div class="chat-actions">
                                     <span class="icon">🔈</span>
-                                   <span class="icon evaluate-icon" title="Evaluate grammar" onclick="handleEvaluateClick(this, '${encodeURIComponent(userInput)}', '${Date.now()}')">⭐</span>
+                                   <span class="icon evaluate-icon" title="Evaluate grammar" onclick="handleEvaluateClick(this, '${encodeURIComponent(userInput)}', '${messageId}')">⭐</span>
                                 </div>
                                 <div class="evaluation-container"></div>
                             </div>
@@ -874,13 +876,7 @@
                 messages.push({ role, content, translatedText, audioUrl, messageId, isEvaluated, evaluation });
             });
 
-            // Giới hạn 100 tin nhắn
-            if (messages.length > 100) {
-                messages.splice(0, messages.length - 100);
-                // Xóa đánh giá cũ
-                const oldMessageIds = messages.slice(0, messages.length - 100).map(msg => msg.messageId);
-                oldMessageIds.forEach(id => sessionStorage.removeItem(`evaluation_${userId}_${situationId}_${typeId}_${id}`));
-            }
+        
             // Lưu vào sessionStorage
             sessionStorage.setItem(chatHistoryKey, JSON.stringify(messages));
         }
@@ -1162,7 +1158,7 @@
             const evaluationContainer = chatBubble.querySelector('.evaluation-container');
             const isEvaluated = chatBubble.getAttribute('data-is-evaluated') === 'true';
             const chatBox = document.getElementById("chatBox");
-
+            console.log('Evaluating message:', decodeURIComponent(encodedMessage), 'Message ID:', messageId, 'Is Evaluated:', isEvaluated);
             // Thêm hiệu ứng loading
             iconElement.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
             iconElement.classList.add('disabled');
@@ -1177,6 +1173,7 @@
                 } else {
                     // Nếu chưa hiển thị, lấy đánh giá
                     const evaluationText = await evaluateMessage(decodeURIComponent(encodedMessage), messageId);
+                    console.log('Evaluation result:', evaluationText);
                     if (evaluationText) {
                         evaluationContainer.innerHTML = `
                             <div class="evaluation">

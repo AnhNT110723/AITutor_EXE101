@@ -86,7 +86,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion
             var emailModel = new EmailVerificationDto
             {
                 FullName = user.FullName,
-                VerificationLink = "https://faienglish.xyz/Account/ConfirmVerificationToken?token=" + token,
+                VerificationLink = Constants.BASE_URL + "Account/ConfirmVerificationToken?token=" + token,
                 ExpirationTime = DateTime.UtcNow.AddMinutes(Constants.EXPIRATION),
                 isResendPassword = false,
                 isVertification = true,
@@ -159,7 +159,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion
                     var emailModel = new EmailVerificationDto
                     {
                         FullName = user.FullName,
-                        VerificationLink = "https://faienglish.xyz/Account/ConfirmVerificationToken?token=" + newToken,
+                        VerificationLink = Constants.BASE_URL + "/Account/ConfirmVerificationToken?token=" + newToken,
                         ExpirationTime = DateTime.UtcNow.AddMinutes(Constants.EXPIRATION),
                         isResendPassword = false,
                         isVertification = true,

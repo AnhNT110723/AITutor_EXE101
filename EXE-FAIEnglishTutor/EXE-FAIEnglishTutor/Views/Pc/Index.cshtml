@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -470,6 +470,19 @@
         }
 
         }
+
+        .btn-login-custom {
+            background-color: black;
+            color: white;
+            border-color: aqua;
+            padding-bottom:10px;
+        }
+
+            .btn-login-custom:hover {
+                color: white;
+                /* Phóng to nhẹ khi hover */
+                transform: scale(1.05);
+            }
     </style>
 </head>
 
@@ -544,7 +557,7 @@
                             }
                             else
                             {
-                                <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Login now</a>
                             }
                         </ul>
                     </div>

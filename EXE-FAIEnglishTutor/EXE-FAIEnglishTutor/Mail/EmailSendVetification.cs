@@ -68,12 +68,12 @@ namespace EXE_FAIEnglishTutor.Mail
             {
                 using (var client = new SmtpClient("smtp.gmail.com", 587))
                 {
-                    client.Credentials = new NetworkCredential("anhnthe172115@fpt.edu.vn", "wfnk uwfc llxo yazo");
+                    client.Credentials = new NetworkCredential("faienglishtutor@gmail.com", "wfnk uwfc llxo yazo");
                     client.EnableSsl = true;
 
                     MailMessage mail = new MailMessage
                     {
-                        From = new MailAddress("anhnthe172115@fpt.edu.vn"),
+                        From = new MailAddress("faienglishtutor@gmail.com"),
                         Subject = "Test Email",
                         Body = "Đây là email test!",
                         IsBodyHtml = false

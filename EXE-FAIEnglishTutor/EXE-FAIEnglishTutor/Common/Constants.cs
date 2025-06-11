@@ -13,6 +13,10 @@
 
         public const string TARGET_LANG = "vi";
 
+        public const string BASE_URL = "https://faienglish.xyz/";
+
+
+
 
 
     }
