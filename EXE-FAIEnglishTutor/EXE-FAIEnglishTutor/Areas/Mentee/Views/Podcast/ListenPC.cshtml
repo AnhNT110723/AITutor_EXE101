@@ -1,0 +1,1051 @@
+﻿@model EXE_FAIEnglishTutor.Models.Podcast
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronunciation Practice - FAI English</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="~/css/course-gen.css">
+    <style>
+        :root {
+            --primary-color: #FF6B6B;
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFE66D;
+            --text-color: #2C3E50;
+            --background-color: #F7F9FC;
+        }
+
+        body {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            padding: 0.5rem;
+            background: linear-gradient(120deg, #f7f9fc 60%, #ffe66d 100%);
+        }
+
+        .postcard {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 2rem 1.5rem;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            margin: 1rem auto;
+        }
+
+        .postcard-header h2 {
+            color: #ff6701;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .postcard-header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .postcard-image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .postcard-decor {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .podcast-content-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .audio-visualizer {
+            width: 100%;
+            height: 50px;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .bar {
+            width: 10px;
+            height: 15px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+            animation: bounce 1s infinite;
+            opacity: 0.7;
+        }
+
+            .bar:nth-child(1) {
+                animation-delay: 0s;
+            }
+
+            .bar:nth-child(2) {
+                animation-delay: 0.1s;
+            }
+
+            .bar:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+
+            .bar:nth-child(4) {
+                animation-delay: 0.3s;
+            }
+
+            .bar:nth-child(5) {
+                animation-delay: 0.4s;
+            }
+
+            .bar:nth-child(6) {
+                animation-delay: 0.5s;
+            }
+
+            .bar:nth-child(7) {
+                animation-delay: 0.6s;
+            }
+
+            .bar:nth-child(8) {
+                animation-delay: 0.7s;
+            }
+
+        @@keyframes bounce {
+            0%, 100% {
+                height: 15px;
+            }
+
+            50% {
+                height: 50px;
+            }
+        }
+
+        @@keyframes highlight {
+            0% {
+                background: var(--secondary-color);
+                color: #fff;
+            }
+
+            100% {
+                background: var(--primary-color);
+                color: #fff;
+            }
+        }
+
+        .audio-player-custom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .custom-audio-player {
+            background: #f5f7fa;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 16px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .player-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .audio-btn {
+            background: transparent;
+            border: none;
+            color: #4f8cff;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+            .audio-btn:hover {
+                background: rgba(79, 140, 255, 0.1);
+            }
+
+            .audio-btn.main-control {
+                background: #4f8cff;
+                color: white;
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+
+                .audio-btn.main-control:hover {
+                    background: #2563eb;
+                    transform: scale(1.05);
+                }
+
+        .progress-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+        }
+
+        .audio-progress {
+            width: 100% !important;
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e8f0;
+            cursor: pointer;
+        }
+
+            .audio-progress::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: #4f8cff;
+                cursor: pointer;
+                border: none;
+                margin-top: -4px;
+            }
+
+        .player-center {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .progress-tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: none;
+            pointer-events: none;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+        }
+
+        .playlist-container {
+            position: fixed;
+            right: -340px;
+            top: 0;
+            width: 340px;
+            height: 100vh;
+            background: #fffbea;
+            box-shadow: -4px 0 24px rgba(255,107,107,0.10);
+            border-top-left-radius: 24px;
+            border-bottom-left-radius: 24px;
+            transition: right 0.3s cubic-bezier(.4,2,.6,1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+            .playlist-container.active {
+                right: 0;
+            }
+
+        .playlist-header {
+            padding: 20px 24px 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffe66d;
+            background: #fffbea;
+            border-top-left-radius: 24px;
+        }
+
+            .playlist-header h3 {
+                font-size: 1.3rem;
+                color: var(--primary-color);
+                font-weight: bold;
+                margin: 0;
+                letter-spacing: 1px;
+            }
+
+        .close-btn {
+            background: #ffe66d;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+            .close-btn:hover {
+                background: #ff6b6b;
+                color: #fff;
+            }
+
+        .playlist-items {
+            padding: 16px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .playlist-item {
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            background: #fff;
+            border: 1px solid #ffe66d;
+            box-shadow: 0 2px 8px rgba(255,230,109,0.1);
+        }
+
+            .playlist-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(255,230,109,0.2);
+                background: #fffbea;
+            }
+
+            .playlist-item.active {
+                background: linear-gradient(90deg, #ff6b6b 0%, #ffe66d 100%);
+                color: white;
+                border-color: #ff6b6b;
+            }
+
+            .playlist-item-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #ffe66d;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ff6b6b;
+                font-size: 1.2rem;
+            }
+
+            .playlist-item.active .playlist-item-icon {
+                background: white;
+            }
+
+            .playlist-item-content {
+                flex: 1;
+            }
+
+            .playlist-item-title {
+                font-weight: 600;
+                margin-bottom: 4px;
+                font-size: 1.1rem;
+            }
+
+            .playlist-item-description {
+                font-size: 0.9rem;
+                color: #666;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .playlist-item.active .playlist-item-description {
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            .playlist-item-duration {
+                font-size: 0.9rem;
+                color: #888;
+                padding-left: 12px;
+            }
+
+            .playlist-item.active .playlist-item-duration {
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+        @@media (max-width: 768px) {
+            #sidebar {
+                min-width: 70px;
+                max-width: 70px;
+                padding: 1rem 0.3rem;
+            }
+
+            .btn-sidebar-custom {
+                font-size: 1rem;
+                padding: 0.5rem;
+            }
+
+            .playlist-container {
+                width: 100vw;
+                right: -100vw;
+                border-radius: 0;
+            }
+
+                .playlist-container.active {
+                    right: 0;
+                }
+
+            .playlist-header {
+                border-radius: 0;
+            }
+
+            .main-content {
+                padding: 0.5rem;
+            }
+
+            .postcard {
+                padding: 1.5rem 1rem;
+                max-width: 90%;
+            }
+
+            .postcard-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .postcard-header p {
+                font-size: 1rem;
+            }
+
+            .audio-visualizer {
+                height: 40px;
+            }
+
+            .bar {
+                width: 8px;
+            }
+
+            @@keyframes bounce {
+                0%, 100% {
+                    height: 15px;
+                }
+
+                50% {
+                    height: 40px;
+                }
+            }
+
+            .postcard-decor {
+                width: 100%;
+                max-width: 800px;
+                height: auto;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            .audio-progress {
+                width: 150px;
+            }
+        }
+
+        .btn-login-custom {
+            background-color: black;
+            color: white;
+            border-color: aqua;
+            padding-bottom: 10px;
+        }
+
+            .btn-login-custom:hover {
+                color: white;
+                /* Phóng to nhẹ khi hover */
+                transform: scale(1.05);
+            }
+    </style>
+</head>
+
+<body>
+    <div id="loader" style="display:flex;justify-content:center;align-items:center;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);z-index:9999;">
+        <div class="spinner-border text-warning" style="width:4rem;height:4rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5 home">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        @*  <li class="nav-item active">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            // Đọc thông tin từ cookie
+                            var fullName = User.Identity.Name;
+                            var avatarUrl = User.FindFirst("Avatar")?.Value;
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                   data-toggle="dropdown" aria-expanded="false">
+                                    <div class="nav-img">
+                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                    </div>
+                                </a>
+                                <div class=" menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
+                                    <div class="menu-title">
+                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
+                                        <i class="bi bi-person-circle"></i> View Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                    </a>
+
+                                    <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Login now</a>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="main-content">
+            <div class="postcard shadow-lg position-relative">
+                <div class="postcard-header text-center mb-3">
+                    <h2 class="fw-bold text-primary">@Model.Title</h2>
+                    <p class="text-muted">@Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                </div>
+                <div class="audio-player-custom">
+                    <div class="postcard-image-container mb-3">
+                        <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? Url.Content("~/Images/default-podcast.jpg") : Model.ImageUrl)" alt="Decor" class="postcard-decor">
+                    </div>
+                    <div class="custom-audio-player">
+                        <audio id="audioPlayer" controls style="width:100%;">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h5>Nội dung Podcast:</h5>
+                    <div class="podcast-content-box">
+                        <p>@Model.Content</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/handle-sidbar/home-sidebar.js"></script>
+    <script>
+                $(document).ready(function () {
+            // Sidebar toggle functionality
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('collapsed');
+            });
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+        const audioPlayer = document.getElementById('audioPlayer');
+        const podcastText = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Content));
+        const formData = new FormData();
+        formData.append('text', podcastText);
+        try {
+            const response = await fetch('/api/audio/generate-english', {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) throw new Error('Không lấy được audio');
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            audioPlayer.src = audioUrl;
+        } catch (err) {
+            audioPlayer.outerHTML = '<div style="color:red;">Không thể phát audio: ' + err.message + '</div>';
+        }
+    });
+    </script>
+
+    <script>
+
+        // Simple audio visualizer animation (bars bounce when playing)
+        function setVisualizerPlaying(isPlaying) {
+            const bars = document.querySelectorAll('.audio-visualizer .bar');
+            bars.forEach(bar => {
+                bar.style.animationPlayState = isPlaying ? 'running' : 'paused';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            const loader = document.getElementById('loader');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audioSource = document.getElementById('audioSource');
+            const subtitleContainer = document.getElementById('subtitleContainer');
+            let podcasts = @Html.Raw(Json.Serialize(Model)); // Get podcasts from model
+            let currentPodcastIndex = 0;
+
+            // Setup initial audio event listeners
+            setupAudioEventListeners();
+
+            try {
+                loader.style.display = 'flex';
+
+                if (podcasts && podcasts.length > 0) {
+                    // Update playlist
+                    updatePlaylist(podcasts);
+                    // Load first podcast
+                    await loadPodcast(0);
+                } else {
+                    throw new Error('No podcasts available');
+                }
+
+            } catch (error) {
+                subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải nội dung: ' + error.message + '</span>';
+            } finally {
+                loader.style.display = 'none';
+            }
+
+            function setupAudioEventListeners() {
+                // Time update event for progress bar
+                audioPlayer.addEventListener('timeupdate', () => {
+                    audioProgress.value = Math.floor(audioPlayer.currentTime);
+                    currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+                });
+
+                // When metadata is loaded
+                audioPlayer.addEventListener('loadedmetadata', () => {
+                    durationEl.textContent = formatTime(audioPlayer.duration);
+                    audioProgress.max = Math.floor(audioPlayer.duration);
+                });
+
+                // When audio ends
+                audioPlayer.addEventListener('ended', () => {
+                    playPauseIcon.classList.remove('fa-pause');
+                    playPauseIcon.classList.add('fa-play');
+                    audioProgress.value = 0;
+                    currentTimeEl.textContent = '00:00';
+                    setVisualizerPlaying(false);
+                });
+            }
+
+            // Function to load a specific podcast
+            async function loadPodcast(index) {
+                try {
+                    loader.style.display = 'flex';
+                    const podcast = podcasts[index];
+                    currentPodcastIndex = index;
+
+                    // Update playlist active state
+                    updatePlaylistActiveState(index);
+
+                    // Split content into sentences and store them
+                    const sentences = podcast.content.match(/[^.!?]+[.!?]+/g) || [podcast.content];
+
+                    // Create a single container for the active sentence
+                    subtitleContainer.innerHTML = '<div class="subtitle-sentence active"></div>';
+                    const subtitleElement = subtitleContainer.querySelector('.subtitle-sentence');
+                    let currentSentenceIndex = 0;
+                    let animationFrameId = null;
+
+                    function updateSubtitle(currentTime, duration) {
+                        // Calculate which sentence should be shown based on current time
+                        const sentenceDuration = duration / sentences.length;
+                        const newIndex = Math.min(
+                            sentences.length - 1,
+                            Math.floor(currentTime / sentenceDuration)
+                        );
+
+                        if (newIndex !== currentSentenceIndex) {
+                            currentSentenceIndex = newIndex;
+                            // Animate out the old text
+                            subtitleElement.style.opacity = '0';
+                            subtitleElement.style.transform = 'translateY(20px)';
+
+                            // After fade out, update text and fade in
+                            setTimeout(() => {
+                                subtitleElement.textContent = sentences[currentSentenceIndex].trim();
+                                subtitleElement.style.opacity = '1';
+                                subtitleElement.style.transform = 'translateY(0)';
+                            }, 300);
+                        }
+                    }
+
+                    // Audio event handlers for subtitles
+                    audioPlayer.onplay = function() {
+                        setVisualizerPlaying(true);
+
+                        function animate() {
+                            if (!audioPlayer.paused && !audioPlayer.ended) {
+                                updateSubtitle(audioPlayer.currentTime, audioPlayer.duration);
+                                animationFrameId = requestAnimationFrame(animate);
+                            }
+                        }
+                        animationFrameId = requestAnimationFrame(animate);
+                    };
+
+                    audioPlayer.onpause = function() {
+                        setVisualizerPlaying(false);
+                        if (animationFrameId) {
+                            cancelAnimationFrame(animationFrameId);
+                        }
+                    };
+
+                    audioPlayer.onended = function() {
+                        setVisualizerPlaying(false);
+                        if (animationFrameId) {
+                            cancelAnimationFrame(animationFrameId);
+                        }
+                    };
+
+                    // Set initial subtitle
+                    subtitleElement.textContent = sentences[0].trim();
+
+                    // Generate audio for the podcast content
+                    const formData = new FormData();
+                    formData.append('text', podcast.content);
+                    const audioResponse = await fetch('/api/audio/generate-english', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!audioResponse.ok) throw new Error('Failed to generate audio');
+                    const audioBlob = await audioResponse.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioSource.src = audioUrl;
+                    audioPlayer.load();
+
+                    // Reset player state
+                    playPauseIcon.classList.remove('fa-pause');
+                    playPauseIcon.classList.add('fa-play');
+                    setVisualizerPlaying(false);
+
+                } catch (error) {
+                    console.error('Error loading podcast:', error);
+                    subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải podcast: ' + error.message + '</span>';
+                } finally {
+                    loader.style.display = 'none';
+                }
+            }
+
+            // Function to update playlist UI
+            function updatePlaylist(podcasts) {
+                playlistItems.innerHTML = podcasts.map((podcast, index) => `
+                    <div class="playlist-item ${index === currentPodcastIndex ? 'active' : ''}"
+                         data-index="${index}">
+                        <div class="playlist-item-icon">
+                            <i class="fas ${index === currentPodcastIndex ? 'fa-play' : 'fa-music'}"></i>
+                        </div>
+                        <div class="playlist-item-content">
+                            <div class="playlist-item-title">${podcast.title || `Podcast ${index + 1}`}</div>
+                            <div class="playlist-item-description">${podcast.content ? podcast.content.substring(0, 100) + '...' : 'No description available'}</div>
+                        </div>
+                        <div class="playlist-item-duration">
+                            <i class="fas fa-clock"></i> ${formatTime(podcast.duration || 0)}
+                        </div>
+                    </div>
+                `).join('');
+
+                // Add click handlers to playlist items
+                document.querySelectorAll('.playlist-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const index = parseInt(item.dataset.index);
+                        if (index !== currentPodcastIndex) {
+                            loadPodcast(index);
+                        }
+                    });
+                });
+            }
+
+            // Function to update active state in playlist
+            function updatePlaylistActiveState(activeIndex) {
+                document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                    const icon = item.querySelector('i');
+                    if (index === activeIndex) {
+                        item.classList.add('active');
+                        icon.classList.remove('fa-music');
+                        icon.classList.add('fa-play');
+                    } else {
+                        item.classList.remove('active');
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-music');
+                    }
+                });
+            }
+
+            // Previous/Next podcast handlers
+            prevPostcard.addEventListener('click', () => {
+                if (currentPodcastIndex > 0) {
+                    loadPodcast(currentPodcastIndex - 1);
+                }
+            });
+
+            nextPostcard.addEventListener('click', () => {
+                if (currentPodcastIndex < podcasts.length - 1) {
+                    loadPodcast(currentPodcastIndex + 1);
+                }
+            });
+
+            // ... rest of your existing audio player code ...
+        });
+
+        const audio = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playPauseIcon = playPauseBtn.querySelector('i');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const audioProgress = document.getElementById('audioProgress');
+        const audioSource = document.getElementById('audioSource');
+
+        // Đặt đường dẫn file audio ở đây
+        audioSource.src = '/path/to/your/audio.mp3';
+        audio.load();
+
+        // Định dạng thời gian
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // Khi audio đã load xong metadata
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+            audioProgress.max = Math.floor(audio.duration);
+        });
+
+        // Cập nhật progress và thời gian hiện tại
+        audio.addEventListener('timeupdate', () => {
+            audioProgress.value = Math.floor(audio.currentTime);
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        // Play/Pause
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseIcon.classList.remove('fa-play');
+                playPauseIcon.classList.add('fa-pause');
+            } else {
+                audio.pause();
+                playPauseIcon.classList.remove('fa-pause');
+                playPauseIcon.classList.add('fa-play');
+            }
+        });
+
+        // Seek khi kéo thanh progress
+        audioProgress.addEventListener('input', () => {
+            audio.currentTime = audioProgress.value;
+        });
+
+        // Khi audio kết thúc
+        audio.addEventListener('ended', () => {
+            playPauseIcon.classList.remove('fa-pause');
+            playPauseIcon.classList.add('fa-play');
+            audio.currentTime = 0;
+            audioProgress.value = 0;
+            currentTimeEl.textContent = '00:00';
+        });
+
+        const skipBackward = document.getElementById('skipBackward');
+        const skipForward = document.getElementById('skipForward');
+        const prevPostcard = document.getElementById('prevPostcard');
+        const nextPostcard = document.getElementById('nextPostcard');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const toggleMute = document.getElementById('toggleMute');
+        const togglePlaylist = document.getElementById('togglePlaylist');
+        const closePlaylist = document.getElementById('closePlaylist');
+        const playlist = document.getElementById('playlist');
+        const playlistItems = document.getElementById('playlistItems');
+        const progressContainer = document.querySelector('.progress-container');
+        const progressTooltip = document.querySelector('.progress-tooltip');
+
+        let currentPostcardIndex = 0;
+        let postcardsList = [];
+        let previousVolume = 1;
+
+        // Skip 15 seconds backward
+        skipBackward.addEventListener('click', () => {
+            audio.currentTime = Math.max(0, audio.currentTime - 15);
+        });
+
+        // Skip 15 seconds forward
+        skipForward.addEventListener('click', () => {
+            audio.currentTime = Math.min(audio.duration, audio.currentTime + 15);
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            audio.volume = volume;
+            updateVolumeIcon(volume);
+        });
+
+        // Toggle mute
+        toggleMute.addEventListener('click', () => {
+            if (audio.volume > 0) {
+                previousVolume = audio.volume;
+                audio.volume = 0;
+                volumeSlider.value = 0;
+            } else {
+                audio.volume = previousVolume;
+                volumeSlider.value = previousVolume * 100;
+            }
+            updateVolumeIcon(audio.volume);
+        });
+
+        function updateVolumeIcon(volume) {
+            const icon = toggleMute.querySelector('i');
+            icon.className = volume === 0
+                ? 'fas fa-volume-mute'
+                : volume < 0.5
+                    ? 'fas fa-volume-down'
+                    : 'fas fa-volume-up';
+        }
+
+        // Progress bar tooltip
+        progressContainer.addEventListener('mousemove', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            const time = pos * audio.duration;
+            progressTooltip.textContent = formatTime(time);
+            progressTooltip.style.display = 'block';
+            progressTooltip.style.left = `${e.clientX - rect.left}px`;
+        });
+
+        progressContainer.addEventListener('mouseleave', () => {
+            progressTooltip.style.display = 'none';
+        });
+
+        // Playlist toggle
+        togglePlaylist.addEventListener('click', () => {
+            playlist.classList.toggle('active');
+        });
+
+        closePlaylist.addEventListener('click', () => {
+            playlist.classList.remove('active');
+        });
+
+        // Add CSS styles for subtitles
+        const style = document.createElement('style');
+        style.textContent = `
+            .subtitle-container {
+                padding: 2rem;
+                min-height: 120px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 15px;
+                backdrop-filter: blur(10px);
+                margin: 20px 0;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .subtitle-sentence {
+                width: 90%;
+                padding: 20px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, rgba(255, 107, 107, 0.95), rgba(255, 107, 107, 0.8));
+                color: white;
+                font-size: 1.3rem;
+                line-height: 1.6;
+                text-align: center;
+                opacity: 1;
+                transform: translateY(0);
+                transition: all 0.3s ease-out;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            }
+
+            @@media (max-width: 768px) {
+                .subtitle-sentence {
+                    font-size: 1.1rem;
+                    padding: 15px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

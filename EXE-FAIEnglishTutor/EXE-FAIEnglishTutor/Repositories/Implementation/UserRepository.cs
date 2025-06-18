@@ -29,12 +29,12 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
 
         public User? GetUserByEmail(string email)
         {
-            return _context.Users.Include(x => x.Roles).FirstOrDefault(u => u.Email.Equals(email));
+            return _context.Users.Include(x => x.Roles).FirstOrDefault(u => u.Email==email);
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+                return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> GetUserByIdAsync(int id)

@@ -17,5 +17,7 @@ public partial class Podcast
 
     public int? UserId { get; set; }
 
+    public string? Topic { get; set; }
+
     public virtual User? User { get; set; }
 }
