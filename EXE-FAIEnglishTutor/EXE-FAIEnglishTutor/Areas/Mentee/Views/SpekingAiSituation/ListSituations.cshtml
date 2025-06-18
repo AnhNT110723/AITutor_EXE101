@@ -155,16 +155,18 @@
                 </a>
             </div>
             @{
+                
                 foreach (var situation in Model)
                 {
                     <div class="course">
                         <a href="@(
-                            User.Identity.IsAuthenticated
+                            User.Identity.IsAuthenticated && ViewBag.userCheckMember == true
                             ? $"/Mentee/Role-Play/{situation.SituatuonId}"
                             : "javascript:void(0)"
                                 )" class="card-link situation-link"
                            data-login="@(!User.Identity.IsAuthenticated)"
-                           data-url="/Mentee/Role-Play/@situation.SituatuonId">
+                           data-url="/Mentee/Role-Play/@situation.SituatuonId"
+                           data-membership="@(ViewBag.userCheckMember == null)">
                             <div class="flex-shrink-0">
                                 <div class="card">
                                     <img src="@situation.ImageUrl"
@@ -182,414 +184,7 @@
                     </div>
                 }
             }
-            @*  <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a64-78f8-663a-be94-0242ac110002-1723465666.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-21c3-622e-aa19-0242ac110002-1723465683.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef58a65-4b1e-62cc-8ab5-0242ac110002-1723465688.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef58a65-7f9b-68f6-a031-0242ac110002-1723465693.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef58a65-be00-6358-9fb6-0242ac110002-1723465700.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef58a65-f008-66ca-be5c-0242ac110002-1723465705.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef612be-0b43-65a8-9dc5-0242ac110002-1724402655.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef612be-57bf-6bd4-a4f2-0242ac110002-1724402663.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef612be-8436-632a-b23b-0242ac110002-1724402667.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef65ed9-88c0-6bc2-ac1c-0242ac110003-1724925661.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef65eda-841b-6576-9299-0242ac110003-1724925687.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef65eda-f1bf-63a2-a405-0242ac110003-1724925699.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ee-21f4-649a-87e1-0242ac110003-1729063126.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ed-dc1e-6e0c-87af-0242ac110003-1729063119.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ed-86c5-6802-8277-0242ac110003-1729063110.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef81600-2a0d-6172-9567-0242ac110005-1727943483.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef8b8ed-4664-6af6-b063-0242ac110003-1729063103.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef8b8ed-00e8-6d9c-8acd-0242ac110003-1729063096.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef81601-946f-6866-9d59-0242ac110005-1727943521.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/8/1ef81601-946f-6866-9d59-0242ac110005-1727943521.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/6/1ef81600-6a61-6700-8654-0242ac110005-1727943490.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/7/1ef81600-9159-6380-ae4c-0242ac110005-1727943494.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef81601-0b85-633e-9e8d-0242ac110005-1727943506.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div>
-            <div class="course">
-            <a asp-controller="Course" asp-action="Detail" class="card-link">
-            <div class="flex-shrink-0  ">
-            <div class="card">
-            <img src="https://files.kynaenglish.com/resize/400/tmp/ai_tutor/9/1ef81600-b2a1-659c-b6f8-0242ac110005-1727943497.png" class="card-img-top"
-            alt="Course 3">
-            <div class="card-title-overlay position-absolute">Khóa học 1</div>
-
-            <div class="overlay-home"></div>
-
-            <div class="card-body">
-            <p class="card-text" style="color: #fff;">Mô tả ngắn gọn về khóa học 3.</p>
-            </div>
-            </div>
-            </div>
-            </a>
-            </div> *@
+            
 
         </div>
 
@@ -810,17 +405,23 @@
             situationLinks.forEach(link => {
                 link.addEventListener("click", function (e) {
                     const requiresLogin = link.getAttribute("data-login") === "True";
+                    const requiresMembership = link.getAttribute("data-membership") === "True";
                     const redirectUrl = link.getAttribute("data-url");
 
                     if (requiresLogin) {
                         e.preventDefault();
 
                         if (confirm("You need to login to access this content.Do you want to login now ?")) {
-                            window.location.href = "/Account/Login"; // hoặc route login thực tế của bạn
+                            window.location.href = "/Account/Login"; 
+                        }
+                    } else if (requiresMembership) {
+                        e.preventDefault();
+                        if (confirm("You need an active membership to access this content. Do you want to upgrade now?")) {
+                            window.location.href = "/Payment";
                         }
                     } else {
                         // Người đã đăng nhập thì chuyển trang như bình thường
-                        window.location.href = redirectUrl;
+                        alert('đã vào đây')
                     }
                 });
             });

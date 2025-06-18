@@ -14,6 +14,8 @@ namespace EXE_FAIEnglishTutor.Repositories.Interface
         Task save(User user);
         
         Task Update(User user);
+        
+        Task SaveChangeAsync(User user);
         Task<IEnumerable<User>> GetAllUserAsync();
 
         Task<int> GetTotalUsersAsync();

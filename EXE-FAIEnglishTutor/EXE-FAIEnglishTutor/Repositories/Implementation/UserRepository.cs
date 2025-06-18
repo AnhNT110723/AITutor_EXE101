@@ -66,6 +66,11 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
 
         }
 
+        public async Task SaveChangeAsync(User user)
+        {
+           await _context.SaveChangesAsync();
+        }
+
         public async Task Update(User user)
         {
             _context.Users.Update(user);

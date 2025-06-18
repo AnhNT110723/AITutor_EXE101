@@ -15,6 +15,8 @@ public partial class Payment
 
     public DateTime? PaymentDate { get; set; }
 
+    public string? Content { get; set; }
+
     public string? Status { get; set; }
 
     public virtual Course? Course { get; set; }

@@ -136,6 +136,18 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         [HttpGet("Mentee/Role-Play")]
         public async Task<IActionResult> GetListSituationsAsync()
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim != null)
+            {
+                int userId = int.Parse(userIdClaim.Value);
+                var user = await _userService.GetUserById(userId);
+                if (user.ExpiryDate != null && user.UpgradeLevel > 0)
+                {
+                    ViewBag.userCheckMember = true;
+                }
+            }
+            
+
             var levels = await _situationService.GetAllLevelAsync();
             var listSituations = await _situationService.GetListSituationByRolePlay(Constants.ROLE_PLAY);
             ViewBag.levels= levels;

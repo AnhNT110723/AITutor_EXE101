@@ -63,6 +63,13 @@ namespace EXE_FAIEnglishTutor.Configurations
             //Podcast
             services.AddScoped<IPodcastService, PodcastService>();
 
+            //payment
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
+
+
+            //chạy nền kiểm tra hết hạn tk
+            services.AddHostedService<AccountExpiryService>();
         }
 
 
