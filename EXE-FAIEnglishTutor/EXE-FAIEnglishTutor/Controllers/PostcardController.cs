@@ -19,82 +19,83 @@ namespace EXE_FAIEnglishTutor.Controllers
             _podcastService = podcastService;
         }
 
-        [HttpGet("get-all-podcasts")]
-        public async Task<IActionResult> GetAllPodcasts()
-        {
-            try
-            {
-                var podcasts = await _podcastService.GetPostCard();
-                return Ok(podcasts);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = "Lỗi khi lấy danh sách podcasts.", detail = ex.Message });
-            }
-        }
+        //[HttpGet("get-all-podcasts")]
+        //public async Task<IActionResult> GetAllPodcasts()
+        //{
+        //    try
+        //    {
+        //        var podcasts = await _podcastService.GetPostCard();
+        //        return Ok(podcasts);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { error = "Lỗi khi lấy danh sách podcasts.", detail = ex.Message });
+        //    }
+        //}
 
-        [HttpPost("generate-podcasts")]
-        public async Task<IActionResult> GeneratePodcasts()
-        {
-            try
-            {
-                var prompts = new List<string>
-            {
-                "Tóm tắt tin tức mới nhất ở Việt Nam",
-                "Tóm tắt tin tức mới nhất trên thế giới",
-                "Tóm tắt tin tức kinh tế gần đây",
-                "Tóm tắt tin tức giáo dục gần đây",
-                "Tóm tắt tin tức thể thao gần đây",
-                "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
-                "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
-                "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
-                "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
-                "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên"
-            };
+        //[HttpPost("generate-podcasts")]
+        //public async Task<IActionResult> GeneratePodcasts()
+        //{
+        //    try
+        //    {
+        //        var prompts = new List<string>
+        //    {
+        //        "Tóm tắt tin tức mới nhất ở Việt Nam",
+        //        "Tóm tắt tin tức mới nhất trên thế giới",
+        //        "Tóm tắt tin tức kinh tế gần đây",
+        //        "Tóm tắt tin tức giáo dục gần đây",
+        //        "Tóm tắt tin tức thể thao gần đây",
+        //        "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
+        //        "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
+        //        "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
+        //        "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên",
+        //        "Tạo một đoạn hội thoại về chủ đề ngẫu nhiên"
+        //    };
 
-                var titles = new List<string>
-            {
-                "Tin tức mới nhất Việt Nam",
-                "Tin tức thế giới",
-                "Tin tức kinh tế",
-                "Tin tức giáo dục",
-                "Tin tức thể thao",
-                "Đoạn hội thoại 1",
-                "Đoạn hội thoại 2",
-                "Đoạn hội thoại 3",
-                "Đoạn hội thoại 4",
-                "Đoạn hội thoại 5"
-            };
+        //        var titles = new List<string>
+        //    {
+        //        "Tin tức mới nhất Việt Nam",
+        //        "Tin tức thế giới",
+        //        "Tin tức kinh tế",
+        //        "Tin tức giáo dục",
+        //        "Tin tức thể thao",
+        //        "Đoạn hội thoại 1",
+        //        "Đoạn hội thoại 2",
+        //        "Đoạn hội thoại 3",
+        //        "Đoạn hội thoại 4",
+        //        "Đoạn hội thoại 5"
+        //    };
 
-                var podcasts = new List<Podcast>();
+        //        var podcasts = new List<Podcast>();
 
-                for (int i = 0; i < prompts.Count; i++)
-                {
-                    var content = await _speechService.GeneratePostcardAsync("Tạo một đoạn podcast bằng tiếng anh khoảng 10000 từ về:"+prompts[i]);
-                    if (string.IsNullOrWhiteSpace(content))
-                    {
-                        return BadRequest($"Không nhận được nội dung cho podcast {titles[i]}.");
-                    }
+        //        for (int i = 0; i < prompts.Count; i++)
+        //        {
+        //            var content = await _speechService.GeneratePostcardAsync("Tạo một đoạn podcast bằng tiếng anh khoảng 10000 từ về:"+prompts[i]);
+        //            if (string.IsNullOrWhiteSpace(content))
+        //            {
+        //                return BadRequest($"Không nhận được nội dung cho podcast {titles[i]}.");
+        //            }
 
-                    var podcast = new Podcast
-                    {
-                        Title = titles[i],
-                        Content = content,
-                        ImageUrl = "/Images/a.jpg",
-                        CreatedAt = DateTime.UtcNow
-                    };
+        //            var podcast = new Podcast
+        //            {
+        //                Title = titles[i],
+        //                Content = content,
+        //                ImageUrl = "/Images/a.jpg",
+        //                CreatedAt = DateTime.UtcNow
+        //            };
 
-                    podcasts.Add(podcast);
-                }
+        //            podcasts.Add(podcast);
+        //        }
 
-                await _podcastService.SavePodcastsAsync(podcasts);
+        //        await _podcastService.SavePodcastsAsync(podcasts);
 
-                return Ok(new { message = "Đã tạo 10 podcast thành công.", podcasts });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = "Lỗi khi tạo podcasts.", detail = ex.Message });
-            }
-        }
+        //        return Ok(new { message = "Đã tạo 10 podcast thành công.", podcasts });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { error = "Lỗi khi tạo podcasts.", detail = ex.Message });
+        //    }
+        //}
+
     }
 }

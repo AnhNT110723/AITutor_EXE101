@@ -13,15 +13,15 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
             _context = context;
         }
 
-        public async Task<List<Podcast>> GetPostCard()
-        {
-            return await _context.Podcasts.ToListAsync();
-        }
+        //public async Task<List<Podcast>> GetPostCard()
+        //{
+        //    return await _context.Podcasts.ToListAsync();
+        //}
 
-        public async Task SavePodcastsAsync(List<Podcast> podcasts)
-        {
-            _context.Podcasts.AddRange(podcasts);
-            await _context.SaveChangesAsync();
-        }
+        //public async Task SavePodcastsAsync(List<Podcast> podcasts)
+        //{
+        //    _context.Podcasts.AddRange(podcasts);
+        //    await _context.SaveChangesAsync();
+        //}
     }
 }
