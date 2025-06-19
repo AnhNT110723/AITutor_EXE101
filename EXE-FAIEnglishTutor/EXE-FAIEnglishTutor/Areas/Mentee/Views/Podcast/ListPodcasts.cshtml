@@ -2,107 +2,182 @@
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
-<div class="vnx-podcast-page">
-    <nav class="vnx-podcast-topics">
-        <ul>
-            <li>
-                <a class="@(string.IsNullOrEmpty(ViewBag.CurrentTopic) ? "active" : "")"
-                   href="@Url.Action("Index")">Tất cả</a>
-            </li>
-            @foreach (var t in ViewBag.Topics)
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+    <div class="sticky-wrapper sticky-wrapper-list-courses">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <!-- Nút Back -->
+                <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        @*  <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            // Đọc thông tin từ cookie
+                            var fullName = User.Identity.Name;
+                            var avatarUrl = User.FindFirst("Avatar")?.Value;
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="nav-img">
+                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                    </div>
+                                </a>
+                                <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                    <div class="menu-title">
+                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                        <i class="bi bi-person-circle"></i> View Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                    </a>
+
+                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="vnx-podcast-page">
+            <nav class="vnx-podcast-topics">
+                <ul>
+                    <li>
+                        <a class="@(string.IsNullOrEmpty(ViewBag.CurrentTopic) ? "active" : "")"
+                           href="@Url.Action("Index")">Tất cả</a>
+                    </li>
+                    @foreach (var t in ViewBag.Topics)
+                    {
+                        <li>
+                            <a class="@(ViewBag.CurrentTopic == t ? "active" : "")"
+                               href="@Url.Action("Index", new { topic = t })">@t</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+            <h1 class="vnx-podcast-title">Podcasts</h1>
+
+            @if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count == 5)
             {
-                <li>
-                    <a class="@(ViewBag.CurrentTopic == t ? "active" : "")"
-                       href="@Url.Action("Index", new { topic = t })">@t</a>
-                </li>
+                <!-- 2 cards to phía trên -->
+                <div class="vnx-row-bigpodcasts">
+                    @for (int i = 0; i < 2; i++)
+                    {
+                        <div class="vnx-bigpodcast-card">
+                            <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                                <div class="vnx-podcast-thumb-big">
+                                    <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                                </div>
+                                <div class="vnx-podcast-info">
+                                    <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
+                                    <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
+                                    <div class="vnx-podcast-desc">@ViewBag.PaginatedOlderPodcasts[i].Content</div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+                <!-- 3 cards nhỏ phía dưới -->
+                <div class="vnx-row-smallpodcasts">
+                    @for (int i = 2; i < 5; i++)
+                    {
+                        <div class="vnx-smallpodcast-card">
+                            <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                                <div class="vnx-podcast-thumb-small">
+                                    <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                                </div>
+                                <div class="vnx-podcast-info">
+                                    <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
+                                    <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
             }
-        </ul>
-    </nav>
-
-    <h1 class="vnx-podcast-title">Podcasts</h1>
-
-    @if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count == 5)
-    {
-        <!-- 2 cards to phía trên -->
-        <div class="vnx-row-bigpodcasts">
-            @for (int i = 0; i < 2; i++)
+            else if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count > 0)
             {
-                <div class="vnx-bigpodcast-card">
-                    <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
-                        <div class="vnx-podcast-thumb-big">
-                            <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                <div class="vnx-podcast-list">
+                    @foreach (var podcast in ViewBag.PaginatedOlderPodcasts)
+                    {
+                        <div class="vnx-podcast-card">
+                            <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="vnx-podcast-link">
+                                <div class="vnx-podcast-thumb">
+                                    <img src="@podcast.ImageUrl" alt="@podcast.Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                                </div>
+                                <div class="vnx-podcast-info">
+                                    <div class="vnx-podcast-topic">@podcast.Topic</div>
+                                    <div class="vnx-podcast-card-title">@podcast.Title</div>
+                                    <div class="vnx-podcast-desc">@podcast.Content</div>
+                                </div>
+                            </a>
                         </div>
-                        <div class="vnx-podcast-info">
-                            <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
-                            <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
-                            <div class="vnx-podcast-desc">@ViewBag.PaginatedOlderPodcasts[i].Content</div>
-                        </div>
-                    </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="vnx-podcast-empty">Không có podcast nào để hiển thị!</div>
+            }
+
+            <!-- Phân trang -->
+            @if (ViewBag.TotalPages > 1)
+            {
+                <div class="vnx-podcast-pagination">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&laquo;</a>
+                    }
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <a href="@Url.Action("Index", new { page = i, topic = ViewBag.CurrentTopic })"
+                           class="vnx-podcast-pageitem @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                    }
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&raquo;</a>
+                    }
                 </div>
             }
         </div>
-        <!-- 3 cards nhỏ phía dưới -->
-        <div class="vnx-row-smallpodcasts">
-            @for (int i = 2; i < 5; i++)
-            {
-                <div class="vnx-smallpodcast-card">
-                    <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
-                        <div class="vnx-podcast-thumb-small">
-                            <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
-                        </div>
-                        <div class="vnx-podcast-info">
-                            <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
-                            <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
-                        </div>
-                    </a>
-                </div>
-            }
-        </div>
-    }
-    else if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count > 0)
-    {
-        <div class="vnx-podcast-list">
-            @foreach (var podcast in ViewBag.PaginatedOlderPodcasts)
-            {
-                <div class="vnx-podcast-card">
-                    <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="vnx-podcast-link">
-                        <div class="vnx-podcast-thumb">
-                            <img src="@podcast.ImageUrl" alt="@podcast.Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
-                        </div>
-                        <div class="vnx-podcast-info">
-                            <div class="vnx-podcast-topic">@podcast.Topic</div>
-                            <div class="vnx-podcast-card-title">@podcast.Title</div>
-                            <div class="vnx-podcast-desc">@podcast.Content</div>
-                        </div>
-                    </a>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="vnx-podcast-empty">Không có podcast nào để hiển thị!</div>
-    }
 
-    <!-- Phân trang -->
-    @if (ViewBag.TotalPages > 1)
-    {
-        <div class="vnx-podcast-pagination">
-            @if (ViewBag.CurrentPage > 1)
-            {
-                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&laquo;</a>
-            }
-            @for (int i = 1; i <= ViewBag.TotalPages; i++)
-            {
-                <a href="@Url.Action("Index", new { page = i, topic = ViewBag.CurrentTopic })"
-                   class="vnx-podcast-pageitem @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
-            }
-            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-            {
-                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&raquo;</a>
-            }
-        </div>
-    }
+
+    </div>
 </div>
 
 @section Styles {

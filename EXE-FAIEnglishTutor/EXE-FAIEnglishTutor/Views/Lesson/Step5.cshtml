@@ -83,25 +83,25 @@
                     <div class="step active">
                         <div class="step-number">5</div>
                         <div class="step-label">Speaking Practice </div>
-                    </div>
+                </div>
                     <div class="step">
                         <div class="step-number">6</div>
                         <div class="step-label">Shadowing </div>
-                    </div>
+            </div>
                     <div class="step">
                         <div class="step-number">7</div>
                         <div class="step-label">Review & Practice</div>
-                    </div>
                 </div>
-            </div>
-        </div>
+                        </div>
+                            </div>
+                                </div>
 
         <!-- Speaking Practice Container -->
         <div class="speaking-practice-container">
             <div class="lesson-header animated fadeInDown">
                 <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
                 <p class="lesson-subtitle">Practice speaking each sentence to improve your pronunciation</p>
-            </div>
+                            </div>
 
             <div class="sentences-container">
                 @foreach (var sentence in Model.Sentences)
@@ -130,38 +130,38 @@
                                         <div class="score-circle">
                                             <div class="score-label">Pronunciation</div>
                                             <div class="score pronunciation-score">-</div>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
                                     <div class="score-item">
                                         <div class="score-circle">
                                             <div class="score-label">Stress</div>
                                             <div class="score stress-score">-</div>
-                                        </div>
-                                    </div>
+                </div>
+                    </div>
                                     <div class="score-item">
                                         <div class="score-circle">
                                             <div class="score-label">Syllable</div>
                                             <div class="score syllable-score">-</div>
-                                        </div>
+                                </div>
+                                    </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                }
+                        }
 
                 <!-- Navigation Buttons -->
                 <div class="d-flex align-items-center justify-content-center gap-4 my-4">
                     <button id="prevSentenceBtn" class="btn btn-nav" onclick="previousSentence()" disabled>
                         <i class="fas fa-chevron-left"></i> Previous
-                    </button>
+                        </button>
                     <span class="sentence-counter fs-5 text-muted">
                         Sentence <span id="currentSentenceIndex">1</span> of <span id="totalSentences">@Model.Sentences.Count</span>
                     </span>
                     <button id="nextSentenceBtn" class="btn btn-nav" onclick="nextSentence()">
                         Next <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
+                        </button>
+                    </div>
 
                 <!-- Navigation Form -->
                 <div class="bottom-navigation">
@@ -235,14 +235,14 @@
         position: relative;
     }
 
-    .step.active {
-        color: #ff9838;
-    }
+        .step.active {
+            color: #ff9838;
+        }
 
-    .step.active .step-number {
-        background: #ff9838;
-        color: white;
-    }
+            .step.active .step-number {
+                background: #ff9838;
+                color: white;
+            }
 
     .step-number {
         width: 30px;

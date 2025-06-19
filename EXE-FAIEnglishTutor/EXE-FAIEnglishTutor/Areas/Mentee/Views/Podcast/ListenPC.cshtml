@@ -627,15 +627,45 @@
                     font-size: 0.98rem;
                 }
         }
+
+        #progressBar {
+            accent-color: #ff9838;
+            height: 4px;
+        }
+
+        .podcast-popup-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            background: #fffbe7;
+            box-shadow: 0 -2px 16px rgba(0,0,0,0.08);
+            padding: 0.5rem 1rem;
+            display: none;
+            align-items: center;
+            transition: box-shadow 0.2s;
+        }
+        .podcast-popup-bar .script-current {
+            font-weight: bold;
+            margin: 0 1rem;
+            max-width: 40vw;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @@media (max-width: 600px) {
+            .podcast-popup-bar .script-current { max-width: 60vw; font-size: 0.9em; }
+        }
+        #progressBar, #popupProgressBar {
+            accent-color: #ff9838;
+            height: 4px;
+        }
     </style>
 </head>
 
 <body>
-    <div id="loader" style="display:flex;justify-content:center;align-items:center;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);z-index:9999;">
-        <div class="spinner-border text-warning" style="width:4rem;height:4rem;" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
+   
 
     <!-- Page Content  -->
     <div id="content" class="p-4 p-md-5 home">
@@ -714,17 +744,22 @@
                         <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? Url.Content("~/Images/default-podcast.jpg") : Model.ImageUrl)" alt="Decor" class="postcard-decor">
                     </div>
                     <div class="custom-audio-player">
-                        <audio id="audioPlayer" controls style="width:100%;">
-                            Your browser does not support the audio element.
-                        </audio>
+                        <div style="margin: 1rem 0;">
+                            <div style="display:flex;align-items:center;gap:1rem;">
+                                <button id="prevBtn" class="btn btn-secondary btn-sm"><i class="fas fa-backward"></i></button>
+                                <button id="playPauseBtn" class="btn btn-success btn-sm"><i class="fas fa-play"></i></button>
+                                <button id="nextBtn" class="btn btn-secondary btn-sm"><i class="fas fa-forward"></i></button>
+                                <span id="currentTimeLabel">0:00</span>
+                                <input id="progressBar" type="range" min="0" max="100" value="0" style="flex:1;">
+                                <span id="totalTimeLabel">0:00</span>
+                            </div>
+                        </div>
+                        <audio id="audioPlayer" controls style="width:100%;margin-top:1rem;display:none;"></audio>
+                        <div id="scriptList"></div>
+
                     </div>
                 </div>
-                <div class="mt-4">
-                    <h5>Nội dung Podcast:</h5>
-                    <div class="podcast-content-box">
-                        <p>@Model.Content</p>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </div>
@@ -740,61 +775,11 @@
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-        const audioPlayer = document.getElementById('audioPlayer');
-        const podcastText = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Content));
-        const formData = new FormData();
-        formData.append('text', podcastText);
-        try {
-            const response = await fetch('/api/audio/generate-english', {
-                method: 'POST',
-                body: formData
-            });
-            if (!response.ok) throw new Error('Không lấy được audio');
-            const audioBlob = await response.blob();
-            const audioUrl = URL.createObjectURL(audioBlob);
-            audioPlayer.src = audioUrl;
-        } catch (err) {
-            audioPlayer.outerHTML = '<div style="color:red;">Không thể phát audio: ' + err.message + '</div>';
-        }
-    });
-    </script>
+    
 
     <script>
 
-        // Simple audio visualizer animation (bars bounce when playing)
-        function setVisualizerPlaying(isPlaying) {
-            const bars = document.querySelectorAll('.audio-visualizer .bar');
-            bars.forEach(bar => {
-                bar.style.animationPlayState = isPlaying ? 'running' : 'paused';
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', async function () {
-            const audioPlayer = document.getElementById('audioPlayer');
-            const popupAudio = window.popupAudio || new Audio();
-            window.popupAudio = popupAudio;
-            const podcastText = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Content));
-            const formData = new FormData();
-            formData.append('text', podcastText);
-            try {
-                const response = await fetch('/api/audio/generate-english', {
-                    method: 'POST',
-                    body: formData
-                });
-                if (!response.ok) throw new Error('Không lấy được audio');
-                const audioBlob = await response.blob();
-                const audioUrl = URL.createObjectURL(audioBlob);
-                audioPlayer.src = audioUrl;
-                popupAudio.src = audioUrl;
-                // Hiện popup luôn sau khi load audio (có thể cho test)
-                // showPopupPlayer();
-            } catch (err) {
-                audioPlayer.outerHTML = '<div style="color:red;">Không thể phát audio: ' + err.message + '</div>';
-            } finally {
-                loader.style.display = 'none';
-            }
+        
 
             function setupAudioEventListeners() {
                 // Time update event for progress bar
@@ -1279,6 +1264,252 @@
             mainAudio.addEventListener('play', ()=>{ popupAudio.pause(); });
         }
 
+    </script>
+
+    <div id="podcastPlayerBar" class="podcast-popup-bar">
+        <button id="popupPrevBtn" class="btn btn-secondary btn-sm"><i class="fas fa-backward"></i></button>
+        <button id="popupPlayPauseBtn" class="btn btn-success btn-sm"><i class="fas fa-play"></i></button>
+        <button id="popupNextBtn" class="btn btn-secondary btn-sm"><i class="fas fa-forward"></i></button>
+        <span id="popupCurrentTimeLabel">0:00</span>
+        <input id="popupProgressBar" type="range" min="0" max="100" value="0" style="flex:1;">
+        <span id="popupTotalTimeLabel">0:00</span>
+        <span class="script-current" id="popupScriptCurrent"></span>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fullScript = '@Model.Content';
+        function splitByWords(text, wordsPerChunk) {
+            const words = text.split(/\s+/);
+            const chunks = [];
+            for (let i = 0; i < words.length; i += wordsPerChunk) {
+                const chunk = words.slice(i, i + wordsPerChunk).join(' ');
+                if (i + wordsPerChunk >= words.length && chunk.trim().split(/\s+/).length < 5) break;
+                chunks.push(chunk);
+            }
+            return chunks;
+        }
+        const scriptParts = splitByWords(fullScript, 20);
+        const audioPlayer = document.getElementById('audioPlayer');
+        const scriptList = document.getElementById('scriptList');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeLabel = document.getElementById('currentTimeLabel');
+        const totalTimeLabel = document.getElementById('totalTimeLabel');
+        // Popup controls
+        const popupBar = document.getElementById('podcastPlayerBar');
+        const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+        const popupPrevBtn = document.getElementById('popupPrevBtn');
+        const popupNextBtn = document.getElementById('popupNextBtn');
+        const popupProgressBar = document.getElementById('popupProgressBar');
+        const popupCurrentTimeLabel = document.getElementById('popupCurrentTimeLabel');
+        const popupTotalTimeLabel = document.getElementById('popupTotalTimeLabel');
+        const popupScriptCurrent = document.getElementById('popupScriptCurrent');
+
+        let currentIdx = 0;
+        let isPlayingAll = false;
+        let isPaused = false;
+        const audioCache = {};
+        let partDurations = scriptParts.map(part => Math.round(part.split(/\s+/).length * 0.5)); // 0.5s/word
+        let totalDuration = partDurations.reduce((a, b) => a + b, 0);
+
+        // Hiển thị script từng đoạn
+        scriptParts.forEach((part, idx) => {
+            const div = document.createElement('div');
+            div.id = 'scriptPart_' + idx;
+            div.textContent = part.trim();
+            div.style.margin = '0.5rem 0';
+            div.style.padding = '0.5rem';
+            div.style.borderRadius = '6px';
+            scriptList.appendChild(div);
+        });
+
+        function formatTime(sec) {
+            sec = Math.round(sec);
+            return `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
+        }
+
+        function updateTotalTime() {
+            totalDuration = partDurations.reduce((a, b) => a + b, 0);
+            totalTimeLabel.textContent = formatTime(totalDuration);
+            popupTotalTimeLabel.textContent = formatTime(totalDuration);
+        }
+        updateTotalTime();
+
+        // Fetch audio cho 1 đoạn
+        async function fetchAudio(idx) {
+            if (audioCache[idx]) return audioCache[idx];
+            const part = scriptParts[idx].trim();
+            const formData = new FormData();
+            formData.append('text', part);
+            const response = await fetch('/api/audio/generate-english', {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            audioCache[idx] = audioUrl;
+            // Cập nhật lại thời lượng thực tế
+            const tempAudio = new Audio(audioUrl);
+            tempAudio.addEventListener('loadedmetadata', function () {
+                partDurations[idx] = tempAudio.duration;
+                updateTotalTime();
+            });
+            return audioUrl;
+        }
+
+        function getCurrentGlobalTime(localTime, idx) {
+            let sum = 0;
+            for (let i = 0; i < idx; i++) sum += partDurations[i];
+            return sum + localTime;
+        }
+        function getPartFromGlobalTime(globalTime) {
+            let sum = 0;
+            for (let i = 0; i < partDurations.length; i++) {
+                if (globalTime < sum + partDurations[i]) {
+                    return { idx: i, localTime: globalTime - sum };
+                }
+                sum += partDurations[i];
+            }
+            return { idx: partDurations.length - 1, localTime: partDurations[partDurations.length - 1] };
+        }
+
+        async function playPart(idx, seekTime = 0) {
+            if (idx >= scriptParts.length) {
+                isPlayingAll = false;
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                popupPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                return;
+            }
+            scriptParts.forEach((_, i) => {
+                const el = document.getElementById('scriptPart_' + i);
+                if (el) el.style.background = (i === idx) ? '#ffeaa7' : '';
+            });
+            try {
+                const audioUrl = await fetchAudio(idx);
+                audioPlayer.src = audioUrl;
+                audioPlayer.currentTime = seekTime;
+                audioPlayer.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                popupPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                currentIdx = idx;
+                isPaused = false;
+                if (idx + 1 < scriptParts.length) {
+                    fetchAudio(idx + 1).catch(() => {});
+                }
+            } catch (err) {
+                alert('Không lấy được audio cho đoạn này: ' + err.message);
+                isPlayingAll = false;
+                playPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+                popupPlayPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+            }
+        }
+
+        function updateProgressBar() {
+            const localTime = audioPlayer.currentTime;
+            const globalTime = getCurrentGlobalTime(localTime, currentIdx);
+            progressBar.value = Math.round(globalTime / totalDuration * 100);
+            currentTimeLabel.textContent = formatTime(globalTime);
+            // Đồng bộ popup
+            popupProgressBar.value = progressBar.value;
+            popupCurrentTimeLabel.textContent = currentTimeLabel.textContent;
+            popupTotalTimeLabel.textContent = totalTimeLabel.textContent;
+            popupScriptCurrent.textContent = scriptParts[currentIdx] || '';
+        }
+
+        function updateTotalTime() {
+            totalDuration = partDurations.reduce((a, b) => a + b, 0);
+            totalTimeLabel.textContent = formatTime(totalDuration);
+            popupTotalTimeLabel.textContent = formatTime(totalDuration);
+        }
+
+        playPauseBtn.onclick = function () {
+            if (audioPlayer.src && !audioPlayer.paused) {
+                audioPlayer.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                popupPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                isPaused = true;
+            } else {
+                if (audioPlayer.src) {
+                    audioPlayer.play();
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    popupPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    isPaused = false;
+                } else {
+                    isPlayingAll = true;
+                    playPart(0);
+                }
+            }
+        };
+        nextBtn.onclick = function () {
+            if (currentIdx + 1 < scriptParts.length) {
+                playPart(currentIdx + 1);
+            }
+        };
+        prevBtn.onclick = function () {
+            if (currentIdx > 0) {
+                playPart(currentIdx - 1);
+            }
+        };
+        // Popup controls
+        popupPlayPauseBtn.onclick = playPauseBtn.onclick;
+        popupPrevBtn.onclick = prevBtn.onclick;
+        popupNextBtn.onclick = nextBtn.onclick;
+        popupProgressBar.oninput = function () {
+            // Tua thực sự: phát đúng đoạn và vị trí tương ứng
+            const globalTime = popupProgressBar.value / 100 * totalDuration;
+            const { idx, localTime } = getPartFromGlobalTime(globalTime);
+            if (idx !== currentIdx) {
+                playPart(idx, localTime);
+            } else {
+                audioPlayer.currentTime = localTime;
+            }
+            // Đồng bộ lại thanh chính
+            progressBar.value = popupProgressBar.value;
+            updateProgressBar();
+        };
+
+        audioPlayer.onended = function () {
+            if (isPlayingAll && currentIdx + 1 < scriptParts.length) {
+                playPart(currentIdx + 1);
+            } else {
+                playPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+                popupPlayPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+            }
+        };
+        audioPlayer.ontimeupdate = updateProgressBar;
+        progressBar.oninput = function () {
+            const globalTime = progressBar.value / 100 * totalDuration;
+            const { idx, localTime } = getPartFromGlobalTime(globalTime);
+            if (idx !== currentIdx) {
+                playPart(idx, localTime);
+            } else {
+                audioPlayer.currentTime = localTime;
+            }
+            updateProgressBar();
+        };
+        updateTotalTime();
+
+        // Hiện/ẩn popup khi cuộn
+        const playerSection = document.querySelector('.custom-audio-player');
+        function checkPlayerInView() {
+            const rect = playerSection.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight) {
+                popupBar.style.display = 'flex';
+            } else {
+                popupBar.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', checkPlayerInView);
+        window.addEventListener('resize', checkPlayerInView);
+        checkPlayerInView();
+    });
     </script>
 </body>
 </html>
