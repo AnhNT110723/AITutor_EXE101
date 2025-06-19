@@ -11,7 +11,6 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
 {
     public class LessonController : Controller
     {
-        public LessonViewModel viewModel1 { get; set; }
         private readonly FaiEnglishContext _context;
         private readonly HttpClient _httpClient;
         private readonly string _apiBaseUrl = "https://faienglish.xyz"; // Update with your actual API base URL
@@ -49,32 +48,31 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
 
                 var response = await _httpClient.PostAsync($"{_apiBaseUrl}/api/audio/generate-random-words", formData);
                 response.EnsureSuccessStatusCode();
-                
+
                 var content = await response.Content.ReadAsStringAsync();
                 var words = System.Text.Json.JsonSerializer.Deserialize<List<WordResult>>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Words = words
-                };
+                ViewBag.Lesson = lesson;
+                ViewBag.Words = words;
 
-                return View(viewModel);
+                return View();
             }
             catch (HttpRequestException ex)
             {
                 // Log the error and return a view with just the lesson
                 // You might want to handle this differently based on your requirements
-                return View(new LessonViewModel { Lesson = lesson, Words = new List<WordResult>() });
+                ViewBag.Lesson = lesson;
+                ViewBag.Words = new List<WordResult>();
+                return View();
             }
         }
         public async Task<IActionResult> Step2(int id)
         {
             var lesson = await _context.Situations
-               
+
                 .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
             if (lesson == null)
@@ -127,49 +125,40 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 var audioBytes = await audioResponse.Content.ReadAsByteArrayAsync();
                 var audioBase64 = Convert.ToBase64String(audioBytes);
 
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = exercise.Script,
-                    Questions = exercise.Questions,
-                    Words = new List<WordResult>(),
-                    AudioData = $"data:audio/mp3;base64,{audioBase64}" // Store as data URL
-                };
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = exercise.Script;
+                ViewBag.Questions = exercise.Questions;
+                ViewBag.Words = new List<WordResult>();
+                ViewBag.AudioData = $"data:audio/mp3;base64,{audioBase64}";
 
-                return View(viewModel);
+                return View();
             }
             catch (HttpRequestException ex)
             {
-                return View(new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = $"Failed to connect to the API (Status: {ex.StatusCode}). Please try again.",
-                    Questions = new List<IeltsQuestion>(),
-                    Words = new List<WordResult>(),
-                    AudioData = string.Empty
-                });
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = $"Failed to connect to the API (Status: {ex.StatusCode}). Please try again.";
+                ViewBag.Questions = new List<IeltsQuestion>();
+                ViewBag.Words = new List<WordResult>();
+                ViewBag.AudioData = string.Empty;
+                return View();
             }
             catch (System.Text.Json.JsonException ex)
             {
-                return View(new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = "Failed to process the API response. Please try again.",
-                    Questions = new List<IeltsQuestion>(),
-                    Words = new List<WordResult>(),
-                    AudioData = string.Empty
-                });
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = "Failed to process the API response. Please try again.";
+                ViewBag.Questions = new List<IeltsQuestion>();
+                ViewBag.Words = new List<WordResult>();
+                ViewBag.AudioData = string.Empty;
+                return View();
             }
             catch (Exception ex)
             {
-                return View(new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = $"An unexpected error occurred: {ex.Message}. Please try again.",
-                    Questions = new List<IeltsQuestion>(),
-                    Words = new List<WordResult>(),
-                    AudioData = string.Empty
-                });
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = $"An unexpected error occurred: {ex.Message}. Please try again.";
+                ViewBag.Questions = new List<IeltsQuestion>();
+                ViewBag.Words = new List<WordResult>();
+                ViewBag.AudioData = string.Empty;
+                return View();
             }
         }
 
@@ -180,7 +169,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
             try
             {
                 var lesson = await _context.Situations
-                    
+
                     .FirstOrDefaultAsync(l => l.SituatuonId == id);
 
                 if (lesson == null)
@@ -194,20 +183,17 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                     .ToList();
 
                 // Deserialize questions with null check
-                var questionsList = !string.IsNullOrEmpty(questions) 
-                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions) 
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
                     : new List<IeltsQuestion>();
 
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Sentences = sentences,
-                    Questions = questionsList
-                };
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = script;
+                ViewBag.AudioData = audioData;
+                ViewBag.Sentences = sentences;
+                ViewBag.Questions = questionsList;
 
-                return View(viewModel);
+                return View();
             }
             catch (Exception ex)
             {
@@ -236,24 +222,21 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 }
 
                 // Deserialize questions with null check
-                var questionsList = !string.IsNullOrEmpty(questions) 
-                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions) 
+                var questionsList = !string.IsNullOrEmpty(questions)
+                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
                     : new List<IeltsQuestion>();
 
                 // Create view model with the data from Step3
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Questions = questionsList,
-                    Words = new List<WordResult>(), // Initialize empty list
-                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim() + ".")
-                        .ToList()
-                };
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = script;
+                ViewBag.AudioData = audioData;
+                ViewBag.Questions = questionsList;
+                ViewBag.Words = new List<WordResult>(); // Initialize empty list
+                ViewBag.Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim() + ".")
+                    .ToList();
 
-                return View("Step2", viewModel);
+                return View("Step2");
             }
             catch (Exception ex)
             {
@@ -261,7 +244,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Step4(int id, string script, string audioData, string questions)
+        public async Task<IActionResult> Step4(int id, string script, string audioData, string questions, string dictations)
         {
             try
             {
@@ -283,16 +266,19 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                     ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
                     : new List<IeltsQuestion>();
 
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Sentences = sentences,
-                    Questions = questionsList
-                };
+                // Deserialize dictations with null check
+                var dictationsList = !string.IsNullOrEmpty(dictations)
+                    ? JsonConvert.DeserializeObject<List<string>>(dictations)
+                    : new List<string>();
 
-                return View(viewModel);
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = script;
+                ViewBag.AudioData = audioData;
+                ViewBag.Sentences = sentences;
+                ViewBag.Questions = questionsList;
+                ViewBag.Dictations = dictationsList;
+
+                return View();
             }
             catch (Exception ex)
             {
@@ -326,27 +312,25 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                     : new List<IeltsQuestion>();
 
                 // Create view model with the data from Step3
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Questions = questionsList,
-                    Words = new List<WordResult>(), // Initialize empty list
-                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim() + ".")
-                        .ToList()
-                };
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = script;
+                ViewBag.AudioData = audioData;
+                ViewBag.Questions = questionsList;
+                ViewBag.Words = new List<WordResult>(); // Initialize empty list
+                ViewBag.Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim() + ".")
+                    .ToList();
 
-                return View("Step3", viewModel);
+                return View("Step3");
             }
             catch (Exception ex)
             {
                 return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
         [HttpPost]
-        public async Task<IActionResult> Step5(int id, string script, string audioData, string questions)
+        public async Task<IActionResult> Step5(int id, string script, string audioData, string questions, string dictations)
         {
             try
             {
@@ -358,26 +342,23 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                     return NotFound("Lesson not found");
                 }
 
-                // Split script into sentences for line-by-line display
-                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim() + ".")
-                    .ToList();
-
                 // Deserialize questions with null check
                 var questionsList = !string.IsNullOrEmpty(questions)
                     ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
                     : new List<IeltsQuestion>();
 
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Sentences = sentences,
-                    Questions = questionsList
-                };
+                // Deserialize dictations with null check
+                var dictationsList = !string.IsNullOrEmpty(dictations)
+                    ? JsonConvert.DeserializeObject<List<string>>(dictations)
+                    : new List<string>();
 
-                return View(viewModel);
+                ViewBag.Lesson = lesson;
+                ViewBag.Script = script;
+                ViewBag.AudioData = audioData;
+                ViewBag.Questions = questionsList;
+                ViewBag.Dictations = dictationsList;
+
+                return View();
             }
             catch (Exception ex)
             {
@@ -388,247 +369,13 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         [HttpGet]
         public async Task<IActionResult> Step5(int id)
         {
-            // Redirect to Step4 if accessed directly via GET
-            return RedirectToAction("Step4", new { id });
+            // Redirect to Step2 if accessed directly via GET
+            return RedirectToAction("Step2", new { id });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Step4Pre(int id, string script, string audioData, string questions)
+        public class ErrorViewModel
         {
-            try
-            {
-                var lesson = await _context.Situations
-                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
-
-                if (lesson == null)
-                {
-                    return NotFound("Lesson not found");
-                }
-
-                // Deserialize questions with null check
-                var questionsList = !string.IsNullOrEmpty(questions)
-                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
-                    : new List<IeltsQuestion>();
-
-                // Create view model with the data from Step3
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Questions = questionsList,
-                    Words = new List<WordResult>(), // Initialize empty list
-                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim() + ".")
-                        .ToList()
-                };
-
-                return View("Step3", viewModel);
-            }
-            catch (Exception ex)
-            {
-                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
-            }
+            public string Message { get; set; }
         }
-        [HttpPost]
-        public async Task<IActionResult> Step6(int id, string script, string audioData, string questions)
-        {
-            try
-            {
-                var lesson = await _context.Situations
-                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
-
-                if (lesson == null)
-                {
-                    return NotFound("Lesson not found");
-                }
-
-                // Split script into sentences for line-by-line display
-                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim() + ".")
-                    .ToList();
-
-                // Deserialize questions with null check
-                var questionsList = !string.IsNullOrEmpty(questions)
-                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
-                    : new List<IeltsQuestion>();
-
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Sentences = sentences,
-                    Questions = questionsList
-                };
-
-                return View(viewModel);
-            }
-            catch (Exception ex)
-            {
-                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Step6(int id)
-        {
-            // Redirect to Step4 if accessed directly via GET
-            return RedirectToAction("Step4", new { id });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Step5Pre(int id, string script, string audioData, string questions)
-        {
-            try
-            {
-                var lesson = await _context.Situations
-                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
-
-                if (lesson == null)
-                {
-                    return NotFound("Lesson not found");
-                }
-
-                // Deserialize questions with null check
-                var questionsList = !string.IsNullOrEmpty(questions)
-                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
-                    : new List<IeltsQuestion>();
-
-                // Create view model with the data from Step3
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Questions = questionsList,
-                    Words = new List<WordResult>(), // Initialize empty list
-                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim() + ".")
-                        .ToList()
-                };
-
-                return View("Step3", viewModel);
-            }
-            catch (Exception ex)
-            {
-                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> Step7(int id, string script, string audioData, string questions)
-        {
-            try
-            {
-                var lesson = await _context.Situations
-                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
-
-                if (lesson == null)
-                {
-                    return NotFound("Lesson not found");
-                }
-
-                // Split script into sentences for line-by-line display
-                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim() + ".")
-                    .ToList();
-
-                // Deserialize questions with null check
-                var questionsList = !string.IsNullOrEmpty(questions)
-                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
-                    : new List<IeltsQuestion>();
-
-                // Extract words from the script for vocabulary practice
-                var words = new List<WordResult>();
-                if (!string.IsNullOrEmpty(script))
-                {
-                    var uniqueWords = script.Split(new[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(w => w.Trim().ToLower())
-                        .Distinct()
-                        .Where(w => w.Length > 3) // Only words longer than 3 characters
-                        .Take(10); // Limit to 10 words
-
-                    words = uniqueWords.Select(w => new WordResult { Word = w }).ToList();
-                }
-
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Sentences = sentences,
-                    Questions = questionsList,
-                    Words = words
-                };
-
-                return View(viewModel);
-            }
-            catch (Exception ex)
-            {
-                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Step7(int id)
-        {
-            // Redirect to Step4 if accessed directly via GET
-            return RedirectToAction("Step4", new { id });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Step6Pre(int id, string script, string audioData, string questions)
-        {
-            try
-            {
-                var lesson = await _context.Situations
-                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
-
-                if (lesson == null)
-                {
-                    return NotFound("Lesson not found");
-                }
-
-                // Deserialize questions with null check
-                var questionsList = !string.IsNullOrEmpty(questions)
-                    ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
-                    : new List<IeltsQuestion>();
-
-                // Create view model with the data from Step3
-                var viewModel = new LessonViewModel
-                {
-                    Lesson = lesson,
-                    Script = script,
-                    AudioData = audioData,
-                    Questions = questionsList,
-                    Words = new List<WordResult>(), // Initialize empty list
-                    Sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim() + ".")
-                        .ToList()
-                };
-
-                return View("Step5", viewModel);
-            }
-            catch (Exception ex)
-            {
-                return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
-            }
-        }
-    }
-    public class LessonViewModel
-    {
-        public Models.Situation Lesson { get; set; }
-        public List<WordResult> Words { get; set; }
-        public List<IeltsQuestion> Questions { get; set; }
-        public string Script { get; set; }
-        public string AudioData { get; set; } // Base64 encoded audio data
-        public List<string> Sentences { get; set; }
-    }
-    
-    public class Step2ViewModel { }
-
-    public class ErrorViewModel
-    {
-        public string Message { get; set; }
     }
 }

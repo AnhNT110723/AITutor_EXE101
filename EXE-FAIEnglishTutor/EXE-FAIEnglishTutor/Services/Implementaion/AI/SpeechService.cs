@@ -420,7 +420,7 @@ Return the response as a raw JSON array of objects, without markdown, code block
         {
             var prompt = $@"Generate an IELTS listening practice exercise in English based on the topic: '{topic}'. Provide:
             - A conversation script (20000-23500 words, suitable for IELTS listening, featuring a dialogue between two or more speakers).
-            - Exactly 14 multiple-choice questions, each with 4 options and one correct answer. Questions should increase in difficulty, starting with basic comprehension (e.g., main ideas, explicit details) and progressing to inference-based or detail-oriented questions (e.g., speaker intent, implied meanings).
+            - Exactly 4 multiple-choice questions, each with 4 options and one correct answer. Questions should increase in difficulty, starting with basic comprehension (e.g., main ideas, explicit details) and progressing to inference-based or detail-oriented questions (e.g., speaker intent, implied meanings).
             Return the response as a raw JSON object, without markdown, code fences (```), or additional text. Ensure all strings are properly escaped to avoid JSON parsing errors (e.g., use \ to escape quotes or special characters). The response must contain exactly 14 multiple-choice questions. Example:
             {{
                 ""script"": ""A conversation between two people about {topic.Replace("\"", "\\\"")}..."",

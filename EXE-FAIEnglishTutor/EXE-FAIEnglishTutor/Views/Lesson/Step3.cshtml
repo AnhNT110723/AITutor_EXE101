@@ -1,8 +1,7 @@
 ﻿@using Newtonsoft.Json
-@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
-    ViewData["Title"] = $"Step 3 - {Model.Lesson.SituationName}";
+    ViewData["Title"] = $"Step 3 - {ViewBag.Lesson.SituationName}";
 }
 
 <div id="content" class="p-4 p-md-5 home">
@@ -61,44 +60,36 @@
         <div class="lesson-progress">
             <div class="progress-container">
                 <div class="progress-bar">
-                    <div class="progress-fill"></div>
+                    <div class="progress-fill" style="width: 75%"></div>
                 </div>
                 <div class="progress-steps">
                     <div class="step active">
                         <div class="step-number">1</div>
-                        <div class="step-label">Pronunciation</div>
+                        <div class="step-label">Pronunciation Preview</div>
                     </div>
                     <div class="step active">
                         <div class="step-number">2</div>
-                        <div class="step-label">First Listening </div>
+                        <div class="step-label">First Listening</div>
                     </div>
                     <div class="step active">
                         <div class="step-number">3</div>
-                        <div class="step-label">Second Listening </div>
+                        <div class="step-label">Dictation Practice</div>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
-                        <div class="step-label">Check Understanding </div>
+                        <div class="step-label">Check & Compare</div>
                     </div>
                     <div class="step">
                         <div class="step-number">5</div>
-                        <div class="step-label">Speaking Practice </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">6</div>
-                        <div class="step-label">Shadowing </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">7</div>
-                        <div class="step-label">Review & Practice</div>
+                        <div class="step-label">Practice & Improve</div>
                     </div>
                 </div>
             </div>
             <div class="listening-container">
                 <!-- Lesson Header -->
                 <div class="lesson-header">
-                    <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
-                    
+                    <h2 class="lesson-title">@ViewBag.Lesson.SituationName</h2>
+                    <p class="lesson-subtitle">Dictation Practice - Listen and write what you hear</p>
                 </div>
 
                 <!-- Audio Player Section -->
@@ -106,8 +97,8 @@
                     <audio id="listeningAudio" class="custom-audio-player" controls style="display: none;"></audio>
                     <div class="podcast-player">
                         <div class="player-artwork">
-                            <img src="@Model.Lesson.ImageUrl" alt="Lesson Cover" />
-                            </div>
+                            <img src="@ViewBag.Lesson.ImageUrl" alt="Lesson Cover" />
+                        </div>
                         <div class="player-controls">
                             <div class="time-display">
                                 <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
@@ -131,62 +122,68 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Transcript Controls -->
-                <div class="learning-tools">
-                    <div class="tool-buttons">
-                        <button id="toggleTranscript" class="tool-btn">
-                            <i class="fas fa-closed-captioning"></i>
-                            <span>Transcript</span>
-                        </button>
-                        <button id="toggleLineByLine" class="tool-btn">
-                            <i class="fas fa-list"></i>
-                            <span>Line by Line</span>
-                        </button>
-                        <button id="highlightMode" class="tool-btn">
-                            <i class="fas fa-highlighter"></i>
-                            <span>Highlight</span>
-                        </button>
-                    </div>
-                </div>
 
-                <!-- Transcript Section -->
-                <div id="transcriptContainer" class="transcript-container" style="display: none;">
-                    <div id="fullTranscript" class="full-transcript">
-                        @foreach (var sentence in Model.Script.Split(new[] { ". ", "! ", "? " }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Trim() + "."))
-                        {
-                            <span class="transcript-sentence">@sentence</span>
-                        }
+                <!-- Dictation Practice Section -->
+                <div class="dictation-section">
+                    <div class="dictation-instructions">
+                        <h3><i class="fas fa-pencil-alt"></i> Dictation Practice</h3>
+                        <p><strong>Instructions:</strong> Listen to each sentence and write exactly what you hear. You can replay each sentence up to 3 times maximum.</p>
+                        <p class="instruction-note"><i class="fas fa-info-circle"></i> <strong>Important:</strong> Complete all sentences first. You will see your results in the next step.</p>
                     </div>
-                    <div id="lineByLineTranscript" class="line-by-line-transcript" style="display: none;">
-                        @for (int i = 0; i < Model.Sentences?.Count; i++)
+
+                    <div class="dictation-container">
+                        @for (int i = 0; i < ViewBag.Sentences?.Count; i++)
                         {
-                            var startTime = i * 5.0;
-                            <div class="transcript-line" data-start-time="@startTime">
-                                <span class="line-number">@(i + 1)</span>
-                                <span class="line-text">@Model.Sentences[i]</span>
+                            var sentence = ViewBag.Sentences[i];
+                            <div class="dictation-item" data-sentence="@sentence" data-index="@i">
+                                <div class="sentence-controls">
+                                    <span class="sentence-number">@(i + 1)</span>
+                                    <button class="play-sentence-btn" onclick="playSentence(@i)">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button class="replay-sentence-btn" onclick="replaySentence(@i)" data-replays="0">
+                                        <i class="fas fa-redo"></i>
+                                        <span class="replay-count">0/3</span>
+                                    </button>
+                                    <div class="completion-status">
+                                        <span class="status-indicator incomplete">Incomplete</span>
+                                    </div>
+                                </div>
+                                <div class="dictation-input-container">
+                                    <textarea class="dictation-input" placeholder="Write what you hear here..." rows="2" required></textarea>
+                                    <div class="word-count">0 words</div>
+                                </div>
                             </div>
                         }
+                    </div>
+
+                    <div class="dictation-actions">
+                        <div class="completion-summary">
+                            <span id="completionStatus">0 of @ViewBag.Sentences?.Count sentences completed</span>
+                        </div>
+                        <button id="continueToNext" class="btn-primary" disabled>
+                            <i class="fas fa-arrow-right"></i> Continue to Next Step
+                        </button>
                     </div>
                 </div>
                 
                 <div class="bottom-navigation">
                     <form id="prevStepForm" method="post" action="@Url.Action("Step2Pre", "Lesson")" style="display: inline;">
-                        <input type="hidden" name="id" value="@Model.Lesson.SituatuonId" />
-                        <input type="hidden" name="script" value="@Model.Script" />
-                        <input type="hidden" name="audioData" value="@Model.AudioData" />
-                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
+                        <input type="hidden" name="id" value="@ViewBag.Lesson.SituatuonId" />
+                        <input type="hidden" name="script" value="@ViewBag.Script" />
+                        <input type="hidden" name="audioData" value="@ViewBag.AudioData" />
+                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(ViewBag.Questions ?? new List<IeltsQuestion>())" />
                         <button type="submit" class="nav-btn prev">
                         <i class="fas fa-arrow-left"></i> Previous
                         </button>
                     </form>
                     <form id="nextStepForm" method="post" action="@Url.Action("Step4", "Lesson")" style="display: inline;">
-                        <input type="hidden" name="id" value="@Model.Lesson.SituatuonId" />
-                        <input type="hidden" name="script" value="@Model.Script" />
-                        <input type="hidden" name="audioData" value="@Model.AudioData" />
-                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
-                        <button type="submit" class="nav-btn next">
+                        <input type="hidden" name="id" value="@ViewBag.Lesson.SituatuonId" />
+                        <input type="hidden" name="script" value="@ViewBag.Script" />
+                        <input type="hidden" name="audioData" value="@ViewBag.AudioData" />
+                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(ViewBag.Questions ?? new List<IeltsQuestion>())" />
+                        <input type="hidden" name="dictations" id="dictationsData" value="" />
+                        <button type="submit" class="nav-btn next" id="nextStepBtn" disabled>
                         Next <i class="fas fa-arrow-right"></i>
                         </button>
                     </form>
@@ -440,7 +437,7 @@
         }
 
         .progress-fill {
-            width: 42.85%; /* 1/7 of the total width */
+            width: 60%; /* 3/5 of the total width */
             height: 100%;
             background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
             border-radius: 2px;
@@ -724,6 +721,191 @@
             color: #999;
             font-size: 0.8em;
             }
+
+        .lesson-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .dictation-section {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 15px rgba(255, 152, 56, 0.1);
+        }
+
+        .dictation-instructions {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .dictation-instructions h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .dictation-instructions p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .dictation-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .dictation-item {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .sentence-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .sentence-number {
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .play-sentence-btn, .replay-sentence-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-sentence-btn:hover, .replay-sentence-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .completion-status {
+            margin-left: auto;
+        }
+
+        .status-indicator {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-indicator.incomplete {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status-indicator.complete {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .dictation-input-container {
+            position: relative;
+        }
+
+        .dictation-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .dictation-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .dictation-input.complete {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+
+        .word-count {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .instruction-note {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            background: #fff3cd;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .replay-sentence-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .replay-count {
+            font-size: 0.7rem;
+            background: rgba(255, 152, 56, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .dictation-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 10px;
+        }
+
+        .completion-summary {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .btn-primary:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-primary:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
     </style>
 
     @section Scripts {
@@ -733,12 +915,12 @@
             let progressBar;
             let currentTimeSpan;
             let durationSpan;
-            let isHighlightMode = false;
+            let sentences = @Html.Raw(Json.Serialize(ViewBag.Sentences ?? new List<string>()));
 
             document.addEventListener('DOMContentLoaded', function() {
                 initializeAudio();
                 loadListeningAudio();
-                initializeTranscriptControls();
+                initializeDictation();
             });
 
             function initializeAudio() {
@@ -758,9 +940,6 @@
                 audioPlayer.addEventListener('loadedmetadata', () => {
                     durationSpan.textContent = formatTime(audioPlayer.duration);
                 });
-                audioPlayer.addEventListener('ended', () => {
-                    ;
-                });
 
                 // Progress bar click
                 document.getElementById('audioProgress').addEventListener('click', function(e) {
@@ -771,7 +950,7 @@
 
             async function loadListeningAudio() {
                 try {
-                    const audioData = @Html.Raw(Json.Serialize(Model.AudioData));
+                    const audioData = @Html.Raw(Json.Serialize(ViewBag.AudioData));
                     if (!audioData) {
                         throw new Error('Audio data is not available');
                     }
@@ -792,10 +971,6 @@
                     audioPlayer.src = audioUrl;
                     audioPlayer.load();
 
-                    // Show audio controls after loading
-                    audioPlayer.style.display = 'none'; // Keep the native audio element hidden
-                    document.querySelector('.audio-controls').style.display = 'flex';
-
                     // Clean up the URL when the audio is loaded
                     audioPlayer.onload = () => {
                         URL.revokeObjectURL(audioUrl);
@@ -803,7 +978,6 @@
 
                 } catch (error) {
                     console.error('Error loading audio:', error);
-                    
                 }
             }
 
@@ -833,153 +1007,162 @@
                 return `${minutes}:${seconds.toString().padStart(2, '0')}`;
             }
 
-            function initializeTranscriptControls() {
-                const toggleTranscriptBtn = document.getElementById('toggleTranscript');
-                const toggleLineByLineBtn = document.getElementById('toggleLineByLine');
-                const highlightModeBtn = document.getElementById('highlightMode');
-                const transcriptContainer = document.getElementById('transcriptContainer');
-                const fullTranscript = document.getElementById('fullTranscript');
-                const lineByLineTranscript = document.getElementById('lineByLineTranscript');
-
-                // Toggle transcript visibility
-                toggleTranscriptBtn.addEventListener('click', () => {
-                    transcriptContainer.style.display = transcriptContainer.style.display === 'none' ? 'block' : 'none';
-                });
-
-                // Toggle between full and line-by-line modes
-                toggleLineByLineBtn.addEventListener('click', () => {
-                    fullTranscript.style.display = fullTranscript.style.display === 'none' ? 'block' : 'none';
-                    lineByLineTranscript.style.display = lineByLineTranscript.style.display === 'none' ? 'block' : 'none';
-                });
-
-                // Highlight mode
-                highlightModeBtn.addEventListener('click', () => {
-                    isHighlightMode = !isHighlightMode;
-                    document.body.classList.toggle('highlight-mode', isHighlightMode);
-                    highlightModeBtn.classList.toggle('active', isHighlightMode);
-                });
-
-                // Full transcript sentence interaction
-                const sentences = document.querySelectorAll('.transcript-sentence');
-                let lastClickedSentence = null;
-                let totalDuration = 0;
-
-                audioPlayer.addEventListener('loadedmetadata', () => {
-                    totalDuration = audioPlayer.duration;
-                    updateSentenceTimings();
-                });
-
-                function updateSentenceTimings() {
-                    const avgTimePerSentence = totalDuration / sentences.length;
-                    sentences.forEach((sentence, index) => {
-                        sentence.setAttribute('data-start-time', (index * avgTimePerSentence).toFixed(1));
-                    });
-                }
-
-                sentences.forEach((sentence, index) => {
-                    sentence.addEventListener('click', () => {
-                        if (isHighlightMode) {
-                            const selection = window.getSelection();
-                            const range = selection.getRangeAt(0);
-                            const span = document.createElement('span');
-                            span.className = 'highlighted';
-                            range.surroundContents(span);
-                        } else {
-                            if (lastClickedSentence) {
-                                lastClickedSentence.classList.remove('active');
-                            }
-                            sentence.classList.add('active');
-                            lastClickedSentence = sentence;
-
-                            const startTime = parseFloat(sentence.getAttribute('data-start-time'));
-                            audioPlayer.currentTime = startTime;
-                            audioPlayer.play();
-                        }
+            function initializeDictation() {
+                // Add word count functionality
+                const dictationInputs = document.querySelectorAll('.dictation-input');
+                dictationInputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        const wordCount = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+                        this.parentElement.querySelector('.word-count').textContent = wordCount + ' words';
+                        
+                        // Check completion status
+                        checkCompletionStatus();
                     });
                 });
 
-                // Line-by-line transcript interaction
-                const transcriptLines = document.querySelectorAll('.transcript-line');
-                let lastClickedLine = null;
-
-                transcriptLines.forEach(line => {
-                    line.addEventListener('click', () => {
-                        if (isHighlightMode) {
-                            const selection = window.getSelection();
-                            const range = selection.getRangeAt(0);
-                            const span = document.createElement('span');
-                            span.className = 'highlighted';
-                            range.surroundContents(span);
-                        } else {
-                            if (lastClickedLine) {
-                                lastClickedLine.classList.remove('active');
-                            }
-                            line.classList.add('active');
-                            lastClickedLine = line;
-
-                            const startTime = parseFloat(line.getAttribute('data-start-time'));
-                            audioPlayer.currentTime = startTime;
-                            audioPlayer.play();
-                        }
-                    });
+                // Continue to next step button
+                document.getElementById('continueToNext').addEventListener('click', function() {
+                    if (validateAllSentences()) {
+                        // Collect dictation data and submit form
+                        collectAndSubmitDictations();
+                    } else {
+                        alert('Please complete all sentences before continuing.');
+                    }
                 });
 
-                // Update active sentence/line based on current time
-                audioPlayer.addEventListener('timeupdate', () => {
-                    const currentTime = audioPlayer.currentTime;
+                // Next step form submission
+                document.getElementById('nextStepForm').addEventListener('submit', function(e) {
+                    if (!validateAllSentences()) {
+                        e.preventDefault();
+                        alert('Please complete all sentences before continuing.');
+                        return false;
+                    }
+                    collectAndSubmitDictations();
+                });
+            }
+
+            function collectAndSubmitDictations() {
+                const dictationInputs = document.querySelectorAll('.dictation-input');
+                const dictations = [];
+                
+                dictationInputs.forEach(input => {
+                    dictations.push(input.value.trim());
+                });
+                
+                // Set the dictations data in the hidden input
+                document.getElementById('dictationsData').value = JSON.stringify(dictations);
+                
+                // Submit the form
+                document.getElementById('nextStepForm').submit();
+            }
+
+            function checkCompletionStatus() {
+                const dictationItems = document.querySelectorAll('.dictation-item');
+                let completedCount = 0;
+                const totalCount = dictationItems.length;
+
+                dictationItems.forEach((item, index) => {
+                    const input = item.querySelector('.dictation-input');
+                    const statusIndicator = item.querySelector('.status-indicator');
+                    const text = input.value.trim();
                     
-                    // Update full transcript
-                    sentences.forEach(sentence => {
-                        const sentenceTime = parseFloat(sentence.getAttribute('data-start-time'));
-                        const nextSentence = sentence.nextElementSibling;
-                        const nextTime = nextSentence ? parseFloat(nextSentence.getAttribute('data-start-time')) : totalDuration;
-
-                        if (currentTime >= sentenceTime && currentTime < nextTime) {
-                            if (lastClickedSentence !== sentence) {
-                                if (lastClickedSentence) {
-                                    lastClickedSentence.classList.remove('active');
-                                }
-                                sentence.classList.add('active');
-                                lastClickedSentence = sentence;
-                                
-                                // Scroll sentence into view if needed
-                                const container = sentence.closest('.transcript-container');
-                                const sentenceRect = sentence.getBoundingClientRect();
-                                const containerRect = container.getBoundingClientRect();
-                                
-                                if (sentenceRect.top < containerRect.top || sentenceRect.bottom > containerRect.bottom) {
-                                    sentence.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                }
-                            }
-                        }
-                    });
-
-                    // Update line-by-line transcript
-                    transcriptLines.forEach(line => {
-                        const lineTime = parseFloat(line.getAttribute('data-start-time'));
-                        const nextLine = line.nextElementSibling;
-                        const nextTime = nextLine ? parseFloat(nextLine.getAttribute('data-start-time')) : totalDuration;
-
-                        if (currentTime >= lineTime && currentTime < nextTime) {
-                            if (lastClickedLine !== line) {
-                                if (lastClickedLine) {
-                                    lastClickedLine.classList.remove('active');
-                                }
-                                line.classList.add('active');
-                                lastClickedLine = line;
-                                
-                                // Scroll line into view if needed
-                                const container = line.closest('.transcript-container');
-                                const lineRect = line.getBoundingClientRect();
-                                const containerRect = container.getBoundingClientRect();
-                                
-                                if (lineRect.top < containerRect.top || lineRect.bottom > containerRect.bottom) {
-                                    line.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                }
-                            }
-                        }
-                    });
+                    if (text.length > 0) {
+                        // Mark as complete
+                        statusIndicator.textContent = 'Complete';
+                        statusIndicator.className = 'status-indicator complete';
+                        input.classList.add('complete');
+                        completedCount++;
+                    } else {
+                        // Mark as incomplete
+                        statusIndicator.textContent = 'Incomplete';
+                        statusIndicator.className = 'status-indicator incomplete';
+                        input.classList.remove('complete');
+                    }
                 });
+
+                // Update completion summary
+                document.getElementById('completionStatus').textContent = `${completedCount} of ${totalCount} sentences completed`;
+                
+                // Enable/disable continue button
+                const continueBtn = document.getElementById('continueToNext');
+                const nextStepBtn = document.getElementById('nextStepBtn');
+                if (completedCount === totalCount) {
+                    continueBtn.disabled = false;
+                    continueBtn.style.opacity = '1';
+                    nextStepBtn.disabled = false;
+                    nextStepBtn.style.opacity = '1';
+                } else {
+                    continueBtn.disabled = true;
+                    continueBtn.style.opacity = '0.6';
+                    nextStepBtn.disabled = true;
+                    nextStepBtn.style.opacity = '0.6';
+                }
+            }
+
+            function validateAllSentences() {
+                const dictationInputs = document.querySelectorAll('.dictation-input');
+                let allCompleted = true;
+                
+                dictationInputs.forEach((input, index) => {
+                    if (input.value.trim().length === 0) {
+                        allCompleted = false;
+                        // Highlight incomplete sentence
+                        const dictationItem = input.closest('.dictation-item');
+                        dictationItem.style.border = '2px solid #dc3545';
+                        dictationItem.style.backgroundColor = '#fff5f5';
+                        
+                        // Remove highlight after 3 seconds
+                        setTimeout(() => {
+                            dictationItem.style.border = '';
+                            dictationItem.style.backgroundColor = '';
+                        }, 3000);
+                    }
+                });
+                
+                return allCompleted;
+            }
+
+            function playSentence(index) {
+                // Calculate approximate time for this sentence
+                const totalDuration = audioPlayer.duration;
+                const sentenceCount = sentences.length;
+                const timePerSentence = totalDuration / sentenceCount;
+                const startTime = index * timePerSentence;
+                const endTime = (index + 1) * timePerSentence;
+
+                audioPlayer.currentTime = startTime;
+                audioPlayer.play();
+
+                // Stop at the end of the sentence
+                const checkTime = setInterval(() => {
+                    if (audioPlayer.currentTime >= endTime) {
+                        audioPlayer.pause();
+                        clearInterval(checkTime);
+                    }
+                }, 100);
+            }
+
+            function replaySentence(index) {
+                const replayBtn = document.querySelector(`[data-index="${index}"] .replay-sentence-btn`);
+                const currentReplays = parseInt(replayBtn.dataset.replays);
+                
+                if (currentReplays >= 3) {
+                    alert('You have reached the maximum number of replays (3) for this sentence.');
+                    return;
+                }
+                
+                // Increment replay count
+                replayBtn.dataset.replays = currentReplays + 1;
+                replayBtn.querySelector('.replay-count').textContent = `${currentReplays + 1}/3`;
+                
+                // Play the sentence
+                playSentence(index);
+                
+                // Disable button if max replays reached
+                if (currentReplays + 1 >= 3) {
+                    replayBtn.disabled = true;
+                    replayBtn.style.opacity = '0.5';
+                }
             }
         </script>
     }
