@@ -11,7 +11,7 @@ namespace EXE_FAIEnglishTutor.Configurations
         {
             services.AddDbContext<FaiEnglishContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("OLS"));
+                options.UseSqlServer(configuration.GetConnectionString("FAI_ENGLISH"));
             });
 
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
