@@ -137,18 +137,22 @@
                             var sentence = ViewBag.Sentences[i];
                             <div class="dictation-item" data-sentence="@sentence" data-index="@i">
                                 <div class="sentence-controls">
-                                    <span class="sentence-number">@(i + 1)</span>
-                                    <button class="play-sentence-btn" onclick="playSentence(@i)">
-                                        <i class="fas fa-play"></i>
-                                    </button>
-                                    <button class="replay-sentence-btn" onclick="replaySentence(@i)" data-replays="0">
-                                        <i class="fas fa-redo"></i>
-                                        <span class="replay-count">0/3</span>
-                                    </button>
-                                    <div class="completion-status">
-                                        <span class="status-indicator incomplete">Incomplete</span>
+                                    <div class="control-left">
+                                        <span class="sentence-number">@(@i + 1)</span>
+
+                                        <div class="replay-group-custom">
+                                            <button class="replay-sentence-btn-custom" type="button" title="Replay">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                            <span class="replay-count-custom">0/3</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-right">
+                                        <span class="status-indicator incomplete" id="status-@i">Incomplete</span>
                                     </div>
                                 </div>
+
                                 <div class="dictation-input-container">
                                     <textarea class="dictation-input" placeholder="Write what you hear here..." rows="2" required></textarea>
                                     <div class="word-count">0 words</div>
@@ -156,6 +160,7 @@
                             </div>
                         }
                     </div>
+
 
                     <div class="dictation-actions">
                         <div class="completion-summary">
@@ -166,7 +171,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="bottom-navigation">
                     <form id="prevStepForm" method="post" action="@Url.Action("Step2Pre", "Lesson")" style="display: inline;">
                         <input type="hidden" name="id" value="@ViewBag.Lesson.SituatuonId" />
@@ -174,7 +179,7 @@
                         <input type="hidden" name="audioData" value="@ViewBag.AudioData" />
                         <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(ViewBag.Questions ?? new List<IeltsQuestion>())" />
                         <button type="submit" class="nav-btn prev">
-                        <i class="fas fa-arrow-left"></i> Previous
+                            <i class="fas fa-arrow-left"></i> Previous
                         </button>
                     </form>
                     <form id="nextStepForm" method="post" action="@Url.Action("Step4", "Lesson")" style="display: inline;">
@@ -184,15 +189,69 @@
                         <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(ViewBag.Questions ?? new List<IeltsQuestion>())" />
                         <input type="hidden" name="dictations" id="dictationsData" value="" />
                         <button type="submit" class="nav-btn next" id="nextStepBtn" disabled>
-                        Next <i class="fas fa-arrow-right"></i>
+                            Next <i class="fas fa-arrow-right"></i>
                         </button>
                     </form>
                 </div>
 
             </div>
-     </div>
-</div>
+        </div>
+    </div>
     <style>
+        .replay-group-custom {
+            display: flex;
+            align-items: center;
+            background: #FFA73C;
+            border-radius: 20px;
+            padding: 0 18px 0 0;
+            height: 60px;
+            min-width: 120px;
+            position: relative;
+            box-shadow: 0 1px 6px rgba(255,152,56,0.09);
+        }
+
+        .replay-sentence-btn-custom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #FFA73C;
+            color: #fff;
+            border: none;
+            font-size: 1.7rem;
+            cursor: pointer;
+            position: relative;
+            margin-right: 10px;
+            box-shadow: none;
+            transition: background 0.16s;
+        }
+
+            .replay-sentence-btn-custom:active,
+            .replay-sentence-btn-custom:focus {
+                background: #ff9000;
+            }
+
+            .replay-sentence-btn-custom i {
+                font-size: 1.5rem;
+                margin: 0;
+                pointer-events: none;
+            }
+
+        .replay-count-custom {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.2rem;
+            align-items: center;
+            display: flex;
+            height: 60px;
+            padding-left: 8px;
+            padding-right: 8px;
+            letter-spacing: 1px;
+            background: transparent;
+        }
+
         .listening-container {
             max-width: 800px;
             margin: 0 auto;
@@ -315,6 +374,7 @@
                 background: white;
                 color: #ff9838;
             }
+
         .audio-player-container {
             width: 70%;
             margin: 0 auto;
@@ -672,14 +732,14 @@
             transition: all 0.3s ease;
         }
 
-        .line-by-line-transcript .transcript-line:hover {
-            background: #fff1e6;
-        }
+            .line-by-line-transcript .transcript-line:hover {
+                background: #fff1e6;
+            }
 
-        .line-by-line-transcript .transcript-line.active {
-            background: var(--primary-light);
-            color: var(--white);
-        }
+            .line-by-line-transcript .transcript-line.active {
+                background: var(--primary-light);
+                color: var(--white);
+            }
 
         .highlighted {
             background-color: #ffeb3b;
@@ -700,26 +760,26 @@
             transition: all 0.2s ease;
         }
 
-        .transcript-sentence:hover {
-            background-color: rgba(255, 152, 56, 0.1);
-        }
+            .transcript-sentence:hover {
+                background-color: rgba(255, 152, 56, 0.1);
+            }
 
-        .transcript-sentence.active {
-            background-color: rgba(255, 152, 56, 0.2);
-            color: #ff9838;
-        }
+            .transcript-sentence.active {
+                background-color: rgba(255, 152, 56, 0.2);
+                color: #ff9838;
+            }
 
         .transcript-line {
             position: relative;
             padding-left: 50px;
         }
 
-        .transcript-line::before {
-            content: attr(data-start-time) 's';
-            position: absolute;
-            left: 10px;
-            color: #999;
-            font-size: 0.8em;
+            .transcript-line::before {
+                content: attr(data-start-time) 's';
+                position: absolute;
+                left: 10px;
+                color: #999;
+                font-size: 0.8em;
             }
 
         .lesson-subtitle {
@@ -741,34 +801,173 @@
             margin-bottom: 2rem;
         }
 
-        .dictation-instructions h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
+            .dictation-instructions h3 {
+                color: var(--primary-color);
+                margin-bottom: 1rem;
+            }
 
-        .dictation-instructions p {
-            color: var(--text-light);
-            font-size: 1rem;
-        }
+            .dictation-instructions p {
+                color: var(--text-light);
+                font-size: 1rem;
+            }
 
         .dictation-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            width: 100%;
+            margin-top: 12px;
         }
 
         .dictation-item {
-            background: var(--bg-light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary-color);
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            margin-bottom: 22px;
+            padding: 16px 22px 20px 22px;
         }
 
         .sentence-controls {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .control-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #FFA73C;
+            color: #fff;
+            font-size: 1.18rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+            .circle.icon-btn i {
+                font-size: 1.1rem;
+                pointer-events: none;
+            }
+
+            .circle.icon-btn:active,
+            .circle.icon-btn:focus {
+                background: #ff9000;
+            }
+
+        .replay-sentence-btn {
+            position: relative;
+            padding-right: 30px !important;
+        }
+
+        .replay-count {
+            position: absolute;
+            right: 6px;
+            bottom: 6px;
+            background: #FFE7C2;
+            color: #FFA73C;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            min-width: 36px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .status-badge {
+            padding: 5px 18px;
+            border-radius: 14px;
+            font-size: 1.02rem;
+            font-weight: 500;
+            background: #FFF4D6;
+            color: #b8860b;
+            border: 1px solid #ffe3a1;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+            .status-badge.incomplete {
+                background: #FFF4D6;
+                color: #b8860b;
+            }
+
+            .status-badge.complete {
+                background: #e5fad7;
+                color: #2a7b3f;
+                border: 1px solid #badaaf;
+            }
+
+        .dictation-input-container {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .dictation-input {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #f0c788;
+            padding: 10px 12px;
+            font-size: 1.08rem;
+            resize: vertical;
+            background: #fff9ed;
+            transition: border 0.2s;
+        }
+
+            .dictation-input:focus {
+                border-color: #ffa73c;
+                outline: none;
+            }
+
+        .word-count {
+            align-self: flex-end;
+            font-size: 0.98rem;
+            color: #ffa73c;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 12px;
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+
+        .dictation-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .dictation-input {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .word-count {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: right;
         }
 
         .sentence-number {
@@ -794,10 +993,10 @@
             transition: all 0.3s ease;
         }
 
-        .play-sentence-btn:hover, .replay-sentence-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.1);
-        }
+            .play-sentence-btn:hover, .replay-sentence-btn:hover {
+                background: var(--primary-dark);
+                transform: scale(1.1);
+            }
 
         .completion-status {
             margin-left: auto;
@@ -810,17 +1009,17 @@
             font-weight: 500;
         }
 
-        .status-indicator.incomplete {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
+            .status-indicator.incomplete {
+                background: #fff3cd;
+                color: #856404;
+                border: 1px solid #ffeaa7;
+            }
 
-        .status-indicator.complete {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
+            .status-indicator.complete {
+                background: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
+            }
 
         .dictation-input-container {
             position: relative;
@@ -836,15 +1035,15 @@
             transition: border-color 0.3s ease;
         }
 
-        .dictation-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+            .dictation-input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+            }
 
-        .dictation-input.complete {
-            border-color: #28a745;
-            background-color: #f8fff9;
-        }
+            .dictation-input.complete {
+                border-color: #28a745;
+                background-color: #f8fff9;
+            }
 
         .word-count {
             position: absolute;
@@ -902,10 +1101,10 @@
             opacity: 0.6;
         }
 
-        .btn-primary:disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
+            .btn-primary:disabled:hover {
+                transform: none;
+                box-shadow: none;
+            }
     </style>
 
     @section Scripts {
@@ -1014,7 +1213,7 @@
                     input.addEventListener('input', function() {
                         const wordCount = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
                         this.parentElement.querySelector('.word-count').textContent = wordCount + ' words';
-                        
+
                         // Check completion status
                         checkCompletionStatus();
                     });
@@ -1031,29 +1230,37 @@
                 });
 
                 // Next step form submission
-                document.getElementById('nextStepForm').addEventListener('submit', function(e) {
-                    if (!validateAllSentences()) {
-                        e.preventDefault();
-                        alert('Please complete all sentences before continuing.');
-                        return false;
-                    }
-                    collectAndSubmitDictations();
-                });
+                           document.getElementById('nextStepForm').addEventListener('submit', function(e) {
+                if (!validateAllSentences()) {
+                    e.preventDefault();
+                    alert('Please complete all sentences before continuing.');
+                    return false;
+                }
+                e.preventDefault(); // tránh double submit
+                collectAndSubmitDictations();
+            });
             }
+
+            document.getElementById('nextStepForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                collectAndSubmitDictations();
+            });
 
             function collectAndSubmitDictations() {
                 const dictationInputs = document.querySelectorAll('.dictation-input');
                 const dictations = [];
-                
                 dictationInputs.forEach(input => {
                     dictations.push(input.value.trim());
                 });
-                
+
                 // Set the dictations data in the hidden input
                 document.getElementById('dictationsData').value = JSON.stringify(dictations);
-                
-                // Submit the form
-                document.getElementById('nextStepForm').submit();
+
+                // Submit the form (sau khi đã gán value)
+                document.getElementById('nextStepForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    this.submit();
+                });
             }
 
             function checkCompletionStatus() {
@@ -1065,7 +1272,7 @@
                     const input = item.querySelector('.dictation-input');
                     const statusIndicator = item.querySelector('.status-indicator');
                     const text = input.value.trim();
-                    
+
                     if (text.length > 0) {
                         // Mark as complete
                         statusIndicator.textContent = 'Complete';
@@ -1082,7 +1289,7 @@
 
                 // Update completion summary
                 document.getElementById('completionStatus').textContent = `${completedCount} of ${totalCount} sentences completed`;
-                
+
                 // Enable/disable continue button
                 const continueBtn = document.getElementById('continueToNext');
                 const nextStepBtn = document.getElementById('nextStepBtn');
@@ -1102,7 +1309,7 @@
             function validateAllSentences() {
                 const dictationInputs = document.querySelectorAll('.dictation-input');
                 let allCompleted = true;
-                
+
                 dictationInputs.forEach((input, index) => {
                     if (input.value.trim().length === 0) {
                         allCompleted = false;
@@ -1110,7 +1317,7 @@
                         const dictationItem = input.closest('.dictation-item');
                         dictationItem.style.border = '2px solid #dc3545';
                         dictationItem.style.backgroundColor = '#fff5f5';
-                        
+
                         // Remove highlight after 3 seconds
                         setTimeout(() => {
                             dictationItem.style.border = '';
@@ -1118,7 +1325,7 @@
                         }, 3000);
                     }
                 });
-                
+
                 return allCompleted;
             }
 
@@ -1145,19 +1352,19 @@
             function replaySentence(index) {
                 const replayBtn = document.querySelector(`[data-index="${index}"] .replay-sentence-btn`);
                 const currentReplays = parseInt(replayBtn.dataset.replays);
-                
+
                 if (currentReplays >= 3) {
                     alert('You have reached the maximum number of replays (3) for this sentence.');
                     return;
                 }
-                
+
                 // Increment replay count
                 replayBtn.dataset.replays = currentReplays + 1;
                 replayBtn.querySelector('.replay-count').textContent = `${currentReplays + 1}/3`;
-                
+
                 // Play the sentence
                 playSentence(index);
-                
+
                 // Disable button if max replays reached
                 if (currentReplays + 1 >= 3) {
                     replayBtn.disabled = true;

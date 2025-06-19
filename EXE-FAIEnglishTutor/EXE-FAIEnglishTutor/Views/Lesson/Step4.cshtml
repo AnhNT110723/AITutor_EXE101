@@ -176,7 +176,7 @@
                         <button id="checkAllResults" class="btn-primary">
                             <i class="fas fa-search"></i> Check All Results
                         </button>
-                        <button id="showPracticeSection" class="btn-secondary" style="display: none;">
+                        <button id="showPracticeSection" class="btn-primary" style="display: none;">
                             <i class="fas fa-redo"></i> Practice Incorrect Parts
                         </button>
                     </div>
@@ -1164,6 +1164,8 @@
                 if (practiceData.length > 0) {
                     document.getElementById('showPracticeSection').style.display = 'inline-block';
                 }
+
+            localStorage.setItem('practiceData', JSON.stringify(practiceData));
             }
 
             function compareSentences(userInput, correctSentence) {

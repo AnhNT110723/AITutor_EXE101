@@ -962,11 +962,12 @@
 
         function playExercise(index) {
             // Calculate approximate time for this sentence
-            const totalDuration = audioPlayer.duration;
-            const sentenceCount = practiceData.length;
-            const timePerSentence = totalDuration / sentenceCount;
-            const startTime = index * timePerSentence;
-            const endTime = (index + 1) * timePerSentence;
+        const sentenceCount = sentences.length;
+        const sentenceIndex = practiceData[index].index;
+        const timePerSentence = audioPlayer.duration / sentenceCount;
+        const startTime = sentenceIndex * timePerSentence;
+        const endTime = (sentenceIndex + 1) * timePerSentence;
+
 
             audioPlayer.currentTime = startTime;
             audioPlayer.play();

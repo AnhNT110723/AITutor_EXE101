@@ -248,34 +248,44 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
         {
             try
             {
-                var lesson = await _context.Situations
-                    .FirstOrDefaultAsync(l => l.SituatuonId == id);
-
+                var lesson = await _context.Situations.FirstOrDefaultAsync(l => l.SituatuonId == id);
                 if (lesson == null)
-                {
                     return NotFound("Lesson not found");
-                }
 
-                // Split script into sentences for line-by-line display
+                var regrex = new[] { @"(?<=[.!?])\s+" };
                 var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim() + ".")
-                    .ToList();
+                                      .Select(s => s.Trim().TrimEnd('.') + ".")
+                                      .ToList();
 
-                // Deserialize questions with null check
                 var questionsList = !string.IsNullOrEmpty(questions)
                     ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
                     : new List<IeltsQuestion>();
 
-                // Deserialize dictations with null check
                 var dictationsList = !string.IsNullOrEmpty(dictations)
                     ? JsonConvert.DeserializeObject<List<string>>(dictations)
                     : new List<string>();
 
+                var results = new List<DictationResult>();
+                for (int i = 0; i < sentences.Count; i++)
+                {
+                    var correct = sentences[i].Trim();
+                    var userInput = i < dictationsList.Count ? dictationsList[i].Trim() : "";
+
+                    results.Add(new DictationResult
+                    {
+                        SentenceNumber = i + 1,
+                        CorrectAnswer = correct,
+                        UserAnswer = userInput,
+                        IsCorrect = string.Equals(correct, userInput, StringComparison.OrdinalIgnoreCase)
+                    });
+                }
+
                 ViewBag.Lesson = lesson;
                 ViewBag.Script = script;
                 ViewBag.AudioData = audioData;
-                ViewBag.Sentences = sentences;
                 ViewBag.Questions = questionsList;
+                ViewBag.DictationResults = results;
+                ViewBag.Sentences = sentences;
                 ViewBag.Dictations = dictationsList;
 
                 return View();
@@ -285,6 +295,16 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 return View("Error", new ErrorViewModel { Message = $"An error occurred: {ex.Message}" });
             }
         }
+
+
+        public class DictationResult
+        {
+            public int SentenceNumber { get; set; }
+            public string CorrectAnswer { get; set; }
+            public string UserAnswer { get; set; }
+            public bool IsCorrect { get; set; }
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Step4(int id)
