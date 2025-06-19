@@ -8,5 +8,8 @@ namespace EXE_FAIEnglishTutor.Services.Interface
         Task SavePaymentAsync(Payment payment);
         Task<PaymentDto> GetPaymentByIdAsync(int id);
         Task UpdatePaymentAsync(PaymentDto p);
+        Task<decimal> GetMonthlyEarningsAsync();
+        Task<decimal> GetAnnualEarningsAsync();
+        Task<List<decimal>> GetMonthlyEarningsForChartAsync();
     }
 }

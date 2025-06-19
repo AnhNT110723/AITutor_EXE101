@@ -16,19 +16,22 @@ namespace EXE_FAIEnglishTutor.Controllers
             _situationService = situationService;
         }
 
+        [Route("/Mentee")]
         public async Task<IActionResult> Index()
         {
             var situations = await _situationService.GetAllSituation();
             return View(situations);
         }
 
+
         public IActionResult Privacy()
         {
             return View();
         }
-        public IActionResult LearningAI()
+        public IActionResult homePage()
         {
-            return View();
+
+            return View("homepage");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

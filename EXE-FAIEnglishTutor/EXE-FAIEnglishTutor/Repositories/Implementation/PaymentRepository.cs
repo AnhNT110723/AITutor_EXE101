@@ -12,6 +12,61 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
         {
         }
 
+        public async Task<decimal> GetAnnualEarningsAsync()
+        {
+            var annualEarnings = await _context.Payments
+            .Where(p => p.Status == "Completed"
+                     && p.PaymentDate.HasValue
+                     && p.PaymentDate.Value.Year == DateTime.Now.Year)
+            .SumAsync(p => (decimal?)p.Amount) ?? 0m;
+
+            return annualEarnings;
+        }
+
+        public  async Task<decimal> GetMonthlyEarningsAsync()
+        {
+            var currentDate = DateTime.Now;
+            var monthlyEarnings = await _context.Payments
+                .Where(p => p.Status == "Completed"
+                         && p.PaymentDate.HasValue
+                         && p.PaymentDate.Value.Year == currentDate.Year
+                         && p.PaymentDate.Value.Month == currentDate.Month)
+                .SumAsync(p => (decimal?)p.Amount) ?? 0m;
+
+            return monthlyEarnings;
+        }
+
+        public async Task<List<decimal>> GetMonthlyEarningsForChartAsync()
+        {
+            var startDate = DateTime.Now.AddMonths(-11); // 12 tháng gần nhất
+
+            var monthlyEarnings = await _context.Payments
+                .Where(p => p.Status == "Completed" && p.PaymentDate >= startDate)
+                .GroupBy(p => new { p.PaymentDate.Value.Year, p.PaymentDate.Value.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Total = g.Sum(p => p.Amount)
+                })
+                .OrderBy(g => g.Year).ThenBy(g => g.Month)
+                .ToListAsync();
+
+            // Tạo danh sách 12 tháng với giá trị mặc định là 0
+            var result = new List<decimal>(new decimal[12]);
+            var currentDate = startDate;
+            for (int i = 0; i < 12; i++)
+            {
+                var year = currentDate.Year;
+                var month = currentDate.Month;
+                var earnings = monthlyEarnings.FirstOrDefault(e => e.Year == year && e.Month == month)?.Total ?? 0m;
+                result[i] = earnings;
+                currentDate = currentDate.AddMonths(1);
+            }
+
+            return result;
+        }
+
         public Task<PaymentDto> GetPaymentByIdAsync(int id)
         {
             return _context.Payments.Where(x => x.PaymentId == id).Select(x => new PaymentDto(x)).FirstOrDefaultAsync();

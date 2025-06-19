@@ -5,8 +5,8 @@ window.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
     const navbar = document.querySelector('.navbar');
     const bg_custom = document.querySelector('.bg-custom');
-    const item_custom = document.querySelector('.item-custom');
-    const right_btn = document.querySelector('.right-btn');
+    //const item_custom = document.querySelector('.item-custom');
+    //const right_btn = document.querySelector('.right-btn');
     const content = document.getElementById('content');
     const sidebarCollapse = document.getElementById('sidebarCollapse');
     const logoImg = document.querySelector('#sidebar .logo img'); // Lấy phần tử ảnh logo
@@ -46,11 +46,11 @@ window.addEventListener('DOMContentLoaded', function () {
     // Hàm thay đổi logo
     function updateLogo() {
         if (sidebar.classList.contains('active')) {
-            logoImg.src = 'Images/concoc.png'; // Logo mặc định khi sidebar active
+            logoImg.src = '/Images/concoc.png'; // Logo mặc định khi sidebar active
             logoImg.classList.add('logo-active'); // Thêm class cho trạng thái active
             logoImg.classList.remove('logo-inactive'); // Xóa class cho trạng thái không active
         } else {
-            logoImg.src = 'Images/FAI-1.png'; // Logo khi sidebar không active
+            logoImg.src = '/Images/FAI-1.png'; // Logo khi sidebar không active
             logoImg.classList.add('logo-inactive'); // Thêm class cho trạng thái không active
             logoImg.classList.remove('logo-active'); // Xóa class cho trạng thái active
         }
@@ -111,54 +111,54 @@ window.addEventListener('DOMContentLoaded', function () {
     //    adjustListHeight();
     //}
 
-    function updateLayoutOnResize() {
-        if (window.innerWidth >= 1400) {
-            sidebar.classList.contains('active')
-                ? (sidebar.classList.add('active'),
-                    (navbar.style.left = "80px"),
-                    (navbar.style.width = "calc(100% - 80px)"),
-                    (bg_custom.style.width = "calc(100% - 80px)"),
-                    (item_custom.style.width = "calc(100% - 80px)"),
-                    (right_btn.classList.add('active')),
-                    (content.style.marginLeft = "80px"))
+    //function updateLayoutOnResize() {
+    //    if (window.innerWidth >= 1400) {
+    //        sidebar.classList.contains('active')
+    //            ? (sidebar.classList.add('active'),
+    //                (navbar.style.left = "80px"),
+    //                (navbar.style.width = "calc(100% - 80px)"),
+    //                (bg_custom.style.width = "calc(100% - 80px)"),
+    //                (item_custom.style.width = "calc(100% - 80px)"),
+    //                (right_btn.classList.add('active')),
+    //                (content.style.marginLeft = "80px"))
 
-                : (sidebar.classList.remove('active'),
-                    (navbar.style.left = "270px"),
-                    (navbar.style.width = "calc(100% - 270px)"),
-                    (bg_custom.style.width = "calc(100% - 270px)"),
-                    (item_custom.style.width = "calc(100% - 270px)"),
-                    (right_btn.classList.remove('active')),
-                    (content.style.marginLeft = "270px")
+    //            : (sidebar.classList.remove('active'),
+    //                (navbar.style.left = "270px"),
+    //                (navbar.style.width = "calc(100% - 270px)"),
+    //                (bg_custom.style.width = "calc(100% - 270px)"),
+    //                (item_custom.style.width = "calc(100% - 270px)"),
+    //                (right_btn.classList.remove('active')),
+    //                (content.style.marginLeft = "270px")
 
-                );
-        } else if (window.innerWidth >= 991) {
-            sidebar.classList.add('active');
-            navbar.style.left = "80px";
-            navbar.style.width = "calc(100% - 80px)";
-            bg_custom.style.width = "calc(100% - 80px)";
-            item_custom.style.width = "calc(100% - 80px)";
-            right_btn.classList.add('active');
-            content.style.marginLeft = "80px";
-        } else {
-            sidebar.classList.contains('active')
-                ? (sidebar.classList.remove('active'),
-                    (navbar.style.left = "0"),
-                    (navbar.style.width = "100%"),
-                    (bg_custom.style.width = "100%"),
-                    (item_custom.style.width = "100%"),
-                    (right_btn.classList.remove('active')),
-                    (content.style.marginLeft = "0"))
-                : (sidebar.classList.add('active'),
-                    (navbar.style.left = "80px"),
-                    (navbar.style.width = "calc(100% - 80px)"),
-                    (bg_custom.style.width = "calc(100% - 80px)"),
-                    (item_custom.style.width = "calc(100% - 80px)"),
-                    (right_btn.classList.add('active')),
-                    (content.style.marginLeft = "80px"));
-        }
-        updateLogo();
-        adjustListHeight();
-    }
+    //            );
+    //    } else if (window.innerWidth >= 991) {
+    //        sidebar.classList.add('active');
+    //        navbar.style.left = "80px";
+    //        navbar.style.width = "calc(100% - 80px)";
+    //        bg_custom.style.width = "calc(100% - 80px)";
+    //        item_custom.style.width = "calc(100% - 80px)";
+    //        right_btn.classList.add('active');
+    //        content.style.marginLeft = "80px";
+    //    } else {
+    //        sidebar.classList.contains('active')
+    //            ? (sidebar.classList.remove('active'),
+    //                (navbar.style.left = "0"),
+    //                (navbar.style.width = "100%"),
+    //                (bg_custom.style.width = "100%"),
+    //                (item_custom.style.width = "100%"),
+    //                (right_btn.classList.remove('active')),
+    //                (content.style.marginLeft = "0"))
+    //            : (sidebar.classList.add('active'),
+    //                (navbar.style.left = "80px"),
+    //                (navbar.style.width = "calc(100% - 80px)"),
+    //                (bg_custom.style.width = "calc(100% - 80px)"),
+    //                (item_custom.style.width = "calc(100% - 80px)"),
+    //                (right_btn.classList.add('active')),
+    //                (content.style.marginLeft = "80px"));
+    //    }
+    //    updateLogo();
+    //    adjustListHeight();
+    //}
 
     // Xử lý sự kiện click vào nút toggle sidebar
     sidebarCollapse.addEventListener('click', function () {
@@ -172,15 +172,15 @@ window.addEventListener('DOMContentLoaded', function () {
             navbar.style.left = isActive ? "80px" : "270px";
             navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
             if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
+            //if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+            //if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
                 content.style.marginLeft = isActive ? "80px" : "270px";
         } else {
             navbar.style.left = isActive ? "80px" : "0";
             navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
             if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
+            //if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
+            //if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
                 content.style.marginLeft = isActive ? "80px" : "0";
 
         }
@@ -199,7 +199,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
         // Chỉ gọi updateLayoutOnResize sau khi resize dừng 200ms
         resizeTimeout = setTimeout(() => {
-            updateLayoutOnResize();
+            //updateLayoutOnResize();
             adjustListHeight();
         }, 120);
     });
@@ -207,5 +207,24 @@ window.addEventListener('DOMContentLoaded', function () {
     // Điều chỉnh lại chiều cao khi cửa sổ thay đổi kích thước
     window.addEventListener('resize', adjustListHeight);
     adjustListHeight();
+});
+
+// Kiểm tra kích thước màn hình khi trang được tải
+window.addEventListener('DOMContentLoaded', function () {
+
+    const sidebar = document.getElementById('sidebar');
+    const navbar = document.querySelector('.navbar');
+    const bg_custom = document.querySelector('.bg-custom');
+    const item_custom = document.querySelector('.item-custom');
+    const content = document.getElementById('content');
+
+    if (window.innerWidth < 991) {
+        sidebar.classList.remove('active');
+        navbar.style.left =  "0px" ;
+        navbar.style.width = "100%";
+        if (bg_custom) bg_custom.style.width = "100%"
+        if (item_custom) item_custom.style.width = "100%";
+        content.style.marginLeft =  "0";
+    }
 });
 

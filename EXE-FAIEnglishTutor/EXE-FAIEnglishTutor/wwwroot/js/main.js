@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Thay đổi ngôn ngữ
     const changeLanguage = (lang) => {
         localStorage.setItem('language', lang); // Lưu vào localStorage
-        fetch('../data/languages.json')
+        fetch('/data/languages.json')
             .then((res) => res.json())
             .then((data) => {
                 if (data[lang]) {
@@ -169,6 +169,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Đặt ngôn ngữ mặc định
     const savedLanguage = localStorage.getItem('language') || 'en';
     changeLanguage(savedLanguage);
+
+
+    // Thêm đoạn này ngay sau changeLanguage(...) để cập nhật dropdown hiển thị:
+    const selectedItem = document.querySelector(`.dropdown-item[data-lang="${savedLanguage}"]`);
+    if (selectedItem && languageDropdown) {
+        const flagSrc = selectedItem.querySelector('img').src;
+        const langText = selectedItem.textContent.trim();
+        languageDropdown.innerHTML = `<img src="${flagSrc}" class="flag-icon" /> ${langText}`;
+    }
+
 
     // Lắng nghe sự kiện thay đổi ngôn ngữ
     languageItems.forEach((item) => {

@@ -52,5 +52,6 @@ namespace EXE_FAIEnglishTutor.Dtos
 
         public int? RoleId { get; set; }
 
+        public AccountStatus Status { get; set; }
     }
 }
