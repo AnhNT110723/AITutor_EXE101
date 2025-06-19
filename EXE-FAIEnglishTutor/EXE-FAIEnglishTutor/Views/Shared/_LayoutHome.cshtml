@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-
+    @RenderSection("Styles", required: false)
     <style>
         .modal-header {
             padding-bottom: 10px !important;
@@ -109,7 +109,7 @@
                         </a>
                     </li>
                     <li>
-                    <a asp-area="" asp-controller="Pc" asp-action="index" class="link-test" data-action="podcast">
+                    <a asp-area="Mentee" asp-controller="Podcast" asp-action="Index" class="link-test" data-action="podcast">
                             <span class="fas fa-book-open"></span>
                             <span class="menu-text">Podcast</span>
                         </a>
@@ -169,7 +169,7 @@
                 (action === 'home' && (currentPath === '/' || currentPath.includes('/home/index') || currentPath.includes('/home'))) ||
                 (action === 'lesson' && currentPath.includes('/lesson')) ||
                 (action === 'toeic' && currentPath.includes('/mentee/toeic')) ||
-                (action === 'podcast' && (currentPath.includes('/pc/index') || currentPath.includes('/pc'))) ||
+                (action === 'podcast' && (currentPath.includes('/mentee/podcast') || currentPath.includes('/podcast'))) ||
                 (action === 'pronunciation' && currentPath.includes('/pronunciation'))
             ) {
                 console.log(`Active item: ${action}`); // Debug mục đang active
