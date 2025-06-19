@@ -1,7 +1,6 @@
-﻿@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
-@{
+﻿@{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
-    ViewData["Title"] = $"Step 1 - {Model.Lesson.SituationName}";
+    ViewData["Title"] = $"Step 1 - {ViewBag.Lesson.SituationName}";
 }
 
 <div id="content" class="p-4 p-md-5 home">
@@ -65,31 +64,23 @@
                 <div class="progress-steps">
                     <div class="step active">
                         <div class="step-number">1</div>
-                        <div class="step-label">Pronunciation</div>
+                        <div class="step-label">Pronunciation Preview</div>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
-                        <div class="step-label">First Listening </div>
+                        <div class="step-label">First Listening</div>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <div class="step-label">Second Listening </div>
+                        <div class="step-label">Dictation Practice</div>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
-                        <div class="step-label">Check Understanding </div>
+                        <div class="step-label">Check & Compare</div>
                     </div>
                     <div class="step">
                         <div class="step-number">5</div>
-                        <div class="step-label">Speaking Practice </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">6</div>
-                        <div class="step-label">Shadowing </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">7</div>
-                        <div class="step-label">Review & Practice</div>
+                        <div class="step-label">Practice & Improve</div>
                     </div>
                 </div>
             </div>
@@ -98,12 +89,12 @@
         <div class="pronunciation-container">
             <!-- Lesson Header -->
             <div class="lesson-header">
-                <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
+                <h2 class="lesson-title">@ViewBag.Lesson.SituationName</h2>
                 
             </div>
 
             <div class="words-container">
-                @foreach (var word in Model.Words)
+                @foreach (var word in ViewBag.Words)
                 {
                     <div class="word-item mb-4" data-word="@word.Word" data-phonetic="@word.Phonetic" style="display: none;">
                         <!-- Word Card -->
@@ -151,23 +142,53 @@
                         <i class="fas fa-chevron-left"></i> Previous
                     </button>
                     <div class="word-counter">
-                        Word <span id="currentWordIndex">1</span> / <span id="totalWords">@Model.Words.Count()</span>
+                        Word <span id="currentWordIndex">1</span> / <span id="totalWords">@ViewBag.Words.Count</span>
                     </div>
                     <button class="nav-btn next" onclick="nextWord()" id="nextWordBtn">
                         Next <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
             </div>
-
+            <!-- Simple MCQ Question -->
+            <div class="mcq-section">
+                <div class="mcq-container">
+                    <h3><i class="fas fa-question-circle"></i> Quick Check</h3>
+                    <p class="mcq-question">Based on the pronunciation practice, what do you think this lesson will be about?</p>
+                    <div class="mcq-options">
+                        <div class="mcq-option" data-correct="true">
+                            <input type="radio" name="mcq" id="option1" value="1">
+                            <label for="option1">Daily conversation</label>
+                        </div>
+                        <div class="mcq-option" data-correct="false">
+                            <input type="radio" name="mcq" id="option2" value="2">
+                            <label for="option2">Business meeting</label>
+                        </div>
+                        <div class="mcq-option" data-correct="false">
+                            <input type="radio" name="mcq" id="option3" value="3">
+                            <label for="option3">Travel planning</label>
+                        </div>
+                        <div class="mcq-option" data-correct="false">
+                            <input type="radio" name="mcq" id="option4" value="4">
+                            <label for="option4">Academic discussion</label>
+                        </div>
+                    </div>
+                    <div class="mcq-feedback" style="display: none;">
+                        <div class="feedback-message"></div>
+                    </div>
+                    <p class="mcq-note"><i class="fas fa-info-circle"></i> This is just to activate your listening thinking - no score will be recorded.</p>
+                </div>
+            </div>
             <!-- Bottom Navigation -->
             <div class="bottom-navigation">
                 <a href="/Mentee/Listening" class="action-btn back">
                     <i class="fas fa-arrow-left"></i> Back to Lessons
                 </a>
-                <a href="@Url.Action("Step2", "Lesson", new { id = Model.Lesson.SituatuonId })" class="action-btn next">
+                <a href="@Url.Action("Step2", "Lesson", new { id = ViewBag.Lesson.SituatuonId })" class="action-btn next">
                     Continue <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
+
+            
         </div>
     </div>
 </div>
@@ -409,7 +430,7 @@
     }
 
     .progress-fill {
-        width: 14.28%; /* 1/7 of the total width */
+        width: 20%; /* 1/5 of the total width */
         height: 100%;
         background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
         border-radius: 2px;
@@ -460,6 +481,112 @@
         text-align: center;
         white-space: nowrap;
     }
+
+    /* MCQ Section Styles */
+    .mcq-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 15px;
+        border-left: 4px solid #ff9838;
+    }
+
+    .mcq-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .mcq-container h3 {
+        color: #ff9838;
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+    }
+
+    .mcq-question {
+        font-size: 1.1rem;
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    .mcq-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .mcq-option {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem;
+        background: white;
+        border-radius: 8px;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .mcq-option:hover {
+        border-color: #ff9838;
+        background: #fff1e6;
+    }
+
+    .mcq-option input[type="radio"] {
+        margin-right: 0.8rem;
+        transform: scale(1.2);
+    }
+
+    .mcq-option label {
+        cursor: pointer;
+        font-size: 1rem;
+        color: #2c3e50;
+        flex: 1;
+    }
+
+    .mcq-note {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        font-style: italic;
+        margin: 0;
+    }
+
+    .mcq-feedback {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .feedback-message {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    .feedback-message.correct {
+        color: #28a745;
+    }
+
+    .feedback-message.incorrect {
+        color: #dc3545;
+    }
+
+    .mcq-option.correct-answer {
+        background: #d4edda !important;
+        border-color: #28a745 !important;
+        color: #155724;
+    }
+
+    .mcq-option.incorrect-answer {
+        background: #f8d7da !important;
+        border-color: #dc3545 !important;
+        color: #721c24;
+    }
+
+    .mcq-option input[type="radio"]:disabled + label {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
 </style>
 
 @section Scripts {
@@ -476,6 +603,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             showWord(0);
             loadAllAudio();
+            initializeMCQ();
 
             // Add event listener for Back to Lessons button
             document.querySelector('.action-btn.back').addEventListener('click', function(e) {
@@ -488,6 +616,46 @@
                 window.location.href = '/Mentee/Listening';
             });
         });
+
+        function initializeMCQ() {
+            const mcqOptions = document.querySelectorAll('.mcq-option input[type="radio"]');
+            mcqOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    showMCQFeedback(this);
+                });
+            });
+        }
+
+        function showMCQFeedback(selectedOption) {
+            const mcqOption = selectedOption.closest('.mcq-option');
+            const isCorrect = mcqOption.dataset.correct === 'true';
+            const feedbackDiv = document.querySelector('.mcq-feedback');
+            const feedbackMessage = feedbackDiv.querySelector('.feedback-message');
+            
+            // Remove previous feedback styling
+            document.querySelectorAll('.mcq-option').forEach(option => {
+                option.classList.remove('correct-answer', 'incorrect-answer');
+            });
+            
+            // Add feedback styling
+            if (isCorrect) {
+                mcqOption.classList.add('correct-answer');
+                feedbackMessage.innerHTML = '<i class="fas fa-check-circle"></i> Correct! This lesson will focus on daily conversation topics.';
+                feedbackMessage.className = 'feedback-message correct';
+            } else {
+                mcqOption.classList.add('incorrect-answer');
+                feedbackMessage.innerHTML = '<i class="fas fa-times-circle"></i> Not quite right. The correct answer is "Daily conversation".';
+                feedbackMessage.className = 'feedback-message incorrect';
+            }
+            
+            // Show feedback
+            feedbackDiv.style.display = 'block';
+            
+            // Disable all options after selection
+            document.querySelectorAll('.mcq-option input[type="radio"]').forEach(option => {
+                option.disabled = true;
+            });
+        }
 
         function showWord(index) {
             // Hide all words

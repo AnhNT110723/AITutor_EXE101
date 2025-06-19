@@ -1,8 +1,7 @@
 ﻿@using Newtonsoft.Json
-@model EXE_FAIEnglishTutor.Controllers.Lesson.LessonViewModel
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
-    ViewData["Title"] = $"Step 2 - {Model.Lesson.SituationName}";
+    ViewData["Title"] = $"Step 2 - {ViewBag.Lesson.SituationName}";
 }
 
 <div id="content" class="p-4 p-md-5 home">
@@ -61,12 +60,12 @@
         <div class="lesson-progress">
             <div class="progress-container">
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 28.56%"></div>
+                    <div class="progress-fill" style="width: 50%"></div>
                 </div>
                 <div class="progress-steps">
                     <div class="step active">
                         <div class="step-number">1</div>
-                        <div class="step-label">Pronunciation</div>
+                        <div class="step-label">Pronunciation Preview</div>
                     </div>
                     <div class="step active">
                         <div class="step-number">2</div>
@@ -74,23 +73,15 @@
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <div class="step-label">Second Listening</div>
+                        <div class="step-label">Dictation Practice</div>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
-                        <div class="step-label">Check Understanding</div>
+                        <div class="step-label">Check & Compare</div>
                     </div>
                     <div class="step">
                         <div class="step-number">5</div>
-                        <div class="step-label">Speaking Practice</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">6</div>
-                        <div class="step-label">Shadowing</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">7</div>
-                        <div class="step-label">Review & Practice</div>
+                        <div class="step-label">Practice & Improve</div>
                     </div>
                 </div>
             </div>
@@ -99,7 +90,7 @@
         <div class="listening-container">
             <!-- Lesson Header -->
             <div class="lesson-header">
-                <h2 class="lesson-title">@Model.Lesson.SituationName</h2>
+                <h2 class="lesson-title">@ViewBag.Lesson.SituationName</h2>
             
             </div>
 
@@ -134,67 +125,130 @@
                 </div>
             </div>
 
-            <!-- Quiz Section -->
-            <div class="quiz-section" style="display: none;">
-            <h3><i class="fas fa-question-circle"></i> Comprehension Check</h3>
-            <div class="quiz-container">
-                @if (Model.Questions != null)
-                {
-                    var displayQuestions = Model.Questions.Take(2).ToList();
-                    for (int i = 0; i < displayQuestions.Count; i++)
-                    {
-                        var question = displayQuestions[i];
-                        <div class="question-card">
-                        <p class="question-text">@(i + 1). @question.Question</p>
-                        <div class="options-container">
-                            @for (int j = 0; j < question.Options.Count; j++)
-                            {
-                            <div class="option">
-                                <input type="radio" id="q@(i)_@(j)" name="question@(i)" value="@question.Options[j]">
-                                <label for="q@(i)_@(j)">@question.Options[j]</label>
-                            </div>
-                            }
-                        </div>
-                        <div class="feedback" style="display: none;">
-                            <div class="correct-feedback">
-                            <i class="fas fa-check-circle"></i> Correct!
-                            </div>
-                            <div class="incorrect-feedback">
-                            <i class="fas fa-times-circle"></i> Incorrect. The correct answer is: <span class="correct-answer"></span>
-                            </div>
-                        </div>
-                        </div>
-                    }
-                    <button id="submitQuiz" class="btn-primary">Check Answers</button>
+            <!-- Simple MCQ Question -->
+            <div class="mcq-section">
+                <div class="mcq-container">
+                    <h3><i class="fas fa-headphones"></i> Listening Comprehension Test</h3>
+                    <p class="mcq-question">Listen to the audio and answer the following questions:</p>
                     
-                    <div id="scoreSummary" class="score-summary" style="display: none;">
-                        <h4><i class="fas fa-star"></i> Your Results <i class="fas fa-star"></i></h4>
-                        <div class="score-details">
-                        <div class="total-score">
-                            Score: <span id="totalScore">0</span>/<span id="totalQuestions">2</span>
-                        </div>
-                        <div class="score-percentage">
-                            (<span id="scorePercentage">0</span>%)
-                        </div>
-                        <div class="feedback-message">
-                            <p id="feedbackMessage"></p>
-                        </div>
+                    <!-- Question 1 -->
+                    <div class="question-item">
+                        <h4>Question 1: What is the main topic of this audio?</h4>
+                        <div class="mcq-options">
+                            <div class="mcq-option" data-correct="true" data-question="1">
+                                <input type="radio" name="q1" id="q1_1" value="1">
+                                <label for="q1_1">Daily conversation</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="1">
+                                <input type="radio" name="q1" id="q1_2" value="2">
+                                <label for="q1_2">Business meeting</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="1">
+                                <input type="radio" name="q1" id="q1_3" value="3">
+                                <label for="q1_3">Travel planning</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="1">
+                                <input type="radio" name="q1" id="q1_4" value="4">
+                                <label for="q1_4">Academic discussion</label>
+                            </div>
                         </div>
                     </div>
-                }
-            </div>
+
+                    <!-- Question 2 -->
+                    <div class="question-item">
+                        <h4>Question 2: How many people are speaking in the conversation?</h4>
+                        <div class="mcq-options">
+                            <div class="mcq-option" data-correct="false" data-question="2">
+                                <input type="radio" name="q2" id="q2_1" value="1">
+                                <label for="q2_1">One person</label>
+                            </div>
+                            <div class="mcq-option" data-correct="true" data-question="2">
+                                <input type="radio" name="q2" id="q2_2" value="2">
+                                <label for="q2_2">Two people</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="2">
+                                <input type="radio" name="q2" id="q2_3" value="3">
+                                <label for="q2_3">Three people</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="2">
+                                <input type="radio" name="q2" id="q2_4" value="4">
+                                <label for="q2_4">Four people</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="question-item">
+                        <h4>Question 3: What is the tone of the conversation?</h4>
+                        <div class="mcq-options">
+                            <div class="mcq-option" data-correct="false" data-question="3">
+                                <input type="radio" name="q3" id="q3_1" value="1">
+                                <label for="q3_1">Formal and serious</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="3">
+                                <input type="radio" name="q3" id="q3_2" value="2">
+                                <label for="q3_2">Angry and confrontational</label>
+                            </div>
+                            <div class="mcq-option" data-correct="true" data-question="3">
+                                <input type="radio" name="q3" id="q3_3" value="3">
+                                <label for="q3_3">Casual and friendly</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="3">
+                                <input type="radio" name="q3" id="q3_4" value="4">
+                                <label for="q3_4">Professional and distant</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="question-item">
+                        <h4>Question 4: What is the main purpose of this conversation?</h4>
+                        <div class="mcq-options">
+                            <div class="mcq-option" data-correct="false" data-question="4">
+                                <input type="radio" name="q4" id="q4_1" value="1">
+                                <label for="q4_1">To make a business deal</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="4">
+                                <input type="radio" name="q4" id="q4_2" value="2">
+                                <label for="q4_2">To plan a vacation</label>
+                            </div>
+                            <div class="mcq-option" data-correct="false" data-question="4">
+                                <input type="radio" name="q4" id="q4_3" value="3">
+                                <label for="q4_3">To discuss academic topics</label>
+                            </div>
+                            <div class="mcq-option" data-correct="true" data-question="4">
+                                <input type="radio" name="q4" id="q4_4" value="4">
+                                <label for="q4_4">To have a casual chat</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mcq-actions">
+                        <button id="checkAnswers" class="btn-primary">
+                            <i class="fas fa-check"></i> Check Answers
+                        </button>
+                        <button id="showResults" class="btn-secondary" style="display: none;">
+                            <i class="fas fa-chart-bar"></i> Show Results
+                        </button>
+                    </div>
+
+                    <div class="mcq-feedback" style="display: none;">
+                        <div class="feedback-summary"></div>
+                        <div class="question-feedback"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Navigation -->
             <div class="bottom-navigation">
-                <a href="@Url.Action("Step1", "Lesson", new { id = Model.Lesson.SituatuonId })" class="nav-btn prev">
+                <a href="@Url.Action("Step1", "Lesson", new { id = ViewBag.Lesson.SituatuonId })" class="nav-btn prev">
                     <i class="fas fa-arrow-left"></i> Previous
                 </a>
                 <form id="nextStepForm" method="post" action="@Url.Action("Step3", "Lesson")" style="display: inline;">
-                    <input type="hidden" name="id" value="@Model.Lesson.SituatuonId" />
-                    <input type="hidden" name="script" value="@Model.Script" />
-                    <input type="hidden" name="audioData" value="@Model.AudioData" />
-                    <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(Model.Questions ?? new List<IeltsQuestion>())" />
+                    <input type="hidden" name="id" value="@ViewBag.Lesson.SituatuonId" />
+                    <input type="hidden" name="script" value="@ViewBag.Script" />
+                    <input type="hidden" name="audioData" value="@ViewBag.AudioData" />
+                    <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(ViewBag.Questions ?? new List<IeltsQuestion>())" />
                     <button type="submit" class="nav-btn next">
                         Next <i class="fas fa-arrow-right"></i>
                     </button>
@@ -362,7 +416,7 @@
     }
 
     .progress-fill {
-        width: 14.28%; /* 1/7 of the total width */
+        width: 40%; /* 2/5 of the total width */
         height: 100%;
         background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
         border-radius: 2px;
@@ -562,8 +616,186 @@
         }
 
         .nav-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* MCQ Section Styles */
+        .mcq-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .mcq-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .mcq-container h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .mcq-question {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .question-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .question-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .mcq-option:hover {
+            border-color: var(--primary-color);
+            background: #fff1e6;
+        }
+
+        .mcq-option input[type="radio"] {
+            margin-right: 0.8rem;
+            transform: scale(1.2);
+        }
+
+        .mcq-option label {
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-dark);
+            flex: 1;
+        }
+
+        .mcq-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background: var(--text-light);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #6c757d;
+            transform: translateY(-2px);
+        }
+
+        .mcq-feedback {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 10px;
+            background: white;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .feedback-summary {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .feedback-summary h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .question-feedback {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .question-result {
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .question-result.correct {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .question-result.incorrect {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .question-result h5 {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .question-result.correct h5 {
+            color: #155724;
+        }
+
+        .question-result.incorrect h5 {
+            color: #721c24;
+        }
+
+        .mcq-option.correct-answer {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724;
+        }
+
+        .mcq-option.incorrect-answer {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24;
+        }
+
+        .mcq-option input[type="radio"]:disabled + label {
+            cursor: not-allowed;
+            opacity: 0.7;
         }
     </style>
 
@@ -578,20 +810,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeAudio();
             loadListeningAudio();
-            document.querySelector('.quiz-section').style.display = 'block';
-
-            // Add this: Load saved state if exists
-            const savedState = localStorage.getItem('lessonState');
-            if (savedState) {
-                const state = JSON.parse(savedState);
-                if (state.lessonId === @Model.Lesson.SituatuonId && state.step === 2) {
-                    // Disable submit button if quiz was completed
-                    if (state.completed) {
-                        document.getElementById('submitQuiz').disabled = true;
-                        document.getElementById('scoreSummary').style.display = 'block';
-                    }
-                }
-            }
+            initializeMCQ();
         });
 
         function initializeAudio() {
@@ -624,7 +843,7 @@
 
         async function loadListeningAudio() {
             try {
-                const audioData = @Html.Raw(Json.Serialize(Model.AudioData));
+                const audioData = @Html.Raw(Json.Serialize(ViewBag.AudioData));
                 if (!audioData) {
                     throw new Error('Audio data is not available');
                 }
@@ -685,79 +904,102 @@
             return `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
 
-        // Quiz handling
-        document.getElementById('submitQuiz')?.addEventListener('click', function() {
-            const questions = @Html.Raw(Json.Serialize(Model.Questions.Take(2)));
-            let score = 0;
-            const totalQuestions = 2;
+        function initializeMCQ() {
+            // Add event listeners for check answers button
+            document.getElementById('checkAnswers').addEventListener('click', checkAllAnswers);
+            document.getElementById('showResults').addEventListener('click', showDetailedResults);
+        }
 
-            questions.forEach((question, index) => {
-                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`)?.value;
-                const questionCard = document.querySelectorAll('.question-card')[index];
-                const feedback = questionCard.querySelector('.feedback');
-                const correctFeedback = questionCard.querySelector('.correct-feedback');
-                const incorrectFeedback = questionCard.querySelector('.incorrect-feedback');
+        function checkAllAnswers() {
+            const questions = [1, 2, 3, 4];
+            let correctAnswers = 0;
+            let totalQuestions = questions.length;
+            let questionResults = [];
 
-                feedback.style.display = 'block';
-                if (selectedOption === question.answer) {
-                    score++;
-                    correctFeedback.style.display = 'block';
-                    incorrectFeedback.style.display = 'none';
+            questions.forEach(questionNum => {
+                const selectedOption = document.querySelector(`input[name="q${questionNum}"]:checked`);
+                const questionItem = document.querySelector(`[data-question="${questionNum}"]`).closest('.question-item');
+                
+                if (selectedOption) {
+                    const mcqOption = selectedOption.closest('.mcq-option');
+                    const isCorrect = mcqOption.dataset.correct === 'true';
+                    
+                    if (isCorrect) {
+                        correctAnswers++;
+                        mcqOption.classList.add('correct-answer');
+                        questionResults.push({
+                            question: questionNum,
+                            correct: true,
+                            message: `Question ${questionNum}: Correct!`
+                        });
+                    } else {
+                        mcqOption.classList.add('incorrect-answer');
+                        // Highlight correct answer
+                        const correctOption = questionItem.querySelector('[data-correct="true"]');
+                        correctOption.classList.add('correct-answer');
+                        questionResults.push({
+                            question: questionNum,
+                            correct: false,
+                            message: `Question ${questionNum}: Incorrect. The correct answer is highlighted.`
+                        });
+                    }
+                    
+                    // Disable all options for this question
+                    questionItem.querySelectorAll('input[type="radio"]').forEach(option => {
+                        option.disabled = true;
+                    });
                 } else {
-                    correctFeedback.style.display = 'none';
-                    incorrectFeedback.style.display = 'block';
-                    questionCard.querySelector('.correct-answer').textContent = question.answer;
+                    questionResults.push({
+                        question: questionNum,
+                        correct: false,
+                        message: `Question ${questionNum}: No answer selected.`
+                    });
                 }
             });
 
-            // Calculate percentage
-            const percentage = Math.round((score / totalQuestions) * 100);
+            // Calculate score
+            const score = Math.round((correctAnswers / totalQuestions) * 100);
             
-            // Update score summary
-            document.getElementById('totalScore').textContent = score;
-            document.getElementById('totalQuestions').textContent = totalQuestions;
-            document.getElementById('scorePercentage').textContent = percentage;
+            // Show feedback
+            showFeedback(score, correctAnswers, totalQuestions, questionResults);
             
-            // Generate feedback message based on score
-            let feedbackMessage = '';
-            if (percentage === 100) {
-                feedbackMessage = '🎉 Perfect! Your listening comprehension is excellent!';
-            } else if (percentage >= 80) {
-                feedbackMessage = '👏 Great job! You have a strong understanding of the content.';
-            } else if (percentage >= 60) {
-                feedbackMessage = '👍 Good effort! Keep practicing to improve your listening skills.';
-            } else if (percentage >= 40) {
-                feedbackMessage = '💪 You\'re making progress! Try listening to the audio again and focus on the details.';
-            } else {
-                feedbackMessage = '📚 Keep practicing! Try listening to the audio multiple times and take notes.';
-            }
-            
-            document.getElementById('feedbackMessage').textContent = feedbackMessage;
-            document.getElementById('scoreSummary').style.display = 'block';
-            this.disabled = true;
+            // Disable check answers button and show results button
+            document.getElementById('checkAnswers').disabled = true;
+            document.getElementById('checkAnswers').style.opacity = '0.5';
+            document.getElementById('showResults').style.display = 'inline-block';
+        }
 
-            // Save state to localStorage
-            const lessonState = {
-                lessonId: @Model.Lesson.SituatuonId,
-                step: 2,
-                completed: true,
-                score: score,
-                percentage: percentage
-            };
-            localStorage.setItem('lessonState', JSON.stringify(lessonState));
-        });
+        function showFeedback(score, correct, total, questionResults) {
+            const feedbackDiv = document.querySelector('.mcq-feedback');
+            const summaryDiv = feedbackDiv.querySelector('.feedback-summary');
+            const questionFeedbackDiv = feedbackDiv.querySelector('.question-feedback');
+            
+            // Show summary
+            summaryDiv.innerHTML = `
+                <h4><i class="fas fa-chart-bar"></i> Test Results</h4>
+                <div class="score-display">${score}%</div>
+                <p>You got ${correct} out of ${total} questions correct.</p>
+            `;
+            
+            // Show individual question results
+            questionFeedbackDiv.innerHTML = '';
+            questionResults.forEach(result => {
+                const resultClass = result.correct ? 'correct' : 'incorrect';
+                const icon = result.correct ? 'fas fa-check-circle' : 'fas fa-times-circle';
+                
+                questionFeedbackDiv.innerHTML += `
+                    <div class="question-result ${resultClass}">
+                        <h5><i class="${icon}"></i> ${result.message}</h5>
+                    </div>
+                `;
+            });
+            
+            feedbackDiv.style.display = 'block';
+        }
 
-        document.getElementById('nextStep').addEventListener('click', function(e) {
-            e.preventDefault();
-            // Save all necessary data to localStorage before navigation
-            const lessonState = {
-                lessonId: @Model.Lesson.SituatuonId,
-                audioData: @Html.Raw(Json.Serialize(Model.AudioData)),
-                script: @Html.Raw(Json.Serialize(Model.Script)),
-                questions: @Html.Raw(Json.Serialize(Model.Questions))
-            };
-            localStorage.setItem('lessonState', JSON.stringify(lessonState));
-            window.location.href = this.href;
-        });
+        function showDetailedResults() {
+            // This function can be expanded to show more detailed analysis
+            alert('Detailed results analysis will be implemented here.');
+        }
     </script>
 }
