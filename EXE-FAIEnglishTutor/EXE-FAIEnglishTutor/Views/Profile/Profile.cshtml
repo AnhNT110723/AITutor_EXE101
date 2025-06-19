@@ -19,11 +19,13 @@
     <link rel="stylesheet" href="~/css/course-gen.css">
 
     <style>
-
+       
     </style>
 </head>
 
 <body>
+    <div id="google_translate_element"></div>
+
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar" class="active">
             <h1><a asp-controller="home" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
@@ -151,6 +153,8 @@
                     <div class="">
                         <h4 id="title">Thông tin tài khoản</h4>
                     </div>
+
+
                     <div>
                         <!-- Tạo dropdown tùy chỉnh -->
                         <div class="dropdown position-relative" style="width: 200px;">
@@ -172,15 +176,18 @@
                             </ul>
                         </div>
 
-
-
                     </div>
+
+
+
                 </div>
 
             </div>
             <div class="scrollContent">
+
                 <form>
                     <h5 id="accountRe">Tài khoản đăng ký</h5>
+
                     <div class="content-source">
                         <div class="container-fluid" style="height: auto;">
                             <div class="body-container">
@@ -372,6 +379,23 @@
         });
 
     </script>
+
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'vi',
+                includedLanguages: 'vi,en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+
 
 </body>
 

@@ -4,6 +4,35 @@
 
 @model ProfileDto
 
+<style>
+    /* Tùy chỉnh giao diện thô của Google Translate */
+    #google_translate_element {
+        display: inline-block;
+        border-radius: 8px;
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+
+    /* Ẩn logo Google nếu bạn muốn tối giản */
+    .goog-logo-link {
+        display: none !important;
+    }
+
+    /* Ẩn thông tin quyền và liên kết */
+    .goog-te-gadget span {
+        display: none;
+    }
+
+    /* Dropdown ngôn ngữ */
+    .goog-te-combo {
+        padding: 4px 8px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background-color: white;
+        color: #333;
+    }
+</style>
 
 <!-- Page Content  -->
 <div id="content" class="p-4 p-md-5">
@@ -19,6 +48,11 @@
                 <!-- <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
                     <i class="fa fa-arrow-left"></i> Back
                 </button> -->
+                 <div class="d-flex justify-content-end align-items-center">
+                    <div id="google_translate_element"></div>
+                </div>
+
+
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
                         data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +90,31 @@
                                             <a class="dropdown-item" asp-controller="Profile" asp-action="index">
                                                 <i class="bi bi-person-circle"></i> View Profile
                                             </a>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+
+
+                                        @if (User.IsInRole("admin")) @if (User.Identity.IsAuthenticated)
+                                            {
+
+
+                                                @if (User.IsInRole("admin"))
+                                                {
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
+                                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                                    </a>
+                                                }
+
+                                            }
+                                                {
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
+                                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                                    </a>
+                                                }
+
+                                            }
                                             <div class="dropdown-divider"></div>
                                             <a id="logout-link" class="dropdown-item text-danger" href="#">
                                                 <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
@@ -118,7 +177,7 @@
             </div>
             <div>
                 <!-- Tạo dropdown tùy chỉnh -->
-                <div class="dropdown position-relative" style="width: 200px;">
+               @*  <div class="dropdown position-relative" style="width: 200px;">
                     <button class="btn btn-light dropdown-toggle" type="button" style="width: 100%;"
                             id="languageDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                         <img src="~/Images/Co-Vietnam.png" alt="Flag" class="flag-icon" /> Tiếng Việt
@@ -135,9 +194,9 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div> *@
 
-
+               
 
             </div>
         </div>
@@ -667,4 +726,15 @@
 
 
     </script>
+
+    <script src="script.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en' },
+                'google_translate_element'
+            );
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 }

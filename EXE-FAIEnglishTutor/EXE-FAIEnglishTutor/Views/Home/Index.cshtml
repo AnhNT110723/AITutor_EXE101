@@ -139,7 +139,11 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex justify-content-end align-items-center">
+                <div id="google_translate_element"></div>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
                        @*  <li class="nav-item active">
                             <a class="nav-link" href="home.html">Home</a>
@@ -672,6 +676,39 @@
                 color: #ffd700; 
                 transform: scale(1.2); 
             }
+
+
+
+
+        /* Tùy chỉnh giao diện thô của Google Translate */
+        #google_translate_element {
+            display: inline-block;
+            border-radius: 8px;
+            padding: 4px 8px;
+            background-color: #f9f9f9;
+            font-size: 14px;
+        }
+
+        /* Ẩn logo Google nếu bạn muốn tối giản */
+        .goog-logo-link {
+            display: none !important;
+        }
+
+        /* Ẩn thông tin quyền và liên kết */
+        .goog-te-gadget span {
+            display: none;
+        }
+
+        /* Dropdown ngôn ngữ */
+        .goog-te-combo {
+            padding: 4px 8px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: #333;
+        }
+
     </style>
 
 
@@ -848,5 +885,19 @@
 
     </script>
 
+
+    <script src="script.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en' },
+                'google_translate_element'
+            );
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 }
+
+
 
