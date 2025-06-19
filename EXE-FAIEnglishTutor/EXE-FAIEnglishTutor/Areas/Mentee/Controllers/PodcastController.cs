@@ -20,35 +20,49 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         {
             try
             {
-                var podcasts = await _podcastService.GetPostCard() ?? new List<Podcast>();
+                var podcasts = await _podcastService.GetPostCard();
                 ViewBag.Topics = podcasts.Select(p => p.Topic).Distinct().ToList();
 
                 // Lọc theo chủ đề nếu có
                 if (!string.IsNullOrEmpty(topic))
                 {
-                    podcasts = podcasts.Where(p => p.Topic == topic).ToList();
+                    podcasts = podcasts.Where(p => p.Topic.Equals(topic)).ToList();
+                }
+                if (podcasts.Count() > 5)
+                {
+
+                    // Sắp xếp theo ngày giảm dần và tách podcast
+                    var orderedPodcasts = podcasts.OrderByDescending(p => p.CreatedAt).ToList();
+                    var newestPodcasts = orderedPodcasts.Take(2).ToList();
+                    var olderPodcasts = orderedPodcasts.Skip(2).ToList();
+
+                    // Phân trang cho các podcast cũ hơn
+                    var totalItems = olderPodcasts.Count;
+                    var totalPages = (int)Math.Ceiling(totalItems / 5.0);
+                    page = Math.Max(1, totalPages == 0 ? 1 : Math.Min(page, totalPages));
+                    var paginatedOlderPodcasts = olderPodcasts
+                        .Skip((page - 1) * 5)
+                        .Take(5)
+                        .ToList();
+
+                    // Truyền dữ liệu vào view
+                    ViewBag.NewestPodcasts = newestPodcasts;
+                    ViewBag.PaginatedOlderPodcasts = paginatedOlderPodcasts;
+                    ViewBag.CurrentPage = page;
+                    ViewBag.TotalPages = totalPages;
+                    ViewBag.CurrentTopic = topic;
+
+                }
+                else
+                {
+                    ViewBag.NewestPodcasts = podcasts;
+                    ViewBag.PaginatedOlderPodcasts = podcasts;
+                    ViewBag.CurrentPage = 1;
+                    ViewBag.TotalPages = 1;
+                    ViewBag.CurrentTopic = topic;
                 }
 
-                // Sắp xếp theo ngày giảm dần và tách podcast
-                var orderedPodcasts = podcasts.OrderByDescending(p => p.CreatedAt).ToList();
-                var newestPodcasts = orderedPodcasts.Take(2).ToList();
-                var olderPodcasts = orderedPodcasts.Skip(2).ToList();
 
-                // Phân trang cho các podcast cũ hơn
-                var totalItems = olderPodcasts.Count;
-                var totalPages = (int)Math.Ceiling(totalItems / 3.0); // PageSize = 3
-                page = Math.Max(1, totalPages == 0 ? 1 : Math.Min(page, totalPages));
-                var paginatedOlderPodcasts = olderPodcasts
-                    .Skip((page - 1) * 3)
-                    .Take(3)
-                    .ToList();
-
-                // Truyền dữ liệu vào view
-                ViewBag.NewestPodcasts = newestPodcasts;
-                ViewBag.PaginatedOlderPodcasts = paginatedOlderPodcasts;
-                ViewBag.CurrentPage = page;
-                ViewBag.TotalPages = totalPages;
-                ViewBag.CurrentTopic = topic;
 
                 return View("ListPodcasts", podcasts);
             }

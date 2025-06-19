@@ -512,6 +512,121 @@
                 /* Phóng to nhẹ khi hover */
                 transform: scale(1.05);
             }
+        /* Popup audio player bar bottom */
+        .podcast-popup-player {
+            display: none;
+            position: fixed;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #67334f 60%, #ad5973 100%);
+            color: #fff;
+            min-width: 340px;
+            max-width: 540px;
+            width: 90vw;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.2);
+            padding: 18px 28px 18px 24px;
+            z-index: 9999;
+            transition: bottom 0.22s, opacity 0.16s;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+            .podcast-popup-player.active {
+                display: flex;
+                opacity: 1;
+                pointer-events: all;
+                bottom: 28px;
+                animation: popupFadeIn 0.3s;
+            }
+
+        @@keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(60px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .podcast-popup-player .popup-close {
+            position: absolute;
+            top: 8px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: #fff;
+            opacity: 0.8;
+            cursor: pointer;
+            transition: color 0.18s;
+        }
+
+        .podcast-popup-player .popup-close:hover {
+            color: #ffd6de;
+        }
+
+        .podcast-popup-player .popup-title {
+            font-size: 1.12rem;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #fff;
+            text-shadow: 1px 1px 4px #2d1527b3;
+        }
+
+        .podcast-popup-player .popup-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .podcast-popup-player .popup-progress {
+            flex: 1;
+            margin: 0 18px;
+            accent-color: #fff3;
+        }
+
+        .podcast-popup-player .popup-time {
+            font-size: 0.98rem;
+            min-width: 58px;
+        }
+
+        .podcast-popup-player .popup-play {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+            .podcast-popup-player .popup-play:active {
+                color: #ffe66d;
+            }
+
+        .podcast-popup-player .popup-speed {
+            font-size: 1rem;
+            background: none;
+            border: none;
+            color: #ffd6de;
+            margin-left: 6px;
+            cursor: pointer;
+        }
+
+        @@media (max-width: 600px) {
+            .podcast-popup-player {
+                padding: 14px 8px 14px 12px;
+                min-width: 0;
+            }
+
+                .podcast-popup-player .popup-title {
+                    font-size: 0.98rem;
+                }
+        }
     </style>
 </head>
 
@@ -657,30 +772,26 @@
         }
 
         document.addEventListener('DOMContentLoaded', async function () {
-            const loader = document.getElementById('loader');
             const audioPlayer = document.getElementById('audioPlayer');
-            const audioSource = document.getElementById('audioSource');
-            const subtitleContainer = document.getElementById('subtitleContainer');
-            let podcasts = @Html.Raw(Json.Serialize(Model)); // Get podcasts from model
-            let currentPodcastIndex = 0;
-
-            // Setup initial audio event listeners
-            setupAudioEventListeners();
-
+            const popupAudio = window.popupAudio || new Audio();
+            window.popupAudio = popupAudio;
+            const podcastText = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Content));
+            const formData = new FormData();
+            formData.append('text', podcastText);
             try {
-                loader.style.display = 'flex';
-
-                if (podcasts && podcasts.length > 0) {
-                    // Update playlist
-                    updatePlaylist(podcasts);
-                    // Load first podcast
-                    await loadPodcast(0);
-                } else {
-                    throw new Error('No podcasts available');
-                }
-
-            } catch (error) {
-                subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải nội dung: ' + error.message + '</span>';
+                const response = await fetch('/api/audio/generate-english', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) throw new Error('Không lấy được audio');
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayer.src = audioUrl;
+                popupAudio.src = audioUrl;
+                // Hiện popup luôn sau khi load audio (có thể cho test)
+                // showPopupPlayer();
+            } catch (err) {
+                audioPlayer.outerHTML = '<div style="color:red;">Không thể phát audio: ' + err.message + '</div>';
             } finally {
                 loader.style.display = 'none';
             }
@@ -1046,6 +1157,128 @@
             }
         `;
         document.head.appendChild(style);
+    </script>
+
+    <div id="popupPlayer" class="podcast-popup-player">
+        <button class="popup-close" id="closePopupBtn" title="Đóng">&times;</button>
+        <div style="flex:1;">
+            <div class="popup-title">@Model.Title</div>
+            <div class="popup-controls">
+                <button class="popup-play" id="popupPlayBtn"><i class="fa fa-play"></i></button>
+                <span class="popup-time" id="popupCurTime">00:00</span>
+                <input type="range" class="popup-progress" id="popupProgress" min="0" max="100" value="0">
+                <span class="popup-time" id="popupDuration">00:00</span>
+                <button class="popup-speed" id="popupSpeedBtn">1x</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Popup player logic
+        let popupPlayer = document.getElementById('popupPlayer');
+        let popupPlayBtn = document.getElementById('popupPlayBtn');
+        let popupCurTime = document.getElementById('popupCurTime');
+        let popupDuration = document.getElementById('popupDuration');
+        let popupProgress = document.getElementById('popupProgress');
+        let popupSpeedBtn = document.getElementById('popupSpeedBtn');
+        let closePopupBtn = document.getElementById('closePopupBtn');
+
+        // Tạo audio ẩn dùng chung
+        let popupAudio = new Audio();
+        popupAudio.preload = "auto";
+        popupAudio.src = "";
+        popupAudio.volume = 1.0;
+        let popupAudioLoaded = false;
+
+        // Lấy link audio từ audioPlayer phía trên (nếu đã có) hoặc fetch lại
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lấy audio link từ player lớn (nếu đã load)
+            let audioPlayer = document.getElementById('audioPlayer');
+            if (audioPlayer && audioPlayer.src) popupAudio.src = audioPlayer.src;
+
+            // Tự động show player khi audio play hoặc scroll gần cuối trang
+            let showWhenScroll = false, userClosed = false;
+            window.addEventListener('scroll', function() {
+                if (userClosed) return;
+                if (window.scrollY > window.innerHeight / 2) {
+                    if (!showWhenScroll) { showPopupPlayer(); showWhenScroll = true; }
+                }
+            });
+
+            // Khi bấm play trên player lớn, kích hoạt popup nổi
+            if (audioPlayer) {
+                audioPlayer.addEventListener('play', function() {
+                    popupAudio.src = audioPlayer.src;
+                    showPopupPlayer();
+                    syncPopupWithAudio(audioPlayer);
+                });
+                audioPlayer.addEventListener('pause', function() { popupPlayBtn.querySelector('i').className = 'fa fa-play'; });
+            }
+        });
+
+        // Show popup
+        function showPopupPlayer() {
+            popupPlayer.classList.add('active');
+            popupPlayer.style.display = 'flex';
+            popupPlayer.style.opacity = '1';
+        }
+
+        // Đóng popup
+        closePopupBtn.onclick = function() {
+            popupPlayer.classList.remove('active');
+            popupPlayer.style.opacity = '0';
+            setTimeout(() => popupPlayer.style.display = 'none', 200);
+            userClosed = true;
+            popupAudio.pause();
+        };
+
+        // Play/Pause
+        popupPlayBtn.onclick = function() {
+            if (popupAudio.paused) { popupAudio.play(); }
+            else { popupAudio.pause(); }
+        };
+        popupAudio.onplay = function() { popupPlayBtn.querySelector('i').className = 'fa fa-pause'; }
+        popupAudio.onpause = function() { popupPlayBtn.querySelector('i').className = 'fa fa-play'; }
+
+        // Cập nhật progress/time
+        popupAudio.ontimeupdate = function() {
+            popupCurTime.textContent = formatTime(popupAudio.currentTime);
+            popupProgress.value = popupAudio.currentTime;
+        };
+        popupAudio.onloadedmetadata = function() {
+            popupDuration.textContent = formatTime(popupAudio.duration);
+            popupProgress.max = Math.floor(popupAudio.duration);
+        };
+        // Khi seek
+        popupProgress.oninput = function() {
+            popupAudio.currentTime = this.value;
+        };
+
+        // Đổi tốc độ phát
+        let speedArr = [1, 1.25, 1.5, 2];
+        let speedIdx = 0;
+        popupSpeedBtn.onclick = function() {
+            speedIdx = (speedIdx + 1) % speedArr.length;
+            popupAudio.playbackRate = speedArr[speedIdx];
+            popupSpeedBtn.textContent = speedArr[speedIdx] + "x";
+        };
+
+        // Định dạng phút:giây
+        function formatTime(sec) {
+            if (!sec || isNaN(sec)) return "00:00";
+            let m = Math.floor(sec/60), s = Math.floor(sec%60);
+            return (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+        }
+
+        // Đồng bộ popup với player lớn
+        function syncPopupWithAudio(mainAudio) {
+            // Khi play trên popup, pause ở main (và ngược lại)
+            popupPlayBtn.onclick = function() {
+                if (popupAudio.paused) { popupAudio.play(); mainAudio.pause(); }
+                else { popupAudio.pause(); }
+            };
+            mainAudio.addEventListener('play', ()=>{ popupAudio.pause(); });
+        }
+
     </script>
 </body>
 </html>

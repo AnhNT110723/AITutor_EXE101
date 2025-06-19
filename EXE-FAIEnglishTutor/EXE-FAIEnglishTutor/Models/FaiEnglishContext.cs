@@ -59,9 +59,9 @@ public partial class FaiEnglishContext : DbContext
 
     public virtual DbSet<VerificationToken> VerificationTokens { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-RIM8CPH;Database=FAI_ENGLISH;User Id=chung;Password=123;TrustServerCertificate=True;");
+//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+//        => optionsBuilder.UseSqlServer("Server=DESKTOP-RIM8CPH;Database=FAI_ENGLISH;User Id=chung;Password=123;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -234,7 +234,7 @@ public partial class FaiEnglishContext : DbContext
             entity.Property(e => e.PaymentDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.Status).IsRequired();
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Course).WithMany(p => p.Payments)
@@ -250,18 +250,19 @@ public partial class FaiEnglishContext : DbContext
 
         modelBuilder.Entity<Podcast>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Podcasts__3214EC07F341D918");
+            entity.HasKey(e => e.Id).HasName("PK__Podcast__3214EC07E01998AB");
 
+            entity.ToTable("Podcast");
+
+            entity.Property(e => e.Content).IsRequired();
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-            entity.Property(e => e.ImageUrl).HasMaxLength(255);
-            entity.Property(e => e.Title).HasMaxLength(255);
+            entity.Property(e => e.ImageUrl).HasMaxLength(500);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(255);
             entity.Property(e => e.Topic).HasMaxLength(100);
-            entity.Property(e => e.UserId).HasColumnName("UserID");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Podcasts)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_Podcasts_Users");
         });
+
 
         modelBuilder.Entity<Progress>(entity =>
         {

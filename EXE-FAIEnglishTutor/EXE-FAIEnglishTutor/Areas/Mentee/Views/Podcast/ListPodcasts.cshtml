@@ -2,477 +2,433 @@
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
-<!-- Page Content -->
-<div id="content" class="p-4 p-md-5">
-    <div class="sticky-wrapper sticky-wrapper-list-courses">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom">
-                    <i class="fa fa-bars"></i>
-                    <span class="sr-only">Toggle Menu</span>
-                </button>
-                <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
-                    <i class="fa fa-arrow-left"></i> Back
-                </button>
-                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
-                        data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fa fa-bars"></i>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="nav navbar-nav ml-auto">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            var fullName = User.Identity.Name;
-                            var avatarUrl = User.FindFirst("Avatar")?.Value;
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="nav-img">
-                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                    </div>
-                                </a>
-                                <div class="menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                    <div class="menu-title">
-                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                        <i class="bi bi-person-circle"></i> View Profile
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                    </a>
-                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <a class="btn-login-custom btn" asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Nội dung podcast -->
-        <div class="container-fluid mt-4 podcast-container">
-            <!-- Horizontal topic navigation -->
-            <ul class="nav nav-pills mb-4">
-                <li class="nav-item">
-                    <a class="nav-link podcast-nav-link @(string.IsNullOrEmpty(ViewBag.CurrentTopic) ? "active" : "")"
-                       href="@Url.Action("Index")">All Topics</a>
-                </li>
-                @foreach (var t in ViewBag.Topics)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link podcast-nav-link @(ViewBag.CurrentTopic == t ? "active" : "")"
-                           href="@Url.Action("Index", new { topic = t })">@t</a>
-                    </li>
-                }
-            </ul>
-
-            <!-- Hiển thị chủ đề -->
-            <h2 class="topic-title mb-4">@(ViewBag.CurrentTopic ?? "All Podcasts")</h2>
-
-            <!-- Hai podcast mới nhất -->
-            <div class="row gx-3 gy-3 mb-4">
-                @foreach (var podcast in ViewBag.NewestPodcasts)
-                {
-                    <div class="col-12 col-md-6">
-                        <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="text-decoration-none">
-                            <div class="card podcast-card podcast-card-large h-100">
-                                <div class="card-body">
-                                    <h3 class="card-title">@podcast.Title</h3>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-            </div>
-
-            <!-- Các podcast cũ hơn -->
-            <div class="row gx-3 gy-3">
-                @foreach (var podcast in ViewBag.PaginatedOlderPodcasts)
-                {
-                    <div class="col-12 col-md-4">
-                        <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="text-decoration-none">
-                            <div class="card podcast-card podcast-card-small h-100">
-                                <div class="card-body">
-                                    <h3 class="card-title">@podcast.Title</h3>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                }
-            </div>
-
-            <!-- Phân trang -->
-            @if (ViewBag.TotalPages > 1)
+<div class="vnx-podcast-page">
+    <nav class="vnx-podcast-topics">
+        <ul>
+            <li>
+                <a class="@(string.IsNullOrEmpty(ViewBag.CurrentTopic) ? "active" : "")"
+                   href="@Url.Action("Index")">Tất cả</a>
+            </li>
+            @foreach (var t in ViewBag.Topics)
             {
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                        {
-                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                                <a class="page-link" href="@Url.Action("Index", new { page = i, topic = ViewBag.CurrentTopic })">@i</a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
+                <li>
+                    <a class="@(ViewBag.CurrentTopic == t ? "active" : "")"
+                       href="@Url.Action("Index", new { topic = t })">@t</a>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <h1 class="vnx-podcast-title">Podcasts</h1>
+
+    @if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count == 5)
+    {
+        <!-- 2 cards to phía trên -->
+        <div class="vnx-row-bigpodcasts">
+            @for (int i = 0; i < 2; i++)
+            {
+                <div class="vnx-bigpodcast-card">
+                    <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                        <div class="vnx-podcast-thumb-big">
+                            <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                        </div>
+                        <div class="vnx-podcast-info">
+                            <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
+                            <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
+                            <div class="vnx-podcast-desc">@ViewBag.PaginatedOlderPodcasts[i].Content</div>
+                        </div>
+                    </a>
+                </div>
             }
         </div>
-
-        <style>
-            .podcast-container {
-                max-height: 600px;
-                overflow-y: auto;
-                overflow-x: hidden; /* chặn cuộn ngang */
-                padding: 0;
-                margin: 0 auto;
-                width: 100%; /* an toàn hơn 100vw */
+        <!-- 3 cards nhỏ phía dưới -->
+        <div class="vnx-row-smallpodcasts">
+            @for (int i = 2; i < 5; i++)
+            {
+                <div class="vnx-smallpodcast-card">
+                    <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                        <div class="vnx-podcast-thumb-small">
+                            <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                        </div>
+                        <div class="vnx-podcast-info">
+                            <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
+                            <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
+                        </div>
+                    </a>
+                </div>
             }
-
-
-
-        .podcast-card {
-            border: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-            margin: 0;
-        }
-
-        .podcast-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .podcast-card .card-title {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 0;
-        }
-
-        .podcast-card-large {
-            min-height: 140px;
-        }
-
-        .podcast-card-small {
-            min-height: 120px;
-        }
-
-        .row.gx-3 > [class^="col-"], .row.gy-3 > [class^="col-"] {
-            padding-left: 12px;
-            padding-right: 12px;
-            margin-bottom: 0;
-        }
-
-        @@media (max-width: 767.98px) {
-            .podcast-card-large, .podcast-card-small {
-                min-height: 100px;
+        </div>
+    }
+    else if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count > 0)
+    {
+        <div class="vnx-podcast-list">
+            @foreach (var podcast in ViewBag.PaginatedOlderPodcasts)
+            {
+                <div class="vnx-podcast-card">
+                    <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="vnx-podcast-link">
+                        <div class="vnx-podcast-thumb">
+                            <img src="@podcast.ImageUrl" alt="@podcast.Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                        </div>
+                        <div class="vnx-podcast-info">
+                            <div class="vnx-podcast-topic">@podcast.Topic</div>
+                            <div class="vnx-podcast-card-title">@podcast.Title</div>
+                            <div class="vnx-podcast-desc">@podcast.Content</div>
+                        </div>
+                    </a>
+                </div>
             }
-            .podcast-container {
-                max-height: 400px;
-            }
-        }
-        </style>
+        </div>
+    }
+    else
+    {
+        <div class="vnx-podcast-empty">Không có podcast nào để hiển thị!</div>
+    }
 
-        
-    </div>
+    <!-- Phân trang -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="vnx-podcast-pagination">
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&laquo;</a>
+            }
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <a href="@Url.Action("Index", new { page = i, topic = ViewBag.CurrentTopic })"
+                   class="vnx-podcast-pageitem @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+            }
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&raquo;</a>
+            }
+        </div>
+    }
 </div>
-@section Scripts {
 
+@section Styles {
     <style>
-        .head-info {
-            background-color: #fff;
-            border-radius: 12px;
+        .vnx-podcast-page {
+            background: #e9eef4;
+            min-height: 100vh;
+            padding: 24px 0 32px 0;
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-
-        .input-group .form-control {
-            border-right: none;
+        .vnx-podcast-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #222;
+            margin: 18px 0 28px 32px;
+            letter-spacing: -1.5px;
         }
 
-        .input-group .btn {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-
-        .vertical-divider {
-            width: 1px;
-            height: 24px;
-            background-color: #ccc;
-        }
-
-        .no-border {
-            border: none !important;
-            box-shadow: none;
-        }
-
-            .no-border:focus {
-                outline: none;
-                box-shadow: none;
-            }
-
-
-        .search-group .form-control {
-            background-color: transparent;
-        }
-
-        .dropdown-btn {
-            text-align: start;
+        .vnx-podcast-topics {
+            border-bottom: 1.5px solid #e9e9e9;
+            margin-bottom: 2px;
+            padding-left: 30px;
             background: #fff;
-            border: none;
-            z-index: 1 !important;
-            margin-bottom: 3px;
-            margin-top: -10px;
-            position: unset;
+            position: sticky;
+            top: 0;
+            z-index: 9;
         }
 
-            .dropdown-btn:hover {
-                background: #fff !important;
-                border: none;
+            .vnx-podcast-topics ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                gap: 28px;
             }
 
-            .dropdown-btn:focus {
-                background: #fff !important;
-                border: none;
+            .vnx-podcast-topics li {
+                display: inline-block;
             }
 
-        .text-level {
-            position: relative;
-            width: 100%;
-            z-index: 2 !important;
-            font-size: 13px;
-            font-weight: bolder;
-            margin: 10px 0 -0px 10px;
-            cursor: pointer;
-        }
+            .vnx-podcast-topics a {
+                text-decoration: none;
+                font-size: 1.12rem;
+                color: #444;
+                font-weight: 500;
+                padding: 12px 0 8px 0;
+                display: inline-block;
+                transition: color 0.17s;
+                border-bottom: 2px solid transparent;
+            }
 
+                .vnx-podcast-topics a.active,
+                .vnx-podcast-topics a:hover {
+                    color: #c1172c;
+                    border-bottom: 2.5px solid #c1172c;
+                    background: none;
+                }
 
-        .list-courses .container-fluid {
+        /* ----- CUSTOM LAYOUT 2 TO + 3 NHỎ ------- */
+        .vnx-row-bigpodcasts {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            /* justify-content: space-between; /* Căn chỉnh khoảng cách giữa các phần tử */ */ padding: 0 !important;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 22px;
+            margin-bottom: 18px;
         }
 
-        @@media (max-width: 768px) {
-            .list-courses .container-fluid {
-                margin-top: 42px !important;
-            }
-        }
-
-        @@media (max-width: 991px) {
-            .list-courses .container-fluid {
-                margin-top: 20px;
-            }
-        }
-
-        .list-courses .card {
-            width: 100% !important;
-            height: 270px;
-        }
-
-        .list-courses .course {
-            flex: 1 1 calc(20% - 10px);
-            /* Chiều rộng mỗi phần tử chiếm 20% trừ đi khoảng cách */
-            max-width: calc(20% - 10px);
-            /* Đảm bảo không vượt quá 20% */
-            box-sizing: border-box;
-            /* Đảm bảo padding không làm tăng kích thước */
-        }
-
-        .sticky-wrapper-list-courses {
-            height: 200px;
-        }
-
-        @@media (max-width: 1200px) {
-            .list-courses .course {
-                flex: 1 1 calc(25% - 10px);
-                /* Chiều rộng 4 cột */
-                max-width: calc(25% - 10px);
-            }
-        }
-
-        @@media (max-width: 900px) {
-            .list-courses .course {
-                flex: 1 1 calc(33.33% - 10px);
-                /* Chiều rộng 3 cột */
-                max-width: calc(33.33% - 10px);
-            }
-        }
-
-        @@media (max-width: 600px) {
-            .list-courses .course {
-                flex: 1 1 calc(50% - 10px);
-                /* Chiều rộng 2 cột */
-                max-width: calc(50% - 10px);
-            }
-
-            .level-container {
-                width: 40%;
-            }
-        }
-
-        @@media (max-width: 400px) {
-            .list-courses .course {
-                flex: 1 1 100%;
-                /* Chiều rộng 1 cột */
-                max-width: 100%;
-            }
-        }
-
-        .btn-create-situation {
+        .vnx-bigpodcast-card {
             background: #fff;
-            margin: 0 20px 10px 20px;
-            border-radius: 8px;
-            padding: 8px 10px;
+            border-radius: 18px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+            min-width: 330px;
+            max-width: 420px;
+            width: 36vw;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.18s, transform 0.13s;
+            overflow: hidden;
+        }
+
+            .vnx-bigpodcast-card:hover {
+                box-shadow: 0 10px 32px rgba(193,23,44,0.13);
+                transform: translateY(-5px) scale(1.018);
+                z-index: 1;
+            }
+
+        .vnx-podcast-thumb-big {
+            width: 100%;
+            height: 120px;
+            background: #f7f7f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .vnx-podcast-thumb-big img {
+                max-width: 95%;
+                max-height: 110px;
+                object-fit: cover;
+                border-radius: 10px;
+                display: block;
+            }
+
+        .vnx-row-smallpodcasts {
+            display: flex;
+            gap: 22px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .vnx-smallpodcast-card {
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            min-width: 180px;
+            max-width: 240px;
+            width: 18vw;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.17s, transform 0.12s;
+            overflow: hidden;
+        }
+
+            .vnx-smallpodcast-card:hover {
+                box-shadow: 0 8px 22px rgba(193,23,44,0.12);
+                transform: translateY(-4px) scale(1.01);
+                z-index: 1;
+            }
+
+        .vnx-podcast-thumb-small {
+            width: 100%;
+            height: 70px;
+            background: #f7f7f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .vnx-podcast-thumb-small img {
+                max-width: 90%;
+                max-height: 62px;
+                object-fit: cover;
+                border-radius: 8px;
+                display: block;
+            }
+        /* Thông tin bên trong card */
+        .vnx-podcast-info {
+            padding: 12px 16px 10px 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 0;
+        }
+
+        .vnx-podcast-card-title {
+            font-size: 1.12rem;
             font-weight: bold;
+            color: #2c2c2c;
+            margin-bottom: 7px;
+            margin-top: 1px;
+            line-height: 1.25;
+            word-break: break-word;
         }
 
-        .btn-save-crate-situation {
-            padding-left: 70px;
-            padding-right: 70px;
-            background: orangered;
-            color: #fff;
-            border-radius: 10px;
-            font-weight: 500;
+        .vnx-podcast-desc {
+            font-size: 1.01rem;
+            color: #373737;
+            margin-bottom: 10px;
+            max-height: 2.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-            .btn-save-crate-situation:hover {
-                background: orange;
+        .vnx-podcast-topic {
+            font-size: 0.99rem;
+            color: #7b7b7b;
+            margin-bottom: 3px;
+            font-style: italic;
+        }
+
+        /* Default grid (dùng cho các trường hợp còn lại) */
+        .vnx-podcast-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+            gap: 36px 36px;
+            margin: 0 auto;
+            padding: 12px 42px 0 42px;
+            max-width: 1440px;
+        }
+
+        .vnx-podcast-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+            transition: box-shadow 0.21s, transform 0.17s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 245px;
+        }
+
+            .vnx-podcast-card:hover {
+                box-shadow: 0 10px 32px rgba(193,23,44,0.18);
+                transform: translateY(-4px) scale(1.018);
+                z-index: 1;
+            }
+
+        .vnx-podcast-thumb {
+            width: 100%;
+            height: 120px;
+            background: #f7f7f7;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .vnx-podcast-thumb img {
+                max-width: 100%;
+                max-height: 110px;
+                object-fit: cover;
+                border-radius: 10px;
+                display: block;
+            }
+
+        /* Empty */
+        .vnx-podcast-empty {
+            text-align: center;
+            color: #c1172c;
+            font-size: 1.14rem;
+            margin: 24px 0;
+        }
+
+        /* Pagination style */
+        .vnx-podcast-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 36px 0 0 0;
+        }
+
+        .vnx-podcast-pageitem {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            color: #c1172c;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.13rem;
+            text-decoration: none;
+            border: none;
+            transition: background 0.14s, color 0.14s;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+        }
+
+            .vnx-podcast-pageitem.active,
+            .vnx-podcast-pageitem:hover {
+                background: #c1172c;
                 color: #fff;
             }
 
-        .form-label {
-            font-weight: bolder;
+        /* Responsive */
+        @@media (max-width: 1100px) {
+            .vnx-row-bigpodcasts
+
+        {
+            gap: 16px;
         }
 
-        .card-text {
-            justify-content: start !important;
+        .vnx-bigpodcast-card {
+            min-width: 235px;
+            max-width: 320px;
+            width: 46vw;
         }
 
+        .vnx-row-smallpodcasts {
+            gap: 11px;
+        }
+
+        .vnx-smallpodcast-card {
+            min-width: 110px;
+            max-width: 180px;
+            width: 24vw;
+        }
+
+        }
+        @@media (max-width: 700px) {
+            .vnx-row-bigpodcasts, .vnx-row-smallpodcasts
+
+        {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .vnx-bigpodcast-card, .vnx-smallpodcast-card {
+            width: 90vw;
+            min-width: 0;
+            max-width: 98vw;
+        }
+
+        }
     </style>
+}
 
+@section Scripts {
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const situationLinks = document.querySelectorAll(".situation-link");
-
-            situationLinks.forEach(link => {
-                link.addEventListener("click", function (e) {
-                    const requiresLogin = link.getAttribute("data-login") === "True";
-                    const redirectUrl = link.getAttribute("data-url");
-
-                    if (requiresLogin) {
-                        e.preventDefault();
-
-                        if (confirm(" You need to login to access this content.Do you want to login now ? ")) {
-                            window.location.href = "/Account/Login"; // hoặc route login thực tế của bạn
-                        }
-                    } else {
-                        // Người đã đăng nhập thì chuyển trang như bình thường
-                        window.location.href = redirectUrl;
-                    }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.podcast-play-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const icon = btn.querySelector('i');
+                    icon.style.transition = "transform 0.5s";
+                    icon.style.transform = "scale(1.3) rotate(360deg)";
+                    setTimeout(() => {
+                        icon.style.transform = "";
+                    }, 500);
                 });
             });
         });
-    </script>
-
-
-    <script>
-             let selectedCategory = "";
-
-             // Khi chọn category
-             document.querySelectorAll('.dropdown-item').forEach(item => {
-                 item.addEventListener('click', function (e) {
-                     e.preventDefault();
-                     selectedCategory = this.dataset.category;
-                     document.getElementById("categoryDropdown").innerText = this.innerText;
-                     fetchSituations(); // gọi API khi đổi category
-                 });
-             });
-
-             // Khi nhập từ khóa
-             document.getElementById('searchCourse').addEventListener('input', function () {
-                 fetchSituations(); // gọi API khi gõ
-             });
-
-        // Hàm gọi API và hiển thị kết quả
-         function fetchSituations() {
-             const keyword = document.getElementById("searchCourse").value;
-             const dynamicContainer = document.getElementById("situation-list");
-
-
-             fetch(`/Mentee/Listening/ListPartial?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(selectedCategory)}`)
-
-                 .then(response => {
-                     if (!response.ok) {
-                         throw new Error('Lỗi khi tải danh sách tình huống');
-                     }
-                     return response.json();
-                 })
-                 .then(data => {
-                     dynamicContainer.innerHTML = ""; // Xóa nội dung cũ trong container động
-
-                     if (data.length === 0) {
-                         dynamicContainer.innerHTML = "<p>Không có tình huống nào phù hợp.</p>";
-                         return;
-                     }
-
-                     data.forEach(item => {
-                         const html = `
-                             <div class="course">
-
-                                 <a href="/Lesson/Step1/${item.situationId}" class="card-link">
-
-                                     <div class="flex-shrink-0">
-                                         <div class="card">
-                                             <img src="${item.imageUrl}" alt="Image of ${item.situationName}" class="card-img-top">
-                                             <div class="card-title-overlay position-absolute">${item.level.levelName}</div>
-                                             <div class="overlay-home"></div>
-                                             <div class="card-body">
-                                                 <p class="card-text" style="color: #fff;">${item.situationName}</p>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </a>
-                             </div>
-                         `;
-                         dynamicContainer.insertAdjacentHTML('beforeend', html);
-                     });
-                 })
-                 .catch(error => {
-                     console.error('Error:', error);
-                     dynamicContainer.innerHTML = "<p>Đã xảy ra lỗi khi tải danh sách. Vui lòng thử lại.</p>";
-                 });
-         }
-
-
-    </script>
-
-
-
-    <script>
-
-
-
-        function toggleDropdown() {
-            const dropdownButton = document.getElementById('categoryDropdown'); // Nút dropdown
-            const dropdownMenu = dropdownButton.nextElementSibling; // Menu dropdown
-
-            // Kiểm tra trạng thái của menu
-            if (dropdownMenu.classList.contains('show')) {
-                // Nếu menu đang mở -> đóng lại
-                dropdownButton.click(); // Giả lập click vào nút để đóng dropdown
-            } else {
-                // Nếu menu đang đóng -> mở ra
-                dropdownButton.click(); // Giả lập click vào nút để mở dropdown
-            }
-        }
-
-
     </script>
 }
