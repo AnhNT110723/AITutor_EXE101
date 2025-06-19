@@ -12,6 +12,23 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion
             _paymentRepo = paymentRepository;
         }
 
+        public async Task<decimal> GetAnnualEarningsAsync()
+        {
+            var annualEarnings = await _paymentRepo.GetAnnualEarningsAsync();
+            return annualEarnings;
+        }
+
+        public async Task<decimal> GetMonthlyEarningsAsync()
+        {
+            var monthlyEarnings = await _paymentRepo.GetMonthlyEarningsAsync();
+            return monthlyEarnings;
+        }
+
+        public async Task<List<decimal>> GetMonthlyEarningsForChartAsync()
+        {
+           return await _paymentRepo.GetMonthlyEarningsForChartAsync();
+        }
+
         public async Task<PaymentDto> GetPaymentByIdAsync(int id)
         {
             return await _paymentRepo.GetPaymentByIdAsync(id);

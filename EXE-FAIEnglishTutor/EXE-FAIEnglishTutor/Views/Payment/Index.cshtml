@@ -120,9 +120,9 @@
                         <li>✔️ Học nghe với AI qua tình huống</li>
                         <li>✔️ Học từ vựng mới theo tình huống</li>
                     </ul>
-                    <form asp-controller="Payment" asp-action="GenerateQR" method="post">
+                    <a href="#" id="pay-link" class="btn btn-pay">🧾 Thanh toán</a>
+                    <form asp-controller="Payment" id="payForm" asp-action="GenerateQR" style="display: none;" method="post">
                         <input type="hidden" name="planAmount" value="2000" />
-                        <button type="submit" class="btn btn-pay">🧾 Thanh toán</button>
                     </form>
                 </div>
             </div>
@@ -200,7 +200,7 @@
         }
 
         .pricing-card {
-            background: linear-gradient(to top, #e2e6e6, #f5f2ee); /*f1faee*/
+            background: linear-gradient(to top, #e2e6e6, #fff); /*f1faee f5f2ee*/
             color: #1a1a1a; /* nên đổi màu chữ nếu nền quá sáng */
             border-radius: 20px;
             padding: 20px;
@@ -277,6 +277,36 @@
             position: relative;
         }
     </style>
+
+
+    <script>
+        const payLink = document.getElementById('pay-link');
+        if (payLink) {
+            payLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                // Kiểm tra trạng thái đăng nhập
+                const isAuthenticated = @Json.Serialize(User.Identity.IsAuthenticated);
+                if (!isAuthenticated) {
+                  
+                    Swal.fire({
+                        title: 'OMG! Có rắc rối rồi.',
+                        text: "Bạn phải đăng nhập để thực hiện yêu cầu này.",
+                        icon: 'info',
+                        confirmButtonColor: '#ed782b',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '@Url.Action("Login", "Account")';
+                        }
+                    });
+                } else {
+                    // Nếu đã đăng nhập, submit form ngay
+                    document.getElementById('payForm').submit();
+                }
+            });
+        }
+    </script>
 
 
 

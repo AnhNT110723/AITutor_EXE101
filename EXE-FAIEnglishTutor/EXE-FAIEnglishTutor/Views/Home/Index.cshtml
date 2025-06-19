@@ -838,40 +838,56 @@
     </script>
 
     <script>
+          function enableSwipeScroll(containerId) {
+        const container = document.getElementById(containerId);
+        let isDown = false;
+        let startX;
+        let scrollLeft;
 
-        //Mới ra mắt
-        document.addEventListener('DOMContentLoaded', function () {
-            const courseList = document.getElementById('course-list-new');
-            const prevBtn = document.getElementById('prev-btn-new');
-            const nextBtn = document.getElementById('next-btn-new');
+        // Mobile touch events
+        container.addEventListener('touchstart', (e) => {
+            isDown = true;
+            startX = e.touches[0].pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+        });
 
-            // Cuộn sang trái
+        container.addEventListener('touchmove', (e) => {
+            if (!isDown) return;
+            e.preventDefault(); // Ngăn cuộn dọc
+            const x = e.touches[0].pageX - container.offsetLeft;
+            const walk = (startX - x); // Khoảng di chuyển
+            container.scrollLeft = scrollLeft + walk;
+        });
+
+        container.addEventListener('touchend', () => {
+            isDown = false;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Cuộn bằng nút bấm (đã có)
+        const setups = [
+            { listId: 'course-list-new', prevId: 'prev-btn-new', nextId: 'next-btn-new' },
+            { listId: 'course-list', prevId: 'prev-btn', nextId: 'next-btn' }
+        ];
+
+        setups.forEach(({ listId, prevId, nextId }) => {
+            const courseList = document.getElementById(listId);
+            const prevBtn = document.getElementById(prevId);
+            const nextBtn = document.getElementById(nextId);
+
             prevBtn.addEventListener('click', () => {
                 courseList.scrollBy({ left: -300, behavior: 'smooth' });
             });
 
-            // Cuộn sang phải
             nextBtn.addEventListener('click', () => {
                 courseList.scrollBy({ left: 300, behavior: 'smooth' });
             });
+
+            // Thêm hỗ trợ vuốt ngang
+            enableSwipeScroll(listId);
         });
-
-        //Đang thình hành
-        document.addEventListener('DOMContentLoaded', function () {
-            const courseList = document.getElementById('course-list');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-
-            // Cuộn sang trái
-            prevBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: -300, behavior: 'smooth' });
-            });
-
-            // Cuộn sang phải
-            nextBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: 300, behavior: 'smooth' });
-            });
-        });
+    });
 
      function getFormattedTime() {
             const now = new Date();
