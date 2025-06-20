@@ -21,6 +21,11 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             try
             {
                 var podcasts = await _podcastService.GetPostCard();
+                // Loại bỏ ký tự đặc biệt khỏi Content
+                foreach (var p in podcasts)
+                {
+                    p.Content = RemoveSpecialCharacters(p.Content);
+                }
                 ViewBag.Topics = podcasts.Select(p => p.Topic).Distinct().ToList();
 
                 // Lọc theo chủ đề nếu có
@@ -84,6 +89,23 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
 
             return View(podcast);
+        }
+
+        // Helper: Loại bỏ ký tự đặc biệt khỏi chuỗi
+        private string RemoveSpecialCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            // Loại bỏ entity HTML như &#x2019; hoặc &#...; hoặc &...;
+            string noEntities = System.Text.RegularExpressions.Regex.Replace(input, "&[#a-zA-Z0-9]+;", "");
+            var sb = new System.Text.StringBuilder();
+            foreach (char c in noEntities)
+            {
+                if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c) || c == '.' || c == ',' || c == '?' || c == '!' || c == '-')
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
         }
     }
 }

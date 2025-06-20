@@ -60,7 +60,7 @@
         <div class="lesson-progress">
             <div class="progress-container">
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 50%"></div>
+                    <div class="progress-fill" style="width: 60%"></div>
                 </div>
                 <div class="progress-steps">
                     <div class="step active">
@@ -75,14 +75,7 @@
                         <div class="step-number">3</div>
                         <div class="step-label">Dictation Practice</div>
                     </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <div class="step-label">Check & Compare</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">5</div>
-                        <div class="step-label">Practice & Improve</div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -99,7 +92,7 @@
                 <audio id="listeningAudio" class="custom-audio-player" controls style="display: none;"></audio>
                 <div class="podcast-player">
                     <div class="player-artwork">
-                        <img src="/images/podcast-default.jpg" alt="Lesson Cover" />
+                        <img src="@ViewBag.Lesson.ImageUrl" alt="Lesson Cover" />
                     </div>
                     <div class="player-controls">
                         <div class="time-display">
@@ -126,118 +119,47 @@
             </div>
 
             <!-- Simple MCQ Question -->
-            <div class="mcq-section">
-                <div class="mcq-container">
-                    <h3><i class="fas fa-headphones"></i> Listening Comprehension Test</h3>
-                    <p class="mcq-question">Listen to the audio and answer the following questions:</p>
-                    
-                    <!-- Question 1 -->
-                    <div class="question-item">
-                        <h4>Question 1: What is the main topic of this audio?</h4>
-                        <div class="mcq-options">
-                            <div class="mcq-option" data-correct="true" data-question="1">
-                                <input type="radio" name="q1" id="q1_1" value="1">
-                                <label for="q1_1">Daily conversation</label>
+            @if (ViewBag.Questions != null && ViewBag.Questions.Count > 0)
+            {
+                <div class="mcq-section">
+                    <div class="mcq-container">
+                        <h3><i class="fas fa-headphones"></i> Listening Comprehension Test</h3>
+                        <p class="mcq-question">Listen to the audio and answer the following questions:</p>
+                        @for (int i = 0; i < Math.Min(10, ViewBag.Questions.Count); i++)
+                        {
+                            var q = ViewBag.Questions[i];
+                            <div class="question-item">
+                                <h4>Question @(i+1): @q.Question</h4>
+                                <div class="mcq-options">
+                                    @if (q.Options != null)
+                                    {
+                                        for (int j = 0; j < q.Options.Count; j++)
+                                        {
+                                            var opt = q.Options[j];
+                                            <div class="mcq-option" data-correct="@(opt == q.Answer ? "true" : "false")" data-question="@(i+1)">
+                                                <input type="radio" name="q@(i+1)" id="q@(i+1)_@(j+1)" value="@(j+1)">
+                                                <label for="q@(i+1)_@(j+1)">@opt</label>
+                                            </div>
+                                        }
+                                    }
+                                </div>
                             </div>
-                            <div class="mcq-option" data-correct="false" data-question="1">
-                                <input type="radio" name="q1" id="q1_2" value="2">
-                                <label for="q1_2">Business meeting</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="1">
-                                <input type="radio" name="q1" id="q1_3" value="3">
-                                <label for="q1_3">Travel planning</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="1">
-                                <input type="radio" name="q1" id="q1_4" value="4">
-                                <label for="q1_4">Academic discussion</label>
-                            </div>
+                        }
+                        <div class="mcq-actions">
+                            <button id="checkAnswers" class="btn-primary">
+                                <i class="fas fa-check"></i> Check Answers
+                            </button>
+                            <button id="showResults" class="btn-secondary" style="display: none;">
+                                <i class="fas fa-chart-bar"></i> Show Results
+                            </button>
                         </div>
-                    </div>
-
-                    <!-- Question 2 -->
-                    <div class="question-item">
-                        <h4>Question 2: How many people are speaking in the conversation?</h4>
-                        <div class="mcq-options">
-                            <div class="mcq-option" data-correct="false" data-question="2">
-                                <input type="radio" name="q2" id="q2_1" value="1">
-                                <label for="q2_1">One person</label>
-                            </div>
-                            <div class="mcq-option" data-correct="true" data-question="2">
-                                <input type="radio" name="q2" id="q2_2" value="2">
-                                <label for="q2_2">Two people</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="2">
-                                <input type="radio" name="q2" id="q2_3" value="3">
-                                <label for="q2_3">Three people</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="2">
-                                <input type="radio" name="q2" id="q2_4" value="4">
-                                <label for="q2_4">Four people</label>
-                            </div>
+                        <div class="mcq-feedback" style="display: none;">
+                            <div class="feedback-summary"></div>
+                            <div class="question-feedback"></div>
                         </div>
-                    </div>
-
-                    <!-- Question 3 -->
-                    <div class="question-item">
-                        <h4>Question 3: What is the tone of the conversation?</h4>
-                        <div class="mcq-options">
-                            <div class="mcq-option" data-correct="false" data-question="3">
-                                <input type="radio" name="q3" id="q3_1" value="1">
-                                <label for="q3_1">Formal and serious</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="3">
-                                <input type="radio" name="q3" id="q3_2" value="2">
-                                <label for="q3_2">Angry and confrontational</label>
-                            </div>
-                            <div class="mcq-option" data-correct="true" data-question="3">
-                                <input type="radio" name="q3" id="q3_3" value="3">
-                                <label for="q3_3">Casual and friendly</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="3">
-                                <input type="radio" name="q3" id="q3_4" value="4">
-                                <label for="q3_4">Professional and distant</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Question 4 -->
-                    <div class="question-item">
-                        <h4>Question 4: What is the main purpose of this conversation?</h4>
-                        <div class="mcq-options">
-                            <div class="mcq-option" data-correct="false" data-question="4">
-                                <input type="radio" name="q4" id="q4_1" value="1">
-                                <label for="q4_1">To make a business deal</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="4">
-                                <input type="radio" name="q4" id="q4_2" value="2">
-                                <label for="q4_2">To plan a vacation</label>
-                            </div>
-                            <div class="mcq-option" data-correct="false" data-question="4">
-                                <input type="radio" name="q4" id="q4_3" value="3">
-                                <label for="q4_3">To discuss academic topics</label>
-                            </div>
-                            <div class="mcq-option" data-correct="true" data-question="4">
-                                <input type="radio" name="q4" id="q4_4" value="4">
-                                <label for="q4_4">To have a casual chat</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mcq-actions">
-                        <button id="checkAnswers" class="btn-primary">
-                            <i class="fas fa-check"></i> Check Answers
-                        </button>
-                        <button id="showResults" class="btn-secondary" style="display: none;">
-                            <i class="fas fa-chart-bar"></i> Show Results
-                        </button>
-                    </div>
-
-                    <div class="mcq-feedback" style="display: none;">
-                        <div class="feedback-summary"></div>
-                        <div class="question-feedback"></div>
                     </div>
                 </div>
-            </div>
+            }
 
             <!-- Navigation -->
             <div class="bottom-navigation">
@@ -257,6 +179,8 @@
         </div>
         </div>
     </div>
+
+    
 
     <style>
     .audio-player-container {
@@ -416,7 +340,7 @@
     }
 
     .progress-fill {
-        width: 40%; /* 2/5 of the total width */
+        width: 30%; /* 2/5 of the total width */
         height: 100%;
         background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
         border-radius: 2px;

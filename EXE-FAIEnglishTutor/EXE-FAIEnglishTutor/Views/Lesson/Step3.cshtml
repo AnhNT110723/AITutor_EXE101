@@ -60,7 +60,7 @@
         <div class="lesson-progress">
             <div class="progress-container">
                 <div class="progress-bar">
-                    <div class="progress-fill" style="width: 75%"></div>
+                    <div class="progress-fill" style="width: 100%"></div>
                 </div>
                 <div class="progress-steps">
                     <div class="step active">
@@ -75,14 +75,7 @@
                         <div class="step-number">3</div>
                         <div class="step-label">Dictation Practice</div>
                     </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <div class="step-label">Check & Compare</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">5</div>
-                        <div class="step-label">Practice & Improve</div>
-                    </div>
+                   
                 </div>
             </div>
             <div class="listening-container">
@@ -128,47 +121,16 @@
                     <div class="dictation-instructions">
                         <h3><i class="fas fa-pencil-alt"></i> Dictation Practice</h3>
                         <p><strong>Instructions:</strong> Listen to each sentence and write exactly what you hear. You can replay each sentence up to 3 times maximum.</p>
-                        <p class="instruction-note"><i class="fas fa-info-circle"></i> <strong>Important:</strong> Complete all sentences first. You will see your results in the next step.</p>
+                        <p class="instruction-note"><i class="fas fa-info-circle"></i> <strong>Important:</strong> Complete all sentences to finish the practice.</p>
                     </div>
 
-                    <div class="dictation-container">
-                        @for (int i = 0; i < ViewBag.Sentences?.Count; i++)
-                        {
-                            var sentence = ViewBag.Sentences[i];
-                            <div class="dictation-item" data-sentence="@sentence" data-index="@i">
-                                <div class="sentence-controls">
-                                    <div class="control-left">
-                                        <span class="sentence-number">@(@i + 1)</span>
-
-                                        <div class="replay-group-custom">
-                                            <button class="replay-sentence-btn-custom" type="button" title="Replay">
-                                                <i class="fas fa-redo"></i>
-                                            </button>
-                                            <span class="replay-count-custom">0/3</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-right">
-                                        <span class="status-indicator incomplete" id="status-@i">Incomplete</span>
-                                    </div>
-                                </div>
-
-                                <div class="dictation-input-container">
-                                    <textarea class="dictation-input" placeholder="Write what you hear here..." rows="2" required></textarea>
-                                    <div class="word-count">0 words</div>
-                                </div>
-                            </div>
-                        }
+                    <div class="dictation-container" id="dictationContainer">
+                        <!-- Sẽ render 1 câu tại 1 thời điểm bằng JS -->
                     </div>
 
-
-                    <div class="dictation-actions">
-                        <div class="completion-summary">
-                            <span id="completionStatus">0 of @ViewBag.Sentences?.Count sentences completed</span>
-                        </div>
-                        <button id="continueToNext" class="btn-primary" disabled>
-                            <i class="fas fa-arrow-right"></i> Continue to Next Step
-                        </button>
+                    <div class="dictation-actions" id="dictationActions" style="display:none;">
+                        <button id="prevSentenceBtn" class="btn-secondary" style="display:none;"><i class="fas fa-arrow-left"></i> Previous</button>
+                        <button id="nextSentenceBtn" class="btn-primary" style="display:none;">Next <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
 
@@ -182,16 +144,9 @@
                             <i class="fas fa-arrow-left"></i> Previous
                         </button>
                     </form>
-                    <form id="nextStepForm" method="post" action="@Url.Action("Step4", "Lesson")" style="display: inline;">
-                        <input type="hidden" name="id" value="@ViewBag.Lesson.SituatuonId" />
-                        <input type="hidden" name="script" value="@ViewBag.Script" />
-                        <input type="hidden" name="audioData" value="@ViewBag.AudioData" />
-                        <input type="hidden" name="questions" value="@JsonConvert.SerializeObject(ViewBag.Questions ?? new List<IeltsQuestion>())" />
-                        <input type="hidden" name="dictations" id="dictationsData" value="" />
-                        <button type="submit" class="nav-btn next" id="nextStepBtn" disabled>
-                            Next <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </form>
+                    <a href="/Mentee/Listening" class="nav-btn next">
+                        <i class="fas fa-list"></i> Back to List
+                    </a>
                 </div>
 
             </div>
@@ -497,7 +452,7 @@
         }
 
         .progress-fill {
-            width: 60%; /* 3/5 of the total width */
+            width: 50%; /* 3/5 of the total width */
             height: 100%;
             background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
             border-radius: 2px;
@@ -1105,6 +1060,59 @@
                 transform: none;
                 box-shadow: none;
             }
+
+        .dictation-check-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 1rem;
+        }
+        .dictation-check-actions .btn-primary,
+        .dictation-check-actions .btn-secondary {
+            min-width: 110px;
+            height: 44px;
+            font-size: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Shadowing popup: chỉnh nút Play Sentence giống Record */
+        #shadowingModal .btn-primary, #shadowingModal .btn-secondary {
+            min-width: 130px;
+            height: 44px;
+            font-size: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0;
+        }
+        #shadowingModal #playShadowingAudio {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            margin-bottom: 0;
+        }
+        #shadowingModal #playShadowingAudio i {
+            margin-right: 8px;
+        }
+        #shadowingModal #startRecordBtn i,
+        #shadowingModal #playShadowingAudio i {
+            margin-right: 8px;
+        }
+
+        .dictation-actions .btn-secondary#prevSentenceBtn,
+        .dictation-actions .btn-primary#nextSentenceBtn {
+            min-width: 110px;
+            height: 44px;
+            font-size: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 
     @section Scripts {
@@ -1115,11 +1123,15 @@
             let currentTimeSpan;
             let durationSpan;
             let sentences = @Html.Raw(Json.Serialize(ViewBag.Sentences ?? new List<string>()));
+            let currentIdx = 0;
+            let userAnswers = Array(sentences.length).fill("");
+            let checkedStatus = Array(sentences.length).fill(false);
+            let replayCounts = Array(sentences.length).fill(0);
 
             document.addEventListener('DOMContentLoaded', function() {
                 initializeAudio();
                 loadListeningAudio();
-                initializeDictation();
+                renderCurrentSentence();
             });
 
             function initializeAudio() {
@@ -1206,127 +1218,176 @@
                 return `${minutes}:${seconds.toString().padStart(2, '0')}`;
             }
 
-            function initializeDictation() {
-                // Add word count functionality
-                const dictationInputs = document.querySelectorAll('.dictation-input');
-                dictationInputs.forEach(input => {
-                    input.addEventListener('input', function() {
-                        const wordCount = this.value.trim().split(/\s+/).filter(word => word.length > 0).length;
-                        this.parentElement.querySelector('.word-count').textContent = wordCount + ' words';
+            function renderCurrentSentence() {
+                const container = document.getElementById('dictationContainer');
+                container.innerHTML = '';
+                if (sentences.length === 0) return;
+                const sentence = sentences[currentIdx];
+                const userInput = userAnswers[currentIdx] || '';
+                const isChecked = checkedStatus[currentIdx];
+                const replayCount = replayCounts[currentIdx];
 
-                        // Check completion status
-                        checkCompletionStatus();
-                    });
-                });
+                let html = `<div class="dictation-item" data-index="${currentIdx}">
+                    <div class="sentence-controls">
+                        <div class="control-left">
+                            <span class="sentence-number">${currentIdx + 1}</span>
+                            <div class="replay-group-custom">
+                                <button class="replay-sentence-btn-custom" type="button" title="Replay" id="replayBtn" ${replayCount>=3?'disabled style=\'opacity:0.5\'':''}>
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <span class="replay-count-custom" id="replayCount">${replayCount}/3</span>
+                            </div>
+                        </div>
+                        <div class="control-right">
+                            <span class="status-indicator" id="statusIndicator">${isChecked ? 'Checked' : 'Incomplete'}</span>
+                        </div>
+                    </div>
+                    <div class="dictation-input-container">
+                        <textarea class="dictation-input" id="dictationInput" placeholder="Write what you hear here..." rows="2" required ${isChecked?'disabled':''}>${userInput}</textarea>
+                        <div class="word-count" id="wordCount"></div>
+                    </div>
+                    <div class="dictation-check-actions">
+                        <button id="checkBtn" class="btn-primary" ${isChecked?'style="display:none;"':''}>Check</button>
+                        <button id="resetBtn" class="btn-secondary">Reset</button>
+                        <button id="showAnswerBtn" class="btn-secondary" style="display:none;"><i class="fas fa-eye"></i> Show Answer</button>
+                    </div>
+                    <div class="dictation-feedback" id="dictationFeedback"></div>
+                    <div class="dictation-script-section" id="dictationScriptSection" style="display:none;">
+                        <div class="script-label">Script:</div>
+                        <div class="script-words" id="scriptWords"></div>
+                    </div>
+                    <div class="shadowing-section" style="margin-top:24px;text-align:center;">
+                        <button id="shadowingBtn" class="btn-primary"><i class="fas fa-microphone"></i> Shadowing</button>
+                    </div>
+                    <div id="shadowingModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
+                        <div style="background:#fff;padding:32px 24px;border-radius:12px;max-width:500px;width:90%;margin:auto;position:relative;">
+                            <button id="closeShadowing" style="position:absolute;top:8px;right:12px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
+                            <h4>Shadowing Practice</h4>
+                            <div style="margin:16px 0;">
+                                <button id="playShadowingAudio" class="btn-secondary"><i class="fas fa-volume-up"></i> Play Sentence</button>
+                            </div>
+                            <div id="shadowingScript" style="margin-bottom:16px;font-size:1.1rem;"></div>
+                            <div style="margin-bottom:12px;">
+                                <button id="startRecordBtn" class="btn-primary"><i class="fas fa-microphone"></i> Record</button>
+                                <button id="stopRecordBtn" class="btn-secondary" style="display:none;"><i class="fas fa-stop"></i> Stop</button>
+                            </div>
+                            <audio id="userRecording" controls style="display:none;width:100%;margin-bottom:12px;"></audio>
+                            <div style="margin-bottom:12px;">
+                                <button id="compareBtn" class="btn-primary" style="display:none;"><i class="fas fa-equals"></i> Compare</button>
+                            </div>
+                            <div id="compareResult" style="margin-top:8px;"></div>
+                        </div>
+                    </div>
+                </div>`;
+                container.innerHTML = html;
+                updateWordCount();
+                document.getElementById('dictationInput').addEventListener('input', updateWordCount);
+                document.getElementById('resetBtn').addEventListener('click', resetCurrentSentence);
+                document.getElementById('replayBtn').addEventListener('click', handleReplay);
+                if (!isChecked) document.getElementById('checkBtn').addEventListener('click', checkCurrentSentence);
+                document.getElementById('showAnswerBtn').addEventListener('click', showFullAnswer);
+                if (isChecked) renderFeedback();
+                updateNavButtons();
+                setTimeout(() => {
+                    const shadowingBtn = document.getElementById('shadowingBtn');
+                    if (shadowingBtn) shadowingBtn.onclick = openShadowingModal;
+                }, 0);
+            }
 
-                // Continue to next step button
-                document.getElementById('continueToNext').addEventListener('click', function() {
-                    if (validateAllSentences()) {
-                        // Collect dictation data and submit form
-                        collectAndSubmitDictations();
-                    } else {
-                        alert('Please complete all sentences before continuing.');
-                    }
-                });
+            function updateWordCount() {
+                const input = document.getElementById('dictationInput');
+                const wordCount = input.value.trim().split(/\s+/).filter(w=>w.length>0).length;
+                document.getElementById('wordCount').textContent = wordCount + ' words';
+            }
 
-                // Next step form submission
-                           document.getElementById('nextStepForm').addEventListener('submit', function(e) {
-                if (!validateAllSentences()) {
-                    e.preventDefault();
-                    alert('Please complete all sentences before continuing.');
-                    return false;
+            function handleReplay() {
+                if (replayCounts[currentIdx] >= 3) return;
+                playSentence(currentIdx);
+                replayCounts[currentIdx]++;
+                document.getElementById('replayCount').textContent = `${replayCounts[currentIdx]}/3`;
+                if (replayCounts[currentIdx] >= 3) {
+                    document.getElementById('replayBtn').disabled = true;
+                    document.getElementById('replayBtn').style.opacity = '0.5';
                 }
-                e.preventDefault(); // tránh double submit
-                collectAndSubmitDictations();
-            });
             }
 
-            document.getElementById('nextStepForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                collectAndSubmitDictations();
-            });
-
-            function collectAndSubmitDictations() {
-                const dictationInputs = document.querySelectorAll('.dictation-input');
-                const dictations = [];
-                dictationInputs.forEach(input => {
-                    dictations.push(input.value.trim());
-                });
-
-                // Set the dictations data in the hidden input
-                document.getElementById('dictationsData').value = JSON.stringify(dictations);
-
-                // Submit the form (sau khi đã gán value)
-                document.getElementById('nextStepForm').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    this.submit();
-                });
+            function checkCurrentSentence() {
+                const input = document.getElementById('dictationInput').value.trim();
+                userAnswers[currentIdx] = input;
+                checkedStatus[currentIdx] = true;
+                renderFeedback();
+                document.getElementById('checkBtn').style.display = 'none';
+                document.getElementById('dictationInput').disabled = true;
+                document.getElementById('showAnswerBtn').style.display = 'inline-block';
+                document.getElementById('dictationScriptSection').style.display = 'block';
+                document.getElementById('statusIndicator').textContent = 'Checked';
             }
 
-            function checkCompletionStatus() {
-                const dictationItems = document.querySelectorAll('.dictation-item');
-                let completedCount = 0;
-                const totalCount = dictationItems.length;
+            function resetCurrentSentence() {
+                userAnswers[currentIdx] = '';
+                checkedStatus[currentIdx] = false;
+                document.getElementById('dictationInput').value = '';
+                document.getElementById('dictationInput').disabled = false;
+                document.getElementById('checkBtn').style.display = 'inline-block';
+                document.getElementById('showAnswerBtn').style.display = 'none';
+                document.getElementById('dictationFeedback').innerHTML = '';
+                document.getElementById('dictationScriptSection').style.display = 'none';
+                document.getElementById('statusIndicator').textContent = 'Incomplete';
+            }
 
-                dictationItems.forEach((item, index) => {
-                    const input = item.querySelector('.dictation-input');
-                    const statusIndicator = item.querySelector('.status-indicator');
-                    const text = input.value.trim();
-
-                    if (text.length > 0) {
-                        // Mark as complete
-                        statusIndicator.textContent = 'Complete';
-                        statusIndicator.className = 'status-indicator complete';
-                        input.classList.add('complete');
-                        completedCount++;
+            function renderFeedback(showFull=false) {
+                const input = userAnswers[currentIdx].trim();
+                const correct = sentences[currentIdx].trim();
+                const inputWords = input.split(/\s+/);
+                const correctWords = correct.split(/\s+/);
+                let feedbackHtml = '';
+                for (let i = 0; i < correctWords.length; i++) {
+                    if (inputWords[i] && inputWords[i].toLowerCase() === correctWords[i].toLowerCase()) {
+                        feedbackHtml += `<span style='color:#28a745;font-weight:bold;'>${correctWords[i]}</span> `;
+                    } else if (inputWords[i] && !showFull) {
+                        feedbackHtml += `<span style='color:#dc3545;font-weight:bold;'>*</span> `;
+                    } else if (showFull) {
+                        feedbackHtml += `<span style='color:#007bff;'>${correctWords[i]}</span> `;
                     } else {
-                        // Mark as incomplete
-                        statusIndicator.textContent = 'Incomplete';
-                        statusIndicator.className = 'status-indicator incomplete';
-                        input.classList.remove('complete');
+                        feedbackHtml += `<span style='color:#dc3545;font-weight:bold;'>*</span> `;
                     }
+                }
+                document.getElementById('dictationFeedback').innerHTML = feedbackHtml;
+                // Render script section
+                renderScriptSection();
+            }
+
+            function showFullAnswer() {
+                renderFeedback(true);
+            }
+
+            function renderScriptSection() {
+                const correct = sentences[currentIdx].trim();
+                const correctWords = correct.split(/\s+/);
+                let html = '';
+                correctWords.forEach(word => {
+                    html += `<button class='script-word-btn' style='margin:2px 4px;padding:2px 8px;border-radius:6px;border:none;background:#f0f0f0;cursor:pointer;' onclick='speakWord("${word}")'>${word}</button>`;
                 });
+                document.getElementById('scriptWords').innerHTML = html;
+            }
 
-                // Update completion summary
-                document.getElementById('completionStatus').textContent = `${completedCount} of ${totalCount} sentences completed`;
-
-                // Enable/disable continue button
-                const continueBtn = document.getElementById('continueToNext');
-                const nextStepBtn = document.getElementById('nextStepBtn');
-                if (completedCount === totalCount) {
-                    continueBtn.disabled = false;
-                    continueBtn.style.opacity = '1';
-                    nextStepBtn.disabled = false;
-                    nextStepBtn.style.opacity = '1';
+            function speakWord(word) {
+                if ('speechSynthesis' in window) {
+                    const utter = new SpeechSynthesisUtterance(word);
+                    utter.lang = 'en-US';
+                    window.speechSynthesis.speak(utter);
                 } else {
-                    continueBtn.disabled = true;
-                    continueBtn.style.opacity = '0.6';
-                    nextStepBtn.disabled = true;
-                    nextStepBtn.style.opacity = '0.6';
+                    alert('Speech Synthesis not supported in this browser.');
                 }
             }
 
-            function validateAllSentences() {
-                const dictationInputs = document.querySelectorAll('.dictation-input');
-                let allCompleted = true;
-
-                dictationInputs.forEach((input, index) => {
-                    if (input.value.trim().length === 0) {
-                        allCompleted = false;
-                        // Highlight incomplete sentence
-                        const dictationItem = input.closest('.dictation-item');
-                        dictationItem.style.border = '2px solid #dc3545';
-                        dictationItem.style.backgroundColor = '#fff5f5';
-
-                        // Remove highlight after 3 seconds
-                        setTimeout(() => {
-                            dictationItem.style.border = '';
-                            dictationItem.style.backgroundColor = '';
-                        }, 3000);
-                    }
-                });
-
-                return allCompleted;
+            function updateNavButtons() {
+                const actions = document.getElementById('dictationActions');
+                actions.style.display = 'flex';
+                document.getElementById('prevSentenceBtn').style.display = currentIdx > 0 ? 'inline-block' : 'none';
+                document.getElementById('nextSentenceBtn').style.display = currentIdx < sentences.length-1 ? 'inline-block' : 'none';
+                document.getElementById('prevSentenceBtn').onclick = function() { currentIdx--; renderCurrentSentence(); };
+                document.getElementById('nextSentenceBtn').onclick = function() { currentIdx++; renderCurrentSentence(); };
             }
 
             function playSentence(index) {
@@ -1349,27 +1410,83 @@
                 }, 100);
             }
 
-            function replaySentence(index) {
-                const replayBtn = document.querySelector(`[data-index="${index}"] .replay-sentence-btn`);
-                const currentReplays = parseInt(replayBtn.dataset.replays);
-
-                if (currentReplays >= 3) {
-                    alert('You have reached the maximum number of replays (3) for this sentence.');
-                    return;
+            function openShadowingModal() {
+                const modal = document.getElementById('shadowingModal');
+                modal.style.display = 'flex';
+                document.getElementById('shadowingScript').textContent = sentences[currentIdx];
+                document.getElementById('userRecording').style.display = 'none';
+                document.getElementById('compareBtn').style.display = 'none';
+                document.getElementById('compareResult').innerHTML = '';
+                // Play audio
+                document.getElementById('playShadowingAudio').onclick = function() { playSentence(currentIdx); };
+                // Close
+                document.getElementById('closeShadowing').onclick = function() { modal.style.display = 'none'; stopRecordingIfNeeded(); };
+                // Record
+                let mediaRecorder, audioChunks = [];
+                const startBtn = document.getElementById('startRecordBtn');
+                const stopBtn = document.getElementById('stopRecordBtn');
+                startBtn.style.display = 'inline-block';
+                stopBtn.style.display = 'none';
+                startBtn.onclick = async function() {
+                    audioChunks = [];
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+                    startBtn.style.display = 'none';
+                    stopBtn.style.display = 'inline-block';
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const userAudio = document.getElementById('userRecording');
+                        userAudio.src = audioUrl;
+                        userAudio.style.display = 'block';
+                        document.getElementById('compareBtn').style.display = 'inline-block';
+                        userAudio.onended = () => URL.revokeObjectURL(audioUrl);
+                        // Save for compare
+                        userAudio._audioBlob = audioBlob;
+                    };
+                };
+                stopBtn.onclick = function() {
+                    if (mediaRecorder && mediaRecorder.state === 'recording') {
+                        mediaRecorder.stop();
+                        startBtn.style.display = 'inline-block';
+                        stopBtn.style.display = 'none';
+                    }
+                };
+                function stopRecordingIfNeeded() {
+                    if (mediaRecorder && mediaRecorder.state === 'recording') {
+                        mediaRecorder.stop();
+                    }
                 }
-
-                // Increment replay count
-                replayBtn.dataset.replays = currentReplays + 1;
-                replayBtn.querySelector('.replay-count').textContent = `${currentReplays + 1}/3`;
-
-                // Play the sentence
-                playSentence(index);
-
-                // Disable button if max replays reached
-                if (currentReplays + 1 >= 3) {
-                    replayBtn.disabled = true;
-                    replayBtn.style.opacity = '0.5';
-                }
+                // Compare (gọi API backend)
+                document.getElementById('compareBtn').onclick = async function() {
+                    const userAudio = document.getElementById('userRecording');
+                    if (!userAudio._audioBlob) return;
+                    const formData = new FormData();
+                    formData.append('audio', userAudio._audioBlob, 'recording.wav');
+                    formData.append('standardSentence', sentences[currentIdx]);
+                    document.getElementById('compareResult').innerHTML = '<span>Processing...</span>';
+                    try {
+                        const resp = await fetch('https://faienglish.xyz/api/audio/process', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        let resultText;
+                        if (!resp.ok) {
+                            resultText = await resp.text();
+                            throw new Error('Server error: ' + resultText);
+                        }
+                        const result = await resp.json();
+                        let html = `<div><b>Transcript:</b> ${result.transcribedText}</div>`;
+                        html += `<div><b>Pronunciation Score:</b> ${result.pronunciationScore}%</div>`;
+                        html += `<div><b>Stress Score:</b> ${result.stressScore}%</div>`;
+                        html += `<div><b>Syllable Score:</b> ${result.syllableScore}%</div>`;
+                        document.getElementById('compareResult').innerHTML = html;
+                    } catch (e) {
+                        document.getElementById('compareResult').innerHTML = '<span style="color:red;">Error: ' + e.message + '</span>';
+                    }
+                };
             }
         </script>
     }

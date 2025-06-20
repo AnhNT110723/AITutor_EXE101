@@ -8,3 +8,4 @@ namespace EXE_FAIEnglishTutor.Services.Interface.AI
         Task<List<Podcast>> GetPostCard();
     }
 }
+    
