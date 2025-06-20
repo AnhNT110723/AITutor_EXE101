@@ -29,6 +29,9 @@
         public const string CANCEL = "Cancel";
 
         // gói nâng cấp
+        public const decimal MEMBER = 48000;
+        public const decimal VIP = 200000;
+        public const decimal ADVANCE = 640000;
 
 
 
