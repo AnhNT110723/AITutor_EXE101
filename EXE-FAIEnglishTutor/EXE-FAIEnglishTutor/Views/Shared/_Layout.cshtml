@@ -64,6 +64,14 @@
                 /* Phóng to nhẹ khi hover */
                 transform: scale(1.05);
             }
+
+        .goog-te-gadget {
+            font-size: 0px !important;
+        }
+
+            .goog-te-gadget .goog-te-combo {
+                width: 140px !important;
+            }
     </style>
 </head>
 
@@ -93,7 +101,7 @@
                         </a>
                     </li>
                     <li>
-                        <a asp-area="" asp-controller="Pc" asp-action="index" class="link-test" data-action="podcast">
+                        <a asp-area="Mentee" asp-controller="Podcast" asp-action="Index" class="link-test" data-action="podcast">
                             <span class="fas fa-book-open"></span>
                             <span class="menu-text">Podcast</span>
                         </a>
@@ -105,7 +113,7 @@
                     </a>
                     </li> *@
                     <li>
-                        <a asp-area="" asp-controller="Payment" asp-action="index" class="link-test" data-action="podcast">
+                        <a asp-area="" asp-controller="Payment" asp-action="index" class="link-test" data-action="payment">
                             <span class="fas fa-credit-card"></span>
                             <span class="menu-text">Membership</span>
                         </a>
@@ -156,8 +164,8 @@
                 (action === 'home' && (currentPath === '/' || currentPath.includes('/home/index') || currentPath.includes('/home'))) ||
                 (action === 'lesson' && currentPath.includes('/lesson')) ||
                 (action === 'toeic' && currentPath.includes('/toeic')) ||
-                (action === 'podcast' && (currentPath.includes('/pc/index') || currentPath.includes('/pc'))) ||
-                (action === 'pronunciation' && currentPath.includes('/pronunciation'))
+                (action === 'podcast' && (currentPath.includes('/Mentee/Podcast'))) ||
+                (action === 'payment' && currentPath.includes('/Payment/index'))
             ) {
                 console.log(`Active item: ${action}`); // Debug mục đang active
                 li.classList.add('active');

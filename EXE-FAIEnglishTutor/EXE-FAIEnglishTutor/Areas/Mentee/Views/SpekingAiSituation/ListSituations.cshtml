@@ -191,12 +191,16 @@
                 </a>
             </div>
             @{
-                
+                // @(
+                // User.Identity.IsAuthenticated && ViewBag.userCheckMember == true
+                // ? $"/Mentee/Role-Play/{situation.SituatuonId}"
+                // : "javascript:void(0)"
+                //     )
                 foreach (var situation in Model)
                 {
                     <div class="course">
                         <a href="@(
-                            User.Identity.IsAuthenticated && ViewBag.userCheckMember == true
+                            User.Identity.IsAuthenticated
                             ? $"/Mentee/Role-Play/{situation.SituatuonId}"
                             : "javascript:void(0)"
                                 )" class="card-link situation-link"
@@ -441,7 +445,7 @@
             situationLinks.forEach(link => {
                 link.addEventListener("click", function (e) {
                     const requiresLogin = link.getAttribute("data-login") === "True";
-                    const requiresMembership = link.getAttribute("data-membership") === "True";
+                    //const requiresMembership = link.getAttribute("data-membership") === "True";
                     const redirectUrl = link.getAttribute("data-url");
 
                     if (requiresLogin) {
@@ -450,15 +454,17 @@
                         if (confirm("You need to login to access this content.Do you want to login now ?")) {
                             window.location.href = "/Account/Login"; 
                         }
-                    } else if (requiresMembership) {
-                        e.preventDefault();
-                        if (confirm("You need an active membership to access this content. Do you want to upgrade now?")) {
-                            window.location.href = "/Payment/index";
-                        }
                     } else {
                         // Người đã đăng nhập thì chuyển trang như bình thường
                         window.location.href = redirectUrl;
                     }
+
+                    //  else if (requiresMembership) {
+                    //     e.preventDefault();
+                    //     if (confirm("You need an active membership to access this content. Do you want to upgrade now?")) {
+                    //         window.location.href = "/Payment/index";
+                    //     }
+                    // }
                 });
             });
         });

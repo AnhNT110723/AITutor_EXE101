@@ -661,10 +661,103 @@
             accent-color: #ff9838;
             height: 4px;
         }
+
+        #podcastPlayerBar.podcast-popup-bar {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            z-index: 9998;
+            background: #fff;
+            box-shadow: 0 -4px 24px rgba(0,0,0,0.10);
+            border-radius: 18px 18px 0 0;
+            padding: 0.7rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 340px;
+            max-width: 700px;
+            width: 90vw;
+            transition: box-shadow 0.2s;
+            border-top: 2px solid #ffe66d;
+        }
+        #podcastPlayerBar .btn-bar {
+            background: #f5f7fa;
+            border: none;
+            color: #4f8cff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s, color 0.18s, transform 0.18s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        #podcastPlayerBar .btn-bar.main {
+            background: #4f8cff;
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            font-size: 22px;
+        }
+        #podcastPlayerBar .btn-bar:hover {
+            background: #e2e8f0;
+            color: #2563eb;
+            transform: scale(1.08);
+        }
+        #podcastPlayerBar .btn-bar.main:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+        #podcastPlayerBar .bar-progress {
+            flex: 1;
+            accent-color: #ff9838;
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e8f0;
+            min-width: 80px;
+            max-width: 200px;
+        }
+        #podcastPlayerBar .bar-time {
+            font-size: 1rem;
+            min-width: 44px;
+            color: #888;
+            font-weight: 500;
+        }
+        #podcastPlayerBar .bar-script {
+            font-size: 1.05rem;
+            color: #2C3E50;
+            font-weight: 600;
+            margin-left: 1rem;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @@media (max-width: 600px) {
+            #podcastPlayerBar.podcast-popup-bar {
+                min-width: 0;
+                max-width: 100vw;
+                padding: 0.5rem 0.3rem;
+                gap: 0.5rem;
+            }
+            #podcastPlayerBar .bar-script {
+                max-width: 80px;
+                font-size: 0.9rem;
+                margin-left: 0.5rem;
+            }
+            #podcastPlayerBar .bar-time {
+                font-size: 0.9rem;
+                min-width: 32px;
+            }
+        }
     </style>
 </head>
 
 <body>
+    
    
 
     <!-- Page Content  -->
@@ -756,7 +849,10 @@
                         </div>
                         <audio id="audioPlayer" controls style="width:100%;margin-top:1rem;display:none;"></audio>
                         <div id="scriptList"></div>
-
+                        <!-- Nút Back to List ở cuối trang -->
+                        <div style="margin: 2rem 0 1.5rem 1.5rem;">
+                            <a href="/Mentee/Podcast" class="btn btn-secondary" style="min-width:120px;font-weight:500;"><i class="fas fa-arrow-left"></i> Back to List</a>
+                        </div>
                     </div>
                 </div>
                
@@ -879,7 +975,7 @@
                     // Generate audio for the podcast content
                     const formData = new FormData();
                     formData.append('text', podcast.content);
-                    const audioResponse = await fetch('/api/audio/generate-english', {
+                    const audioResponse = await fetch('https://faienglish.xyz/api/audio/generate-english', {
                         method: 'POST',
                         body: formData
                     });
@@ -1267,13 +1363,13 @@
     </script>
 
     <div id="podcastPlayerBar" class="podcast-popup-bar">
-        <button id="popupPrevBtn" class="btn btn-secondary btn-sm"><i class="fas fa-backward"></i></button>
-        <button id="popupPlayPauseBtn" class="btn btn-success btn-sm"><i class="fas fa-play"></i></button>
-        <button id="popupNextBtn" class="btn btn-secondary btn-sm"><i class="fas fa-forward"></i></button>
-        <span id="popupCurrentTimeLabel">0:00</span>
-        <input id="popupProgressBar" type="range" min="0" max="100" value="0" style="flex:1;">
-        <span id="popupTotalTimeLabel">0:00</span>
-        <span class="script-current" id="popupScriptCurrent"></span>
+        <button id="popupPrevBtn" class="btn btn-bar"><i class="fas fa-backward"></i></button>
+        <button id="popupPlayPauseBtn" class="btn btn-bar main"><i class="fas fa-play"></i></button>
+        <button id="popupNextBtn" class="btn btn-bar"><i class="fas fa-forward"></i></button>
+        <span id="popupCurrentTimeLabel" class="bar-time">0:00</span>
+        <input id="popupProgressBar" type="range" min="0" max="100" value="0" class="bar-progress">
+        <span id="popupTotalTimeLabel" class="bar-time">0:00</span>
+        <span class="script-current bar-script" id="popupScriptCurrent"></span>
     </div>
 
     <script>
@@ -1344,7 +1440,7 @@
             const part = scriptParts[idx].trim();
             const formData = new FormData();
             formData.append('text', part);
-            const response = await fetch('/api/audio/generate-english', {
+                const response = await fetch('https://faienglish.xyz/api/audio/generate-english', {
                 method: 'POST',
                 body: formData
             });
@@ -1511,5 +1607,7 @@
         checkPlayerInView();
     });
     </script>
+
+   
 </body>
 </html>

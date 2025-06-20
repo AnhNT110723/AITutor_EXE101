@@ -40,56 +40,6 @@ namespace EXE_FAIEnglishTutor.Controllers
             return View("homepage");
         }
 
-
-        [HttpPost]
-        public async Task<IActionResult> Translate(TranslationViewModel model)
-        {
-            if (string.IsNullOrEmpty(model.Text) || model.SourceLanguage == model.TargetLanguage)
-            {
-                ModelState.AddModelError("", "Văn bản không hợp lệ hoặc ngôn ngữ nguồn và đích giống nhau.");
-                return View("Index", model);
-            }
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var requestUri = $"{_translatorEndpoint}&from={model.SourceLanguage}&to={model.TargetLanguage}";
-                    var requestBody = new[] { new { Text = model.Text } };
-                    var jsonRequest = JsonConvert.SerializeObject(requestBody);
-
-                    var request = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Post,
-                        RequestUri = new Uri(requestUri),
-                        Content = new StringContent(jsonRequest, Encoding.UTF8, "application/json")
-                    };
-
-                    request.Headers.Add("Ocp-Apim-Subscription-Key", _apiKey);
-                    request.Headers.Add("Ocp-Apim-Subscription-Region", _region);
-
-                    var response = await client.SendAsync(request);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
-                        model.TranslatedText = result[0].translations[0].text;
-                    }
-                    else
-                    {
-                        model.TranslatedText = $"Lỗi khi dịch: {response.StatusCode}. Vui lòng thử lại.";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                model.TranslatedText = $"Lỗi: {ex.Message}";
-            }
-
-            return View("Index", model);
-        }
-    }
-
     public IActionResult Privacy()
         {
             return View();

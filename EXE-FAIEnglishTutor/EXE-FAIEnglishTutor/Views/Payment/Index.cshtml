@@ -95,15 +95,15 @@
     <div class="container text-center mt-5">
 
         <!-- FAI MEMBER -->
-        @if (User.Identity.IsAuthenticated && Model.ExpiryDate != null && Model.UpgradeLevel > 0)
-        {
+@*         @if (User.Identity.IsAuthenticated && Model.ExpiryDate != null && Model.UpgradeLevel > 0)
+        { *@
             <div class="text-center" style="font-size:30px; color: black">
                 Không tìm thấy dịch vụ nào
             </div>
-        }
+     @*    }
         else
-        {
-            <h2>Chọn gói nâng cấp FAI</h2>
+        { *@
+@*             <h2>Chọn gói nâng cấp FAI</h2>
             <p style="text-align: center !important; color:black;">
                 Để có thể sử dụng một số chức năng đặc biệt, bạn cần đăng ký gói
                 thành viên:
@@ -127,7 +127,7 @@
                 </div>
             </div>
         }
-
+ *@
         @*   <!-- FAI VIP -->
         <div class="pricing-card card-wrapper">
         <div class="featured">FEATURED</div>
