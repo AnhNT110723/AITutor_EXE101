@@ -28,7 +28,8 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                     {
                     new { role = "user", content = prompt }
                 },
-                    max_tokens = 500,
+                    max_tokens = 4000, // khoảng tối đa model hỗ trợ cho 3.5-turbo
+
                     temperature = 0.7
                 };
 
