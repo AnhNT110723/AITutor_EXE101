@@ -137,9 +137,9 @@ namespace EXE_FAIEnglishTutor.Controllers
 
         private int GetUpgradeLevelFromPlan(decimal planAmount)
         {
-            if (planAmount == 2000) return 1; 
-            if (planAmount == 200000) return 2; 
-            if (planAmount == 640000) return 3;
+            if (planAmount == Constants.MEMBER) return 1; 
+            if (planAmount == Constants.VIP) return 2; 
+            if (planAmount == Constants.ADVANCE) return 3;
             return 0; // Không nâng cấp
         }
 
