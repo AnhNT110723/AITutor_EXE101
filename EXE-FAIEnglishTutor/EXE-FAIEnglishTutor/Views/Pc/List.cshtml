@@ -1,0 +1,229 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // hoặc relative path phù hợp
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAI English</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/course.css">
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+    
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5">
+        <div id="content" class="p-4 p-md-5">
+            <div class="sticky-wrapper sticky-wrapper-list-courses">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                            <i class="fa fa-bars"></i>
+                            <span class="sr-only">Toggle Menu</span>
+                        </button>
+                        <!-- Nút Back -->
+                        <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                                data-bs-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="nav navbar-nav ml-auto">
+                                @*  <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    // Đọc thông tin từ cookie
+                                    var fullName = User.Identity.Name;
+                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
+                                    <li class="nav-item dropdown">
+
+                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            <div class="nav-img">
+                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                            </div>
+                                        </a>
+                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                            <div class="menu-title">
+                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                                <i class="bi bi-person-circle"></i> View Profile
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                            </a>
+
+                                            <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+
+            
+
+            <div class="content-source">
+                <div class="container-fluid">
+                    <div class="body-container">
+                        <h2 style="font-weight: 700; font-size: 1.5rem;">Khóa học</h2>
+
+                        <div class="row gx-1">
+                            <!-- Khóa học 1 -->
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 parent">
+                                <a href="parentCourseDetail.html" class="card-link">
+                                    <div class="custom-card">
+                                        <div class="card-img">
+                                            <img src="static/images/course1.jpg" class="card-img-top" alt="Khóa học 1">
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">Dạy con làm việc nhà</h5>
+                                            <div class="card-text">
+                                                <p class="card-text-video">
+                                                    <strong>Videos đã xem:</strong> 5/10
+                                                </p>
+                                                <p class="card-text-time">
+
+                                                    <strong>Thời hạn:</strong> Trọn đời
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Khóa học 2 -->
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 parent">
+                                <a href="parentCourseDetail.html" class="card-link">
+                                    <div class="custom-card">
+                                        <div class="card-img">
+                                            <img src="static/images/course2.webp" class="card-img-top" alt="Khóa học 1">
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">Phát triển trí thông minh tương tác </h5>
+                                            <div class="card-text">
+                                                <p class="card-text-video">
+                                                    <strong>Videos đã xem:</strong> 5/10
+                                                </p>
+                                                <p class="card-text-time">
+
+                                                    <strong>Thời hạn:</strong> Trọn đời
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Khóa học 3 -->
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 parent">
+                                <a href="parentCourseDetail.html" class="card-link">
+                                    <div class="custom-card">
+                                        <div class="card-img">
+                                            <img src="static/images/course3.webp" class="card-img-top" alt="Khóa học 1">
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">Phát triển thể chất - nhân cách cho trẻ</h5>
+                                            <div class="card-text">
+                                                <p class="card-text-video">
+                                                    <strong>Videos đã xem:</strong> 5/10
+                                                </p>
+                                                <p class="card-text-time">
+
+                                                    <strong>Thời hạn:</strong> Trọn đời
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 parent">
+                                <a href="parentCourseDetail.html" class="card-link">
+                                    <div class="custom-card">
+                                        <div class="card-img">
+                                            <img src="static/images/course4.webp" class="card-img-top" alt="Khóa học 1">
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">Phát triển tư duy</h5>
+                                            <div class="card-text">
+                                                <p class="card-text-video">
+                                                    <strong>Videos đã xem:</strong> 5/10
+                                                </p>
+                                                <p class="card-text-time">
+
+                                                    <strong>Thời hạn:</strong> Trọn đời
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/popper.js"></script>
+    <script src="static/js/main.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+
+
+</body>
+
+</html>

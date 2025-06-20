@@ -1,0 +1,509 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<!-- Page Content  -->
+<div id="content" class="p-4 p-md-5">
+    <div class="sticky-wrapper sticky-wrapper-list-courses">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <!-- Nút Back -->
+                <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        @*  <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">Portfolio</a>
+                        </li> *@
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            // Đọc thông tin từ cookie
+                            var fullName = User.Identity.Name;
+                            var avatarUrl = User.FindFirst("Avatar")?.Value;
+                            <li class="nav-item dropdown">
+
+                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="nav-img">
+                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+                                    </div>
+                                </a>
+                                <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                    <div class="menu-title">
+                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                        <i class="bi bi-person-circle"></i> View Profile
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
+                                    </a>
+
+                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="vnx-podcast-page">
+            <nav class="vnx-podcast-topics">
+                <ul>
+                    <li>
+                        <a class="@(string.IsNullOrEmpty(ViewBag.CurrentTopic) ? "active" : "")"
+                           href="@Url.Action("Index")">Tất cả</a>
+                    </li>
+                    @foreach (var t in ViewBag.Topics)
+                    {
+                        <li>
+                            <a class="@(ViewBag.CurrentTopic == t ? "active" : "")"
+                               href="@Url.Action("Index", new { topic = t })">@t</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+            <h1 class="vnx-podcast-title">Podcasts</h1>
+
+            @if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count == 5)
+            {
+                <!-- 2 cards to phía trên -->
+                <div class="vnx-row-bigpodcasts">
+                    @for (int i = 0; i < 2; i++)
+                    {
+                        <div class="vnx-bigpodcast-card">
+                            <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                                <div class="vnx-podcast-thumb-big">
+                                    <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                                </div>
+                                <div class="vnx-podcast-info">
+                                    <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
+                                    <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
+                                    <div class="vnx-podcast-desc">@ViewBag.PaginatedOlderPodcasts[i].Content</div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+                <!-- 3 cards nhỏ phía dưới -->
+                <div class="vnx-row-smallpodcasts">
+                    @for (int i = 2; i < 5; i++)
+                    {
+                        <div class="vnx-smallpodcast-card">
+                            <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                                <div class="vnx-podcast-thumb-small">
+                                    <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                                </div>
+                                <div class="vnx-podcast-info">
+                                    <div class="vnx-podcast-topic">@ViewBag.PaginatedOlderPodcasts[i].Topic</div>
+                                    <div class="vnx-podcast-card-title">@ViewBag.PaginatedOlderPodcasts[i].Title</div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else if (ViewBag.PaginatedOlderPodcasts != null && ViewBag.PaginatedOlderPodcasts.Count > 0)
+            {
+                <div class="vnx-podcast-list">
+                    @foreach (var podcast in ViewBag.PaginatedOlderPodcasts)
+                    {
+                        <div class="vnx-podcast-card">
+                            <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="vnx-podcast-link">
+                                <div class="vnx-podcast-thumb">
+                                    <img src="@podcast.ImageUrl" alt="@podcast.Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
+                                </div>
+                                <div class="vnx-podcast-info">
+                                    <div class="vnx-podcast-topic">@podcast.Topic</div>
+                                    <div class="vnx-podcast-card-title">@podcast.Title</div>
+                                    <div class="vnx-podcast-desc">@podcast.Content</div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="vnx-podcast-empty">Không có podcast nào để hiển thị!</div>
+            }
+
+            <!-- Phân trang -->
+            @if (ViewBag.TotalPages > 1)
+            {
+                <div class="vnx-podcast-pagination">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&laquo;</a>
+                    }
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <a href="@Url.Action("Index", new { page = i, topic = ViewBag.CurrentTopic })"
+                           class="vnx-podcast-pageitem @(i == ViewBag.CurrentPage ? "active" : "")">@i</a>
+                    }
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, topic = ViewBag.CurrentTopic })" class="vnx-podcast-pageitem">&raquo;</a>
+                    }
+                </div>
+            }
+        </div>
+
+
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .vnx-podcast-page {
+            background: #e9eef4;
+            min-height: 100vh;
+            padding: 24px 0 32px 0;
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .vnx-podcast-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #222;
+            margin: 18px 0 28px 32px;
+            letter-spacing: -1.5px;
+        }
+
+        .vnx-podcast-topics {
+            border-bottom: 1.5px solid #e9e9e9;
+            margin-bottom: 2px;
+            padding-left: 30px;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 9;
+        }
+
+            .vnx-podcast-topics ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                gap: 28px;
+            }
+
+            .vnx-podcast-topics li {
+                display: inline-block;
+            }
+
+            .vnx-podcast-topics a {
+                text-decoration: none;
+                font-size: 1.12rem;
+                color: #444;
+                font-weight: 500;
+                padding: 12px 0 8px 0;
+                display: inline-block;
+                transition: color 0.17s;
+                border-bottom: 2px solid transparent;
+            }
+
+                .vnx-podcast-topics a.active,
+                .vnx-podcast-topics a:hover {
+                    color: #c1172c;
+                    border-bottom: 2.5px solid #c1172c;
+                    background: none;
+                }
+
+        /* ----- CUSTOM LAYOUT 2 TO + 3 NHỎ ------- */
+        .vnx-row-bigpodcasts {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 22px;
+            margin-bottom: 18px;
+        }
+
+        .vnx-bigpodcast-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.06);
+            min-width: 330px;
+            max-width: 420px;
+            width: 36vw;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.18s, transform 0.13s;
+            overflow: hidden;
+        }
+
+            .vnx-bigpodcast-card:hover {
+                box-shadow: 0 10px 32px rgba(193,23,44,0.13);
+                transform: translateY(-5px) scale(1.018);
+                z-index: 1;
+            }
+
+        .vnx-podcast-thumb-big {
+            width: 100%;
+            height: 120px;
+            background: #f7f7f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .vnx-podcast-thumb-big img {
+                max-width: 95%;
+                max-height: 110px;
+                object-fit: cover;
+                border-radius: 10px;
+                display: block;
+            }
+
+        .vnx-row-smallpodcasts {
+            display: flex;
+            gap: 22px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .vnx-smallpodcast-card {
+            background: #fff;
+            border-radius: 13px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            min-width: 180px;
+            max-width: 240px;
+            width: 18vw;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.17s, transform 0.12s;
+            overflow: hidden;
+        }
+
+            .vnx-smallpodcast-card:hover {
+                box-shadow: 0 8px 22px rgba(193,23,44,0.12);
+                transform: translateY(-4px) scale(1.01);
+                z-index: 1;
+            }
+
+        .vnx-podcast-thumb-small {
+            width: 100%;
+            height: 70px;
+            background: #f7f7f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .vnx-podcast-thumb-small img {
+                max-width: 90%;
+                max-height: 62px;
+                object-fit: cover;
+                border-radius: 8px;
+                display: block;
+            }
+        /* Thông tin bên trong card */
+        .vnx-podcast-info {
+            padding: 12px 16px 10px 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 0;
+        }
+
+        .vnx-podcast-card-title {
+            font-size: 1.12rem;
+            font-weight: bold;
+            color: #2c2c2c;
+            margin-bottom: 7px;
+            margin-top: 1px;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+
+        .vnx-podcast-desc {
+            font-size: 1.01rem;
+            color: #373737;
+            margin-bottom: 10px;
+            max-height: 2.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .vnx-podcast-topic {
+            font-size: 0.99rem;
+            color: #7b7b7b;
+            margin-bottom: 3px;
+            font-style: italic;
+        }
+
+        /* Default grid (dùng cho các trường hợp còn lại) */
+        .vnx-podcast-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+            gap: 36px 36px;
+            margin: 0 auto;
+            padding: 12px 42px 0 42px;
+            max-width: 1440px;
+        }
+
+        .vnx-podcast-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+            transition: box-shadow 0.21s, transform 0.17s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 245px;
+        }
+
+            .vnx-podcast-card:hover {
+                box-shadow: 0 10px 32px rgba(193,23,44,0.18);
+                transform: translateY(-4px) scale(1.018);
+                z-index: 1;
+            }
+
+        .vnx-podcast-thumb {
+            width: 100%;
+            height: 120px;
+            background: #f7f7f7;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .vnx-podcast-thumb img {
+                max-width: 100%;
+                max-height: 110px;
+                object-fit: cover;
+                border-radius: 10px;
+                display: block;
+            }
+
+        /* Empty */
+        .vnx-podcast-empty {
+            text-align: center;
+            color: #c1172c;
+            font-size: 1.14rem;
+            margin: 24px 0;
+        }
+
+        /* Pagination style */
+        .vnx-podcast-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 36px 0 0 0;
+        }
+
+        .vnx-podcast-pageitem {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fff;
+            color: #c1172c;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.13rem;
+            text-decoration: none;
+            border: none;
+            transition: background 0.14s, color 0.14s;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+        }
+
+            .vnx-podcast-pageitem.active,
+            .vnx-podcast-pageitem:hover {
+                background: #c1172c;
+                color: #fff;
+            }
+
+        /* Responsive */
+        @@media (max-width: 1100px) {
+            .vnx-row-bigpodcasts
+
+        {
+            gap: 16px;
+        }
+
+        .vnx-bigpodcast-card {
+            min-width: 235px;
+            max-width: 320px;
+            width: 46vw;
+        }
+
+        .vnx-row-smallpodcasts {
+            gap: 11px;
+        }
+
+        .vnx-smallpodcast-card {
+            min-width: 110px;
+            max-width: 180px;
+            width: 24vw;
+        }
+
+        }
+        @@media (max-width: 700px) {
+            .vnx-row-bigpodcasts, .vnx-row-smallpodcasts
+
+        {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .vnx-bigpodcast-card, .vnx-smallpodcast-card {
+            width: 90vw;
+            min-width: 0;
+            max-width: 98vw;
+        }
+
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.podcast-play-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const icon = btn.querySelector('i');
+                    icon.style.transition = "transform 0.5s";
+                    icon.style.transform = "scale(1.3) rotate(360deg)";
+                    setTimeout(() => {
+                        icon.style.transform = "";
+                    }, 500);
+                });
+            });
+        });
+    </script>
+}
