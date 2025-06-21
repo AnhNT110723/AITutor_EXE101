@@ -32,6 +32,10 @@ namespace EXE_FAIEnglishTutor.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var model = new LoginDto();
 
             // Kiểm tra nếu có cookie "SavedEmail" thì lấy giá trị

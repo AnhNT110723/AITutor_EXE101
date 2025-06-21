@@ -1,0 +1,566 @@
+﻿@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>FAI English</title>
+    <link rel="icon" type="image/png" href="~/images/favicon/con_coc_icon.png" />
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    @* <link href="~/css/homepage/bootstrap-icons.css" rel="stylesheet"> *@
+
+    <link href="~/css/homepage/fai-landing.css" rel="stylesheet">
+
+
+    <style>
+
+        .timeline-section {
+            background-image: url('../images/homepage/learnai.webp');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+        }
+
+        .timeline-container .vertical-scrollable-timeline {
+            list-style-type: none;
+            position: relative;
+            padding-left: 0;
+        }
+
+            .timeline-container .vertical-scrollable-timeline .list-progress {
+                width: 8px;
+                height: 87%;
+                background-color: #e96d08;
+                position: absolute;
+                left: 52px;
+                top: 0;
+                overflow: hidden;
+            }
+
+                .timeline-container .vertical-scrollable-timeline .list-progress .inner {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    height: 100%;
+                    background-color: #f4a261;
+                    width: 100%;
+                }
+
+            .timeline-container .vertical-scrollable-timeline li {
+                position: relative;
+                padding: 20px 0px 65px 145px;
+            }
+
+                .timeline-container .vertical-scrollable-timeline li:last-child {
+                    padding-bottom: 0;
+                }
+
+                .timeline-container .vertical-scrollable-timeline li p {
+                    line-height: 40px;
+                }
+
+                    .timeline-container .vertical-scrollable-timeline li p:last-child {
+                        margin-bottom: 0;
+                    }
+
+                .timeline-container .vertical-scrollable-timeline li .icon-holder {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 104px;
+                    height: 104px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #f4a261;
+                    border-radius: 50%;
+                    z-index: 1;
+                    transition: 0.4s all;
+                }
+
+                    .timeline-container .vertical-scrollable-timeline li .icon-holder::before {
+                        content: "";
+                        width: 80px;
+                        height: 80px;
+                        border: 4px solid #fff;
+                        position: absolute;
+                        background-color: #f4a261;
+                        border-radius: 50%;
+                        z-index: -1;
+                        transition: 0.4s all;
+                    }
+
+                    .timeline-container .vertical-scrollable-timeline li .icon-holder i {
+                        font-size: 25px;
+                        color: #fff;
+                    }
+
+                .timeline-container .vertical-scrollable-timeline li::before {
+                    content: "";
+                    position: absolute;
+                    height: 100%;
+                    width: 8px;
+                    background-color: transparent;
+                    left: 52px;
+                    z-index: 0;
+                }
+
+                .timeline-container .vertical-scrollable-timeline li.active .icon-holder {
+                    background-color: #d56604;
+                }
+
+                    .timeline-container .vertical-scrollable-timeline li.active .icon-holder::before {
+                        background-color: #d56604;
+                    }
+
+        .section-overlay {
+            background-image: linear-gradient(15deg, #423b35 0%, #2f2816 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            opacity: 0.85;
+        }
+
+            .section-overlay + .container-fluid {
+                position: relative;
+            }
+
+
+        #google_translate_element {
+            margin-top: 14px;
+        }
+
+
+        .goog-logo-link {
+            display: none !important;
+        }
+
+
+        .goog-te-gadget span {
+            display: none;
+        }
+
+
+        .goog-te-combo {
+            padding: 4px 8px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: #333;
+        }
+
+        .goog-te-gadget {
+            font-size: 0px !important;
+        }
+
+            .goog-te-gadget .goog-te-combo {
+                width: 140px !important;
+            }
+    </style>
+</head>
+
+<body>
+
+    <main>
+
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="navbar-brand-icon "><img src="~/images/favicon/con_coc_icon.png" style="width: 22px; margin-bottom: 5px" /></i>
+                    <span>FAI English</span>
+                    <!-- <img src="images/FAI-Logo.png" alt="" style="width: 200px; height: 100px;"> -->
+                </a>
+                <div class="d-lg-none ms-auto me-3">
+                    <a href="/Account/Login" class="btn custom-btn custom-border-btn btn-naira btn-inverted">
+                        <i class="btn-icon bi-cloud-download"></i>
+                        <span>Login now</span><!-- duplicated another one below for mobile -->
+                    </a>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-lg-auto me-lg-4">
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_1">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_2">The Book</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_3">How does it works</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_3">FAQs</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_5">Contact</a>
+                        </li>
+                        <li>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <div id="google_translate_element"></div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="d-none d-lg-block">
+                        <a href="/Account/Login" class="btn custom-btn custom-border-btn btn-naira btn-inverted">
+                            <i class="btn-icon bi-box-arrow-in-right"></i>
+                            <span>Login now</span><!-- duplicated above one for mobile -->
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+        <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-6 col-12 mb-5 pb-5 pb-lg-0 mb-lg-0">
+
+                        <h6>Introducing FAI</h6>
+
+                        <h1 class="text-white mb-4">platform for creatives around the world</h1>
+
+                        <a href="#section_2" class="btn custom-btn smoothscroll me-3">Discover More</a>
+
+                        <a href="#section_3" class="link link--kale smoothscroll">How to learn listening</a>
+                    </div>
+
+                    <div class="hero-image-wrap col-lg-6 col-12 mt-3 mt-lg-0">
+                        <img src="~/images/homepage/learnewai-removebg-preview.png" class="hero-image img-fluid" alt="education online books">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+        <section class="featured-section">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-8 col-12">
+
+                        <h2>Discover. Learn. Enjoy</h2>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="py-lg-5"></section>
+
+
+        <section class="book-section section-padding" id="section_2">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-6 col-12">
+                        <img src="~/images/homepage/image.png" class="img-fluid" alt="">
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                        <div class="book-section-info">
+                            <h6>Modern &amp; Creative</h6>
+
+
+                            <h2 class="mb-4">About The FAI english tutor</h2>
+
+                            <p>Learn English the smart way — with AI that listens, speaks, and improves with you.</p>
+
+                            <p>The <strong>FAI English</strong> Tutor is an AI-powered learning platform designed to help learners master English <strong>speaking</strong> and <strong>listening</strong> skills through intelligent, interactive practice.</p>
+                            <p>Unlike <strong>traditional</strong> methods, FAI uses <strong>advanced</strong> speech recognition and natural conversation engines to simulate real-life dialogues, offer real-time feedback, and adapt to your learning pace — anytime, anywhere.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+
+        <section class="timeline-section section-padding" id="section_3">
+            <div class="section-overlay"></div>
+
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-12 text-center">
+                        <h2 class="text-white mb-4">How does it work?</h1>
+                    </div>
+
+                    <div class="col-lg-10 col-12 mx-auto">
+                        <div class="timeline-container">
+                            <ul class="vertical-scrollable-timeline" id="vertical-scrollable-timeline">
+                                <div class="list-progress">
+                                    <div class="inner"></div>
+                                </div>
+
+                                <li>
+                                    <h4 class="text-white mb-3">Search your favourite topic</h4>
+
+                                    <p class="text-white">First you choose the listening practice section after successfully logging in, then you choose the appropriate level and choose the topic you want to practice listening.</p>
+
+                                    <div class="icon-holder">
+                                        <i class="bi-search"></i>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <h4 class="text-white mb-3 ">Users listen to podcasts by topic</h4>
+
+                                    <p class="text-white">After selecting a topic that suits your level, users can listen to AI-curated podcasts tailored to their interests. These podcasts are designed with clear pronunciation, real-life scenarios, and relevant vocabulary to enhance listening comprehension while keeping learning engaging.</p>
+
+                                    <div class="icon-holder">
+                                        <i class="bi-bookmark"></i>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <h4 class="text-white mb-3">Listenling Test &amp; Enjoy</h4>
+
+                                    <p class="text-white"> Once users complete a set of listening practices, they can take interactive listening tests to measure progress. The system provides instant feedback, highlighting both strengths and areas for improvement — turning assessment into a fun and rewarding experience.</p>
+
+                                    <div class="icon-holder">
+                                        <i class="bi-book"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center mt-5">
+                        <p class="text-white">
+                            Want to learn more?
+                            <a href="#" class="btn custom-btn custom-border-btn ms-3">Check out Youtube</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <section class="faq-section section-padding" id="section_4">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-6 col-12">
+                        <h2 class="mb-4">Frequently Asked Questions</h2>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-lg-5 col-12">
+                        <img src="~/images/homepage/faq_graphic.jpg" class="img-fluid" alt="FAQs">
+                    </div>
+
+                    <div class="col-lg-6 col-12 m-auto">
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        What is this site for?
+                                    </button>
+                                </h2>
+
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        The website provides products that help users solve English <strong>listening</strong> and<strong>speaking</strong>  problems effectively, saving learning time by learning with AI without being bound by time.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        How to learn speaking with AI?
+                                    </button>
+                                </h2>
+
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        After logging into our <strong>website</strong>, you choose role playing mode then you choose the topic you want to learn. Next you will choose the AI ​​voice you want to learn then press the start button to learn.
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Does it need to paid?
+                                        </button>
+                                    </h2>
+
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            Since we are new to the market we are giving students a month of free lessons, starting <strong>7/7/2025</strong> we will start charging per account.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </section>
+
+
+
+
+
+        <section class="contact-section section-padding" id="section_5">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-5 col-12 mx-auto">
+                        <form id="contactForm" class="custom-form ebook-download-form bg-white shadow" action="#" method="post" role="form">
+                            <div class="text-center mb-5">
+                                <h2 class="mb-1">We'd love to hear from you</h2>
+                            </div>
+
+                            <div class="ebook-download-form-body">
+                                <div class="input-group mb-4">
+                                    <input type="text" name="ebook-form-name" id="ebook-form-name" class="form-control" placeholder="Your Name" required>
+                                    <span class="input-group-text"><i class="custom-form-icon bi-person"></i></span>
+                                </div>
+
+                                <div class="input-group mb-4">
+                                    <input type="email" name="ebook-email" id="ebook-email" class="form-control" placeholder="your@gmail.com" required>
+                                    <span class="input-group-text"><i class="custom-form-icon bi-envelope"></i></span>
+                                </div>
+
+                                <div class="input-group mb-4">
+                                    <textarea name="ebook-message" class="form-control" placeholder="Tell me about the project" required></textarea>
+                                </div>
+
+                                <div class="col-lg-8 col-md-10 col-8 mx-auto">
+                                    <button type="submit" class="form-control">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                        <h6 class="mt-5">Say hi and talk to us</h6>
+
+                        <h2 class="mb-4">Contact</h2>
+
+                        <p class="mb-3">
+                            <i class="bi-geo-alt me-2"></i>
+                            Hoa Lac - Ha Noi - Viet Nam
+                        </p>
+
+                        <p class="mb-2">
+                            <a href="tel: 0869620295" class="contact-link">
+                                0869-620-295
+                            </a>
+                        </p>
+
+                        <p>
+                            <a href="mailto:info@company.com" class="contact-link">
+                                faienglishtutor@gmail.com
+                            </a>
+                        </p>
+
+                        <h6 class="site-footer-title mt-5 mb-3">Social</h6>
+
+                        <ul class="social-icon mb-4">
+                            <li class="social-icon-item">
+                                <a href="https://www.tiktok.com/@@fai.tutor" class="social-icon-link bi-tiktok"></a>
+                            </li>
+                            <li class="social-icon-item">
+                                <a href="https://www.facebook.com/groups/1233997501508518/" class="social-icon-link bi-facebook"></a>
+                            </li>
+
+                        </ul>
+
+                        <p class="copyright-text">
+                            Copyright © 2025 FAI company
+                            <br><br><a rel="nofollow" href="#" target="_blank">designed by FAI Team</a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function(e) {
+            e.preventDefault(); // Ngăn hành vi submit form thật
+
+            // Lấy giá trị và kiểm tra cơ bản (nếu muốn nâng cao có thể dùng thêm regex)
+            const name = document.getElementById("ebook-form-name").value.trim();
+            const email = document.getElementById("ebook-email").value.trim();
+            const message = document.querySelector("textarea[name='ebook-message']").value.trim();
+
+            if (name && email && message) {
+                // Hiển thị thông báo đã nhận
+              alert("Chúng tôi đã nhận phản hồi từ bạn. Cảm ơn bạn đã liên hệ!");
+
+                // Xóa nội dung form (nếu muốn)
+                document.getElementById("contactForm").reset();
+            } else {
+                alert("Vui lòng điền đầy đủ thông tin.");
+            }
+        });
+    </script>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="~/lib//jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/homepage/jquery.sticky.js"></script>
+    <script src="~/js/homepage/click-scroll.js"></script>
+    <script src="~/js/homepage/custom.js"></script>
+    <script src="script.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en' },
+                'google_translate_element'
+            );
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

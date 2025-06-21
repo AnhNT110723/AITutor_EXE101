@@ -15,6 +15,8 @@ namespace EXE_FAIEnglishTutor.Services.Interface
         Task UpdateUser(User user);
 
         Task AddUserAsync(User user);
+        
+        Task SaveChangeAsync(User user);
 
         Task DeleteUserAsync(int id);
 

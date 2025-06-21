@@ -75,6 +75,11 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion
             return user;
         }
 
+        public async Task SaveChangeAsync(User user)
+        {
+            await _userRepository.SaveChangeAsync(user);
+        }
+
         public async Task UpdateUser(User user)
         {
              await _userRepository.Update(user);

@@ -139,7 +139,11 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex justify-content-end align-items-center">
+                <div id="google_translate_element"></div>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
                        @*  <li class="nav-item active">
                             <a class="nav-link" href="home.html">Home</a>
@@ -272,7 +276,7 @@
             </a>
 
             </a>
-        <a href="Pronunciation">
+        <a href="Pronunciation/index">
 
                 <div class="d-flex flex-column align-items-center cursor-pointer">
                     <div class="rounded-circle bg-orange p-1">
@@ -672,6 +676,39 @@
                 color: #ffd700; 
                 transform: scale(1.2); 
             }
+
+
+
+
+        /* Tùy chỉnh giao diện thô của Google Translate */
+        #google_translate_element {
+            display: inline-block;
+            border-radius: 8px;
+            padding: 4px 8px;
+            background-color: #f9f9f9;
+            font-size: 14px;
+        }
+
+        /* Ẩn logo Google nếu bạn muốn tối giản */
+        .goog-logo-link {
+            display: none !important;
+        }
+
+        /* Ẩn thông tin quyền và liên kết */
+        .goog-te-gadget span {
+            display: none;
+        }
+
+        /* Dropdown ngôn ngữ */
+        .goog-te-combo {
+            padding: 4px 8px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: #333;
+        }
+
     </style>
 
 
@@ -801,40 +838,56 @@
     </script>
 
     <script>
+          function enableSwipeScroll(containerId) {
+        const container = document.getElementById(containerId);
+        let isDown = false;
+        let startX;
+        let scrollLeft;
 
-        //Mới ra mắt
-        document.addEventListener('DOMContentLoaded', function () {
-            const courseList = document.getElementById('course-list-new');
-            const prevBtn = document.getElementById('prev-btn-new');
-            const nextBtn = document.getElementById('next-btn-new');
+        // Mobile touch events
+        container.addEventListener('touchstart', (e) => {
+            isDown = true;
+            startX = e.touches[0].pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+        });
 
-            // Cuộn sang trái
+        container.addEventListener('touchmove', (e) => {
+            if (!isDown) return;
+            e.preventDefault(); // Ngăn cuộn dọc
+            const x = e.touches[0].pageX - container.offsetLeft;
+            const walk = (startX - x); // Khoảng di chuyển
+            container.scrollLeft = scrollLeft + walk;
+        });
+
+        container.addEventListener('touchend', () => {
+            isDown = false;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Cuộn bằng nút bấm (đã có)
+        const setups = [
+            { listId: 'course-list-new', prevId: 'prev-btn-new', nextId: 'next-btn-new' },
+            { listId: 'course-list', prevId: 'prev-btn', nextId: 'next-btn' }
+        ];
+
+        setups.forEach(({ listId, prevId, nextId }) => {
+            const courseList = document.getElementById(listId);
+            const prevBtn = document.getElementById(prevId);
+            const nextBtn = document.getElementById(nextId);
+
             prevBtn.addEventListener('click', () => {
                 courseList.scrollBy({ left: -300, behavior: 'smooth' });
             });
 
-            // Cuộn sang phải
             nextBtn.addEventListener('click', () => {
                 courseList.scrollBy({ left: 300, behavior: 'smooth' });
             });
+
+            // Thêm hỗ trợ vuốt ngang
+            enableSwipeScroll(listId);
         });
-
-        //Đang thình hành
-        document.addEventListener('DOMContentLoaded', function () {
-            const courseList = document.getElementById('course-list');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-
-            // Cuộn sang trái
-            prevBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: -300, behavior: 'smooth' });
-            });
-
-            // Cuộn sang phải
-            nextBtn.addEventListener('click', () => {
-                courseList.scrollBy({ left: 300, behavior: 'smooth' });
-            });
-        });
+    });
 
      function getFormattedTime() {
             const now = new Date();
@@ -848,5 +901,19 @@
 
     </script>
 
+
+    <script src="script.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en' },
+                'google_translate_element'
+            );
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 }
+
+
 

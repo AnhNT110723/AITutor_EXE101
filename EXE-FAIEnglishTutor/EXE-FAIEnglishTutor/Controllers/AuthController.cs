@@ -20,7 +20,7 @@ namespace EXE_FAIEnglishTutor.Controllers
 
 
 		// GET: /Auth/LoginWithGoogle
-        public IActionResult LoginWithGoogle(string returnUrl = "/")
+        public IActionResult LoginWithGoogle(string returnUrl = "/Mentee")
         {
             var properties = new AuthenticationProperties
             {
@@ -37,7 +37,7 @@ namespace EXE_FAIEnglishTutor.Controllers
 
         // GET: /Auth/LoginWithFacebook
         [HttpGet]
-        public IActionResult LoginWithFacebook(string returnUrl = "/")
+        public IActionResult LoginWithFacebook(string returnUrl = "/Mentee")
         {
             var properties = new AuthenticationProperties
             {
@@ -51,7 +51,7 @@ namespace EXE_FAIEnglishTutor.Controllers
 
         // GET: /Auth/LoginWithTwitter
         [HttpGet]
-        public IActionResult LoginWithTwitter(string returnUrl = "/")
+        public IActionResult LoginWithTwitter(string returnUrl = "/Mentee")
         {
             var properties = new AuthenticationProperties
             {
@@ -64,7 +64,7 @@ namespace EXE_FAIEnglishTutor.Controllers
 
         // GET: /Auth/Callback (Callback chung cho tất cả external login)
         [HttpGet]
-		public async Task<IActionResult> Callback(string returnUrl = "/")
+		public async Task<IActionResult> Callback(string returnUrl = "/Mentee")
 		{
 			// Kiểm tra xem người dùng đã được xác thực chưa
 			if (!User.Identity.IsAuthenticated)

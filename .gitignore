@@ -2,6 +2,7 @@
 #appsettings.json
 appsettings.Development.json
 #file build solution
+.vscode/
 .vs/
 bin/
 obj/

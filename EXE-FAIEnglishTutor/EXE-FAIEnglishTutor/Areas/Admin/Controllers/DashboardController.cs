@@ -1,5 +1,6 @@
 ﻿using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
+using EXE_FAIEnglishTutor.Services.Implementaion;
 using EXE_FAIEnglishTutor.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -18,18 +19,34 @@ namespace EXE_FAIEnglishTutor.Areas.Admin.Controllers
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public DashboardController(IUserService userService, IRoleService roleService, IWebHostEnvironment webHostEnvironment)
+        private readonly IPaymentService _paymentService;
+        public DashboardController(IUserService userService, IRoleService roleService, IWebHostEnvironment webHostEnvironment, IPaymentService paymentService)
         {
             _userService = userService;
             _roleService = roleService;
             _webHostEnvironment = webHostEnvironment;
+            _paymentService = paymentService;
+
         }
 
         public async Task<IActionResult> Index()
         {
             int totalUsers = await _userService.GetTotalUsersAsync();
+
             ViewBag.TotalUsers = totalUsers;
+            // Lấy thu nhập hàng tháng và hàng năm
+            decimal monthlyEarnings = await _paymentService.GetMonthlyEarningsAsync();
+            decimal annualEarnings = await _paymentService.GetAnnualEarningsAsync();
+
+            // Gửi dữ liệu đến ViewBag để hiển thị trong thẻ
+            ViewBag.MonthlyEarnings = monthlyEarnings;
+            ViewBag.AnnualEarnings = annualEarnings;
+
+            // Lấy dữ liệu thu nhập hàng tháng cho biểu đồ (ví dụ: 12 tháng gần nhất)
+            var monthlyEarningsData = await _paymentService.GetMonthlyEarningsForChartAsync();
+           
+            ViewBag.MonthlyEarningsData = monthlyEarningsData;
+            
             return View();
         }
 

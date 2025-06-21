@@ -36,6 +36,23 @@
             margin-top: 20px;
         }
 
+
+        .custom-confirm-btn, .custom-cancel-btn {
+            width: 100px; /* Make both buttons the same width */
+            padding: 10px; /* Add padding for better appearance */
+        }
+
+        .custom-confirm-btn {
+            background-color: #ed782b !important; /* Set OK button color to black */
+            color: white;
+            border: none;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+            .custom-confirm-btn:hover {
+                background-color: #dc3545; /* Change OK button to green on hover */
+            }
+
         .btn-login-custom {
             background-color: black;
             color: white;
@@ -47,57 +64,71 @@
                 /* Phóng to nhẹ khi hover */
                 transform: scale(1.05);
             }
+
+        .goog-te-gadget {
+            font-size: 0px !important;
+        }
+
+            .goog-te-gadget .goog-te-combo {
+                width: 140px !important;
+            }
     </style>
 </head>
 
 <body>
     <main role="main">
         <div class="wrapper d-flex align-items-stretch">
-<nav id="sidebar" class="active">
+            <nav id="sidebar" class="active">
                 <h1><a asp-area="" asp-controller="home" asp-action="Index" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
-            <ul class="list-unstyled components mb-5">
-             @*    <li>
+                <ul class="list-unstyled components mb-5">
+                    @*    <li>
                     <a asp-area="" asp-controller="Ielts" class="link-test">
-                        <span class="fa fa-users"></span>
-                        <span class="menu-text">Học Ielts</span>
+                    <span class="fa fa-users"></span>
+                    <span class="menu-text">Học Ielts</span>
                     </a>
-                </li> *@
-                <li>
+                    </li> *@
+                    <li>
                         <a asp-area="Mentee" asp-controller="Toeic" asp-action="Index" class="link-test" data-action="toeic">
-                        <span class="fas fa-graduation-cap icon"></span>
-                        <span class="menu-text">Học Toeic</span>
-                    </a>
-                </li>
-                <li >
+                            <span class="fas fa-graduation-cap icon"></span>
+                            <span class="menu-text">Học Toeic</span>
+                        </a>
+                    </li>
+                    <li>
                         <a asp-area="" asp-controller="home" asp-action="Index" class="link-test" data-action="home">
-                        <span class="fa fa-frog"></span>
-                        <span class="menu-text">AI Tutor</span>
+                            <span class="fa fa-frog"></span>
+                            <span class="menu-text">AI Tutor</span>
 
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Mentee" asp-controller="Podcast" asp-action="Index" class="link-test" data-action="podcast">
+                            <span class="fas fa-book-open"></span>
+                            <span class="menu-text">Podcast</span>
+                        </a>
+                    </li>
+                    @*    <li>
+                    <a  asp-area="" asp-controller="Pronunciation"  class="link-test" data-action="pronunciation">
+                    <span class="bi bi-people-fill"></span>
+                    <span class="menu-text">Phat am</span>
                     </a>
-                </li>
-                <li>
-                        <a asp-area="" asp-controller="Pc" asp-action="index" class="link-test" data-action="podcast">
-                        <span class="fas fa-book-open"></span>
-                        <span class="menu-text">Podcast</span>
-                    </a>
-                </li>
-             @*    <li>
-                        <a  asp-area="" asp-controller="Pronunciation"  class="link-test" data-action="pronunciation">
-                        <span class="bi bi-people-fill"></span>
-                        <span class="menu-text">Phat am</span>
-                    </a>
-                </li> *@
-            </ul>
+                    </li> *@
+                    <li>
+                        <a asp-area="" asp-controller="Payment" asp-action="index" class="link-test" data-action="payment">
+                            <span class="fas fa-credit-card"></span>
+                            <span class="menu-text">Membership</span>
+                        </a>
+                    </li>
+                </ul>
 
-            <div class="footer">
-                <p style="color: #667085;">
-                    Copyright &copy;
-                    <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
-                    made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                                                                                  target="_blank">Colorlib.com</a>
-                </p>
-            </div>
-        </nav>
+                <div class="footer">
+                    <p style="color: #667085;">
+                        Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is
+                        made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                                                                                      target="_blank">Colorlib.com</a>
+                    </p>
+                </div>
+            </nav>
             @RenderBody()
         </div>
     </main>
@@ -133,8 +164,8 @@
                 (action === 'home' && (currentPath === '/' || currentPath.includes('/home/index') || currentPath.includes('/home'))) ||
                 (action === 'lesson' && currentPath.includes('/lesson')) ||
                 (action === 'toeic' && currentPath.includes('/toeic')) ||
-                (action === 'podcast' && (currentPath.includes('/pc/index') || currentPath.includes('/pc'))) ||
-                (action === 'pronunciation' && currentPath.includes('/pronunciation'))
+                (action === 'podcast' && (currentPath.includes('/Mentee/Podcast'))) ||
+                (action === 'payment' && currentPath.includes('/Payment/index'))
             ) {
                 console.log(`Active item: ${action}`); // Debug mục đang active
                 li.classList.add('active');

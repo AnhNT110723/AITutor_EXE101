@@ -1,0 +1,207 @@
+﻿@model EXE_FAIEnglishTutor.Dtos.PaymentDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán QR</title>
+    @* <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> *@
+    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> *@
+    <link rel="icon" type="image/png" href="~/images/favicon/con_coc_icon.png" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .order-box, .qr-box {
+            border-radius: 12px;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            height: 550px;
+            display: flex;
+            flex-direction: column; 
+        }
+
+        .bottom-section {
+            margin-bottom: 20px;
+            margin-top: auto; 
+            text-align: center; 
+        }
+        .qr-background {
+            background: orange;
+            background-image: url('../images/qrcode-bg-2.png');
+            padding: 30px;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            height: 550px;
+        }
+
+        .qr-background img {
+                border-radius: 10px;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border: 10px solid #fff;
+                width:280px;
+        }
+
+        .countdown-box {
+            bottom :0;
+            background:#ffebcc;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .countdown-box .time {
+            display: inline-block;
+            background: #ffd699;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="order-box">
+                    <h5><strong>Thông tin đơn hàng</strong></h5>
+                    <p><strong>Mã đơn hàng</strong><br>@Model.PaymentId</p>
+                    <p><strong>Mô tả</strong><br>Thanh toán đơn hàng: @Model.Content. Nâng cấp tài khoản FAI.</p>
+                    <p><strong>Số tiền</strong><br class="text-danger fs-4">@Model.TotalAmount VNĐ</p>
+                <div class="bottom-section">
+                    <div class="countdown-box mt-4">
+                        <p>Đơn hàng sẽ hết hạn sau:</p>
+                        <div>
+                            <span class="time" id="minutes">09</span>
+                            <span>Phút</span>
+                            <span class="time" id="seconds">59</span>
+                            <span>Giây</span>
+                        </div>
+                    </div>
+                 <a href="#" id="backLink" class="d-block text-center mt-3">Quay về</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="qr-background">
+                    <h5><strong>Quét mã QR để thanh toán</strong></h5>
+                    <p>Vui lòng không đóng trang cho đến khi hoàn tất thanh toán</p>
+                    <img src="@Model.QRCodeUrl" alt="QR Code" class="img-fluid my-3">
+                    <p class="text-white"><i class="fas fa-download"></i> Lưu về máy</p>
+                    <p class="text-white small">Sử dụng App Ngân Hàng hoặc ứng dụng Ví điện tỬ hỗ trợ QR code để quét mã thanh toán.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for Success Notification -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Thành công</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Thanh toán của bạn đã thành công!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="okButton">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Đồng hồ đếm ngược
+        let totalSeconds = 9 * 60 + 59;
+        const minutesEl = document.getElementById("minutes");
+        const secondsEl = document.getElementById("seconds");
+
+        function updateCountdown() {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            minutesEl.textContent = minutes.toString().padStart(2, '0');
+            secondsEl.textContent = seconds.toString().padStart(2, '0');
+            if (totalSeconds > 0) {
+                totalSeconds--;
+                setTimeout(updateCountdown, 1000);
+            } else {
+                // Hết thời gian, gọi API để hủy payment
+                $.ajax({
+                    url: '/Payment/CancelPayment',
+                    type: 'POST',
+                    data: { paymentId: @Model.PaymentId },
+                    success: function () {
+                        window.location.href = "@Url.Action("Index", "Payment")";
+                    },
+                    error: function () {
+                        console.error('Không thể hủy giao dịch khi hết thời gian.');
+                    }
+                });
+            }
+        }
+        // Polling để kiểm tra trạng thái thanh toán
+        function checkPaymentStatus() {
+            $.get("/Payment/CheckPaymentStatus?paymentId=@Model.PaymentId", function (data) {
+                if (data.success) {
+                    $("#successModal").modal("show");
+                    clearInterval(pollingInterval); // Dừng polling
+                }
+            });
+        }
+        const pollingInterval = setInterval(checkPaymentStatus, 5000); // Kiểm tra mỗi 5 giây
+        updateCountdown();
+
+
+        // Xử lý khi nhấn OK
+        $("#okButton").click(function () {
+            window.location.href = "@Url.Action("Index", "home")"; // Quay về Home
+        });
+
+
+
+        // Xử lý sự kiện khi nhấn "Quay về"
+        document.getElementById('backLink').addEventListener('click', function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Bạn có muốn thoát không?',
+                text: "Nếu thoát, giao dịch sẽ bị hủy.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ed782b',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, thoát!',
+                cancelButtonText: 'Không'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Payment/CancelPayment',
+                        type: 'POST',
+                        data: { paymentId: @Model.PaymentId },
+                        success: function () {
+                            window.location.href = "@Url.Action("Index", "Payment")";
+                        },
+                        error: function () {
+                            Swal.fire('Lỗi!', 'Không thể hủy giao dịch.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

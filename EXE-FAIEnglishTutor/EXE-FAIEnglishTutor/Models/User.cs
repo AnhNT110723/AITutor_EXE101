@@ -26,6 +26,8 @@ public partial class User
 
     public AccountStatus Status { get; set; } 
 
+    public int? UpgradeLevel { get; set; }
+
     public DateTime? ExpiryDate { get; set; }
 
     public string Provider { get; set; } = null!;
@@ -37,8 +39,6 @@ public partial class User
     public virtual ICollection<Feeback> Feebacks { get; set; } = new List<Feeback>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
-
-    public virtual ICollection<Podcast> Podcasts { get; set; } = new List<Podcast>();
 
     public virtual ICollection<Progress> Progresses { get; set; } = new List<Progress>();
 
