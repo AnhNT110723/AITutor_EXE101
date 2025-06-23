@@ -70,6 +70,9 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 return View();
             }
         }
+        
+
+        private string[] regrex = { ". ", "! ", "? " };
         public async Task<IActionResult> Step2(int id)
         {
             var lesson = await _context.Situations
@@ -162,8 +165,6 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 return View();
             }
         }
-
-        private string[] regrex = { ". ", "! ", "? " };
         [HttpPost]
         public async Task<IActionResult> Step3(int id, string script, string audioData, string questions)
         {

@@ -1375,17 +1375,17 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const fullScript = '@Model.Content';
-        function splitByWords(text, wordsPerChunk) {
-            const words = text.split(/\s+/);
+        function splitBySentences(text, sentencesPerChunk) {
+            // Tách thành các câu
+            const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
             const chunks = [];
-            for (let i = 0; i < words.length; i += wordsPerChunk) {
-                const chunk = words.slice(i, i + wordsPerChunk).join(' ');
-                if (i + wordsPerChunk >= words.length && chunk.trim().split(/\s+/).length < 5) break;
-                chunks.push(chunk);
+            for (let i = 0; i < sentences.length; i += sentencesPerChunk) {
+                const chunk = sentences.slice(i, i + sentencesPerChunk).join(' ').trim();
+                if (chunk) chunks.push(chunk);
             }
             return chunks;
         }
-        const scriptParts = splitByWords(fullScript, 20);
+        const scriptParts = splitBySentences(fullScript, 4);
         const audioPlayer = document.getElementById('audioPlayer');
         const scriptList = document.getElementById('scriptList');
         const playPauseBtn = document.getElementById('playPauseBtn');
@@ -1403,13 +1403,14 @@
         const popupCurrentTimeLabel = document.getElementById('popupCurrentTimeLabel');
         const popupTotalTimeLabel = document.getElementById('popupTotalTimeLabel');
         const popupScriptCurrent = document.getElementById('popupScriptCurrent');
-
         let currentIdx = 0;
         let isPlayingAll = false;
         let isPaused = false;
         const audioCache = {};
         let partDurations = scriptParts.map(part => Math.round(part.split(/\s+/).length * 0.5)); // 0.5s/word
         let totalDuration = partDurations.reduce((a, b) => a + b, 0);
+        // Loader element
+        const audioLoader = document.getElementById('audioLoader');
 
         // Hiển thị script từng đoạn
         scriptParts.forEach((part, idx) => {
@@ -1419,6 +1420,7 @@
             div.style.margin = '0.5rem 0';
             div.style.padding = '0.5rem';
             div.style.borderRadius = '6px';
+            div.style.color = '#111';
             scriptList.appendChild(div);
         });
 
@@ -1488,6 +1490,8 @@
                 if (el) el.style.background = (i === idx) ? '#ffeaa7' : '';
             });
             try {
+                // Hiển thị loader khi đang tải audio cho 4 câu đầu tiên
+                if(idx === 0 && audioLoader) audioLoader.style.display = 'flex';
                 const audioUrl = await fetchAudio(idx);
                 audioPlayer.src = audioUrl;
                 audioPlayer.currentTime = seekTime;
@@ -1504,6 +1508,9 @@
                 isPlayingAll = false;
                 playPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
                 popupPlayPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+            } finally {
+                // Ẩn loader sau khi tải xong đoạn đầu tiên
+                if(idx === 0 && audioLoader) audioLoader.style.display = 'none';
             }
         }
 
@@ -1607,6 +1614,12 @@
         checkPlayerInView();
     });
     </script>
+
+    <div id="audioLoader" style="display:none;position:fixed;z-index:10000;left:0;top:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);align-items:center;justify-content:center;">
+        <div style="background:#fffbe7;padding:2rem 2.5rem;border-radius:16px;box-shadow:0 2px 16px #ff6b6b33;font-size:1.3rem;font-weight:600;color:#ff6b6b;display:flex;align-items:center;gap:1rem;">
+            <i class="fas fa-spinner fa-spin"></i> Xin chờ tôi giây lát!
+        </div>
+    </div>
 
    
 </body>
