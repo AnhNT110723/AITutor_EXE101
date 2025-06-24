@@ -94,7 +94,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 // Make API call
-                var response = await _httpClient.PostAsync(apiUrl, content);
+                var response = await _httpClient.PostAsync(apiUrl, content);    
                 response.EnsureSuccessStatusCode();
 
                 var responseContent = await response.Content.ReadAsStringAsync();
