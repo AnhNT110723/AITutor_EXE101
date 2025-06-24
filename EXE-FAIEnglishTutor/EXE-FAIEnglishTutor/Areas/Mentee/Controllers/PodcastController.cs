@@ -24,7 +24,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 // Loại bỏ ký tự đặc biệt khỏi Content
                 foreach (var p in podcasts)
                 {
-                    p.Content = RemoveSpecialCharacters(p.Content);
+                    p.Content = FilterSpecialCharacters(p.Content);
                 }
                 ViewBag.Topics = podcasts.Select(p => p.Topic).Distinct().ToList();
 
@@ -82,21 +82,31 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         {
             var podcasts = await _podcastService.GetPostCard();
             var podcast = podcasts.FirstOrDefault(p => p.Id == id);
-            
+
             if (podcast == null)
             {
                 return NotFound();
             }
 
+            // Lọc ký tự đặc biệt ở các trường cần thiết, ví dụ Title và Description
+            podcast.Title = FilterSpecialCharacters(podcast.Title);
+            podcast.Content = FilterSpecialCharacters(podcast.Content);
+
             return View(podcast);
         }
 
-        // Helper: Loại bỏ ký tự đặc biệt khỏi chuỗi
-        private string RemoveSpecialCharacters(string input)
+        // Hàm hỗ trợ lọc ký tự đặc biệt và entity HTML
+        private string FilterSpecialCharacters(string input)
         {
             if (string.IsNullOrEmpty(input)) return input;
-            // Loại bỏ entity HTML như &#x2019; hoặc &#...; hoặc &...;
+
+            // 1. Loại bỏ entity HTML &...; hoặc &#...;
             string noEntities = System.Text.RegularExpressions.Regex.Replace(input, "&[#a-zA-Z0-9]+;", "");
+
+            // 2. Loại bỏ xuống dòng cứng (nếu muốn giữ lại thì comment dòng này)
+            noEntities = noEntities.Replace("\r", "").Replace("\n", "");
+
+            // 3. Loại bỏ mọi ký tự không mong muốn, chỉ giữ lại chữ, số, dấu cách, ., ,, ?, !, -
             var sb = new System.Text.StringBuilder();
             foreach (char c in noEntities)
             {

@@ -70,6 +70,9 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 return View();
             }
         }
+        
+
+        private string[] regrex = { ". ", "! ", "? " };
         public async Task<IActionResult> Step2(int id)
         {
             var lesson = await _context.Situations
@@ -91,7 +94,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 // Make API call
-                var response = await _httpClient.PostAsync(apiUrl, content);
+                var response = await _httpClient.PostAsync(apiUrl, content);    
                 response.EnsureSuccessStatusCode();
 
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -162,8 +165,6 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 return View();
             }
         }
-
-        private string[] regrex = { ". ", "! ", "? " };
         [HttpPost]
         public async Task<IActionResult> Step3(int id, string script, string audioData, string questions)
         {
