@@ -418,110 +418,113 @@ Return the response as a raw JSON array of objects, without markdown, code block
         }
         public async Task<IeltsListeningExercise> GenerateIeltsListeningExerciseAsync(string topic)
         {
-            var prompt = $@"Generate an IELTS listening practice exercise in English based on the topic: '{topic.Replace("\"", "\\\"")}'. Provide:
-    - A conversation script (exactly 150-180 words, suitable for a 1-minute IELTS listening dialogue, featuring a dialogue between 2-3 speakers). The script must be concise, natural, and support a variety of question types (e.g., main ideas, specific details, speaker intent, inferred meanings). Do not generate a script with fewer than 135 words or more than 195 words.
-    - Exactly 10 multiple-choice questions, each with 4 options and one correct answer. Questions should increase in difficulty, starting with basic comprehension (e.g., main ideas, explicit details) and progressing to inference-based or detail-oriented questions (e.g., speaker intent, implied meanings). Ensure all questions are directly related to the script.
-    Return the response as a raw JSON object, without markdown, code fences, or additional text. Ensure all strings are properly escaped to avoid JSON parsing errors (e.g., use \ to escape quotes or special characters). Example:
-    {{
-        ""script"": ""A conversation between two people about {topic.Replace("\"", "\\\"")}..."",
-        ""questions"": [
-            {{
-                ""type"": ""multiple-choice"",
-                ""question"": ""What is the main topic of the conversation?"",
-                ""options"": [""Option A"", ""Option B"", ""Option C"", ""Option D""],
-                ""answer"": ""Option A""
-            }}
-        ]
-    }}";
+            if (string.IsNullOrWhiteSpace(_apiKey))
+                throw new Exception("Missing OpenAI API key. Please set your API key.");
+
+            const string endpoint = "https://api.openai.com/v1/chat/completions";
+            var prompt = $@"Generate an IELTS listening practice exercise in English on the topic: '{topic.Replace("\"", "\\\"")}'.
+- Create a conversation script (150-180 words, 2-3 speakers, natural IELTS style, various question types, no fewer than 135 or more than 195 words).
+- Write exactly 14 multiple-choice questions, each with 4 options, one correct answer. Start from easy (main idea, details) to harder (inference, intent).
+- Return a raw JSON object (no markdown/code block/extra text). All strings must be correctly JSON-escaped.
+Format:
+{{
+  ""script"": ""..."",
+  ""questions"": [
+    {{""type"":""multiple-choice"",""question"":""..."",""options"":[""..."",""..."",""..."",""...""] ,""answer"":""...""}}
+  ]
+}}";
 
             var requestBody = new
             {
                 model = "gpt-3.5-turbo",
                 messages = new[] { new { role = "user", content = prompt } },
-                max_tokens = 3000,
+                max_tokens = 1800, // Đủ cho script + 14 câu hỏi
                 temperature = 0.6
             };
 
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(50));
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiKey);
 
-            int maxRetries = 5;
-            int retryCount = 0;
+            int maxRetries = 3;
             IeltsListeningExercise exercise = null;
             string lastError = "";
-
-            while (retryCount < maxRetries)
+            for (int retry = 0; retry < maxRetries; retry++)
             {
-                var response = await _httpClient.PostAsJsonAsync("chat/completions", requestBody);
-                response.EnsureSuccessStatusCode();
-
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var jsonDoc = JsonDocument.Parse(jsonResponse);
-                var content = jsonDoc.RootElement
-                    .GetProperty("choices")[0]
-                    .GetProperty("message")
-                    .GetProperty("content")
-                    .GetString();
-
-                if (string.IsNullOrWhiteSpace(content))
+                try
                 {
-                    throw new InvalidOperationException("Empty content received from OpenAI API");
+                    var response = await _httpClient.PostAsJsonAsync(endpoint, requestBody, cts.Token);
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        // Nếu lỗi key/quota, không retry
+                        if (jsonResponse.Contains("API key") || jsonResponse.Contains("quota") || jsonResponse.Contains("unauthorized"))
+                            throw new Exception($"OpenAI API error: {response.StatusCode}\n{jsonResponse}");
+                        lastError = $"API error: {response.StatusCode}\n{jsonResponse}";
+                        continue;
+                    }
+
+                    // Lấy content
+                    using var jsonDoc = JsonDocument.Parse(jsonResponse);
+                    var content = jsonDoc.RootElement
+                        .GetProperty("choices")[0]
+                        .GetProperty("message")
+                        .GetProperty("content")
+                        .GetString();
+                    if (string.IsNullOrWhiteSpace(content))
+                        throw new InvalidOperationException("Empty content received from OpenAI API");
+
+                    // Loại bỏ markdown/code block
+                    content = content.Trim();
+                    if (content.StartsWith("```json")) content = content[7..];
+                    if (content.EndsWith("```")) content = content[..^3];
+                    content = content.Trim(new char[] { '\r', '\n', '`' });
+
+                    // Deserialize
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                        AllowTrailingCommas = true,
+                        ReadCommentHandling = JsonCommentHandling.Skip
+                    };
+                    exercise = JsonSerializer.Deserialize<IeltsListeningExercise>(content, options);
+
+                    // Validate
+                    if (exercise == null || string.IsNullOrWhiteSpace(exercise.Script) || exercise.Questions == null || exercise.Questions.Count() != 14)
+                        throw new JsonException("Invalid exercise format or missing questions.\n" + content);
+
+                    // Đếm số từ bằng regex cho chính xác
+                    var wordCount = System.Text.RegularExpressions.Regex.Matches(exercise.Script, @"\b\w+\b").Count;
+                    if (wordCount < 135 || wordCount > 195)
+                    {
+                        lastError = $"Script word count ({wordCount}) is not within 135-195 range.";
+                        continue; // Không hợp lệ, thử lại
+                    }
+
+                    // Thành công!
+                    return exercise;
                 }
-
-                content = content.Trim();
-                if (content.StartsWith("```json") && content.EndsWith("```"))
+                catch (JsonException ex)
                 {
-                    content = content.Substring(7, content.Length - 10).Trim();
+                    lastError = "JSON parse error: " + ex.Message;
+                    continue;
                 }
-
-                var options = new JsonSerializerOptions
+                catch (TaskCanceledException)
                 {
-                    PropertyNameCaseInsensitive = true,
-                    AllowTrailingCommas = true,
-                    ReadCommentHandling = JsonCommentHandling.Skip
-                };
-
-                exercise = JsonSerializer.Deserialize<IeltsListeningExercise>(content, options);
-                if (exercise == null || string.IsNullOrEmpty(exercise.Script) || exercise.Questions == null || exercise.Questions.Count() != 14)
-                {
-                    throw new JsonException($"Invalid IELTS listening exercise format: {content}");
+                    lastError = "Request timed out.";
+                    continue;
                 }
-
-                var wordCount = exercise.Script.Split(new[] { ' ', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length;
-                Console.WriteLine($"Attempt {retryCount + 1}: Script word count = {wordCount}");
-                if (wordCount >= 135 && wordCount <= 195)
+                catch (Exception ex)
                 {
-                    break;
-                }
-
-                lastError = $"Script word count ({wordCount}) is not within 135-195 range.";
-                if (wordCount < 135)
-                {
-                    prompt += $"\nPrevious attempt produced a script with only {wordCount} words. Ensure the script is at least 150 words.";
-                }
-                retryCount++;
-                if (retryCount == maxRetries)
-                {
-                    throw new InvalidOperationException($"Failed to generate script with 150-180 words after {maxRetries} attempts. Last error: {lastError}");
+                    lastError = ex.Message;
+                    break; // Lỗi nghiêm trọng, không retry nữa
                 }
             }
 
-            // Hậu kỳ để điều chỉnh độ dài nếu cần
-            var finalWordCount = exercise.Script.Split(new[] { ' ', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).Length;
-            if (finalWordCount < 135)
-            {
-                exercise.Script += "\nSpeaker 1: Thanks for the chat, let's catch up again soon!";
-            }
-            else if (finalWordCount > 195)
-            {
-                var words = exercise.Script.Split(' ').ToList();
-                var fillerWords = new[] { "um", "you know", "like", "well" };
-                words.RemoveAll(w => fillerWords.Contains(w.ToLower()));
-                exercise.Script = string.Join(" ", words);
-            }
-
-            return exercise;
+            throw new InvalidOperationException($"Failed to generate IELTS exercise after {maxRetries} attempts. Last error: {lastError}");
         }
 
 
