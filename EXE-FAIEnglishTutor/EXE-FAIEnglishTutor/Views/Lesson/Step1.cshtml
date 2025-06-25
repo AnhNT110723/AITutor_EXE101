@@ -95,6 +95,10 @@
                             <div class="word-main">
                                 <h3 class="word">@word.Word</h3>
                                 <p class="phonetic">@word.Phonetic</p>
+                                @if (!string.IsNullOrEmpty(word.VietnameseMeaning))
+                                {
+                                    <p class="vietnamese-meaning" style="color:#27ae60;font-size:1.1rem;margin-top:0.5rem;">@word.VietnameseMeaning</p>
+                                }
                             </div>
 
                             <!-- Audio Controls Section -->

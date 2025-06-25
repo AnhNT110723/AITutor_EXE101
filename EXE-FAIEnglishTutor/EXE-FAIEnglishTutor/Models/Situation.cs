@@ -23,6 +23,8 @@ public partial class Situation
 
     public int? LevelId { get; set; }
 
+    public string? AudioUrl { get; set; }
+
     public virtual Level? Level { get; set; }
 
     public virtual Type? Type { get; set; }

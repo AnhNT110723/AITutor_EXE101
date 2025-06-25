@@ -80,6 +80,13 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
         public async Task<IActionResult> ListenPC(int id)
         {
+            // Kiểm tra người dùng đã đăng nhập chưa
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Nếu chưa đăng nhập, chuyển hướng sang trang Login
+                return RedirectToAction("Login", "Account");
+            }
+
             var podcasts = await _podcastService.GetPostCard();
             var podcast = podcasts.FirstOrDefault(p => p.Id == id);
 

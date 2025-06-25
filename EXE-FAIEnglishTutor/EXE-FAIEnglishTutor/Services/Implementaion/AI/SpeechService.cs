@@ -189,24 +189,28 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
             try
             {
                 // Prompt yêu cầu 10 từ tiếng Anh liên quan đến topic
-                var prompt = $@"Generate exactly 10 random English words related to the topic '{topic}'. For each word, provide:
-        - The word
-        - Its meaning in English (a short definition, max 10 words)
-        - Its phonetic transcription in IPA format
-        Return the response as a raw JSON array of objects, without markdown, code blocks, or any additional text. Example:
-        [
-            {{
-                ""word"": ""example"",
-                ""meaning"": ""A sample or instance"",
-                ""phonetic"": ""/ɪɡˈzæmpəl/""
-            }},
-            {{
-                ""word"": ""test"",
-                ""meaning"": ""An examination or trial"",
-                ""phonetic"": ""/tɛst/""
-            }}
-        ]";
-
+                var prompt = $@"
+Generate exactly 10 random English words related to the topic '{topic}'. For each word, provide:
+- The word
+- Its meaning in English (a short definition, max 10 words)
+- Its phonetic transcription in IPA format
+- Its meaning in Vietnamese (short, max 10 words)
+Return the response as a raw JSON array of objects, without markdown, code blocks, or any additional text. Example:
+[
+    {{
+        ""word"": ""example"",
+        ""meaning"": ""A sample or instance"",
+        ""phonetic"": ""/ɪɡˈzæmpəl/"",
+        ""vietnameseMeaning"": ""Ví dụ, mẫu vật""
+    }},
+    {{
+        ""word"": ""test"",
+        ""meaning"": ""An examination or trial"",
+        ""phonetic"": ""/tɛst/"",
+        ""vietnameseMeaning"": ""Bài kiểm tra""
+    }}
+]
+";
                 var requestBody = new
                 {
                     model = "gpt-3.5-turbo",

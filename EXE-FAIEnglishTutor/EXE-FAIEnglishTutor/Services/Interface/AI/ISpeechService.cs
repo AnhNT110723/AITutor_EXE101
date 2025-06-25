@@ -17,6 +17,7 @@ namespace EXE_FAIEnglishTutor.Services.Interface.AI
         public string Word { get; set; }
         public string Meaning { get; set; }
         public string Phonetic { get; set; }
+        public string VietnameseMeaning { get; set; }
     }
 
 }
