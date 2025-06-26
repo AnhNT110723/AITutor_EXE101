@@ -18,6 +18,7 @@
             }
             catch (KeyNotFoundException ex)
             {
+                _logger.LogError(ex, "KeyNotFoundException occurred: {Message}, Path: {Path}, Query: {Query}", ex.Message, context.Request.Path, context.Request.QueryString);
                 await HandleError(context, StatusCodes.Status404NotFound, ex, "Resource not found");
             }
             catch (UnauthorizedAccessException ex)

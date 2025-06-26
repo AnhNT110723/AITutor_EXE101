@@ -18,6 +18,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
         public async Task<IActionResult> Index(int page = 1, string topic = null)
         {
+            
             try
             {
                 var podcasts = await _podcastService.GetPostCard();
