@@ -218,7 +218,7 @@ Return the response as a raw JSON array of objects, without markdown, code block
                     {
                 new { role = "user", content = prompt }
             },
-                    max_tokens = 500, // Tăng max_tokens để chứa 10 từ
+                    max_tokens = 1000, // Tăng max_tokens để chứa 10 từ
                     temperature = 0.7
                 };
 
@@ -427,7 +427,7 @@ Return the response as a raw JSON array of objects, without markdown, code block
 
             const string endpoint = "https://api.openai.com/v1/chat/completions";
             var prompt = $@"Generate an IELTS listening practice exercise in English on the topic: '{topic.Replace("\"", "\\\"")}'.
-- Create a conversation script (150-180 words, 2-3 speakers, natural IELTS style, various question types, no fewer than 135 or more than 195 words).
+- Create a conversation script (150-180 words, 2-3 speakers, natural IELTS style, various question types, no fewer than 135 or more than 195 words, do not need add person1 or person 2 only need the sentence).
 - Write exactly 14 multiple-choice questions, each with 4 options, one correct answer. Start from easy (main idea, details) to harder (inference, intent).
 - Return a raw JSON object (no markdown/code block/extra text). All strings must be correctly JSON-escaped.
 Format:

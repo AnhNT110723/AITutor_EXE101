@@ -72,7 +72,7 @@
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <div class="step-label">Dictation Practice</div>
+                        <div class="step-label">Second Listening</div>
                     </div>
                     
                 </div>
@@ -85,7 +85,6 @@
                 <h2 class="lesson-title">@ViewBag.Lesson.SituationName</h2>
                 
             </div>
-
             <div class="words-container">
                 @foreach (var word in ViewBag.Words)
                 {
@@ -97,7 +96,7 @@
                                 <p class="phonetic">@word.Phonetic</p>
                                 @if (!string.IsNullOrEmpty(word.VietnameseMeaning))
                                 {
-                                    <p class="vietnamese-meaning" style="color:#27ae60;font-size:1.1rem;margin-top:0.5rem;">@word.VietnameseMeaning</p>
+                                    <p class="vietnamese-meaning">@word.VietnameseMeaning</p>
                                 }
                             </div>
 
@@ -189,7 +188,17 @@
         </div>
     </div>
 </div>
+<script src="~/js/handle-sidbar/home-sidebar.js"></script>
+<script>
+            $(document).ready(function () {
+        // Sidebar toggle functionality
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('collapsed');
+        });
+    });
+</script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
     .pronunciation-container {
         max-width: 800px;
@@ -238,6 +247,9 @@
     }
 
     .word-main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
         margin-bottom: 1.5rem;
         position: relative;
@@ -254,17 +266,12 @@
 
     .phonetic {
         font-size: 1.8rem;
-        color: #7f8c8d;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #ff9838 0%, #ffb347 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        padding: 0.5rem 1.5rem;
-        border-radius: 20px;
-        white-space: nowrap;
+        color: #ff9838;
+        background: none;
         font-family: 'Arial', sans-serif;
+        margin: 0.5rem 0 0.3rem 0;
+        font-weight: 600;
+        letter-spacing: 1.5px;
     }
 
     .phonetic::before {
@@ -289,6 +296,21 @@
         transform: translateY(-50%);
     }
 
+    .vietnamese-meaning {
+        margin-top: 1.1rem;
+        padding: 0.5rem 2rem;
+        background: linear-gradient(90deg, #ff9838 0%, #ffb347 100%);
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 600;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(255, 152, 56, 0.15);
+        letter-spacing: 1px;
+        width: max-content;
+        max-width: 100%;
+        display: block;
+    }
     .audio-section {
         display: flex;
         justify-content: center;

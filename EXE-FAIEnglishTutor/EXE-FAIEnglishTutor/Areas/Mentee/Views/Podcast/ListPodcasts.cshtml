@@ -2,6 +2,9 @@
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
+<body>
+
+
 <!-- Page Content  -->
 <div id="content" class="p-4 p-md-5">
     <div class="sticky-wrapper sticky-wrapper-list-courses">
@@ -197,7 +200,18 @@
     </div>
     
 </div>
+</body>
+<script src="~/js/handle-sidbar/home-sidebar.js"></script>
+<script>
+            $(document).ready(function () {
+        // Sidebar toggle functionality
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('collapsed');
+        });
+    });
+</script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 @section Styles {
     <style>
        
