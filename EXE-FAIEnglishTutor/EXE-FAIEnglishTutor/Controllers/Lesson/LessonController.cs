@@ -183,7 +183,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 string scripts = Regex.Replace(script, @"\bSpeaker\s*\d*\s*:\s*", ".", RegexOptions.IgnoreCase);
                 // Split script into sentences for line-by-line display
                 var sentences = scripts.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim() + ".")
+                    .Select(s => s.Trim().TrimEnd('.').TrimStart('.'))
                     .ToList();
 
                 // Deserialize questions with null check
