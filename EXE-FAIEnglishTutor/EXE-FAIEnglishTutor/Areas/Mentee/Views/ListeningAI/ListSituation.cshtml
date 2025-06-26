@@ -192,12 +192,13 @@
                 {
                     <div class="course">
                         <a href="@(
-                            User.Identity.IsAuthenticated
+                            User.Identity.IsAuthenticated && ViewBag.userCheckMember == true
                             ? $"/Lesson/Step1/{situation.SituatuonId}"
                             : "javascript:void(0)"
                                     )" class="card-link situation-link"
                            data-login="@(!User.Identity.IsAuthenticated)"
-                           data-url="/Mentee/Role-Play/@situation.SituatuonId">
+                           data-url="/Mentee/Role-Play/@situation.SituatuonId"
+                           data-membership="@(ViewBag.userCheckMember == null)">
 
                             <div class="flex-shrink-0">
                                 <div class="card">
@@ -845,6 +846,7 @@
             situationLinks.forEach(link => {
                 link.addEventListener("click", function (e) {
                     const requiresLogin = link.getAttribute("data-login") === "True";
+                    const requiresMembership = link.getAttribute("data-membership") === "True";
                     const redirectUrl = link.getAttribute("data-url");
 
                     if (requiresLogin) {
@@ -853,7 +855,13 @@
                         if (confirm(" You need to login to access this content.Do you want to login now ? ")) {
                             window.location.href = "/Account/Login"; // hoặc route login thực tế của bạn
                         }
-                    } else {
+                    } else if (requiresMembership) {
+                        e.preventDefault();
+                        if (confirm("You need an active membership to access this content. Do you want to upgrade now?")) {
+                            window.location.href = "/Payment/index";
+                        }
+                    }               
+                    else {
                         // Người đã đăng nhập thì chuyển trang như bình thường
                         window.location.href = redirectUrl;
                     }

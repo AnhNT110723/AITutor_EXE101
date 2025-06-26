@@ -95,15 +95,15 @@
     <div class="container text-center mt-5">
 
         <!-- FAI MEMBER -->
-@*         @if (User.Identity.IsAuthenticated && Model.ExpiryDate != null && Model.UpgradeLevel > 0)
-        { *@
+        @if (User.Identity.IsAuthenticated && Model.ExpiryDate != null && Model.UpgradeLevel > 0)
+        { 
             <div class="text-center" style="font-size:30px; color: black">
                 Không tìm thấy dịch vụ nào
             </div>
-     @*    }
+         }
         else
-        { *@
-@*             <h2>Chọn gói nâng cấp FAI</h2>
+        { 
+             <h2>Chọn gói nâng cấp FAI</h2>
             <p style="text-align: center !important; color:black;">
                 Để có thể sử dụng một số chức năng đặc biệt, bạn cần đăng ký gói
                 thành viên:
@@ -116,7 +116,6 @@
                     <div class="price">48,000₫ cho 1 tháng</div>
                     <ul class="features text-start">
                         <li>✔️ Học nhập vai theo tình huống để giao tiếp với AI</li>
-                        <li>✔️ Nghe các bài podcast hay để củng cố kĩ năng nghe </li>
                         <li>✔️ Học nghe với AI qua tình huống</li>
                         <li>✔️ Học từ vựng mới theo tình huống</li>
                     </ul>
@@ -127,7 +126,7 @@
                 </div>
             </div>
         }
- *@
+ 
         @*   <!-- FAI VIP -->
         <div class="pricing-card card-wrapper">
         <div class="featured">FEATURED</div>
@@ -205,6 +204,7 @@
             border-radius: 20px;
             padding: 20px;
             width: 300px;
+            height: 374px;
             box-shadow: 0 0 15px #00000060;
             transition: transform 0.3s;
         }
@@ -252,7 +252,7 @@
             width: 100%;
             background-color: orange;
             border: none;
-            margin-top: 15px;
+            margin-top: 35px;
         }
 
         .avatar-glow {
