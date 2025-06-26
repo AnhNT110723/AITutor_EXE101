@@ -4,6 +4,7 @@ using EXE_FAIEnglishTutor.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using EXE_FAIEnglishTutor.Common;
+using System.Security.Claims;
 
 namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 {
@@ -33,6 +34,18 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         [HttpGet("Mentee/Listening")]
         public async Task<IActionResult> GetListSituationsAsync2()
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim != null)
+            {
+                int userId = int.Parse(userIdClaim.Value);
+                var user = await _userService.GetUserById(userId);
+                if (user.ExpiryDate != null && user.UpgradeLevel > 0)
+                {
+                    ViewBag.userCheckMember = true;
+                }
+            }
+
+
             var levels = await _situationService.GetAllLevelAsync();
             var listSituations = await _situationService.GetListSituationByRolePlay(Constants.LISTENING);
             ViewBag.levels = levels;

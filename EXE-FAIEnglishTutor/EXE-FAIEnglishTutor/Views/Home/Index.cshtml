@@ -282,7 +282,7 @@
                     <div class="rounded-circle bg-orange p-1">
                         <div class="d-flex justify-content-center align-items-center rounded-circle bg-light img-wrapper"
                              style="width: 80px; height: 80px; padding: 10px;">
-                            <img src="~/Images/mic-header.png" class="img-fluid" alt="img">
+                            <img src="~/Images/mic.png" class="img-fluid" alt="img">
                         </div>
                     </div>
                 <p class="mt-2 text-center font-custom text-secondary">Pronounce</p>
@@ -311,7 +311,22 @@
 
                 @foreach (var situation in Model.OrderByDescending(s => s.CreatedAt).Take(8))
                 {
-                    <a href="@(situation.Type.TypeId == 2 ? $"/Lesson/Step1/{situation.SituatuonId}" : $"/Mentee/Role-Play/{situation.SituatuonId}")">
+                    var isAuthenticated = User.Identity.IsAuthenticated;
+                    var isPaidMember = ViewBag.userCheckMember == true;
+
+                    string link = situation.Type.TypeId == 2
+                    ? $"/Lesson/Step1/{situation.SituatuonId}"
+                    : $"/Mentee/Role-Play/{situation.SituatuonId}";
+
+
+                    string href = isAuthenticated && isPaidMember
+                    ? link
+                    : "javascript:void(0)";
+
+                    <a href="@href"  class="situation-link"
+                     data-login="@(!isAuthenticated)"
+                     data-url="@link"
+                     data-membership="@(ViewBag.userCheckMember == null)">
                             <div class="flex-shrink-0" style="min-width: 164px; max-width: 230px;">
                                 <div class="card" style="width: 200px; height: 250px;">
                                 <img src="@situation?.ImageUrl" class="card-img-top" alt="@situation?.SituationName ?? " No Title"">
@@ -349,7 +364,23 @@
                 <div class="d-flex overflow-hidden" id="course-list" style="scroll-behavior: smooth; ">
                 @foreach (var situation in Model)
                 {
-                    <a href="@(situation.Type.TypeId == 2 ? $"/Lesson/Step1/{situation.SituatuonId}" : $"/Mentee/Role-Play/{situation.SituatuonId}")">
+                    var isAuthenticated = User.Identity.IsAuthenticated;
+                    var isPaidMember = ViewBag.userCheckMember == true;
+
+                    string link = situation.Type.TypeId == 2
+                    ? $"/Lesson/Step1/{situation.SituatuonId}"
+                    : $"/Mentee/Role-Play/{situation.SituatuonId}";
+
+                    string href = isAuthenticated && isPaidMember
+                    ? (situation.Type.TypeId == 2
+                    ? $"/Lesson/Step1/{situation.SituatuonId}"
+                    : $"/Mentee/Role-Play/{situation.SituatuonId}")
+                    : "javascript:void(0)";
+
+                    <a href="@href"  class="situation-link"
+                       data-login="@(!isAuthenticated)"
+                       data-url="@link"
+                       data-membership="@(ViewBag.userCheckMember == null)">
                     <div class="flex-shrink-0 " style="min-width: 164px; max-width: 250px;">
                         <div class="card">
                             <div class="img-container">
@@ -711,7 +742,36 @@
 
     </style>
 
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const situationLinks = document.querySelectorAll(".situation-link");
 
+            situationLinks.forEach(link => {
+                link.addEventListener("click", function (e) {
+                    const requiresLogin = link.getAttribute("data-login") === "True";
+                    const requiresMembership = link.getAttribute("data-membership") === "True";
+                    const redirectUrl = link.getAttribute("data-url");
+
+                    if (requiresLogin) {
+                        e.preventDefault();
+
+                        if (confirm(" You need to login to access this content.Do you want to login now ? ")) {
+                            window.location.href = "/Account/Login"; // hoặc route login thực tế của bạn
+                        }
+                    } else if (requiresMembership) {
+                        e.preventDefault();
+                        if (confirm("You need an active membership to access this content. Do you want to upgrade now?")) {
+                            window.location.href = "/Payment/index";
+                        }
+                    }               
+                    else {
+                        // Người đã đăng nhập thì chuyển trang như bình thường
+                        window.location.href = redirectUrl;
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         $(function () {
             $("#addClass").click(function () {
