@@ -7,6 +7,8 @@ using EXE_FAIEnglishTutor.Dtos;
 using System.Text;
 using Newtonsoft.Json;
 using EXE_FAIEnglishTutor.Common;
+using Microsoft.CodeAnalysis.Scripting;
+using System.Text.RegularExpressions;
 
 namespace EXE_FAIEnglishTutor.Controllers.Lesson
 {
@@ -47,7 +49,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                     new KeyValuePair<string, string>("topic", lesson.SituationName)
                 });
 
-                var response = await _httpClient.PostAsync($"{_apiBaseUrl}/api/audio/generate-random-words", formData);
+                var response = await _httpClient.PostAsync($"http://localhost:5037/api/audio/generate-random-words", formData);
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
@@ -128,9 +130,9 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 // Get audio bytes and convert to Base64
                 var audioBytes = await audioResponse.Content.ReadAsByteArrayAsync();
                 var audioBase64 = Convert.ToBase64String(audioBytes);
-
+                string script = Regex.Replace(exercise.Script, @"\bSpeaker\s*\d*\s*:\s*", ".", RegexOptions.IgnoreCase);
                 ViewBag.Lesson = lesson;
-                ViewBag.Script = exercise.Script;
+                ViewBag.Script = script;
                 ViewBag.Questions = exercise.Questions;
                 ViewBag.Words = new List<WordResult>();
                 ViewBag.AudioData = $"data:audio/mp3;base64,{audioBase64}";
@@ -178,10 +180,10 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                 {
                     return NotFound("Lesson not found");
                 }
-
+                string scripts = Regex.Replace(script, @"\bSpeaker\s*\d*\s*:\s*", ".", RegexOptions.IgnoreCase);
                 // Split script into sentences for line-by-line display
-                var sentences = script.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim() + ".")
+                var sentences = scripts.Split(regrex, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim().TrimEnd('.').TrimStart('.'))
                     .ToList();
 
                 // Deserialize questions with null check
@@ -189,7 +191,7 @@ namespace EXE_FAIEnglishTutor.Controllers.Lesson
                     ? JsonConvert.DeserializeObject<List<IeltsQuestion>>(questions)
                     : new List<IeltsQuestion>();
 
-                ViewBag.Lesson = lesson;
+                ViewBag.Lesson = lesson;    
                 ViewBag.Script = script;
                 ViewBag.AudioData = audioData;
                 ViewBag.Sentences = sentences;

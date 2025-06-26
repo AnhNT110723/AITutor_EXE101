@@ -753,6 +753,75 @@
                 min-width: 32px;
             }
         }
+
+        .audio-btn {
+            background: #ffa502;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 2px 6px #ffbe7644;
+            transition: background 0.2s, transform 0.1s;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .audio-btn.main {
+                width: 48px;
+                height: 48px;
+                background: #ff793f;
+                font-size: 1.3rem;
+            }
+
+                .audio-btn:active,
+                .audio-btn.main:active {
+                    background: #ffbe76;
+                    transform: scale(0.95);
+                }
+
+            .audio-btn:hover {
+                background: #ffbe76;
+                color: #fff;
+            }
+
+        .audio-time {
+            min-width: 38px;
+            text-align: center;
+            color: #e17055;
+            font-weight: 500;
+        }
+
+        .audio-progress {
+            flex: 1;
+            accent-color: #ffa502;
+            height: 4px;
+            border-radius: 3px;
+            margin: 0 6px;
+            outline: none;
+            background: #ffe5b4;
+        }
+
+        .audio-transcript {
+            margin-top: 1.5rem;
+            font-size: 1.07rem;
+            line-height: 1.7;
+            color: #444;
+        }
+
+            .audio-transcript span {
+                padding: 2px 6px;
+                border-radius: 6px;
+                transition: background 0.2s;
+            }
+
+                .audio-transcript span.active {
+                    background: #ffbe76;
+                    color: #222;
+                    font-weight: bold;
+                }
     </style>
 </head>
 
@@ -776,6 +845,10 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
+                <div class="d-flex justify-content-end align-items-center">
+                    <div id="google_translate_element"></div>
+                </div>
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
                         @*  <li class="nav-item active">
@@ -792,6 +865,7 @@
                             // Đọc thông tin từ cookie
                             var fullName = User.Identity.Name;
                             var avatarUrl = User.FindFirst("Avatar")?.Value;
+
                             <li class="nav-item dropdown">
 
                                 <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
@@ -804,10 +878,27 @@
                                     <div class="menu-title">
                                         <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
                                     </div>
+
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
                                         <i class="bi bi-person-circle"></i> View Profile
                                     </a>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+
+
+                                        @if (User.IsInRole("admin"))
+                                        {
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
+                                                <i class="bi bi-speedometer2"></i> Dashboard
+                                            </a>
+                                        }
+
+                                    }
+
+
+
                                     <div class="dropdown-divider"></div>
                                     <a id="logout-link" class="dropdown-item text-danger" href="#">
                                         <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
@@ -830,32 +921,31 @@
             <div class="postcard shadow-lg position-relative">
                 <div class="postcard-header text-center mb-3">
                     <h2 class="fw-bold text-primary">@Model.Title</h2>
-                    <p class="text-muted">@Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                    @* <p class="text-muted">@Model.CreatedAt.ToString("MMM dd, yyyy")</p> *@
                 </div>
                 <div class="audio-player-custom">
                     <div class="postcard-image-container mb-3">
                         <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? Url.Content("~/Images/default-podcast.jpg") : Model.ImageUrl)" alt="Decor" class="postcard-decor">
                     </div>
-                    <div class="custom-audio-player">
+                    <div class="custom-audio-player" style="background:#fff3e6;border-radius:16px;padding:1.25rem;box-shadow:0 2px 15px 0 #ffbe7622;">
                         <div style="margin: 1rem 0;">
                             <div style="display:flex;align-items:center;gap:1rem;">
-                                <button id="prevBtn" class="btn btn-secondary btn-sm"><i class="fas fa-backward"></i></button>
-                                <button id="playPauseBtn" class="btn btn-success btn-sm"><i class="fas fa-play"></i></button>
-                                <button id="nextBtn" class="btn btn-secondary btn-sm"><i class="fas fa-forward"></i></button>
-                                <span id="currentTimeLabel">0:00</span>
-                                <input id="progressBar" type="range" min="0" max="100" value="0" style="flex:1;">
-                                <span id="totalTimeLabel">0:00</span>
+                                <button id="prevBtn" class="audio-btn"><i class="fas fa-backward"></i></button>
+                                <button id="playPauseBtn" class="audio-btn main"><i class="fas fa-play"></i></button>
+                                <button id="nextBtn" class="audio-btn"><i class="fas fa-forward"></i></button>
+                                <span id="currentTimeLabel" class="audio-time">0:00</span>
+                                <input id="progressBar" type="range" min="0" max="100" value="0" class="audio-progress">
+                                <span id="totalTimeLabel" class="audio-time">0:00</span>
                             </div>
                         </div>
-                        <audio id="audioPlayer" controls style="width:100%;margin-top:1rem;display:none;"></audio>
-                        <div id="scriptList"></div>
-                        <!-- Nút Back to List ở cuối trang -->
+                        <!-- Audio hidden, only controlled by JS -->
+                        <audio id="audioPlayer" src="@Model.AudioUrl" style="display:none;"></audio>
+                        <div id="scriptList" class="audio-transcript"></div>
                         <div style="margin: 2rem 0 1.5rem 1.5rem;">
                             <a href="/Mentee/Podcast" class="btn btn-secondary" style="min-width:120px;font-weight:500;"><i class="fas fa-arrow-left"></i> Back to List</a>
                         </div>
                     </div>
                 </div>
-               
             </div>
         </div>
     </div>
@@ -874,745 +964,100 @@
     
 
     <script>
-
-        
-
-            function setupAudioEventListeners() {
-                // Time update event for progress bar
-                audioPlayer.addEventListener('timeupdate', () => {
-                    audioProgress.value = Math.floor(audioPlayer.currentTime);
-                    currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
-                });
-
-                // When metadata is loaded
-                audioPlayer.addEventListener('loadedmetadata', () => {
-                    durationEl.textContent = formatTime(audioPlayer.duration);
-                    audioProgress.max = Math.floor(audioPlayer.duration);
-                });
-
-                // When audio ends
-                audioPlayer.addEventListener('ended', () => {
-                    playPauseIcon.classList.remove('fa-pause');
-                    playPauseIcon.classList.add('fa-play');
-                    audioProgress.value = 0;
-                    currentTimeEl.textContent = '00:00';
-                    setVisualizerPlaying(false);
-                });
-            }
-
-            // Function to load a specific podcast
-            async function loadPodcast(index) {
-                try {
-                    loader.style.display = 'flex';
-                    const podcast = podcasts[index];
-                    currentPodcastIndex = index;
-
-                    // Update playlist active state
-                    updatePlaylistActiveState(index);
-
-                    // Split content into sentences and store them
-                    const sentences = podcast.content.match(/[^.!?]+[.!?]+/g) || [podcast.content];
-
-                    // Create a single container for the active sentence
-                    subtitleContainer.innerHTML = '<div class="subtitle-sentence active"></div>';
-                    const subtitleElement = subtitleContainer.querySelector('.subtitle-sentence');
-                    let currentSentenceIndex = 0;
-                    let animationFrameId = null;
-
-                    function updateSubtitle(currentTime, duration) {
-                        // Calculate which sentence should be shown based on current time
-                        const sentenceDuration = duration / sentences.length;
-                        const newIndex = Math.min(
-                            sentences.length - 1,
-                            Math.floor(currentTime / sentenceDuration)
-                        );
-
-                        if (newIndex !== currentSentenceIndex) {
-                            currentSentenceIndex = newIndex;
-                            // Animate out the old text
-                            subtitleElement.style.opacity = '0';
-                            subtitleElement.style.transform = 'translateY(20px)';
-
-                            // After fade out, update text and fade in
-                            setTimeout(() => {
-                                subtitleElement.textContent = sentences[currentSentenceIndex].trim();
-                                subtitleElement.style.opacity = '1';
-                                subtitleElement.style.transform = 'translateY(0)';
-                            }, 300);
-                        }
-                    }
-
-                    // Audio event handlers for subtitles
-                    audioPlayer.onplay = function() {
-                        setVisualizerPlaying(true);
-
-                        function animate() {
-                            if (!audioPlayer.paused && !audioPlayer.ended) {
-                                updateSubtitle(audioPlayer.currentTime, audioPlayer.duration);
-                                animationFrameId = requestAnimationFrame(animate);
-                            }
-                        }
-                        animationFrameId = requestAnimationFrame(animate);
-                    };
-
-                    audioPlayer.onpause = function() {
-                        setVisualizerPlaying(false);
-                        if (animationFrameId) {
-                            cancelAnimationFrame(animationFrameId);
-                        }
-                    };
-
-                    audioPlayer.onended = function() {
-                        setVisualizerPlaying(false);
-                        if (animationFrameId) {
-                            cancelAnimationFrame(animationFrameId);
-                        }
-                    };
-
-                    // Set initial subtitle
-                    subtitleElement.textContent = sentences[0].trim();
-
-                    // Generate audio for the podcast content
-                    const formData = new FormData();
-                    formData.append('text', podcast.content);
-                    const audioResponse = await fetch('https://faienglish.xyz/api/audio/generate-english', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (!audioResponse.ok) throw new Error('Failed to generate audio');
-                    const audioBlob = await audioResponse.blob();
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    audioSource.src = audioUrl;
-                    audioPlayer.load();
-
-                    // Reset player state
-                    playPauseIcon.classList.remove('fa-pause');
-                    playPauseIcon.classList.add('fa-play');
-                    setVisualizerPlaying(false);
-
-                } catch (error) {
-                    console.error('Error loading podcast:', error);
-                    subtitleContainer.innerHTML = '<span style="color:red;font-size:1.2rem;">Lỗi khi tải podcast: ' + error.message + '</span>';
-                } finally {
-                    loader.style.display = 'none';
-                }
-            }
-
-            // Function to update playlist UI
-            function updatePlaylist(podcasts) {
-                playlistItems.innerHTML = podcasts.map((podcast, index) => `
-                    <div class="playlist-item ${index === currentPodcastIndex ? 'active' : ''}"
-                         data-index="${index}">
-                        <div class="playlist-item-icon">
-                            <i class="fas ${index === currentPodcastIndex ? 'fa-play' : 'fa-music'}"></i>
-                        </div>
-                        <div class="playlist-item-content">
-                            <div class="playlist-item-title">${podcast.title || `Podcast ${index + 1}`}</div>
-                            <div class="playlist-item-description">${podcast.content ? podcast.content.substring(0, 100) + '...' : 'No description available'}</div>
-                        </div>
-                        <div class="playlist-item-duration">
-                            <i class="fas fa-clock"></i> ${formatTime(podcast.duration || 0)}
-                        </div>
-                    </div>
-                `).join('');
-
-                // Add click handlers to playlist items
-                document.querySelectorAll('.playlist-item').forEach(item => {
-                    item.addEventListener('click', () => {
-                        const index = parseInt(item.dataset.index);
-                        if (index !== currentPodcastIndex) {
-                            loadPodcast(index);
-                        }
-                    });
-                });
-            }
-
-            // Function to update active state in playlist
-            function updatePlaylistActiveState(activeIndex) {
-                document.querySelectorAll('.playlist-item').forEach((item, index) => {
-                    const icon = item.querySelector('i');
-                    if (index === activeIndex) {
-                        item.classList.add('active');
-                        icon.classList.remove('fa-music');
-                        icon.classList.add('fa-play');
-                    } else {
-                        item.classList.remove('active');
-                        icon.classList.remove('fa-play');
-                        icon.classList.add('fa-music');
-                    }
-                });
-            }
-
-            // Previous/Next podcast handlers
-            prevPostcard.addEventListener('click', () => {
-                if (currentPodcastIndex > 0) {
-                    loadPodcast(currentPodcastIndex - 1);
-                }
-            });
-
-            nextPostcard.addEventListener('click', () => {
-                if (currentPodcastIndex < podcasts.length - 1) {
-                    loadPodcast(currentPodcastIndex + 1);
-                }
-            });
-
-            // ... rest of your existing audio player code ...
-        });
-
-        const audio = document.getElementById('audioPlayer');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const playPauseIcon = playPauseBtn.querySelector('i');
-        const currentTimeEl = document.getElementById('currentTime');
-        const durationEl = document.getElementById('duration');
-        const audioProgress = document.getElementById('audioProgress');
-        const audioSource = document.getElementById('audioSource');
-
-        // Đặt đường dẫn file audio ở đây
-        audioSource.src = '/path/to/your/audio.mp3';
-        audio.load();
-
-        // Định dạng thời gian
-        function formatTime(sec) {
-            const m = Math.floor(sec / 60);
-            const s = Math.floor(sec % 60);
-            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        // Khi audio đã load xong metadata
-        audio.addEventListener('loadedmetadata', () => {
-            durationEl.textContent = formatTime(audio.duration);
-            audioProgress.max = Math.floor(audio.duration);
-        });
-
-        // Cập nhật progress và thời gian hiện tại
-        audio.addEventListener('timeupdate', () => {
-            audioProgress.value = Math.floor(audio.currentTime);
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-        });
-
-        // Play/Pause
-        playPauseBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                playPauseIcon.classList.remove('fa-play');
-                playPauseIcon.classList.add('fa-pause');
-            } else {
-                audio.pause();
-                playPauseIcon.classList.remove('fa-pause');
-                playPauseIcon.classList.add('fa-play');
-            }
-        });
-
-        // Seek khi kéo thanh progress
-        audioProgress.addEventListener('input', () => {
-            audio.currentTime = audioProgress.value;
-        });
-
-        // Khi audio kết thúc
-        audio.addEventListener('ended', () => {
-            playPauseIcon.classList.remove('fa-pause');
-            playPauseIcon.classList.add('fa-play');
-            audio.currentTime = 0;
-            audioProgress.value = 0;
-            currentTimeEl.textContent = '00:00';
-        });
-
-        const skipBackward = document.getElementById('skipBackward');
-        const skipForward = document.getElementById('skipForward');
-        const prevPostcard = document.getElementById('prevPostcard');
-        const nextPostcard = document.getElementById('nextPostcard');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const toggleMute = document.getElementById('toggleMute');
-        const togglePlaylist = document.getElementById('togglePlaylist');
-        const closePlaylist = document.getElementById('closePlaylist');
-        const playlist = document.getElementById('playlist');
-        const playlistItems = document.getElementById('playlistItems');
-        const progressContainer = document.querySelector('.progress-container');
-        const progressTooltip = document.querySelector('.progress-tooltip');
-
-        let currentPostcardIndex = 0;
-        let postcardsList = [];
-        let previousVolume = 1;
-
-        // Skip 15 seconds backward
-        skipBackward.addEventListener('click', () => {
-            audio.currentTime = Math.max(0, audio.currentTime - 15);
-        });
-
-        // Skip 15 seconds forward
-        skipForward.addEventListener('click', () => {
-            audio.currentTime = Math.min(audio.duration, audio.currentTime + 15);
-        });
-
-        // Volume control
-        volumeSlider.addEventListener('input', (e) => {
-            const volume = e.target.value / 100;
-            audio.volume = volume;
-            updateVolumeIcon(volume);
-        });
-
-        // Toggle mute
-        toggleMute.addEventListener('click', () => {
-            if (audio.volume > 0) {
-                previousVolume = audio.volume;
-                audio.volume = 0;
-                volumeSlider.value = 0;
-            } else {
-                audio.volume = previousVolume;
-                volumeSlider.value = previousVolume * 100;
-            }
-            updateVolumeIcon(audio.volume);
-        });
-
-        function updateVolumeIcon(volume) {
-            const icon = toggleMute.querySelector('i');
-            icon.className = volume === 0
-                ? 'fas fa-volume-mute'
-                : volume < 0.5
-                    ? 'fas fa-volume-down'
-                    : 'fas fa-volume-up';
-        }
-
-        // Progress bar tooltip
-        progressContainer.addEventListener('mousemove', (e) => {
-            const rect = progressContainer.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            const time = pos * audio.duration;
-            progressTooltip.textContent = formatTime(time);
-            progressTooltip.style.display = 'block';
-            progressTooltip.style.left = `${e.clientX - rect.left}px`;
-        });
-
-        progressContainer.addEventListener('mouseleave', () => {
-            progressTooltip.style.display = 'none';
-        });
-
-        // Playlist toggle
-        togglePlaylist.addEventListener('click', () => {
-            playlist.classList.toggle('active');
-        });
-
-        closePlaylist.addEventListener('click', () => {
-            playlist.classList.remove('active');
-        });
-
-        // Add CSS styles for subtitles
-        const style = document.createElement('style');
-        style.textContent = `
-            .subtitle-container {
-                padding: 2rem;
-                min-height: 120px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 15px;
-                backdrop-filter: blur(10px);
-                margin: 20px 0;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .subtitle-sentence {
-                width: 90%;
-                padding: 20px;
-                border-radius: 12px;
-                background: linear-gradient(135deg, rgba(255, 107, 107, 0.95), rgba(255, 107, 107, 0.8));
-                color: white;
-                font-size: 1.3rem;
-                line-height: 1.6;
-                text-align: center;
-                opacity: 1;
-                transform: translateY(0);
-                transition: all 0.3s ease-out;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            }
-
-            @@media (max-width: 768px) {
-                .subtitle-sentence {
-                    font-size: 1.1rem;
-                    padding: 15px;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
-
-    <div id="popupPlayer" class="podcast-popup-player">
-        <button class="popup-close" id="closePopupBtn" title="Đóng">&times;</button>
-        <div style="flex:1;">
-            <div class="popup-title">@Model.Title</div>
-            <div class="popup-controls">
-                <button class="popup-play" id="popupPlayBtn"><i class="fa fa-play"></i></button>
-                <span class="popup-time" id="popupCurTime">00:00</span>
-                <input type="range" class="popup-progress" id="popupProgress" min="0" max="100" value="0">
-                <span class="popup-time" id="popupDuration">00:00</span>
-                <button class="popup-speed" id="popupSpeedBtn">1x</button>
-            </div>
-        </div>
-    </div>
-    <script>
-        // Popup player logic
-        let popupPlayer = document.getElementById('popupPlayer');
-        let popupPlayBtn = document.getElementById('popupPlayBtn');
-        let popupCurTime = document.getElementById('popupCurTime');
-        let popupDuration = document.getElementById('popupDuration');
-        let popupProgress = document.getElementById('popupProgress');
-        let popupSpeedBtn = document.getElementById('popupSpeedBtn');
-        let closePopupBtn = document.getElementById('closePopupBtn');
-
-        // Tạo audio ẩn dùng chung
-        let popupAudio = new Audio();
-        popupAudio.preload = "auto";
-        popupAudio.src = "";
-        popupAudio.volume = 1.0;
-        let popupAudioLoaded = false;
-
-        // Lấy link audio từ audioPlayer phía trên (nếu đã có) hoặc fetch lại
-        document.addEventListener('DOMContentLoaded', function() {
-            // Lấy audio link từ player lớn (nếu đã load)
-            let audioPlayer = document.getElementById('audioPlayer');
-            if (audioPlayer && audioPlayer.src) popupAudio.src = audioPlayer.src;
-
-            // Tự động show player khi audio play hoặc scroll gần cuối trang
-            let showWhenScroll = false, userClosed = false;
-            window.addEventListener('scroll', function() {
-                if (userClosed) return;
-                if (window.scrollY > window.innerHeight / 2) {
-                    if (!showWhenScroll) { showPopupPlayer(); showWhenScroll = true; }
-                }
-            });
-
-            // Khi bấm play trên player lớn, kích hoạt popup nổi
-            if (audioPlayer) {
-                audioPlayer.addEventListener('play', function() {
-                    popupAudio.src = audioPlayer.src;
-                    showPopupPlayer();
-                    syncPopupWithAudio(audioPlayer);
-                });
-                audioPlayer.addEventListener('pause', function() { popupPlayBtn.querySelector('i').className = 'fa fa-play'; });
-            }
-        });
-
-        // Show popup
-        function showPopupPlayer() {
-            // popupPlayer.classList.add('active');
-            // popupPlayer.style.display = 'flex';
-            // popupPlayer.style.opacity = '1';
-        }
-
-        // Đóng popup
-        closePopupBtn.onclick = function() {
-            popupPlayer.classList.remove('active');
-            popupPlayer.style.opacity = '0';
-            setTimeout(() => popupPlayer.style.display = 'none', 200);
-            userClosed = true;
-            popupAudio.pause();
-        };
-
-        // Play/Pause
-        popupPlayBtn.onclick = function() {
-            if (popupAudio.paused) { popupAudio.play(); }
-            else { popupAudio.pause(); }
-        };
-        popupAudio.onplay = function() { popupPlayBtn.querySelector('i').className = 'fa fa-pause'; }
-        popupAudio.onpause = function() { popupPlayBtn.querySelector('i').className = 'fa fa-play'; }
-
-        // Cập nhật progress/time
-        popupAudio.ontimeupdate = function() {
-            popupCurTime.textContent = formatTime(popupAudio.currentTime);
-            popupProgress.value = popupAudio.currentTime;
-        };
-        popupAudio.onloadedmetadata = function() {
-            popupDuration.textContent = formatTime(popupAudio.duration);
-            popupProgress.max = Math.floor(popupAudio.duration);
-        };
-        // Khi seek
-        popupProgress.oninput = function() {
-            popupAudio.currentTime = this.value;
-        };
-
-        // Đổi tốc độ phát
-        let speedArr = [1, 1.25, 1.5, 2];
-        let speedIdx = 0;
-        popupSpeedBtn.onclick = function() {
-            speedIdx = (speedIdx + 1) % speedArr.length;
-            popupAudio.playbackRate = speedArr[speedIdx];
-            popupSpeedBtn.textContent = speedArr[speedIdx] + "x";
-        };
-
-        // Định dạng phút:giây
-        function formatTime(sec) {
-            if (!sec || isNaN(sec)) return "00:00";
-            let m = Math.floor(sec/60), s = Math.floor(sec%60);
-            return (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
-        }
-
-        // Đồng bộ popup với player lớn
-        function syncPopupWithAudio(mainAudio) {
-            // Khi play trên popup, pause ở main (và ngược lại)
-            popupPlayBtn.onclick = function() {
-                if (popupAudio.paused) { popupAudio.play(); mainAudio.pause(); }
-                else { popupAudio.pause(); }
-            };
-            mainAudio.addEventListener('play', ()=>{ popupAudio.pause(); });
-        }
-
-    </script>
-
-    <div id="podcastPlayerBar" class="podcast-popup-bar">
-        <button id="popupPrevBtn" class="btn btn-bar"><i class="fas fa-backward"></i></button>
-        <button id="popupPlayPauseBtn" class="btn btn-bar main"><i class="fas fa-play"></i></button>
-        <button id="popupNextBtn" class="btn btn-bar"><i class="fas fa-forward"></i></button>
-        <span id="popupCurrentTimeLabel" class="bar-time">0:00</span>
-        <input id="popupProgressBar" type="range" min="0" max="100" value="0" class="bar-progress">
-        <span id="popupTotalTimeLabel" class="bar-time">0:00</span>
-        <span class="script-current bar-script" id="popupScriptCurrent"></span>
-    </div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fullScript = '@Model.Content';
-        function splitBySentences(text, sentencesPerChunk) {
-            // Tách thành các câu
-            const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-            const chunks = [];
-            for (let i = 0; i < sentences.length; i += sentencesPerChunk) {
-                const chunk = sentences.slice(i, i + sentencesPerChunk).join(' ').trim();
-                if (chunk) chunks.push(chunk);
-            }
-            return chunks;
-        }
-        const scriptParts = splitBySentences(fullScript, 4);
-        const audioPlayer = document.getElementById('audioPlayer');
-        const scriptList = document.getElementById('scriptList');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const progressBar = document.getElementById('progressBar');
-        const currentTimeLabel = document.getElementById('currentTimeLabel');
-        const totalTimeLabel = document.getElementById('totalTimeLabel');
-        // Popup controls
-        const popupBar = document.getElementById('podcastPlayerBar');
-        const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
-        const popupPrevBtn = document.getElementById('popupPrevBtn');
-        const popupNextBtn = document.getElementById('popupNextBtn');
-        const popupProgressBar = document.getElementById('popupProgressBar');
-        const popupCurrentTimeLabel = document.getElementById('popupCurrentTimeLabel');
-        const popupTotalTimeLabel = document.getElementById('popupTotalTimeLabel');
-        const popupScriptCurrent = document.getElementById('popupScriptCurrent');
-        let currentIdx = 0;
-        let isPlayingAll = false;
-        let isPaused = false;
-        const audioCache = {};
-        let partDurations = scriptParts.map(part => Math.round(part.split(/\s+/).length * 0.5)); // 0.5s/word
-        let totalDuration = partDurations.reduce((a, b) => a + b, 0);
-        // Loader element
-        const audioLoader = document.getElementById('audioLoader');
-
-        // Hiển thị script từng đoạn
-        scriptParts.forEach((part, idx) => {
-            const div = document.createElement('div');
-            div.id = 'scriptPart_' + idx;
-            div.textContent = part.trim();
-            div.style.margin = '0.5rem 0';
-            div.style.padding = '0.5rem';
-            div.style.borderRadius = '6px';
-            div.style.color = '#111';
-            scriptList.appendChild(div);
-        });
-
-        function formatTime(sec) {
-            sec = Math.round(sec);
-            return `${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`;
-        }
-
-        function updateTotalTime() {
-            totalDuration = partDurations.reduce((a, b) => a + b, 0);
-            totalTimeLabel.textContent = formatTime(totalDuration);
-            popupTotalTimeLabel.textContent = formatTime(totalDuration);
-        }
-        updateTotalTime();
-
-        // Fetch audio cho 1 đoạn
-        async function fetchAudio(idx) {
-            if (audioCache[idx]) return audioCache[idx];
-            const part = scriptParts[idx].trim();
-            const formData = new FormData();
-            formData.append('text', part);
-                const response = await fetch('https://faienglish.xyz/api/audio/generate-english', {
-                method: 'POST',
-                body: formData
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText);
-            }
-            const audioBlob = await response.blob();
-            const audioUrl = URL.createObjectURL(audioBlob);
-            audioCache[idx] = audioUrl;
-            // Cập nhật lại thời lượng thực tế
-            const tempAudio = new Audio(audioUrl);
-            tempAudio.addEventListener('loadedmetadata', function () {
-                partDurations[idx] = tempAudio.duration;
-                updateTotalTime();
-            });
-            return audioUrl;
-        }
-
-        function getCurrentGlobalTime(localTime, idx) {
-            let sum = 0;
-            for (let i = 0; i < idx; i++) sum += partDurations[i];
-            return sum + localTime;
-        }
-        function getPartFromGlobalTime(globalTime) {
-            let sum = 0;
-            for (let i = 0; i < partDurations.length; i++) {
-                if (globalTime < sum + partDurations[i]) {
-                    return { idx: i, localTime: globalTime - sum };
-                }
-                sum += partDurations[i];
-            }
-            return { idx: partDurations.length - 1, localTime: partDurations[partDurations.length - 1] };
-        }
-
-        async function playPart(idx, seekTime = 0) {
-            if (idx >= scriptParts.length) {
-                isPlayingAll = false;
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                popupPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                return;
-            }
-            scriptParts.forEach((_, i) => {
-                const el = document.getElementById('scriptPart_' + i);
-                if (el) el.style.background = (i === idx) ? '#ffeaa7' : '';
-            });
-            try {
-                // Hiển thị loader khi đang tải audio cho 4 câu đầu tiên
-                if(idx === 0 && audioLoader) audioLoader.style.display = 'flex';
-                const audioUrl = await fetchAudio(idx);
-                audioPlayer.src = audioUrl;
-                audioPlayer.currentTime = seekTime;
-                audioPlayer.play();
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                popupPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                currentIdx = idx;
-                isPaused = false;
-                if (idx + 1 < scriptParts.length) {
-                    fetchAudio(idx + 1).catch(() => {});
-                }
-            } catch (err) {
-                alert('Không lấy được audio cho đoạn này: ' + err.message);
-                isPlayingAll = false;
-                playPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
-                popupPlayPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
-            } finally {
-                // Ẩn loader sau khi tải xong đoạn đầu tiên
-                if(idx === 0 && audioLoader) audioLoader.style.display = 'none';
-            }
-        }
-
-        function updateProgressBar() {
-            const localTime = audioPlayer.currentTime;
-            const globalTime = getCurrentGlobalTime(localTime, currentIdx);
-            progressBar.value = Math.round(globalTime / totalDuration * 100);
-            currentTimeLabel.textContent = formatTime(globalTime);
-            // Đồng bộ popup
-            popupProgressBar.value = progressBar.value;
-            popupCurrentTimeLabel.textContent = currentTimeLabel.textContent;
-            popupTotalTimeLabel.textContent = totalTimeLabel.textContent;
-            popupScriptCurrent.textContent = scriptParts[currentIdx] || '';
-        }
-
-        function updateTotalTime() {
-            totalDuration = partDurations.reduce((a, b) => a + b, 0);
-            totalTimeLabel.textContent = formatTime(totalDuration);
-            popupTotalTimeLabel.textContent = formatTime(totalDuration);
-        }
-
-        playPauseBtn.onclick = function () {
-            if (audioPlayer.src && !audioPlayer.paused) {
-                audioPlayer.pause();
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                popupPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-                isPaused = true;
-            } else {
-                if (audioPlayer.src) {
-                    audioPlayer.play();
-                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    popupPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                    isPaused = false;
+                document.addEventListener("DOMContentLoaded", function () {
+            // Audio control
+            const audio = document.getElementById("audioPlayer");
+            const playPauseBtn = document.getElementById("playPauseBtn");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            const progressBar = document.getElementById("progressBar");
+            const currentTimeLabel = document.getElementById("currentTimeLabel");
+            const totalTimeLabel = document.getElementById("totalTimeLabel");
+            const playPauseIcon = playPauseBtn.querySelector("i");
+
+            // Thay đổi giao diện khi phát/tạm dừng
+            function setPlayingUI(isPlaying) {
+                if (isPlaying) {
+                    playPauseIcon.classList.remove("fa-play");
+                    playPauseIcon.classList.add("fa-pause");
+                    playPauseBtn.style.background = "#ff793f";
                 } else {
-                    isPlayingAll = true;
-                    playPart(0);
+                    playPauseIcon.classList.remove("fa-pause");
+                    playPauseIcon.classList.add("fa-play");
+                    playPauseBtn.style.background = "#ffa502";
                 }
             }
-        };
-        nextBtn.onclick = function () {
-            if (currentIdx + 1 < scriptParts.length) {
-                playPart(currentIdx + 1);
-            }
-        };
-        prevBtn.onclick = function () {
-            if (currentIdx > 0) {
-                playPart(currentIdx - 1);
-            }
-        };
-        // Popup controls
-        popupPlayPauseBtn.onclick = playPauseBtn.onclick;
-        popupPrevBtn.onclick = prevBtn.onclick;
-        popupNextBtn.onclick = nextBtn.onclick;
-        popupProgressBar.oninput = function () {
-            // Tua thực sự: phát đúng đoạn và vị trí tương ứng
-            const globalTime = popupProgressBar.value / 100 * totalDuration;
-            const { idx, localTime } = getPartFromGlobalTime(globalTime);
-            if (idx !== currentIdx) {
-                playPart(idx, localTime);
-            } else {
-                audioPlayer.currentTime = localTime;
-            }
-            // Đồng bộ lại thanh chính
-            progressBar.value = popupProgressBar.value;
-            updateProgressBar();
-        };
 
-        audioPlayer.onended = function () {
-            if (isPlayingAll && currentIdx + 1 < scriptParts.length) {
-                playPart(currentIdx + 1);
-            } else {
-                playPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
-                popupPlayPauseBtn.innerHTML = '<i class=\"fas fa-play\"></i>';
+            // Định dạng thời gian mm:ss
+            function formatTime(sec) {
+                sec = Math.floor(sec);
+                const m = Math.floor(sec / 60);
+                const s = sec % 60;
+                return `${m}:${s.toString().padStart(2, '0')}`;
             }
-        };
-        audioPlayer.ontimeupdate = updateProgressBar;
-        progressBar.oninput = function () {
-            const globalTime = progressBar.value / 100 * totalDuration;
-            const { idx, localTime } = getPartFromGlobalTime(globalTime);
-            if (idx !== currentIdx) {
-                playPart(idx, localTime);
-            } else {
-                audioPlayer.currentTime = localTime;
-            }
-            updateProgressBar();
-        };
-        updateTotalTime();
 
-        // Hiện/ẩn popup khi cuộn
-        const playerSection = document.querySelector('.custom-audio-player');
-        function checkPlayerInView() {
-            const rect = playerSection.getBoundingClientRect();
-            if (rect.bottom < 0 || rect.top > window.innerHeight) {
-                popupBar.style.display = 'flex';
-            } else {
-                popupBar.style.display = 'none';
+            audio.addEventListener("loadedmetadata", function () {
+                totalTimeLabel.textContent = formatTime(audio.duration);
+                progressBar.max = Math.floor(audio.duration);
+            });
+
+            audio.addEventListener("timeupdate", function () {
+                progressBar.value = Math.floor(audio.currentTime);
+                currentTimeLabel.textContent = formatTime(audio.currentTime);
+                highlightCurrentSentence();
+            });
+
+            playPauseBtn.addEventListener("click", function () {
+                if (audio.paused) {
+                    audio.play();
+                    setPlayingUI(true);
+                } else {
+                    audio.pause();
+                    setPlayingUI(false);
+                }
+            });
+
+            audio.addEventListener("ended", function () {
+                setPlayingUI(false);
+                progressBar.value = 0;
+                currentTimeLabel.textContent = "0:00";
+            });
+
+            prevBtn.addEventListener("click", function () {
+                audio.currentTime = Math.max(0, audio.currentTime - 10);
+            });
+
+            nextBtn.addEventListener("click", function () {
+                audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+            });
+
+            progressBar.addEventListener("input", function () {
+                audio.currentTime = progressBar.value;
+            });
+
+            // Transcript highlight (chia đều thời lượng cho từng câu)
+            const transcript = `@Model.Content`;
+            const sentences = transcript.match(/[^.!?]+[.!?]+/g) || [transcript];
+            const transcriptContainer = document.getElementById('scriptList');
+            sentences.forEach((sentence, idx) => {
+                const span = document.createElement('span');
+                span.textContent = sentence.trim() + " ";
+                span.id = "sent_" + idx;
+                transcriptContainer.appendChild(span);
+            });
+
+            function highlightCurrentSentence() {
+                const duration = audio.duration || 1;
+                const currentTime = audio.currentTime;
+                const sentenceDuration = duration / sentences.length;
+                const currIdx = Math.floor(currentTime / sentenceDuration);
+                sentences.forEach((_, idx) => {
+                    const el = document.getElementById('sent_' + idx);
+                    if (!el) return;
+                    el.classList.toggle('active', idx === currIdx);
+                });
             }
-        }
-        window.addEventListener('scroll', checkPlayerInView);
-        window.addEventListener('resize', checkPlayerInView);
-        checkPlayerInView();
-    });
+        });
     </script>
 
     <div id="audioLoader" style="display:none;position:fixed;z-index:10000;left:0;top:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);align-items:center;justify-content:center;">

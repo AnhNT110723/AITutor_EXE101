@@ -189,24 +189,28 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
             try
             {
                 // Prompt yêu cầu 10 từ tiếng Anh liên quan đến topic
-                var prompt = $@"Generate exactly 10 random English words related to the topic '{topic}'. For each word, provide:
-        - The word
-        - Its meaning in English (a short definition, max 10 words)
-        - Its phonetic transcription in IPA format
-        Return the response as a raw JSON array of objects, without markdown, code blocks, or any additional text. Example:
-        [
-            {{
-                ""word"": ""example"",
-                ""meaning"": ""A sample or instance"",
-                ""phonetic"": ""/ɪɡˈzæmpəl/""
-            }},
-            {{
-                ""word"": ""test"",
-                ""meaning"": ""An examination or trial"",
-                ""phonetic"": ""/tɛst/""
-            }}
-        ]";
-
+                var prompt = $@"
+Generate exactly 10 random English words related to the topic '{topic}'. For each word, provide:
+- The word
+- Its meaning in English (a short definition, max 10 words)
+- Its phonetic transcription in IPA format
+- Its meaning in Vietnamese (short, max 10 words)
+Return the response as a raw JSON array of objects, without markdown, code blocks, or any additional text. Example:
+[
+    {{
+        ""word"": ""example"",
+        ""meaning"": ""A sample or instance"",
+        ""phonetic"": ""/ɪɡˈzæmpəl/"",
+        ""vietnameseMeaning"": ""Ví dụ, mẫu vật""
+    }},
+    {{
+        ""word"": ""test"",
+        ""meaning"": ""An examination or trial"",
+        ""phonetic"": ""/tɛst/"",
+        ""vietnameseMeaning"": ""Bài kiểm tra""
+    }}
+]
+";
                 var requestBody = new
                 {
                     model = "gpt-3.5-turbo",
@@ -214,7 +218,7 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
                     {
                 new { role = "user", content = prompt }
             },
-                    max_tokens = 500, // Tăng max_tokens để chứa 10 từ
+                    max_tokens = 1000, // Tăng max_tokens để chứa 10 từ
                     temperature = 0.7
                 };
 
@@ -423,7 +427,7 @@ Return the response as a raw JSON array of objects, without markdown, code block
 
             const string endpoint = "https://api.openai.com/v1/chat/completions";
             var prompt = $@"Generate an IELTS listening practice exercise in English on the topic: '{topic.Replace("\"", "\\\"")}'.
-- Create a conversation script (150-180 words, 2-3 speakers, natural IELTS style, various question types, no fewer than 135 or more than 195 words).
+- Create a conversation script (150-180 words, 2-3 speakers, natural IELTS style, various question types, no fewer than 135 or more than 195 words, do not need add person1 or person 2 only need the sentence).
 - Write exactly 14 multiple-choice questions, each with 4 options, one correct answer. Start from easy (main idea, details) to harder (inference, intent).
 - Return a raw JSON object (no markdown/code block/extra text). All strings must be correctly JSON-escaped.
 Format:

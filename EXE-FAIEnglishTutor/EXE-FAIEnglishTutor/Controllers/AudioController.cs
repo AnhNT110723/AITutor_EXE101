@@ -224,7 +224,8 @@ public async Task<IActionResult> GenerateIeltsListening([FromBody] string topic)
                 {
                     word = w.Word,
                     meaning = w.Meaning,
-                    phonetic = w.Phonetic
+                    phonetic = w.Phonetic,
+                    vietnameseMeaning = w.VietnameseMeaning
                 }));
             }
             catch (Exception ex)
