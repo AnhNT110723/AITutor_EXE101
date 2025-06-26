@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using System.Text.Json.Serialization;
 
 namespace EXE_FAIEnglishTutor.Services.Interface.AI
 {
@@ -17,6 +18,8 @@ namespace EXE_FAIEnglishTutor.Services.Interface.AI
         public string Word { get; set; }
         public string Meaning { get; set; }
         public string Phonetic { get; set; }
+        [JsonPropertyName("vietnameseMeaning")]
+        public string VietnameseMeaning { get; set; }
     }
 
 }

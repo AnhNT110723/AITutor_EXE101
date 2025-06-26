@@ -1,9 +1,10 @@
-﻿using EXE_FAIEnglishTutor.Dtos;
+﻿using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc;
+using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Implementaion.AI;
 using EXE_FAIEnglishTutor.Services.Interface.AI;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using EXE_FAIEnglishTutor.Services.Interface;
 
 namespace EXE_FAIEnglishTutor.Controllers
 {
@@ -13,89 +14,92 @@ namespace EXE_FAIEnglishTutor.Controllers
     {
         private readonly SpeechService _speechService;
         private readonly IPodcastService _podcastService;
-        public PostcardController(SpeechService speechService,IPodcastService podcastService)
-        {   
+        private readonly ICloudinaryService _cloudinaryService;
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public PostcardController(
+            SpeechService speechService,
+            IPodcastService podcastService,
+            ICloudinaryService cloudinaryService,
+            IHttpClientFactory httpClientFactory)
+        {
             _speechService = speechService;
             _podcastService = podcastService;
+            _cloudinaryService = cloudinaryService;
+            _httpClientFactory = httpClientFactory;
         }
 
-        //[HttpGet("get-all-podcasts")]
-        //public async Task<IActionResult> GetAllPodcasts()
-        //{
-        //    try
-        //    {
-        //        var podcasts = await _podcastService.GetPostCard();
-        //        return Ok(podcasts);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { error = "Lỗi khi lấy danh sách podcasts.", detail = ex.Message });
-        //    }
-        //}
-
-        [HttpPost("generate-podcasts")]
-        public async Task<IActionResult> GeneratePodcasts()
+        [HttpPost("generate-podcast")]
+        public async Task<IActionResult> GeneratePodcast([FromBody] PodcastRequestDto request)
         {
             try
             {
-                var prompts = new List<(string Prompt, string Title, string Topic)>
-        {
-            ("Tóm tắt tin tức mới nhất ở Việt Nam", "Tin tức mới nhất Việt Nam", "News"),
-            ("Tóm tắt tin tức mới nhất trên thế giới", "Tin tức thế giới", "News"),
-            ("Tóm tắt tin tức kinh tế gần đây", "Tin tức kinh tế", "Economy"),
-            ("Tóm tắt tin tức giáo dục gần đây", "Tin tức giáo dục", "Education"),
-            ("Tóm tắt tin tức thể thao gần đây", "Tin tức thể thao", "Sports"),
-            ("Tạo một đoạn hội thoại về chủ đề ngẫu nhiên", "Đoạn hội thoại 1", "Conversation"),
-            ("Tạo một đoạn hội thoại về chủ đề ngẫu nhiên", "Đoạn hội thoại 2", "Conversation"),
-            ("Tạo một đoạn hội thoại về chủ đề ngẫu nhiên", "Đoạn hội thoại 3", "Conversation"),
-            ("Tạo một đoạn hội thoại về chủ đề ngẫu nhiên", "Đoạn hội thoại 4", "Conversation"),
-            ("Tạo một đoạn hội thoại về chủ đề ngẫu nhiên", "Đoạn hội thoại 5", "Conversation"),
-        };
+                if (string.IsNullOrWhiteSpace(request?.Topic) || string.IsNullOrWhiteSpace(request?.Title))
+                    return BadRequest("Thiếu chủ đề hoặc tiêu đề podcast.");
 
-                var podcasts = new List<Podcast>();
+                string promptText = $"Viết một đoạn podcast tiếng Anh khoảng 300-500 từ về: {request.Topic}";
 
-                for (int i = 0; i < prompts.Count; i++)
+                // 1. Gen text content
+                var content = await _speechService.GeneratePostcardAsync(promptText);
+
+                if (string.IsNullOrWhiteSpace(content))
+                    return BadRequest($"Không nhận được nội dung cho podcast {request.Title}.");
+
+                // 2. Gọi API tạo audio từ text
+                var audioBytes = await GenerateAudioFromText(content);
+                if (audioBytes == null)
+                    return StatusCode(500, $"Không tạo được audio cho podcast {request.Title}.");
+
+                // 3. Upload audio lên Cloudinary
+                var audioUrl = await _cloudinaryService.UploadAudioAsync(audioBytes, $"podcast_{DateTime.UtcNow.Ticks}");
+                if (string.IsNullOrEmpty(audioUrl))
+                    return StatusCode(500, $"Không up được audio lên Cloudinary cho podcast {request.Title}.");
+
+                var podcast = new Podcast
                 {
-                    string promptText = $"Viết một đoạn podcast tiếng Anh khoảng 300-500 từ về: {prompts[i].Prompt}";
+                    Title = request.Title,
+                    Content = content,
+                    ImageUrl = "/Images/a.jpg", // hoặc tạo ảnh ngẫu nhiên nếu cần
+                    CreatedAt = DateTime.UtcNow,
+                    UserId = null, // Nếu có user đăng nhập thì lấy id user
+                    Topic = request.Topic,
+                    AudioUrl = audioUrl
+                };
 
-                    var content = await _speechService.GeneratePostcardAsync(promptText);
-
-                    if (string.IsNullOrWhiteSpace(content))
-                    {
-                        return BadRequest($"Không nhận được nội dung cho podcast {prompts[i].Title}.");
-                    }
-
-                    var podcast = new Podcast
-                    {
-                        Title = prompts[i].Title,
-                        Content = content,
-                        ImageUrl = "/Images/a.jpg", // hoặc tạo ảnh ngẫu nhiên nếu cần
-                        CreatedAt = DateTime.UtcNow,
-                        UserId = null, // bạn có thể gán ID user cụ thể nếu có đăng nhập
-                        Topic = prompts[i].Topic
-                    };
-
-                    podcasts.Add(podcast);
-                }
-
-                await _podcastService.SavePodcastsAsync(podcasts);
+                await _podcastService.SavePodcastsAsync(new List<Podcast> { podcast });
 
                 return Ok(new
                 {
-                    message = "Đã tạo 10 podcast thành công.",
-                    podcasts
+                    message = "Đã tạo podcast thành công.",
+                    podcast
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new
-                {
-                    error = "Lỗi khi tạo podcasts.",
-                    detail = ex.Message
-                });
+                return StatusCode(500, new { error = "Lỗi khi tạo podcast.", detail = ex.Message });
             }
         }
 
+        // Hàm helper gọi API AudioController
+        private async Task<byte[]?> GenerateAudioFromText(string text)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var url = "http://localhost:5037/api/audio/generate-english"; // Đổi lại port nếu khác
 
+            using var form = new MultipartFormDataContent();
+            form.Add(new StringContent(text), "text");
+
+            var response = await client.PostAsync(url, form);
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+    }
+
+    public class PodcastRequestDto
+    {
+        public string Topic { get; set; }
+        public string Title { get; set; }
     }
 }

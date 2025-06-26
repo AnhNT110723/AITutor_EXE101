@@ -35,6 +35,7 @@ namespace EXE_FAIEnglishTutor.Configurations
 
             // Chat bot - Sử dụng AddHttpClient thay vì AddScoped
             services.AddHttpClient<IOpenAIService, OpenAIService>();
+            services.AddHttpClient<ISpeechService, SpeechService>();
             services.AddScoped<ISpeakingAIService, SpeakingAIService>();
             services.AddScoped<IReadingAIService, ReadingAIService>();
 
@@ -70,6 +71,9 @@ namespace EXE_FAIEnglishTutor.Configurations
 
             //chạy nền kiểm tra hết hạn tk
             services.AddHostedService<AccountExpiryService>();
+
+            //Cloudinary
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
         }
 
 
