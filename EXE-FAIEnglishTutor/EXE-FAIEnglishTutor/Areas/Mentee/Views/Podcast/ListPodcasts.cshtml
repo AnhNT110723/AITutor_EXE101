@@ -80,14 +80,14 @@
                                         <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
                                     </a>
 
-                                    <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+                                        <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
 
                                 </div>
                             </li>
                         }
                         else
                         {
-                            <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Login now</a>
+                                <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
                         }
                     </ul>
                 </div>
@@ -119,7 +119,13 @@
                     @for (int i = 0; i < 2; i++)
                     {
                         <div class="vnx-bigpodcast-card">
-                            <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                                <a href="@(User.Identity.IsAuthenticated
+             ? Url.Action("ListenPC", "Podcast", new { id = @ViewBag.PaginatedOlderPodcasts[i].Id })
+             : "javascript:void(0)")"
+                                   class="vnx-podcast-link podcast-link"
+                                   data-login="@(!User.Identity.IsAuthenticated)"
+                                   data-url="@Url.Action("ListenPC", "Podcast", new { id = @ViewBag.PaginatedOlderPodcasts[i].Id })">
+
                                 <div class="vnx-podcast-thumb-big">
                                     <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
                                 </div>
@@ -137,7 +143,13 @@
                     @for (int i = 2; i < 5; i++)
                     {
                         <div class="vnx-smallpodcast-card">
-                            <a href="@Url.Action("ListenPC", "Podcast", new { id = ViewBag.PaginatedOlderPodcasts[i].Id })" class="vnx-podcast-link">
+                                <a href="@(User.Identity.IsAuthenticated
+             ? Url.Action("ListenPC", "Podcast", new { id = @ViewBag.PaginatedOlderPodcasts[i].Id })
+             : "javascript:void(0)")"
+                                   class="vnx-podcast-link podcast-link"
+                                   data-login="@(!User.Identity.IsAuthenticated)"
+                                   data-url="@Url.Action("ListenPC", "Podcast", new { id = @ViewBag.PaginatedOlderPodcasts[i].Id })">
+
                                 <div class="vnx-podcast-thumb-small">
                                     <img src="@ViewBag.PaginatedOlderPodcasts[i].ImageUrl" alt="@ViewBag.PaginatedOlderPodcasts[i].Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
                                 </div>
@@ -156,7 +168,14 @@
                     @foreach (var podcast in ViewBag.PaginatedOlderPodcasts)
                     {
                         <div class="vnx-podcast-card">
-                            <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="vnx-podcast-link">
+                                <a href="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })" class="vnx-podcast-link">
+                                    <a href="@(User.Identity.IsAuthenticated
+             ? Url.Action("ListenPC", "Podcast", new { id = podcast.Id })
+             : "javascript:void(0)")"
+                                       class="vnx-podcast-link podcast-link"
+                                       data-login="@(!User.Identity.IsAuthenticated)"
+                                       data-url="@Url.Action("ListenPC", "Podcast", new { id = podcast.Id })">
+
                                 <div class="vnx-podcast-thumb">
                                     <img src="@podcast.ImageUrl" alt="@podcast.Title" loading="lazy" onerror="this.onerror=null;this.src='/images/podcast-default.png';" />
                                 </div>
@@ -201,17 +220,7 @@
     
 </div>
 </body>
-<script src="~/js/handle-sidbar/home-sidebar.js"></script>
-<script>
-            $(document).ready(function () {
-        // Sidebar toggle functionality
-        $('#sidebarCollapse').on('click', function () {
-            $('#sidebar').toggleClass('collapsed');
-        });
-    });
-</script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 @section Styles {
     <style>
        
@@ -525,7 +534,24 @@
         }
     </style>
 }
+<script>
+    document.getElementById("logout-link").addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("logoutForm").submit();
+    });
+</script>
 
+ <script src="~/js/handle-sidbar/home-sidebar.js"></script>
+    <script>
+                $(document).ready(function () {
+            // Sidebar toggle functionality
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('collapsed');
+            });
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -541,28 +567,27 @@
             });
         });
     </script>
-    
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const situationLinks = document.querySelectorAll(".vnx-podcast-link");
+            const podcastLinks = document.querySelectorAll(".podcast-link");
 
-            situationLinks.forEach(link => {
+            podcastLinks.forEach(link => {
                 link.addEventListener("click", function (e) {
                     const requiresLogin = link.getAttribute("data-login") === "True";
                     const redirectUrl = link.getAttribute("data-url");
 
                     if (requiresLogin) {
                         e.preventDefault();
-
-                        if (confirm(" You need to login to access this content.Do you want to login now ? ")) {
-                            window.location.href = "/Account/Login"; // hoặc route login thực tế của bạn
+                        if (confirm("Bạn cần đăng nhập để nghe podcast này. Chuyển đến trang đăng nhập?")) {
+                            window.location.href = "/Account/Login";
                         }
                     } else {
-                        // Người đã đăng nhập thì chuyển trang như bình thường
                         window.location.href = redirectUrl;
                     }
                 });
             });
         });
     </script>
+
 }
