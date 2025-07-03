@@ -25,7 +25,7 @@ function validateEmail() {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
     if (!emailPattern.test(email)) {
-        emailError.textContent = "Please enter a valid email address.";
+        emailError.textContent = "Vui lòng nhập địa chỉ email hợp lệ.";
         emailInput.classList.remove("is-valid");
         emailInput.classList.add("is-invalid");
     } else {
@@ -49,7 +49,7 @@ function validatePhone() {
     console.log("Formatted Number:", phoneNumber); // Số điện thoại đã định dạng
 
     if (!phoneNumber || !iti.isValidNumber()) {
-        phoneError.textContent = "Invalid phone number format.";
+        phoneError.textContent = "Định dạng số điện thoại không hợp lệ.";
         phoneInput.classList.remove("is-valid");
         phoneInput.classList.add("is-invalid");
     } else {
@@ -73,7 +73,7 @@ function validatePassword() {
     const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*(){}\[\]_\-+=~`|:;\"'<>,.\/?])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
     if (!regex.test(password)) {
-        passwordError.textContent = "Password must have (A-Z), (a-z), (0-9), a special char, and be 8+ chars.";
+        passwordError.textContent = "Mật khẩu phải có (A-Z), (a-z), (0-9), một ký tự đặc biệt và dài hơn 8 ký tự.";
         passwordInput.classList.remove("is-valid");
         passwordInput.classList.add("is-invalid");
     } else {
@@ -94,11 +94,11 @@ function validateConfirmPassword() {
     const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*(){}\[\]_\-+=~`|:;\"'<>,.\/?])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
     if (!regex.test(confirmPassword)) {
-        confirmPasswordError.textContent = "Password must have (A-Z), (a-z), (0-9), a special char, and be 8+ chars.";
+        confirmPasswordError.textContent = "Xác nhận mật khẩu phải có (A-Z), (a-z), (0-9), một ký tự đặc biệt và dài hơn 8 ký tự.";
         confirmPasswordInput.classList.remove("is-valid");
         confirmPasswordInput.classList.add("is-invalid");
     } else if (confirmPassword !== password) {
-        confirmPasswordError.textContent = "Passwords do not match.";
+        confirmPasswordError.textContent = "Mật khẩu không khớp.";
         confirmPasswordInput.classList.remove("is-valid");
         confirmPasswordInput.classList.add("is-invalid");
     } else {

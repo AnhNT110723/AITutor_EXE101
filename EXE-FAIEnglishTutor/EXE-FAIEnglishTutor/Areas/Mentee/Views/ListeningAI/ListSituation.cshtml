@@ -860,12 +860,12 @@
                     if (requiresLogin) {
                         e.preventDefault();
 
-                        if (confirm(" You need to login to access this content.Do you want to login now ? ")) {
+                        if (confirm(" Bạn cần đăng nhập để truy cập nội dung này. Bạn có muốn đăng nhập ngay không? ")) {
                             window.location.href = "/Account/Login"; // hoặc route login thực tế của bạn
                         }
                     } else if (requiresMembership) {
                         e.preventDefault();
-                        if (confirm("You need an active membership to access this content. Do you want to upgrade now?")) {
+                        if (confirm("Bạn cần nâng cấp gói thành viên để truy cập nội dung này. Bạn có muốn nâng cấp ngay không?")) {
                             window.location.href = "/Payment/index";
                         }
                     }               
