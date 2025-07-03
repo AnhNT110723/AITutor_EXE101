@@ -40,99 +40,74 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
 
-                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom ">
+                <button type="button" id="sidebarCollapse" class="btn btn-sidebar-custom">
                     <i class="fa fa-bars"></i>
-                    <span class="sr-only">Toggle Menu</span>
+                    <span class="sr-only">Ẩn/Hiện menu</span>
                 </button>
-                <!-- Nút Back -->
+
+                <!-- Nút Quay lại -->
                 <!-- <button class="btn btn-outline-secondary ml-2" onclick="history.back()">
-                    <i class="fa fa-arrow-left"></i> Back
+                    <i class="fa fa-arrow-left"></i> Quay lại
                 </button> -->
-                 <div class="d-flex justify-content-end align-items-center">
+
+                <div class="d-flex justify-content-end align-items-center">
                     <div id="google_translate_element"></div>
                 </div>
 
-
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
                         data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Ẩn/Hiện thanh điều hướng">
                     <i class="fa fa-bars"></i>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
-                        @*  <li class="nav-item active">
-                        <a class="nav-link" href="home.html">Home</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="#">Portfolio</a>
-                        </li> *@
                         @if (User.Identity.IsAuthenticated)
                         {
-                            // Đọc thông tin từ cookie
                             var fullName = User.Identity.Name;
                             var avatarUrl = User.FindFirst("Avatar")?.Value;
                             <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            <div class="nav-img">
-                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                            </div>
+                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="nav-img">
+                                        <img src="@avatarUrl" alt="Ảnh đại diện" class="img-fluid" style="border-radius: 50%;">
+                                    </div>
+                                </a>
+                                <div class="menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+                                    <div class="menu-title">
+                                        <h6 class="dropdown-header">Xin chào, <span>@fullName</span></h6>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
+                                        <i class="bi bi-person-circle"></i> Xem hồ sơ
+                                    </a>
+
+                                    @if (User.IsInRole("admin"))
+                                    {
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
+                                            <i class="bi bi-speedometer2"></i> Bảng điều khiển
                                         </a>
-                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                            <div class="menu-title">
-                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                            </div>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                                <i class="bi bi-person-circle"></i> View Profile
-                                            </a>
-                                            @if (User.Identity.IsAuthenticated)
-                                            {
+                                    }
 
-
-                                        @if (User.IsInRole("admin")) @if (User.Identity.IsAuthenticated)
-                                            {
-
-
-                                                @if (User.IsInRole("admin"))
-                                                {
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
-                                                        <i class="bi bi-speedometer2"></i> Dashboard
-                                                    </a>
-                                                }
-
-                                            }
-                                                {
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
-                                                        <i class="bi bi-speedometer2"></i> Dashboard
-                                                    </a>
-                                                }
-
-                                            }
-                                            <div class="dropdown-divider"></div>
-                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                            </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
+                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Đăng xuất</span>
+                                    </a>
 
                                     <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="btn-login-custom btn" asp-area="" asp-controller="Account" asp-action="Login">Đăng nhập ngay</a>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-                                        </div>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
 
 
 @*                 <div class="head-info">
