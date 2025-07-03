@@ -107,45 +107,47 @@
 </head>
 <body>
     <div class="container">
-        <h1>Account Activation Status</h1>
+        <h1>Trạng thái Kích Hoạt Tài Khoản</h1>
         @{
-            if(ViewData["InvalidToken"] != null)
-            {
-                <div  class="error">
-                    <p>Invalid Token</p>
-                </div>
-            } if(ViewData["Tokenexpired"] != null)
+            if (ViewData["InvalidToken"] != null)
             {
                 <div class="error">
-                    <p>This link has expired. Please go back to Login and try again.</p>
+                    <p>Liên kết không hợp lệ</p>
                 </div>
-            } 
-            if(ViewData["UserNotFound"] != null)
-            {
-                <div  class="error">
-                    <p>User Not Found</p>
-                </div>
-            } 
-            if(ViewData["AccountLocked"] != null)
+            }
+            if (ViewData["Tokenexpired"] != null)
             {
                 <div class="error">
-                    <p>This account is locked</p>
+                    <p>Liên kết đã hết hạn. Vui lòng quay lại trang Đăng nhập và thử lại.</p>
                 </div>
-            } 
-            if(ViewData["Accountactivated"] != null)
+            }
+            if (ViewData["UserNotFound"] != null)
             {
-                <div  class="message">
-                    <p>Account activated</p>
+                <div class="error">
+                    <p>Không tìm thấy người dùng</p>
+                </div>
+            }
+            if (ViewData["AccountLocked"] != null)
+            {
+                <div class="error">
+                    <p>Tài khoản này đã bị khóa</p>
+                </div>
+            }
+            if (ViewData["Accountactivated"] != null)
+            {
+                <div class="message">
+                    <p>Tài khoản đã được kích hoạt</p>
                 </div>
             }
             if (ViewData["Tokenvalid"] != null)
             {
-                <div  class="message">
-                    <p>Your account has been activated successfully.</p>
+                <div class="message">
+                    <p>Tài khoản của bạn đã được kích hoạt thành công.</p>
                 </div>
-            }    
+            }
         }
-        <a  asp-controller="Account" asp-action="Login" class="back-to-login">Back to login</a>
+        <a asp-controller="Account" asp-action="Login" class="back-to-login">Quay lại đăng nhập</a>
     </div>
+
 </body>
 </html>

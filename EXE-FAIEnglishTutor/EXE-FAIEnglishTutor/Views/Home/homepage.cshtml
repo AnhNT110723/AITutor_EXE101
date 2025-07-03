@@ -1,7 +1,9 @@
-﻿@{
+﻿@using Microsoft.Extensions.Localization
+@using System.Globalization
+@{
     Layout = null;
 }
-
+@inject IStringLocalizer<EXE_FAIEnglishTutor.Resources.ShareResources> Localizer
 <!doctype html>
 <html lang="en">
 <head>
@@ -179,6 +181,118 @@
             .goog-te-gadget .goog-te-combo {
                 width: 140px !important;
             }
+
+        .pricing-section .card {
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-radius: 18px;
+            border: none;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        .pricing-section .card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+        .pricing-section .featured {
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            padding: 6px 0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .pricing-section .plan-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .pricing-section .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e96d08;
+        }
+        .pricing-section .features {
+            font-size: 1.05rem;
+        }
+        .pricing-section .btn-pay {
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 10px 0;
+            width: 100%;
+            transition: background 0.2s, color 0.2s;
+        }
+        /* FAI GUEST card (FREE TRIAL) */
+        .pricing-section .col-lg-5:first-child .card {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffe0c1 100%);
+            color: #e96d08;
+            border: 2px solid #f4a261;
+        }
+        .pricing-section .col-lg-5:first-child .card .featured {
+            background: #f4a261;
+            color: #fff;
+        }
+        .pricing-section .col-lg-5:first-child .card .plan-title {
+            color: #e96d08;
+        }
+        .pricing-section .col-lg-5:first-child .card .price {
+            color: #e96d08;
+        }
+        .pricing-section .col-lg-5:first-child .card .btn-pay {
+            background: #e96d08;
+            color: #fff;
+            border: none;
+        }
+        .pricing-section .col-lg-5:first-child .card .features li {
+            color: #e96d08;
+        }
+        /* FAI MEMBER card (right) */
+        .pricing-section .col-lg-5:last-child .card {
+            background: linear-gradient(135deg, #f4a261 0%, #e96d08 100%);
+            color: #fff;
+        }
+        .pricing-section .col-lg-5:last-child .card .featured {
+            background: #fff;
+            color: #e96d08;
+        }
+        .pricing-section .col-lg-5:last-child .card .plan-title {
+            color: #fff;
+        }
+        .pricing-section .col-lg-5:last-child .card .price {
+            color: #fff;
+        }
+        .pricing-section .col-lg-5:last-child .card .btn-pay {
+            background: #fff;
+            color: #e96d08;
+            border: none;
+        }
+        .pricing-section .col-lg-5:last-child .card .features li {
+            color: #fff;
+        }
+        @@media (max-width: 991px) {
+            .pricing-section .col-lg-5 {
+                margin-bottom: 24px;
+            }
+        }
+        .pricing-section .row.justify-content-center {
+            gap: 32px;
+        }
+        .pricing-section .col-lg-5 {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        @@media (min-width: 992px) {
+            .pricing-section .row.justify-content-center {
+                justify-content: center;
+            }
+            .pricing-section .col-lg-5 {
+                flex: 0 0 40%;
+                max-width: 40%;
+            }
+        }
     </style>
 </head>
 
@@ -196,7 +310,7 @@
                 <div class="d-lg-none ms-auto me-3">
                     <a href="/Account/Login" class="btn custom-btn custom-border-btn btn-naira btn-inverted">
                         <i class="btn-icon bi-cloud-download"></i>
-                        <span>Login now</span><!-- duplicated another one below for mobile -->
+                        <span>Đăng nhập</span><!-- duplicated another one below for mobile -->
                     </a>
                 </div>
 
@@ -207,25 +321,29 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-lg-auto me-lg-4">
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_1">Home</a>
+                            <a class="nav-link click-scroll" href="#section_1">Trang chủ</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_2">The Book</a>
+                            <a class="nav-link click-scroll" href="#section_2">Giới thiệu</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_3">How does it work</a>
+                            <a class="nav-link click-scroll" href="#section_3">Hoạt động</a>
                         </li>
-
-
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_3">FAQs</a>
+                            <a class="nav-link click-scroll" href="#section_4">Chọn gói</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_5">Contact</a>
+                            <a class="nav-link click-scroll" href="#section_5">Hỏi đáp</a>
                         </li>
+                        
+
+                        <li class="nav-item">
+                            <a class="nav-link click-scroll" href="#section_6">Liên hệ</a>
+                        </li>
+                        
                         <li>
                             <div class="d-flex justify-content-end align-items-center">
                                 <div id="google_translate_element"></div>
@@ -236,7 +354,7 @@
                     <div class="d-none d-lg-block">
                         <a href="/Account/Login" class="btn custom-btn custom-border-btn btn-naira btn-inverted">
                             <i class="btn-icon bi-box-arrow-in-right"></i>
-                            <span>Login now</span><!-- duplicated above one for mobile -->
+                            <span>Đăng nhập ngay</span><!-- duplicated above one for mobile -->
                         </a>
                     </div>
                 </div>
@@ -250,24 +368,25 @@
 
                     <div class="col-lg-6 col-12 mb-5 pb-5 pb-lg-0 mb-lg-0">
 
-                        <h6>Introducing FAI</h6>
+                        <h6>Giới thiệu FAI</h6>
 
                         <h1 class="text-white mb-4" style="font-size: 35px">
-                            Listen and speak English easily – learn anytime, without limits.
+                            Nghe và nói tiếng Anh dễ dàng – học mọi lúc, không giới hạn.
                         </h1>
 
-                        <a href="#section_2" class="btn custom-btn smoothscroll me-3">Discover More</a>
+                        <a href="#section_2" class="btn custom-btn smoothscroll me-3">Khám phá thêm</a>
 
-                        <a href="#section_3" class="link link--kale smoothscroll">How to learn listening</a>
+                        <a href="#section_3" class="link link--kale smoothscroll">Cách học nghe hiệu quả</a>
                     </div>
 
                     <div class="hero-image-wrap col-lg-6 col-12 mt-3 mt-lg-0">
-                        <img src="~/images/homepage/learnewai-removebg-preview.png" class="hero-image img-fluid" alt="education online books">
+                        <img src="~/images/homepage/learnewai-removebg-preview.png" class="hero-image img-fluid" alt="giáo dục trực tuyến sách vở">
                     </div>
 
                 </div>
             </div>
         </section>
+
 
 
 
@@ -279,13 +398,14 @@
 
                     <div class="col-lg-8 col-12">
 
-                        <h2>Discover. Learn. Enjoy</h2>
-
+                        <h2>Khám phá. Học tập. Tận hưởng</h2>
 
                     </div>
                 </div>
             </div>
         </section>
+
+        
 
 
         <section class="py-lg-5"></section>
@@ -301,196 +421,224 @@
 
                     <div class="col-lg-6 col-12">
                         <div class="book-section-info">
-                            <h6>Modern &amp; Creative</h6>
+                            <h6>Hiện đại &amp; Sáng tạo</h6>
 
+                            <h2 class="mb-4">Về Gia sư tiếng Anh FAI</h2>
 
-                            <h2 class="mb-4">About The FAI English tutor</h2>
+                            <p>Học tiếng Anh thông minh hơn — với AI có thể lắng nghe, trò chuyện và cải thiện cùng bạn.</p>
 
-                            <p>Learn English the smart way — with AI that listens, speaks, and improves with you.</p>
+                            <p><strong>FAI English</strong> là nền tảng học tập ứng dụng trí tuệ nhân tạo, được thiết kế để giúp người học nâng cao kỹ năng <strong>nghe</strong> và <strong>nói</strong> tiếng Anh thông qua luyện tập tương tác và thông minh.</p>
 
-                            <p>The <strong>FAI English</strong> Tutor is an AI-powered learning platform designed to help learners master English <strong>speaking</strong> and <strong>listening</strong> skills through intelligent, interactive practice.</p>
-                            <p>Unlike <strong>traditional</strong> methods, FAI uses <strong>advanced</strong> speech recognition and natural conversation engines to simulate real-life dialogues, offer real-time feedback, and adapt to your learning pace — anytime, anywhere.</p>
+                            <p>Không giống như các phương pháp <strong>truyền thống</strong>, FAI sử dụng công nghệ <strong>nhận diện giọng nói tiên tiến</strong> và bộ máy hội thoại tự nhiên để mô phỏng các tình huống giao tiếp thực tế, đưa ra phản hồi tức thì và điều chỉnh theo tốc độ học của bạn — mọi lúc, mọi nơi.</p>
                         </div>
                     </div>
 
                 </div>
             </div>
         </section>
+
 
 
 
         <section class="timeline-section section-padding" id="section_3">
-            <div class="section-overlay"></div>
+    <div class="section-overlay"></div>
 
-            <div class="container-fluid">
-                <div class="row">
+    <div class="container-fluid">
+        <div class="row">
 
+            <div class="col-12 text-center">
+                <h2 class="text-white mb-4">Hệ thống hoạt động như thế nào?</h2>
+            </div>
+
+            <div class="col-lg-10 col-12 mx-auto">
+                <div class="timeline-container">
+                    <ul class="vertical-scrollable-timeline" id="vertical-scrollable-timeline">
+                        <div class="list-progress">
+                            <div class="inner"></div>
+                        </div>
+
+                        <li>
+                            <h4 class="text-white mb-3">Tìm kiếm chủ đề yêu thích của bạn</h4>
+
+                            <p class="text-white">Đầu tiên, bạn chọn phần luyện nghe sau khi đăng nhập thành công. Sau đó, bạn chọn trình độ phù hợp và chủ đề bạn muốn luyện nghe.</p>
+
+                            <div class="icon-holder">
+                                <i class="bi-search"></i>
+                            </div>
+                        </li>
+
+                        <li>
+                            <h4 class="text-white mb-3">Người dùng nghe podcast theo từng chủ đề</h4>
+
+                            <p class="text-white">Sau khi chọn chủ đề phù hợp với trình độ, bạn có thể nghe các podcast được AI tuyển chọn theo sở thích. Các podcast này được thiết kế với phát âm rõ ràng, tình huống thực tế và từ vựng liên quan để tăng khả năng nghe hiểu và giữ hứng thú học tập.</p>
+
+                            <div class="icon-holder">
+                                <i class="bi-bookmark"></i>
+                            </div>
+                        </li>
+
+                        <li>
+                            <h4 class="text-white mb-3">Kiểm tra kỹ năng nghe &amp; Tận hưởng</h4>
+
+                            <p class="text-white">Sau khi hoàn thành một loạt bài luyện nghe, bạn có thể làm bài kiểm tra tương tác để đánh giá tiến bộ. Hệ thống sẽ cung cấp phản hồi tức thì, chỉ ra điểm mạnh và điểm cần cải thiện — biến việc kiểm tra thành trải nghiệm thú vị và hữu ích.</p>
+
+                            <div class="icon-holder">
+                                <i class="bi-book"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+        <!-- Pricing Section -->
+        <section class="pricing-section section-padding" id="section_4">
+            <div class="container">
+                <div class="row mb-4">
                     <div class="col-12 text-center">
-                        <h2 class="text-white mb-4">How does it work?</h1>
+                        <h2 class="fw-bold" style="color: #e96d08; font-size: 2.2rem; letter-spacing: 1px;">Chọn Gói</h2>
                     </div>
-
-                    <div class="col-lg-10 col-12 mx-auto">
-                        <div class="timeline-container">
-                            <ul class="vertical-scrollable-timeline" id="vertical-scrollable-timeline">
-                                <div class="list-progress">
-                                    <div class="inner"></div>
-                                </div>
-
-                                <li>
-                                    <h4 class="text-white mb-3">Search your favourite topic</h4>
-
-                                    <p class="text-white">First you choose the listening practice section after successfully logging in, then you choose the appropriate level and choose the topic you want to practice listening.</p>
-
-                                    <div class="icon-holder">
-                                        <i class="bi-search"></i>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <h4 class="text-white mb-3 ">Users listen to podcasts by topic</h4>
-
-                                    <p class="text-white">After selecting a topic that suits your level, users can listen to AI-curated podcasts tailored to their interests. These podcasts are designed with clear pronunciation, real-life scenarios, and relevant vocabulary to enhance listening comprehension while keeping learning engaging.</p>
-
-                                    <div class="icon-holder">
-                                        <i class="bi-bookmark"></i>
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <h4 class="text-white mb-3">Listening Test &amp; Enjoy</h4>
-
-                                    <p class="text-white"> Once users complete a set of listening practices, they can take interactive listening tests to measure progress. The system provides instant feedback, highlighting both strengths and areas for improvement — turning assessment into a fun and rewarding experience.</p>
-
-                                    <div class="icon-holder">
-                                        <i class="bi-book"></i>
-                                    </div>
-                                </li>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 col-md-7 col-12 mb-4 mb-lg-0">
+                        <div class="card shadow p-4 text-center">
+                            <div class="featured mb-2">FREE TRIAL</div>
+                            <div class="plan-title mb-2">FAI GUEST</div>
+                            <div class="price mb-3">Free</div>
+                            <ul class="features text-start mb-4">
+                                <li>✔️ Nói tự do với AI</li>
+                                <li>✔️ Luyện phát âm </li>
+                                <li>✔️ Nghe podcast hàng ngày theo nhiều chủ đề</li>
                             </ul>
+                            <a href="/Account/Login" id="pay-link" class="btn btn-pay">🧾 Trải nghiệm ngay</a>
                         </div>
                     </div>
-
-                   @*   <div class="col-12 text-center mt-5">
-                         <p class="text-white">
-                             Want to learn more?
-                             <a href="#" class="btn custom-btn custom-border-btn ms-3">Check out Youtube</a>
-                         </p>
-                     </div> *@
+                    <div class="col-lg-5 col-md-7 col-12">
+                        <div class="card shadow p-4 text-center">
+                            <div class="featured mb-2">FEATURED</div>
+                            <div class="plan-title mb-2">FAI MEMBER</div>
+                            <div class="price mb-3">48,000₫ cho 1 tháng</div>
+                            <ul class="features text-start mb-4">
+                                <li>✔️ Học nhập vai theo tình huống để giao tiếp với AI</li>
+                                <li>✔️ Học nghe với AI qua tình huống</li>
+                                <li>✔️ Học từ vựng mới theo tình huống</li>
+                            </ul>
+                            <a href="/Payment/index" id="pay-link" class="btn btn-pay">🧾 Thanh toán</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
+<section class="faq-section section-padding" id="section_5">
+    <div class="container">
+        <div class="row">
 
+            <div class="col-lg-6 col-12">
+                <h2 class="mb-4">Câu hỏi thường gặp</h2>
+            </div>
 
+            <div class="clearfix"></div>
 
-        <section class="faq-section section-padding" id="section_4">
-            <div class="container">
-                <div class="row">
+            <div class="col-lg-5 col-12">
+                <img src="~/images/homepage/faq_graphic.jpg" class="img-fluid" alt="Câu hỏi thường gặp">
+            </div>
 
-                    <div class="col-lg-6 col-12">
-                        <h2 class="mb-4">Frequently Asked Questions</h2>
-                    </div>
+            <div class="col-lg-6 col-12 m-auto">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Trang web này dùng để làm gì?
+                            </button>
+                        </h2>
 
-                    <div class="clearfix"></div>
-
-                    <div class="col-lg-5 col-12">
-                        <img src="~/images/homepage/faq_graphic.jpg" class="img-fluid" alt="FAQs">
-                    </div>
-
-                    <div class="col-lg-6 col-12 m-auto">
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        What is this site for?
-                                    </button>
-                                </h2>
-
-                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        The website offers AI-powered tools that help users improve their English <strong>listening</strong> and <strong>speaking</strong> skills efficiently — saving time and allowing for flexible, on-demand practice.
-                                    </div>
-                                </div>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Trang web cung cấp công cụ học tiếng Anh thông minh ứng dụng AI, giúp người dùng cải thiện kỹ năng <strong>nghe</strong> và <strong>nói</strong> một cách hiệu quả — tiết kiệm thời gian và linh hoạt trong luyện tập.
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        How to learn speaking with AI?
-                                    </button>
-                                </h2>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Làm sao để học nói với AI?
+                            </button>
+                        </h2>
 
-                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        After logging into our <strong>website</strong>, you choose role playing mode then you choose the topic you want to learn. Next you will choose the AI ​​voice you want to learn then press the start button to learn.
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingThree">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Does it need to paid?
-                                        </button>
-                                    </h2>
-
-                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            Since we are new to the market, we will give students a month of free lessons. Starting from <strong>27/6/2025</strong> we will start charging. We will launch a 48,000 VND per month package so users can learn speaking and listening with AI
-                                        </div>
-                                    </div>
-                                </div>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                Sau khi đăng nhập vào <strong>trang web</strong>, bạn chọn chế độ nhập vai (role-playing), sau đó chọn chủ đề muốn học. Tiếp theo, bạn chọn giọng nói AI muốn luyện tập rồi nhấn nút bắt đầu để học.
                             </div>
                         </div>
 
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Có phải trả phí không?
+                                </button>
+                            </h2>
+
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    Vì chúng tôi mới ra mắt thị trường, người học sẽ được học thử miễn phí trong 1 tháng. Bắt đầu từ <strong>27/6/2025</strong>, chúng tôi sẽ bắt đầu tính phí với gói học <strong>48.000 VNĐ/tháng</strong> để luyện nghe và nói cùng AI.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-        </section>
+
+            </div>
+        </div>
+</section>
 
 
 
 
 
-        <section class="contact-section section-padding" id="section_5">
+
+        <section class="contact-section section-padding" id="section_6">
             <div class="container">
                 <div class="row">
 
                     <div class="col-lg-5 col-12 mx-auto">
                         <form id="contactForm" class="custom-form ebook-download-form bg-white shadow" action="#" method="post" role="form">
                             <div class="text-center mb-5">
-                                <h2 class="mb-1">We'd love to hear from you</h2>
+                                <h2 class="mb-1">Chúng tôi rất mong nhận được phản hồi từ bạn</h2>
                             </div>
 
                             <div class="ebook-download-form-body">
                                 <div class="input-group mb-4">
-                                    <input type="text" name="ebook-form-name" id="ebook-form-name" class="form-control" placeholder="Your Name" required>
+                                    <input type="text" name="ebook-form-name" id="ebook-form-name" class="form-control" placeholder="Họ tên của bạn" required>
                                     <span class="input-group-text"><i class="custom-form-icon bi-person"></i></span>
                                 </div>
 
                                 <div class="input-group mb-4">
-                                    <input type="email" name="ebook-email" id="ebook-email" class="form-control" placeholder="your@gmail.com" required>
+                                    <input type="email" name="ebook-email" id="ebook-email" class="form-control" placeholder="email@gmail.com" required>
                                     <span class="input-group-text"><i class="custom-form-icon bi-envelope"></i></span>
                                 </div>
 
                                 <div class="input-group mb-4">
-                                    <textarea name="ebook-message" class="form-control" placeholder="Tell me about the project" required></textarea>
+                                    <textarea name="ebook-message" class="form-control" placeholder="Hãy mô tả dự án bạn muốn chia sẻ" required></textarea>
                                 </div>
 
                                 <div class="col-lg-8 col-md-10 col-8 mx-auto">
-                                    <button type="submit" class="form-control">Submit</button>
+                                    <button type="submit" class="form-control">Gửi</button>
                                 </div>
                             </div>
                         </form>
-
-
                     </div>
 
                     <div class="col-lg-6 col-12">
-                        <h6 class="mt-5">Say hi and talk to us</h6>
+                        <h6 class="mt-5">Gửi lời chào và kết nối với chúng tôi</h6>
 
-                        <h2 class="mb-4">Contact</h2>
+                        <h2 class="mb-4">Liên hệ</h2>
 
                         <p class="mb-3">
                             <i class="bi-geo-alt me-2"></i>
-                            Hoa Lac - Ha Noi - Viet Nam
+                            Hòa Lạc - Hà Nội - Việt Nam
                         </p>
 
                         <p class="mb-2">
@@ -505,7 +653,7 @@
                             </a>
                         </p>
 
-                        <h6 class="site-footer-title mt-5 mb-3">Social</h6>
+                        <h6 class="site-footer-title mt-5 mb-3">Mạng xã hội</h6>
 
                         <ul class="social-icon mb-4">
                             <li class="social-icon-item">
@@ -514,18 +662,18 @@
                             <li class="social-icon-item">
                                 <a href="https://www.facebook.com/groups/1233997501508518/" class="social-icon-link bi-facebook"></a>
                             </li>
-
                         </ul>
 
                         <p class="copyright-text">
-                            Copyright © 2025 FAI company
-                            <br><br><a rel="nofollow" href="#" target="_blank">designed by FAI Team</a>
+                            Bản quyền © 2025 Công ty FAI
+                            <br><br><a rel="nofollow" href="#" target="_blank">thiết kế bởi FAI Team</a>
                         </p>
                     </div>
 
                 </div>
             </div>
         </section>
+
     </main>
     <script>
         document.getElementById("contactForm").addEventListener("submit", function(e) {
