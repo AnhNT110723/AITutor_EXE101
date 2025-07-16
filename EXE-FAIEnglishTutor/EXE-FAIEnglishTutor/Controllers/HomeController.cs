@@ -48,6 +48,10 @@ namespace EXE_FAIEnglishTutor.Controllers
             var situations = await _situationService.GetAllSituation();
             return View(situations);
         }
+        public IActionResult MusicChallenge()
+        {
+            return View();
+        }
 
 
         public IActionResult homePage()

@@ -398,9 +398,12 @@
 
     </div>
 
-
+<!-- Voucher Button -->
+<button class="voucher-toggle-btn" onclick="window.location.href='/Voucher/MusicVoucher'">
+    <i class="fas fa-ticket-alt"></i>
+</button>
 <!-- Nút chat hình tròn -->
-
+    
 
     <button class="chat-toggle-btn" id="addClass">
         <i class="fas fa-comment"></i>
@@ -731,6 +734,28 @@
             background-color: white;
             color: #333;
         }
+
+        .voucher-toggle-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #28a745;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+            .voucher-toggle-btn:hover {
+                background-color: #218838;
+                transform: scale(1.1);
+            }
 
     </style>
 
