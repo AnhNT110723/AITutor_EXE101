@@ -284,6 +284,59 @@
             margin-left: 0;
             margin-right: 0;
         }
+        /* Voucher Section Styles */
+        .voucher-section {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffe0c1 100%);
+            padding: 60px 0;
+        }
+
+            .voucher-section .card {
+                min-height: 300px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                border-radius: 18px;
+                border: none;
+                box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+                transition: transform 0.2s;
+                background: linear-gradient(135deg, #f4a261 0%, #e96d08 100%);
+                color: #fff;
+            }
+
+                .voucher-section .card:hover {
+                    transform: translateY(-8px) scale(1.03);
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                }
+
+            .voucher-section .voucher-title {
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin-bottom: 12px;
+                color: #fff;
+            }
+
+            .voucher-section .voucher-text {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+                color: #fff;
+            }
+
+            .voucher-section .btn-voucher {
+                font-size: 1.1rem;
+                font-weight: 600;
+                border-radius: 8px;
+                padding: 10px 0;
+                width: 100%;
+                background: #fff;
+                color: #e96d08;
+                border: none;
+                transition: background 0.2s, color 0.2s;
+            }
+
+                .voucher-section .btn-voucher:hover {
+                    background: #e96d08;
+                    color: #fff;
+                }
         @@media (min-width: 992px) {
             .pricing-section .row.justify-content-center {
                 justify-content: center;
@@ -338,6 +391,7 @@
                         <li class="nav-item">
                             <a class="nav-link click-scroll" href="#section_4">Chọn gói</a>
                         </li>
+                       
 
                         <li class="nav-item">
                             <a class="nav-link click-scroll" href="#section_5">Hỏi đáp</a>
@@ -529,6 +583,25 @@
                                 <li>✔️ Học từ vựng mới theo tình huống</li>
                             </ul>
                             <a href="/Payment/index" id="pay-link" class="btn btn-pay">🧾 Thanh toán</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Voucher Section -->
+        <section class="voucher-section section-padding" id="sect">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <h2 class="fw-bold" style="color: #e96d08; font-size: 2.2rem; letter-spacing: 1px;">Thử Thách Âm Nhạc Nhận Voucher</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-8 col-12">
+                        <div class="card shadow p-4 text-center">
+                            <div class="voucher-title">Tham Gia Thử Thách Âm Nhạc</div>
+                            <div class="voucher-text">Nghe các đoạn nhạc ngắn và đoán tên bài hát để nhận ngay voucher độc quyền! Gửi câu trả lời của bạn trên trang <a href="https://www.facebook.com/groups/1233997501508518/" target="_blank" style="color: #fff; text-decoration: underline;">Facebook</a> của FAI English.</div>
+                            <a href="/Voucher/MusicVoucher" id="voucher-link" class="btn btn-voucher">🎶 Tham Gia Ngay</a>
                         </div>
                     </div>
                 </div>

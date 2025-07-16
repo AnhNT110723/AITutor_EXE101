@@ -116,18 +116,30 @@
                 <div class="pricing-card card-wrapper">
                     <div class="featured">FEATURED</div>
                     <div class="plan-title">FAI MEMBER</div>
-                    <div class="price">39,000₫ cho 1 tháng</div>
+                    <div class="price" id="priceText">39,000₫ cho 1 tháng</div>
+
                     <ul class="features text-start">
                         <li>✔️ Học nhập vai theo tình huống để giao tiếp với AI</li>
                         <li>✔️ Học nghe với AI qua tình huống</li>
                         <li>✔️ Học từ vựng mới theo tình huống</li>
                     </ul>
-                    <a href="#" id="pay-link" class="btn btn-pay">🧾 Thanh toán</a>
+
+                    <!-- VOUCHER INPUT -->
+                    <div class="mb-3">
+                        <input type="text" id="voucherInput" class="form-control" placeholder="Nhập mã giảm giá">
+                        <button type="button" class="btn btn-secondary mt-2" onclick="applyVoucher()">Áp dụng</button>
+                        <div id="voucherMessage" class="text-success mt-1"></div>
+                    </div>
+
+                    <a href="#" id="pay-link" class="btn btn-pay" onclick="submitForm()">🧾 Thanh toán</a>
+
+                    <!-- FORM -->
                     <form asp-controller="Payment" id="payForm" asp-action="GenerateQR" style="display: none;" method="post">
-                        <input type="hidden" name="planAmount" value="39000" />
+                        <input type="hidden" id="planAmount" name="planAmount" value="39000" />
                     </form>
                 </div>
             </div>
+
         }
  
         @*   <!-- FAI VIP -->
@@ -308,6 +320,45 @@
                     document.getElementById('payForm').submit();
                 }
             });
+        }
+    </script>
+    <script>
+        let originalPrice = 39000;
+
+        async function applyVoucher() {
+            const inputCode = document.getElementById("voucherInput").value.trim().toUpperCase();
+            const priceText = document.getElementById("priceText");
+            const voucherMessage = document.getElementById("voucherMessage");
+
+            try {
+                const response = await fetch('/vouchers.json'); // Make sure this path is correct and accessible
+                const vouchers = await response.json();
+
+                const matchedVoucher = vouchers.find(v => v.code.toUpperCase() === inputCode);
+
+                if (matchedVoucher) {
+                    const discount = matchedVoucher.discount;
+                    const discountedPrice = Math.floor(originalPrice * (100 - discount) / 100);
+
+                    document.getElementById("planAmount").value = discountedPrice;
+                    priceText.innerText = `${discountedPrice.toLocaleString()}₫ cho 1 tháng (đã áp dụng ${discount}% giảm)`;
+                    voucherMessage.innerText = "Mã giảm giá hợp lệ!";
+                    voucherMessage.classList.remove("text-danger");
+                    voucherMessage.classList.add("text-success");
+                } else {
+                    throw new Error("Mã không hợp lệ");
+                }
+            } catch (err) {
+                document.getElementById("planAmount").value = originalPrice;
+                priceText.innerText = `${originalPrice.toLocaleString()}₫ cho 1 tháng`;
+                voucherMessage.innerText = "Mã giảm giá không hợp lệ!";
+                voucherMessage.classList.remove("text-success");
+                voucherMessage.classList.add("text-danger");
+            }
+        }
+
+        function submitForm() {
+            document.getElementById("payForm").submit();
         }
     </script>
 
