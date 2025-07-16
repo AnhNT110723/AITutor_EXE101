@@ -670,8 +670,82 @@
             </div>
         </div>
 </section>
+        <!-- Testimonials Section -->
+        <section class="testimonials-section section-padding" id="section_testimonials">
+            <div class="container">
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <h2 class="fw-bold" style="color: #e96d08; font-size: 2.2rem; letter-spacing: 1px;">Học viên của FAI chia sẻ</h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center" id="testimonial-list">
+                    <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card shadow p-4 text-center h-100">
+                            <img src="~/Images/user_icon.webp" alt="avatar" class="rounded-circle mb-3" style="width: 70px; height: 70px; object-fit: cover; margin: 0 auto;">
+                            <div class="testimonial-text mb-3">“FAI English giúp mình tự tin hơn khi giao tiếp tiếng Anh. AI sửa phát âm rất chi tiết và dễ hiểu!”</div>
+                            <div class="testimonial-author fw-bold">Nguyễn Huyền Trang</div>
+                            <div class="testimonial-role text-muted">Phú Thọ</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card shadow p-4 text-center h-100">
+                            <img src="~/Images/user_icon.webp" alt="avatar" class="rounded-circle mb-3" style="width: 70px; height: 70px; object-fit: cover; margin: 0 auto;">
+                            <div class="testimonial-text mb-3">“Mình thích nhất là luyện nghe podcast theo chủ đề yêu thích. Học mà không bị nhàm chán!”</div>
+                            <div class="testimonial-author fw-bold">Nguyễn Thị Thái Bảo</div>
+                            <div class="testimonial-role text-muted">Hải Phòng</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="card shadow p-4 text-center h-100">
+                            <img src="~/Images/user_icon.webp" alt="avatar" class="rounded-circle mb-3" style="width: 70px; height: 70px; object-fit: cover; margin: 0 auto;">
+                            <div class="testimonial-text mb-3">“AI phản hồi rất nhanh và chính xác. Mình tiến bộ rõ rệt chỉ sau 2 tuần sử dụng.”</div>
+                            <div class="testimonial-author fw-bold">Nguyễn Thị Thuỳ Linh</div>
+                            <div class="testimonial-role text-muted">Đà Nẵng</div>
+                        </div>
+                    </div>
+                    <!-- Hidden testimonials (show on See More) -->
+                    <div class="col-lg-4 col-md-6 col-12 mb-4 d-none" id="testimonial4">
+                        <div class="card shadow p-4 text-center h-100">
+                            <img src="~/Images/user_icon.webp" alt="avatar" class="rounded-circle mb-3" style="width: 70px; height: 70px; object-fit: cover; margin: 0 auto;">
+                            <div class="testimonial-text mb-3">“Trang web rất dễ sử dụng, phù hợp cho cả người mới bắt đầu. Mình đã cải thiện kỹ năng nghe rõ rệt.”</div>
+                            <div class="testimonial-author fw-bold">Phạm Văn Dũng</div>
+                            <div class="testimonial-role text-muted">Phú Thọ</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12 mb-4 d-none" id="testimonial5">
+                        <div class="card shadow p-4 text-center h-100">
+                            <img src="~/Images/user_icon.webp" alt="avatar" class="rounded-circle mb-3" style="width: 70px; height: 70px; object-fit: cover; margin: 0 auto;">
+                            <div class="testimonial-text mb-3">“Tính năng nhập vai giúp mình luyện nói tự nhiên hơn, không còn ngại giao tiếp với người nước ngoài.”</div>
+                            <div class="testimonial-author fw-bold">Đỗ Thị Mai</div>
+                            <div class="testimonial-role text-muted">Hà Nội</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12 mb-4 d-none" id="testimonial6">
+                        <div class="card shadow p-4 text-center h-100">
+                            <img src="~/Images/user_icon.webp" alt="avatar" class="rounded-circle mb-3" style="width: 70px; height: 70px; object-fit: cover; margin: 0 auto;">
+                            <div class="testimonial-text mb-3">“FAI English thực sự là giải pháp tuyệt vời cho người đi làm bận rộn như mình. Học mọi lúc, mọi nơi!”</div>
+                            <div class="testimonial-author fw-bold">Ngô Minh Tuấn</div>
+                            <div class="testimonial-role text-muted">Hà Nội</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <button id="seeMoreTestimonials" class="btn btn-outline-warning mt-3" style="font-weight:600; border-radius:8px; padding:8px 32px;">Xem thêm</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script>
+            document.getElementById('seeMoreTestimonials').addEventListener('click', function() {
+                for (let i = 4; i <= 6; i++) {
+                    document.getElementById('testimonial' + i).classList.remove('d-none');
+                }
+                this.style.display = 'none';
+            });
+        </script>
 
-
+    
 
 
 
