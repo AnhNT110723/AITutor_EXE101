@@ -126,7 +126,7 @@ The project is organized using an **ASP.NET Core MVC** architecture, with a fold
    Alternatively, use Visual Studio: Set the MyEnglishTutor project as the startup project and press F5.
 
 
-### Các API endpoints chính:
+## 📚 Các API endpoints chính:
 
 The project is built on **Razor Pages** and **MVC**, so there are no public API endpoints documented with Swagger. All functionalities are accessible through the web UI.
 
@@ -136,8 +136,7 @@ The project is built on **Razor Pages** and **MVC**, so there are no public API 
 - **Podcast Listening**: Access ` /Podcast`.
 
 
-
-   ## 🤝 **Contributing**
+## 🤝 **Contributing**
 
 We welcome contributions! Please follow these steps to contribute:
 1. Fork the project
