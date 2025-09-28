@@ -1,4 +1,3 @@
-# AITutor_EXE101
 
 # MyEnglishTutor - AI English Tutor
 ## 📋 **Introduction**
