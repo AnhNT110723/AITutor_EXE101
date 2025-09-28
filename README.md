@@ -75,3 +75,38 @@ The project is organized using an **ASP.NET Core MVC** architecture, with a fold
    ```bash
    git clone <repository-url>
    cd MyEnglishTutor
+
+
+2. **Restore packages**
+   ```bash
+   dotnet restore
+   ```
+
+3. **Cấu hình database**
+   
+   Cập nhật connection string trong `API/appsettings.json`:
+   ```json
+   {
+     "Database": {
+       "UseInMemoryDatabase": false,
+       "ConnectionString": "server=localhost; database=ToeicApp;TrustServerCertificate=True;Trusted_Connection=True;"
+     }
+   }
+   ```
+
+4. **Cấu hình Email (tùy chọn)**
+   
+   Cập nhật SMTP settings trong `API/appsettings.json`:
+   ```json
+   {
+     "SmtpSettings": {
+       "Server": "smtp.gmail.com",
+       "Port": 587,
+       "SenderName": "ToeicApp",
+       "SenderEmail": "your-email@gmail.com",
+       "Username": "your-email@gmail.com",
+       "Password": "your-app-password"
+     }
+   }
+   ```
+
