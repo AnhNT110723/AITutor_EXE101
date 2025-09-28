@@ -82,21 +82,18 @@ The project is organized using an **ASP.NET Core MVC** architecture, with a fold
    dotnet restore
    ```
 
-3. **Cấu hình database**
+3. **Configure the database**
    
-   Cập nhật connection string trong `API/appsettings.json`:
+   Update connection string in `appsettings.json`:
    ```json
-   {
-     "Database": {
-       "UseInMemoryDatabase": false,
-       "ConnectionString": "server=localhost; database=ToeicApp;TrustServerCertificate=True;Trusted_Connection=True;"
-     }
+      "ConnectionStrings": {
+        "DefaultConnection": "Server=localhost;Database=MyEnglishTutor;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"
    }
    ```
 
-4. **Cấu hình Email (tùy chọn)**
+4. **Configure  Email (optional)**
    
-   Cập nhật SMTP settings trong `API/appsettings.json`:
+   Update SMTP settings trong `API/appsettings.json`:
    ```json
    {
      "SmtpSettings": {
@@ -109,4 +106,52 @@ The project is organized using an **ASP.NET Core MVC** architecture, with a fold
      }
    }
    ```
+
+5. **Configure AI APIs (optional)**
+   
+   Update the API keys in `appsettings.json`:
+   ```json
+         "AIApiSettings": {
+           "SpeechToTextKey": "your-stt-api-key",
+           "PronunciationEvaluationKey": "your-pronunciation-api-key"
+   }
+   ```
+
+   6. **Run the application**
+   
+   Update the API keys in `appsettings.json`:
+   ```Bash
+      dotnet run
+   ```
+   Alternatively, use Visual Studio: Set the MyEnglishTutor project as the startup project and press F5.
+
+
+### Các API endpoints chính:
+
+The project is built on **Razor Pages** and **MVC**, so there are no public API endpoints documented with Swagger. All functionalities are accessible through the web UI.
+
+- **Login/Register**:  Access `/Account/Login` or `Account/Register`
+- **Homepage**:  After logging in, you will be redirected to the dashboard.
+- **Speaking Practice**: Access `/Speech`.
+- **Podcast Listening**: Access ` /Podcast`.
+
+
+
+   ## 🤝 **Contributing**
+
+We welcome contributions! Please follow these steps to contribute:
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/NewFeature`)
+3. Commit your changes (`git commit -m 'Add some NewFeature'`)
+4. Push to the branch (`git push origin feature/NewFeature`)
+5. Open a Pull Request
+
+## 📄 **License**
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## 📞 **Support**
+
+Nếu bạn gặp vấn đề hoặc có câu hỏi, vui lòng tạo issue trên GitHub repository.
+
 
