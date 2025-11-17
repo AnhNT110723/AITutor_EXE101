@@ -1,0 +1,33 @@
+name: .NET Core Automation
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Lấy code từ repo về máy ảo
+    - uses: actions/checkout@v4
+
+    # 2. Cài đặt môi trường .NET 8 
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # 3. Khôi phục các thư viện (Restore)
+    - name: Restore dependencies
+      run: dotnet restore
+
+    # 4. Build dự án 
+    - name: Build
+      run: dotnet build --no-restore
+
+    # 5. Chạy Test (Nếu có project test. Nếu chưa có thì bước này sẽ báo 'No test found' nhưng vẫn xanh)
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
