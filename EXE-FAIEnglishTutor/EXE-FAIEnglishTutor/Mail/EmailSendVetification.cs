@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Helpers;
+using EXE_FAIEnglishTutor.Helpers;
 using EXE_FAIEnglishTutor.Models;
 using Microsoft.Extensions.Options;
 using System.Net.Mail;
@@ -39,6 +39,7 @@ namespace EXE_FAIEnglishTutor.Mail
 
                 using (var client = new SmtpClient(_emailSettings.SmtpHost, _emailSettings.SmtpPort))
                 {
+                    client.UseDefaultCredentials = false;
                     client.Credentials = new NetworkCredential(_emailSettings.FromEmail, _emailSettings.FromPassword);
                     client.EnableSsl = true;
 
