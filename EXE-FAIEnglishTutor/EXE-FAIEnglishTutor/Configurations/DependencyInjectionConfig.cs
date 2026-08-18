@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Helpers;
+using EXE_FAIEnglishTutor.Helpers;
 using EXE_FAIEnglishTutor.Mail;
 using EXE_FAIEnglishTutor.Repositories.Implementation;
 using EXE_FAIEnglishTutor.Repositories.Interface;
@@ -11,12 +11,13 @@ using EXE_FAIEnglishTutor.Repositories.Implementation.Mentee;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using EXE_FAIEnglishTutor.Services.Implementaion.Mentee;
 using EXE_FAIEnglishTutor.Services.Implementaion.AI;
+using Microsoft.Extensions.Options;
 
 namespace EXE_FAIEnglishTutor.Configurations
 {
     public static class  DependencyInjectionConfig
     {
-        public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
+        public static void AddDependencyInjectionConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             // Thêm Dependency Injection
 
@@ -44,8 +45,9 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddScoped<IProfileService, ProfileService>();
 
 
-            //UpLoad File
-            services.AddScoped<IFileUploadService, FileUploadService>();
+            //UpLoad File — dùng Cloudinary thay vì lưu local
+            services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
+            services.AddScoped<IFileUploadService, CloudinaryService>();
 
 
             //Toeic test

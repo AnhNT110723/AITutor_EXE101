@@ -1,11 +1,10 @@
-﻿    using EXE_FAIEnglishTutor.Services.Implimentaion.AI;
     using EXE_FAIEnglishTutor.Services.Interface.AI;
-    using System.Net.Http;
-    using System.Text;
+    using System.Collections.Generic;
+    using System.Text.Json;
 
     namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
     {
-        public class SpeakingAIService :  ISpeakingAIService
+        public class SpeakingAIService : ISpeakingAIService
         {
             private readonly IOpenAIService _openAIClient;
 
@@ -16,14 +15,16 @@
 
             public async Task<string> GetChatResponseAsync(object messages)
             {
-            var requestBody = new
-            {
-                model = "gpt-3.5-turbo",
-                messages = messages,
-                max_tokens = 100
-            };
+                // Serialize với CamelCase policy → keys luôn là lowercase (role, content)
+                // dù input là PascalCase class (Role/Content) hay anonymous type (role/content)
+                var serializeOptions = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                var json = JsonSerializer.Serialize(messages, serializeOptions);
+                var messagesDict = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
 
-            return await _openAIClient.CallOpenAIAsync(requestBody);
+                return await _openAIClient.CallGeminiAsync(messagesDict);
             }
 
             public async Task<string> TranscribeAudioAsync(byte[] audioBytes)

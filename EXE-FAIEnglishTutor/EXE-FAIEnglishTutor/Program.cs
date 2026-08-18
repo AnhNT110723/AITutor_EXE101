@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Configurations;
+using EXE_FAIEnglishTutor.Configurations;
 using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Middleware;
 using EXE_FAIEnglishTutor.Models;
@@ -38,7 +38,7 @@ builder.Services.AddHttpClient();
 
 
 // Cấu hình DI
-builder.Services.AddDependencyInjectionConfiguration();
+builder.Services.AddDependencyInjectionConfiguration(builder.Configuration);
 
 builder.Services.AddSession(options =>
 {

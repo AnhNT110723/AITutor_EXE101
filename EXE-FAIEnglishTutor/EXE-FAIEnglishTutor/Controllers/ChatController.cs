@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Services.Interface.AI;
+using EXE_FAIEnglishTutor.Services.Interface.AI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EXE_FAIEnglishTutor.Controllers
@@ -23,12 +23,19 @@ namespace EXE_FAIEnglishTutor.Controllers
             {
                 return Json(new { success = false, response = "Vui lòng nhập tin nhắn!" });
             }
-            var messages = new[]
-{
-                new { role = "user", content = message }
-            };
-            var response = await _chatBotService.GetChatResponseAsync(messages);
-            return Json(new { success = true, response });
+            try
+            {
+                var messages = new[]
+                {
+                    new { role = "user", content = message }
+                };
+                var response = await _chatBotService.GetChatResponseAsync(messages);
+                return Json(new { success = true, response });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, response = $"Lỗi kết nối AI: {ex.Message}" });
+            }
         }
     }
 }
