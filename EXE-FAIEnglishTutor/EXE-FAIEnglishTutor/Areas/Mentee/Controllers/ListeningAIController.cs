@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Services.Interface.AI;
+using EXE_FAIEnglishTutor.Services.Interface.AI;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using EXE_FAIEnglishTutor.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
     [Area("Mentee")]
     public class ListeningAIController : Controller
     {
-        private readonly IOpenAIService _aiService;
+        private readonly IAIService _aiService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly ISituationService _situationService;
@@ -18,7 +18,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         private readonly ISpeakingAIService _speakingAiService;
         private readonly AzureTranslatorConfig _azureTranslatorConfig;
         private readonly HttpClient _httpClient;
-        public ListeningAIController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IOpenAIService aiService, ISituationService situationService, IUserService userService, ISpeakingAIService speakingAIService, IOptions<AzureTranslatorConfig> azureTranslatorConfig
+        public ListeningAIController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IAIService aiService, ISituationService situationService, IUserService userService, ISpeakingAIService speakingAIService, IOptions<AzureTranslatorConfig> azureTranslatorConfig
         )
         {
             _httpClientFactory = httpClientFactory;
@@ -52,7 +52,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
                 var listSituations = await _situationService.GetListSituationByRolePlay(Constants.LISTENING, keyword, category);
 
-                // Chọn chỉ các thuộc tính cần thiết
+                // Ch?n ch? c�c thu?c t�nh c?n thi?t
                 var result = listSituations.Select(s => new
                 {
                     situationId = s.SituatuonId,
@@ -68,10 +68,11 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
             catch (Exception ex)
             {
-                // Ghi log lỗi nếu cần (tùy thuộc vào hệ thống logging của bạn)
-                return StatusCode(500, new { error = "Đã xảy ra lỗi khi tải danh sách tình huống." });
+                // Ghi log l?i n?u c?n (t�y thu?c v�o h? th?ng logging c?a b?n)
+                return StatusCode(500, new { error = "�� x?y ra l?i khi t?i danh s�ch t�nh hu?ng." });
             }
         }
 
     }
 }
+

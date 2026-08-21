@@ -35,7 +35,7 @@ namespace EXE_FAIEnglishTutor.Configurations
             services.AddTransient<EmailSendVetification>();
 
             // Chat bot - Sử dụng AddHttpClient thay vì AddScoped
-            services.AddHttpClient<IOpenAIService, OpenAIService>();
+            services.AddHttpClient<IAIService, GeminiService>(); // Use Gemini by default for free tier`n            // services.AddHttpClient<IAIService, OpenAIService>(); // Uncomment to use OpenAI
             services.AddScoped<ISpeakingAIService, SpeakingAIService>();
             services.AddScoped<IReadingAIService, ReadingAIService>();
 
@@ -79,3 +79,4 @@ namespace EXE_FAIEnglishTutor.Configurations
 
     }
 }
+

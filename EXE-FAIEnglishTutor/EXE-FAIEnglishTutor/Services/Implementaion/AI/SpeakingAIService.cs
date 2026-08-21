@@ -1,16 +1,17 @@
     using EXE_FAIEnglishTutor.Services.Interface.AI;
     using System.Collections.Generic;
     using System.Text.Json;
+    using System.Threading.Tasks;
 
     namespace EXE_FAIEnglishTutor.Services.Implementaion.AI
     {
         public class SpeakingAIService : ISpeakingAIService
         {
-            private readonly IOpenAIService _openAIClient;
+            private readonly IAIService _aiService;
 
-            public SpeakingAIService(IOpenAIService openAIClient)
+            public SpeakingAIService(IAIService aiService)
             {
-                _openAIClient = openAIClient;
+                _aiService = aiService;
             }
 
             public async Task<string> GetChatResponseAsync(object messages)
@@ -24,12 +25,12 @@
                 var json = JsonSerializer.Serialize(messages, serializeOptions);
                 var messagesDict = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(json);
 
-                return await _openAIClient.CallGeminiAsync(messagesDict);
+                return await _aiService.GenerateChatResponseAsync(messagesDict);
             }
 
             public async Task<string> TranscribeAudioAsync(byte[] audioBytes)
             {
-                return await _openAIClient.TranscribeAudioAsync(audioBytes);
+                return await _aiService.TranscribeAudioAsync(audioBytes);
             }
         }
     }

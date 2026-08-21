@@ -1,4 +1,4 @@
-﻿@using System.Text.Encodings.Web
+@using System.Text.Encodings.Web
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
 }
@@ -162,7 +162,7 @@
                         <input type="text" id="userInput" placeholder="Type your message..." style="width: 100%;" />
                         <span class="mic-icon-in-input" onclick="toggleMicFromInput()"><i class="bi-mic-fill"></i></span>
                     </div>
-                    <button onclick="sendMessage()" class="send-btn"><i class="bi-send-fill"></i></button>
+                    <!-- <button onclick="sendMessage()" class="send-btn"><i class="bi-send-fill"></i></button> -->
                 </div>
             </div>
         </div>
@@ -302,6 +302,7 @@
             align-items: center;
             gap: 10px;
             flex-grow: 1;
+            width: 100%;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
@@ -345,19 +346,19 @@
                 color: #ff7875;
             }
 
-        /* CSS cho nút Send */
+        /* CSS cho nút Send (Tạm thời ẩn đi vì đã dùng Enter)
         .send-btn {
             background-color: #ff9900;
             color: white;
             border: none;
-            padding: 8px 12px; /* Giảm padding để phù hợp với icon */
-            border-radius: 50%; /* Bo tròn nút thành hình tròn */
+            padding: 8px 12px;
+            border-radius: 50%; 
             font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px; /* Kích thước cố định */
+            width: 40px; 
             height: 40px;
             transition: background-color 0.3s ease;
         }
@@ -367,8 +368,9 @@
             }
 
             .send-btn i {
-                font-size: 18px; /* Kích thước icon */
+                font-size: 18px;
             }
+        */
 
         /* CSS cho chat-bubble */
         .chat-bubble {
@@ -392,7 +394,7 @@
                 margin-right: auto;
                 border-bottom-left-radius: 0;
             }
-
+            
         .chat-actions {
             display: flex;
             gap: 5px;
@@ -508,13 +510,46 @@
         }
 
 
-
+        /* Custom Scrollbar cho chat-container */
+        .chat-container::-webkit-scrollbar {
+            width: 4px; /* Mặc định nhỏ */
+        }
+        .chat-container:hover::-webkit-scrollbar {
+            width: 8px; /* Phóng to khi hover */
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .chat-container:hover::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .chat-container::-webkit-scrollbar-button {
+            display: none;
+        }
     </style>
 
+    <script src="~/js/ai-chat-utils.js"></script>
     <script defer>
 
 
         let mediaRecorder;
+
+        // Xử lý sự kiện nhấn Enter để gửi tin nhắn
+        document.addEventListener("DOMContentLoaded", function() {
+            const userInputEl = document.getElementById("userInput");
+            if (userInputEl) {
+                userInputEl.addEventListener("keypress", function(e) {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+        });
         let audioChunks = [];
         let isRecording = false;
         const situationId = @ViewBag.SituationId;
@@ -602,6 +637,7 @@
                 nurseImg.style.opacity = '1';
             }, 300);
             restoreChatHistory();
+            showAITyping("chatBox", "role-play-typing", { bubbleClass: "chat-bubble ai typing-indicator", textClass: "typing-dots-wrapper" });
             // Gọi API StartConversation 
             try {
                 const response = await fetch('/Mentee/SpekingAiSituation/StartConversation', {
@@ -617,6 +653,7 @@
                 }
 
                 const data = await response.json();
+                removeAITyping("role-play-typing");
                 if (data.reply) {  
                     await typeMessage(data.reply, data.audioUrl, data.translatedReply);
                     saveChatHistory()
@@ -636,6 +673,7 @@
                     chatBox.innerHTML += `<p><strong>Error:</strong> Failed to start conversation.</p>`;
                 }
             } catch (error) {
+                removeAITyping("role-play-typing");
                 console.error('🚨 Error starting conversation:', error);
                 chatBox.innerHTML += `<p><strong>Error:</strong> Could not start conversation. Please try again.</p>`;
             }
@@ -645,7 +683,6 @@
             updateSpeakEventListeners();
             updateTranslateEventListeners();
         }
-
 
         
        
@@ -751,6 +788,7 @@
                 const messages = savedChat ? JSON.parse(savedChat) : [];
                 messages.push({ role: 'user', content: userMessage });
                 // Bước 2: Gửi userMessage để lấy phản hồi AI
+                showAITyping("chatBox", "role-play-typing", { bubbleClass: "chat-bubble ai typing-indicator", textClass: "typing-dots-wrapper" });
                 const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -762,6 +800,7 @@
                 }
 
                 const data = await response.json();
+                removeAITyping("role-play-typing");
                 if (!data.reply) {
                     throw new Error("Reply not found in response");
                 }
@@ -780,6 +819,7 @@
                 updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 mới
                 updateTranslateEventListeners();
             } catch (error) {
+                removeAITyping("role-play-typing");
                 console.error("Error in sendAudio:", error);
                 chatBox.innerHTML += `<p><strong>Error:</strong> ${error.message}</p>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -817,6 +857,7 @@
             // Thêm tin nhắn hiện tại vào danh sách
             messages.push({ role: 'user', content: userInput });
             console.log("mess : ", messages);
+            showAITyping("chatBox", "role-play-typing", { bubbleClass: "chat-bubble ai typing-indicator", textClass: "typing-dots-wrapper" });
             try {
                 const response = await fetch('/Mentee/SpekingAiSituation/SendMessage', {
                     method: 'POST',
@@ -829,6 +870,7 @@
                 }
 
                 const data = await response.json();
+                removeAITyping("role-play-typing");
                 if (!data.reply) {
                     throw new Error("Reply not found in response");
                 }
@@ -845,6 +887,7 @@
 
                 updateSpeakEventListeners(); // Thêm sự kiện cho các icon 🔈 mới
             } catch (error) {
+                removeAITyping("role-play-typing");
                 console.error("Error in sendMessage:", error);
                 chatBox.innerHTML += `<p><strong>Error:</strong> Could not get response from AI. Please try again.</p>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -1364,3 +1407,4 @@
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 }
+

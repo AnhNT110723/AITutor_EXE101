@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Common;
+using EXE_FAIEnglishTutor.Common;
 using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Implimentaion.AI;
@@ -19,7 +19,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
     [Area("Mentee")]
     public class SpekingAiSituationController : Controller
     {
-        private readonly IOpenAIService _aiService;
+        private readonly IAIService _aiService;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly ISituationService _situationService;
@@ -27,7 +27,17 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         private readonly ISpeakingAIService _speakingAiService;
         private readonly AzureTranslatorConfig _azureTranslatorConfig;
         private readonly HttpClient _httpClient;
-        public SpekingAiSituationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, IOpenAIService aiService, ISituationService situationService, IUserService userService, ISpeakingAIService speakingAIService, IOptions<AzureTranslatorConfig> azureTranslatorConfig
+        private readonly ILogger<SpekingAiSituationController> _logger;
+
+        public SpekingAiSituationController(
+            IHttpClientFactory httpClientFactory, 
+            IConfiguration configuration, 
+            IAIService aiService, 
+            ISituationService situationService, 
+            IUserService userService, 
+            ISpeakingAIService speakingAIService, 
+            IOptions<AzureTranslatorConfig> azureTranslatorConfig,
+            ILogger<SpekingAiSituationController> logger
         )
         {
             _httpClientFactory = httpClientFactory;
@@ -38,6 +48,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             _speakingAiService = speakingAIService;
             _azureTranslatorConfig = azureTranslatorConfig.Value;
             _httpClient = httpClientFactory.CreateClient();
+            _logger = logger;
         }
 
         [HttpGet("Mentee/Role-Play/{situationId}/practice")]
@@ -121,14 +132,14 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 string audioUrl = await GenerateSpeechAsync(aiReply, voice);
                 if (audioUrl == null)
                 {
-                    Console.WriteLine("Failed to generate audio for initial message.");
+                    _logger.LogError("Failed to generate audio for initial message.");
                 }
 
                 return Json(new { reply = aiReply, translatedReply, audioUrl });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in StartConversation: {ex.Message}");
+                _logger.LogError($"Error in StartConversation: {ex.Message}");
                 return StatusCode(500, new { error = "Error starting conversation.", details = ex.Message });
             }
         }
@@ -316,7 +327,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error generating audio: {ex.Message}");
+                _logger.LogError($"Error generating audio: {ex.Message}");
                 return StatusCode(500, "Error generating audio.");
             }
         }
@@ -339,7 +350,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetSuggestion: {ex.Message}");
+                _logger.LogError($"Error in GetSuggestion: {ex.Message}");
                 return StatusCode(500, new { error = "Could not generate suggestion.", details = ex.Message });
             }
         }
@@ -375,7 +386,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in EvaluateMessage: {ex.Message}");
+                _logger.LogError($"Error in EvaluateMessage: {ex.Message}");
                 return StatusCode(500, new { error = "Error evaluating message.", details = ex.Message });
             }
         }
@@ -446,7 +457,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 {
                     var audioBytes = await response.Content.ReadAsByteArrayAsync();
                     var audioBase64 = Convert.ToBase64String(audioBytes);
-                    Console.WriteLine($"Base64 Length: ${audioBase64.Length}, Preview: {audioBase64.Substring(0, Math.Min(50, audioBase64.Length))}");
+                    _logger.LogInformation($"Base64 Length: ${audioBase64.Length}, Preview: {audioBase64.Substring(0, Math.Min(50, audioBase64.Length))}");
                     return $"data:audio/mp3;base64,{audioBase64}";
                 }
 
@@ -455,7 +466,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
             catch (Exception ex)
             {
                 // XỬ LÝ LỖI: Trả về null nếu Azure TTS thất bại
-                Console.WriteLine($"Lỗi Azure TTS: {ex.Message}");
+                _logger.LogInformation($"Lỗi Azure TTS: {ex.Message}");
                 return null;
             }
         }
@@ -466,8 +477,8 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         {
             try
             {
-                Console.WriteLine($"Config: ApiKey={_azureTranslatorConfig.ApiKey?.Substring(0, 4)}..., Endpoint={_azureTranslatorConfig.Endpoint}, Region={_azureTranslatorConfig.Region}");
-                Console.WriteLine($"Translating text: {text} to {targetLang}");
+                _logger.LogInformation($"Config: ApiKey={_azureTranslatorConfig.ApiKey?.Substring(0, 4)}..., Endpoint={_azureTranslatorConfig.Endpoint}, Region={_azureTranslatorConfig.Region}");
+                _logger.LogInformation($"Translating text: {text} to {targetLang}");
                 string endpoint = $"{_azureTranslatorConfig.Endpoint}/translate?api-version=3.0";
 
                 _httpClient.DefaultRequestHeaders.Clear();
@@ -483,7 +494,7 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"Translation failed: {response.StatusCode}");
+                    _logger.LogInformation($"Translation failed: {response.StatusCode}");
                     return text; // Trả về text gốc nếu dịch thất bại
                 }
 
@@ -492,17 +503,17 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
                 var result = JsonSerializer.Deserialize<List<TranslationResponse>>(responseBody, options);
                 if (result == null || result.Count == 0 || result[0].Translations == null || result[0].Translations.Count == 0)
                 {
-                    Console.WriteLine("Invalid translation response format.");
+                    _logger.LogWarning("Invalid translation response format.");
                     return text;
                 }
 
                 var translatedText = result[0].Translations[0].Text;
-                Console.WriteLine($"Translated text: {translatedText}");
+                _logger.LogInformation($"Translated text: {translatedText}");
                 return translatedText;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error translating text: {ex.Message}");
+                _logger.LogError($"Error translating text: {ex.Message}");
                 return text; // Trả về text gốc nếu có lỗi
             }
         }
@@ -567,3 +578,5 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
 }
 
 }
+
+

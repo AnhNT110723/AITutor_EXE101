@@ -17,9 +17,9 @@ namespace EXE_FAIEnglishTutor.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendMessage(string message)
+        public async Task<IActionResult> SendMessage(string message, string? imageBase64)
         {
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message) && string.IsNullOrEmpty(imageBase64))
             {
                 return Json(new { success = false, response = "Vui lòng nhập tin nhắn!" });
             }
@@ -27,7 +27,7 @@ namespace EXE_FAIEnglishTutor.Controllers
             {
                 var messages = new[]
                 {
-                    new { role = "user", content = message }
+                    new { role = "user", content = message ?? "", imageBase64 = imageBase64 }
                 };
                 var response = await _chatBotService.GetChatResponseAsync(messages);
                 return Json(new { success = true, response });
