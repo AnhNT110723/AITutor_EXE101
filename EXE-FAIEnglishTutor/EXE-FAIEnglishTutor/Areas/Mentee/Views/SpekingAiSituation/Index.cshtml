@@ -442,6 +442,32 @@
                 background-color: #ffaa33;
             }
 
+        .chat-actions .speak-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px; /* Kích thước mặc định cho các icon khác (như nút dừng) */
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .chat-actions .speak-icon .bi-volume-down {
+            font-size: 22px; /* Chỉ phóng to icon loa */
+        }
+
+        .chat-actions .speak-icon:hover {
+            color: #ff9900;
+        }
+
+        .chat-bubble.user .chat-actions .speak-icon {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .chat-bubble.user .chat-actions .speak-icon:hover {
+            color: #ffffff;
+        }
+
         .chat-actions .evaluate-icon {
             display: inline-flex;
             align-items: center;
@@ -733,7 +759,7 @@
                     <div class="chat-bubble user" data-message-id="${messageId}" data-is-evaluated="false">
                         <p>${userMessage}</p>
                         <div class="chat-actions">
-                            <span class="icon">🔈</span>
+                            <span class="icon speak-icon" title="Listen"><i class="bi bi-volume-down"></i></span>
                             <span class="icon evaluate-icon" title="Evaluate grammar"><i class="bi bi-stars"></i></span>                   
                         </div>
                         <div class="evaluation-container"></div>
@@ -800,7 +826,7 @@
                             <div class="chat-bubble user" data-message-id="${messageId}" data-is-evaluated="false">
                                 <p>${userInput}</p>
                                 <div class="chat-actions">
-                                    <span class="icon">🔈</span>
+                                    <span class="icon speak-icon" title="Listen"><i class="bi bi-volume-down"></i></span>
                                    <span class="icon evaluate-icon" title="Evaluate grammar"><i class="bi bi-stars"></i></span>
                                 </div>
                                 <div class="evaluation-container"></div>
@@ -868,7 +894,7 @@
 
             let actions = document.createElement("div");
             actions.className = "chat-actions";
-            actions.innerHTML = `<span class="icon">&#128264;</span>
+            actions.innerHTML = `<span class="icon speak-icon" title="Listen"><i class="bi bi-volume-down"></i></span>
                     <span class="icon translate-icon" title="Translate">↔</span>
                     `;
             bubble.appendChild(actions);
@@ -894,14 +920,14 @@
             utterance.pitch = 1;
             utterance.onend = () => {
                 if (icon) {
-                    icon.textContent = '🔈';
+                    icon.innerHTML = '<i class="bi bi-volume-down"></i>';
                     icon.classList.remove('disabled');
                 }
                 currentSpeakIcon = null;
             };
             utterance.onerror = () => {
                 if (icon) {
-                    icon.textContent = '🔈';
+                    icon.innerHTML = '<i class="bi bi-volume-down"></i>';
                     icon.classList.remove('disabled');
                 }
                 currentSpeakIcon = null;
@@ -970,7 +996,7 @@
                              <div class="chat-bubble ${bubbleClass}" data-original-text="${msg.content}" data-translated-text="${msg.translatedText}" data-audio-url="${msg.audioUrl}" data-is-translated="false">
                             <p>${msg.content}</p>
                             <div class="chat-actions">
-                                <span class="icon">🔈</span>
+                                <span class="icon speak-icon" title="Listen"><i class="bi bi-volume-down"></i></span>
                                         ${msg.role === 'assistant' ? '<span class="icon translate-icon" title="Translate">↔</span>' : evaluationIcon}
                             </div>
                             ${evaluationContainer}
@@ -987,13 +1013,10 @@
 
          // Hàm thêm sự kiện cho các icon 🔈 để phát lại nội dung
         function addSpeakEventListeners() {
-            const speakIcons = document.querySelectorAll('.chat-actions .icon');
+            const speakIcons = document.querySelectorAll('.chat-actions .speak-icon');
             speakIcons.forEach(icon => {
-                if (icon.textContent === '🔈') {
-                    // Xóa tất cả sự kiện click cũ trước khi thêm mới
-                    icon.removeEventListener('click', handleSpeakClick); // Xóa sự kiện cũ
-                    icon.addEventListener('click', handleSpeakClick); // Thêm sự kiện mới
-                }
+                icon.removeEventListener('click', handleSpeakClick);
+                icon.addEventListener('click', handleSpeakClick);
             });
         }
        
@@ -1011,7 +1034,7 @@
             window.speechSynthesis.cancel();
             // Reset icon cũ nếu có
             if (currentSpeakIcon) {
-                currentSpeakIcon.textContent = '🔈';
+                currentSpeakIcon.innerHTML = '<i class="bi bi-volume-down"></i>';
                 currentSpeakIcon.classList.remove('disabled');
                 currentSpeakIcon = null;
             }
@@ -1034,7 +1057,7 @@
             stopCurrentAudio();
 
             // Disable icon và đổi trạng thái
-            icon.textContent = '⏹';
+            icon.innerHTML = '<i class="bi bi-stop-circle"></i>';
             icon.classList.add('disabled');
             currentSpeakIcon = icon;
             
@@ -1048,13 +1071,13 @@
                 currentAudio = audio;
 
                 audio.addEventListener('ended', () => {
-                    icon.textContent = '🔈';
+                    icon.innerHTML = '<i class="bi bi-volume-down"></i>';
                     icon.classList.remove('disabled');
                     currentAudio = null;
                     currentSpeakIcon = null;
                 });
                 audio.addEventListener('error', () => {
-                    icon.textContent = '🔈';
+                    icon.innerHTML = '<i class="bi bi-volume-down"></i>';
                     icon.classList.remove('disabled');
                     currentAudio = null;
                     currentSpeakIcon = null;
@@ -1062,7 +1085,7 @@
 
                 audio.play().catch(error => {
                     console.error('Audio play error:', error);
-                    icon.textContent = '🔈';
+                    icon.innerHTML = '<i class="bi bi-volume-down"></i>';
                     icon.classList.remove('disabled');
                     currentAudio = null;
                     currentSpeakIcon = null;
