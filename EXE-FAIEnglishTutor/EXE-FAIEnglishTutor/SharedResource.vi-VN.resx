@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Logout" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+  <data name="ViewProfile" xml:space="preserve">
+    <value>Hồ sơ của bạn</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="Situation" xml:space="preserve">
+    <value>Tình huống</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="LanguageVi" xml:space="preserve">
+    <value>Tiếng Việt</value>
+  </data>
+  <data name="LanguageEn" xml:space="preserve">
+    <value>Tiếng Anh</value>
+  </data>
+  <data name="AITutorStudyGuide" xml:space="preserve">
+    <value>Hướng dẫn học AI Tutor</value>
+  </data>
+  <data name="WhereToLearnAI" xml:space="preserve">
+    <value>Học AI Tutoring ở đâu? Hướng dẫn trên Web</value>
+  </data>
+  <data name="RolePlayingStudyGuide" xml:space="preserve">
+    <value>Hướng dẫn học Nhập vai</value>
+  </data>
+  <data name="HomeSlogan" xml:space="preserve">
+    <value>AI trở thành người bạn đồng hành luyện nghe và nói tiếng Anh hàng ngày tại FAI</value>
+  </data>
+  <data name="Guide" xml:space="preserve">
+    <value>Hướng dẫn</value>
+  </data>
+  <data name="RolePlay" xml:space="preserve">
+    <value>Nhập vai</value>
+  </data>
+  <data name="Listening" xml:space="preserve">
+    <value>Nghe</value>
+  </data>
+  <data name="SpeakFreely" xml:space="preserve">
+    <value>Nói tự do</value>
+  </data>
+  <data name="Pronounce" xml:space="preserve">
+    <value>Phát âm</value>
+  </data>
+  <data name="NewlyReleased" xml:space="preserve">
+    <value>Mới phát hành</value>
+  </data>
+  <data name="Prevalent" xml:space="preserve">
+    <value>Phổ biến</value>
+  </data>
+  <data name="SidebarToeic" xml:space="preserve">
+    <value>Học Toeic</value>
+  </data>
+  <data name="SidebarAITutor" xml:space="preserve">
+    <value>AI Gia sư</value>
+  </data>
+  <data name="SidebarPodcast" xml:space="preserve">
+    <value>Podcast</value>
+  </data>
+  <data name="SidebarMembership" xml:space="preserve">
+    <value>Thành viên</value>
+  </data>
+  <data name="PaymentTitle" xml:space="preserve">
+    <value>Chọn gói nâng cấp FAI</value>
+  </data>
+  <data name="PaymentDesc" xml:space="preserve">
+    <value>Để có thể sử dụng một số chức năng đặc biệt, bạn cần đăng ký gói thành viên:</value>
+  </data>
+  <data name="PaymentPrice" xml:space="preserve">
+    <value>48,000₫ cho 1 tháng</value>
+  </data>
+  <data name="PaymentFeature1" xml:space="preserve">
+    <value>✔️ Học nhập vai theo tình huống để giao tiếp với AI</value>
+  </data>
+  <data name="PaymentFeature2" xml:space="preserve">
+    <value>✔️ Nghe các bài podcast hay để củng cố kĩ năng nghe</value>
+  </data>
+  <data name="PaymentFeature3" xml:space="preserve">
+    <value>✔️ Học nghe với AI qua tình huống</value>
+  </data>
+  <data name="PaymentFeature4" xml:space="preserve">
+    <value>✔️ Học từ vựng mới theo tình huống</value>
+  </data>
+  <data name="PaymentButton" xml:space="preserve">
+    <value>🧾 Thanh toán</value>
+  </data>
+  <data name="PaymentNoService" xml:space="preserve">
+    <value>Không tìm thấy dịch vụ nào</value>
+  </data>
+  <data name="RolePlayBack" xml:space="preserve">
+    <value>Quay lại</value>
+  </data>
+  <data name="LevelLabel" xml:space="preserve">
+    <value>Cấp độ</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Vui lòng nhập từ khóa bằng tiếng anh</value>
+  </data>
+  <data name="CreatePersonalizedSituationDesc" xml:space="preserve">
+    <value>Tạo nhân vật và tình huống theo cách cá nhân hóa.</value>
+  </data>
+  <data name="CreateSituation" xml:space="preserve">
+    <value>Tạo tình huống</value>
+  </data>
+  <data name="MyRole" xml:space="preserve">
+    <value>Vai trò của tôi</value>
+  </data>
+  <data name="MyRoleExample" xml:space="preserve">
+    <value>Ví dụ: Nhân viên bán quần áo</value>
+  </data>
+  <data name="AiRole" xml:space="preserve">
+    <value>Vai trò của AI</value>
+  </data>
+  <data name="AiRoleExample" xml:space="preserve">
+    <value>Ví dụ: Khách hàng nữ</value>
+  </data>
+  <data name="SituationLabel" xml:space="preserve">
+    <value>Tình huống</value>
+  </data>
+  <data name="SituationExample" xml:space="preserve">
+    <value>Trong cửa hàng quần áo, tôi đang tư vấn cho khách hàng mua quần jean</value>
+  </data>
+  <data name="SubmitButton" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
+  <data name="FeatureUnderDevelopment" xml:space="preserve">
+    <value>Tính năng tạo tình huống này đang được phát triển.</value>
+  </data>
+  <data name="LessonObjectives" xml:space="preserve">
+    <value>Mục tiêu bài học:</value>
+  </data>
+  <data name="Obj1" xml:space="preserve">
+    <value>Biết cách đặt lịch hẹn</value>
+  </data>
+  <data name="Obj2" xml:space="preserve">
+    <value>Nắm từ vựng chủ đề sức khỏe</value>
+  </data>
+  <data name="Obj3" xml:space="preserve">
+    <value>Luyện tập cấu trúc "I want to..."</value>
+  </data>
+  <data name="ReturnToPreviousPage" xml:space="preserve">
+    <value>Quay lại trang trước</value>
+  </data>
+  <data name="PracticeWithAI" xml:space="preserve">
+    <value>Luyện tập với AI</value>
+  </data>
+  <data name="UseButton" xml:space="preserve">
+    <value>Sử dụng</value>
+  </data>
+  <data name="TypeYourMessage" xml:space="preserve">
+    <value>Nhập tin nhắn...</value>
+  </data>
+  <data name="WelcomeToAITutor" xml:space="preserve">
+    <value>Chào mừng đến với AI Tutor!</value>
+  </data>
+  <data name="ChooseYourAIVoice" xml:space="preserve">
+    <value>Chọn giọng nói nhân vật AI của bạn:</value>
+  </data>
+  <data name="StartButton" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+</root>

@@ -1,3 +1,5 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
 }
@@ -12,7 +14,7 @@
                 <!-- Header -->
                 <div class="modal-header">
                     <h4 style="font-weight: bold;" id="videoModalLabel">
-                        AI Tutor Study Guide
+                        @Localizer["AITutorStudyGuide"]
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -21,7 +23,7 @@
 
                 <!-- Nội dung -->
                 <div class="modal-body">
-                    <h5 style="font-weight: 700;">Where to Learn AI Tutoring? Web-Based Guide</h5>
+                    <h5 style="font-weight: 700;">@Localizer["WhereToLearnAI"]</h5>
                     <div class="row">
                         <!-- Video bên trái -->
                         <div class="col-lg-9 col-12 parent">
@@ -83,7 +85,7 @@
                                                 <div class="group-img col-6">
                                                     <img src="https://files.kynaenglish.com/uploads/ai_started_media/1/1efbdf4d-f118-6374-a6a1-0242ac110002-1734604488.png" alt="">
                                                 </div>
-                                                <div class="group-title col-6">Role Playing Study Guide</div>
+                                                <div class="group-title col-6">@Localizer["RolePlayingStudyGuide"]</div>
                                             </div>
 
                                         </div>
@@ -139,9 +141,6 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-            <div class="d-flex justify-content-end align-items-center">
-                <div id="google_translate_element"></div>
-            </div>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav ml-auto">
@@ -154,58 +153,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Portfolio</a>
                         </li> *@
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                        // Đọc thông tin từ cookie
-                        var fullName = User.Identity.Name;
-                        var avatarUrl = User.FindFirst("Avatar")?.Value;
-                       
-                            <li class="nav-item dropdown">
-          
-                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                   data-toggle="dropdown" aria-expanded="false">
-                                    <div class="nav-img">
-                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                    </div>
-                                </a>
-                                <div class=" menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
-                                    <div class="menu-title">
-                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
-                                        <i class="bi bi-person-circle"></i> View Profile
-                                    </a>
-                                @if(User.Identity.IsAuthenticated)
-                                {
-
-
-                                @if (User.IsInRole("admin"))
-                                    {
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
-                                            <i class="bi bi-speedometer2"></i> Dashboard
-                                        </a>
-                                    }
-                                    
-                                }
-
-                                    
-
-                                    <div class="dropdown-divider"></div>
-                                    <a id="logout-link" class="dropdown-item text-danger" href="#" >
-                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                    </a>
-
-                                    <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <a class="btn-login-custom btn "  asp-controller="Account" asp-action="Login">Login now</a>
-                        }
+                                                @await Html.PartialAsync("_UserDropdown")
                     </ul>
                 </div>
             </div>
@@ -219,12 +167,12 @@
                         <!-- <img src="https://image.nhandan.vn/w800/Files/Images/2021/12/19/cv-1639898315592.jpg.webp"/> -->
                         <p class="text-display text-white text-lg">FAI English</p>
                         <p class="mb-2 text-md font-light text-white md:max-w-[374px] lg:my-3 lg:text-lg">
-                        AI becomes your daily English listening and speaking companion at FAI
+                        @Localizer["HomeSlogan"]
                         </p>
                         <div class="cursor-pointer items-center justify-center self-baseline rounded-lg bg-white/40 py-2 px-10 text-md font-bold md:py-3 md:px-14 lg:text-lg">
                             <!-- <p class=" text-white md:text-lg">Hướng dẫn</p> -->
                             <button class=" text-white btn btn-nav" data-toggle="modal" data-target="#videoModal">
-                            Guide
+                            @Localizer["Guide"]
                             </button>
                         </div>
                     </div>
@@ -246,7 +194,7 @@
                             <img src="~/Images/CHAT.png" class="img-fluid" alt="img">
                         </div>
                     </div>
-                    <p class="mt-2 text-center font-custom text-secondary">Role play</p>
+                    <p class="mt-2 text-center font-custom text-secondary">@Localizer["RolePlay"]</p>
                 </div>
             </a>
         <a href="/Mentee/Listening">
@@ -257,7 +205,7 @@
                         <img src="~/images/listening.png" class="img-fluid" alt="img">
                     </div>
                 </div>
-                <p class="mt-2 text-center font-custom text-secondary">Listening</p>
+                <p class="mt-2 text-center font-custom text-secondary">@Localizer["Listening"]</p>
             </div>
 
 
@@ -270,7 +218,7 @@
                             <img src="~/Images/mic-header.png" class="img-fluid" alt="img">
                     </div>
                 </div>
-                <p class="mt-2 text-center font-custom text-secondary">Speak freely</p>
+                <p class="mt-2 text-center font-custom text-secondary">@Localizer["SpeakFreely"]</p>
             </div>
             </a>
 
@@ -284,7 +232,7 @@
                             <img src="~/Images/mic-header.png" class="img-fluid" alt="img">
                         </div>
                     </div>
-                <p class="mt-2 text-center font-custom text-secondary">Pronounce</p>
+                <p class="mt-2 text-center font-custom text-secondary">@Localizer["Pronounce"]</p>
                 </div>
             </a>
 
@@ -298,7 +246,7 @@
         <!-- Sản Phầm Khóa Học -->
 
         <div class="mt-4">
-            <h3 id="new_released ">Newly released</h3>
+            <h3 id="new_released ">@Localizer["NewlyReleased"]</h3>
             <div class="position-relative button-container">
 
                 <button class="btn btn-outline-secondary position-absolute left-btn" id="prev-btn-new">
@@ -337,7 +285,7 @@
 
 
         <div class="mt-4 mt-4-custome">
-        <h3 id="prevalent">Prevalent</h3>
+        <h3 id="prevalent">@Localizer["Prevalent"]</h3>
             <div class="position-relative button-container">
 
                 <button class="btn btn-outline-secondary position-absolute left-btn" id="prev-btn">
@@ -520,11 +468,7 @@
         .send-btn:hover { transform: scale(1.08); }
         .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        /* Google Translate */
-        #google_translate_element { display:inline-block; border-radius:8px; padding:4px 8px; background-color:#f9f9f9; font-size:14px; }
-        .goog-logo-link { display:none !important; }
-        .goog-te-gadget span { display:none; }
-        .goog-te-combo { padding:4px 8px; font-size:14px; border-radius:6px; border:1px solid #ccc; background-color:white; color:#333; }
+
     </style>
 
     <script>
@@ -654,15 +598,7 @@
             }
         });
     </script>
-<script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                { pageLanguage: 'en' },
-                'google_translate_element'
-            );
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
 }
 

@@ -9,12 +9,30 @@ using EXE_FAIEnglishTutor.Services.Interface.AI;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { new CultureInfo("vi-VN"), new CultureInfo("en-US") };
+    options.DefaultRequestCulture = new RequestCulture("vi-VN");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    
+    // Xóa provider đọc header Accept-Language của trình duyệt để không bị ghi đè DefaultRequestCulture
+    var acceptLanguageProvider = options.RequestCultureProviders.OfType<Microsoft.AspNetCore.Localization.AcceptLanguageHeaderRequestCultureProvider>().FirstOrDefault();
+    if (acceptLanguageProvider != null)
+    {
+        options.RequestCultureProviders.Remove(acceptLanguageProvider);
+    }
+});
+builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 builder.Services.AddHttpClient<SpeechService>(client =>
 {
     client.BaseAddress = new Uri("https://api.openai.com/v1/");
@@ -96,7 +114,6 @@ var app = builder.Build();
 // Thêm middleware xử lý lỗi trạng thái trước các middleware khác
 app.UseStatusCodePagesWithRedirects("~/Error/{0}");
 
-app.UseCors("AllowAll");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -114,14 +131,20 @@ if (!app.Environment.IsDevelopment())
 else
 {
     app.UseDeveloperExceptionPage();
-    app.UseStatusCodePagesWithRedirects("~/Error/{0}"); 
 }
 
 
 //Midleware
 app.UseStaticFiles();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseRouting();
+
+var localizationOptions = app.Services.GetService<Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
+
+app.UseCors("AllowAll");
 
 app.UseSession();
 
@@ -129,9 +152,8 @@ app.UseAuthentication();
 
 app.UseMiddleware<TokenMiddleware>();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 app.UseAuthorization();
+
 
 //Kiem tra area truoc
 app.MapControllerRoute(
@@ -143,3 +165,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=homepage}/{id?}");
 
 app.Run();
+

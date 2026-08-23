@@ -1,3 +1,5 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
 @{
     Layout = "~/Views/Shared/_Layout.cshtml"; // hoặc relative path phù hợp
 }
@@ -5,35 +7,7 @@
 @model List<Situation>
 
 
-<style>
-    /* Tùy chỉnh giao diện thô của Google Translate */
-    #google_translate_element {
-        display: inline-block;
-        border-radius: 8px;
-        padding: 4px 8px;
-        font-size: 14px;
-    }
 
-    /* Ẩn logo Google nếu bạn muốn tối giản */
-    .goog-logo-link {
-        display: none !important;
-    }
-
-    /* Ẩn thông tin quyền và liên kết */
-    .goog-te-gadget span {
-        display: none;
-    }
-
-    /* Dropdown ngôn ngữ */
-    .goog-te-combo {
-        padding: 4px 8px;
-        font-size: 14px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        background-color: white;
-        color: #333;
-    }
-</style>
 
 <!-- Page Content  -->
 <div id="content" class="p-4 p-md-5">
@@ -47,12 +21,10 @@
                 </button>
                 <!-- Nút Back -->
                 <a href="/Mentee" class="btn btn-outline-secondary ml-2">
-                    <i class="fa fa-arrow-left"></i> Back
+                    <i class="fa fa-arrow-left"></i> @Localizer["RolePlayBack"]
                 </a>
 
-                <div class="d-flex justify-content-end align-items-center">
-                    <div id="google_translate_element"></div>
-                </div>
+
 
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
                         data-bs-target="#navbarSupportedContent"
@@ -72,41 +44,7 @@
                         <a class="nav-link" href="#">Portfolio</a>
                         </li> *@
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            // Đọc thông tin từ cookie
-                            var fullName = User.Identity.Name;
-                            var avatarUrl = User.FindFirst("Avatar")?.Value;
-                            <li class="nav-item dropdown">
-
-                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="nav-img">
-                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                    </div>
-                                </a>
-                                <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                    <div class="menu-title">
-                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
-                                        <i class="bi bi-person-circle"></i> View Profile
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                    </a>
-
-                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
-                        }
+                                                @await Html.PartialAsync("_UserDropdown")
                     </ul>
                 </div>
             </div>
@@ -121,7 +59,7 @@
                             <!-- Nhãn Level -->
                             <label for="categoryDropdown" class="form-label text-muted text-level"
                                    onclick="toggleDropdown()">
-                                Level
+                                @Localizer["LevelLabel"]
                             </label>
                             <!-- Nút dropdown -->
                             <button class="btn btn-light dropdown-toggle w-100 dropdown-btn" type="button"
@@ -149,7 +87,7 @@
                     <div class="d-flex align-items-center flex-grow-1">
                         <div class="input-group rounded-pill">
                             <input type="text" class="form-control no-border" id="searchCourse"
-                                   placeholder="Vui lòng nhập từ khóa bằng tiếng anh" aria-label="Search">
+                                   placeholder="@Localizer["SearchPlaceholder"]" aria-label="Search">
                             <button class="btn  no-border ms-2" type="button">
                                 <i class="fas fa-search"></i> <!-- Icon kính lúp -->
                             </button>
@@ -183,8 +121,8 @@
                                  alt="Course 3">
 
                             <div class="card-body">
-                                <p id="titleListCourse" style="font-weight: 35px;">Tạo nhân vật và tình huống theo cách cá nhân hóa.</p>
-                                <button class="btn btn-create-situation">Tạo tình huống</button>
+                                <p id="titleListCourse" style="font-weight: 35px;">@Localizer["CreatePersonalizedSituationDesc"]</p>
+                                <button class="btn btn-create-situation">@Localizer["CreateSituation"]</button>
                             </div>
                         </div>
                     </div>
@@ -238,27 +176,27 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="situationModalLabel">Tạo tình huống</h5>
+                <h5 class="modal-title" id="situationModalLabel">@Localizer["CreateSituation"]</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="myRole" class="form-label">Vai trò của tôi</label>
-                        <input type="text" class="form-control" id="myRole" placeholder="Ví dụ: Nhân viên bán quần áo">
+                        <label for="myRole" class="form-label">@Localizer["MyRole"]</label>
+                        <input type="text" class="form-control" id="myRole" placeholder="@Localizer["MyRoleExample"]">
                     </div>
                     <div class="mb-3">
-                        <label for="aiRole" class="form-label">AI's Role</label>
-                        <input type="text" class="form-control" id="aiRole" placeholder="Ví dụ: Khách hàng nữ">
+                        <label for="aiRole" class="form-label">@Localizer["AiRole"]</label>
+                        <input type="text" class="form-control" id="aiRole" placeholder="@Localizer["AiRoleExample"]">
                     </div>
                     <div class="mb-3">
-                        <label for="situation" class="form-label">Situation</label>
-                        <textarea class="form-control" id="situation" rows="3" placeholder="Trong cửa hàng quần áo, tôi đang tư vấn cho khách hàng mua quần jean"></textarea>
+                        <label for="situation" class="form-label">@Localizer["SituationLabel"]</label>
+                        <textarea class="form-control" id="situation" rows="3" placeholder="@Localizer["SituationExample"]"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer" style="margin: 0 auto;">
-                <button type="button" class="btn btn-save-crate-situation" style="text-align: center;" onclick="alert('Tính năng tạo tình huống này đang được phát triển.')">Gửi</button>
+                <button type="button" class="btn btn-save-crate-situation" style="text-align: center;" onclick="alert('@Localizer["FeatureUnderDevelopment"]')">@Localizer["SubmitButton"]</button>
             </div>
         </div>
     </div>
@@ -561,14 +499,4 @@
 
     </script>
 
-    <script src="script.js"></script>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                { pageLanguage: 'en' },
-                'google_translate_element'
-            );
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 }

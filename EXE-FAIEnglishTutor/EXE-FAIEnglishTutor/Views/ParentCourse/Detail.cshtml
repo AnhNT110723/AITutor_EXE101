@@ -120,37 +120,7 @@
                                 <a class="nav-link" href="#">Portfolio</a>
                                 </li> *@
 
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    // Đọc thông tin từ cookie
-                                    var fullName = User.Identity.Name;
-                                    var avatarUrl = User.FindFirst("Avatar")?.Value;
-                                    <li class="nav-item dropdown">
-
-                                        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            <div class="nav-img">
-                                                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                            </div>
-                                        </a>
-                                        <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                            <div class="menu-title">
-                                                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                            </div>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                                <i class="bi bi-person-circle"></i> View Profile
-                                            </a>
-                                            <div class="dropdown-divider"></div>
-                                            <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                                <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                            </a>
-
-                                            <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                                        </div>
-                                    </li>
-                                }
+                                                        @await Html.PartialAsync("_UserDropdown")
                                 else
                                 {
                                     <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Đăng nhập</a>

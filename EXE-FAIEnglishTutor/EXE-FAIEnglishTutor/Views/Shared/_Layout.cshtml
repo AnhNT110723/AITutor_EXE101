@@ -1,4 +1,5 @@
-﻿
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,20 +91,19 @@
                     <li>
                         <a asp-area="Mentee" asp-controller="Toeic" asp-action="Index" class="link-test" data-action="toeic">
                             <span class="fas fa-graduation-cap icon"></span>
-                            <span class="menu-text">Học Toeic</span>
+                            <span class="menu-text">@Localizer["SidebarToeic"]</span>
                         </a>
                     </li>
                     <li>
                         <a asp-area="" asp-controller="home" asp-action="Index" class="link-test" data-action="home">
                             <span class="fa fa-frog"></span>
-                            <span class="menu-text">AI Tutor</span>
-
+                            <span class="menu-text">@Localizer["SidebarAITutor"]</span>
                         </a>
                     </li>
                     <li>
                         <a asp-area="Mentee" asp-controller="Podcast" asp-action="Index" class="link-test" data-action="podcast">
                             <span class="fas fa-book-open"></span>
-                            <span class="menu-text">Podcast</span>
+                            <span class="menu-text">@Localizer["SidebarPodcast"]</span>
                         </a>
                     </li>
                     @*    <li>
@@ -115,7 +115,7 @@
                     <li>
                         <a asp-area="" asp-controller="Payment" asp-action="index" class="link-test" data-action="payment">
                             <span class="fas fa-credit-card"></span>
-                            <span class="menu-text">Membership</span>
+                            <span class="menu-text">@Localizer["SidebarMembership"]</span>
                         </a>
                     </li>
                 </ul>
@@ -220,5 +220,6 @@
         }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

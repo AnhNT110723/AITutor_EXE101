@@ -1,0 +1,78 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+@inject IStringLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@if (User.Identity.IsAuthenticated)
+{
+    var fullName = User.Identity.Name;
+    var avatarUrl = User.FindFirst("Avatar")?.Value;
+
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName })
+        .ToList();
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
+           data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="nav-img">
+                <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
+            </div>
+        </a>
+        <div class="menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
+            <div class="menu-title">
+                <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" style="padding-left: 13px;" asp-controller="Profile" asp-action="index">
+                <i class="bi bi-person-circle" style="margin-right: 10px;"></i> @Localizer["ViewProfile"]
+            </a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item custome-dropdown-laguage">
+                <form id="langForm" asp-area="" asp-controller="Language" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" role="form">
+                    <input type="hidden" name="culture" id="cultureInput" value="" />
+                    <div class="dropdown position-relative">
+                        <button class="btn dropdown-toggle" type="button" style="width: 100%; display: flex; align-items: center; justify-content: space-between;"
+                                id="languageDropdown" onclick="event.stopPropagation(); event.preventDefault(); document.getElementById('langSubmenu').classList.toggle('show');">
+                            @if (requestCulture.RequestCulture.UICulture.Name == "vi-VN" || requestCulture.RequestCulture.UICulture.Name == "vi")
+                            {
+                                <span><img src="~/Images/Co-Vietnam.png" alt="Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> Tiếng Việt</span>
+                            }
+                            else
+                            {
+                                <span><img src="~/Images/co-england.png" alt="Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> English</span>
+                            }
+                        </button>
+                        <ul class="dropdown-menu w-100 shadow" id="langSubmenu" aria-labelledby="languageDropdown" style="position: absolute; z-index: 1050; margin-top: 2px;">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:void(0)" onclick="document.getElementById('cultureInput').value='vi-VN'; document.getElementById('langForm').submit();">
+                                    <img src="~/Images/Co-Vietnam.png" alt="Vietnam Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> Tiếng Việt
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="javascript:void(0)" onclick="document.getElementById('cultureInput').value='en-US'; document.getElementById('langForm').submit();">
+                                    <img src="~/Images/co-england.png" alt="England Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> English
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="dropdown-divider"></div>
+
+            <a id="logout-link" class="dropdown-item text-danger" style="padding-left: 13px;" href="#">
+                <i class="bi bi-box-arrow-right" style="margin-right: 10px;"></i> <span id="logoutOption">@Localizer["Logout"]</span>
+            </a>
+            <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
+        </div>
+    </li>
+}
+else
+{
+    <a class="btn-login-custom btn" asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="ViewProfile" xml:space="preserve">
+    <value>View Profile</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Situation" xml:space="preserve">
+    <value>Situation</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageVi" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="LanguageEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="AITutorStudyGuide" xml:space="preserve">
+    <value>AI Tutor Study Guide</value>
+  </data>
+  <data name="WhereToLearnAI" xml:space="preserve">
+    <value>Where to Learn AI Tutoring? Web-Based Guide</value>
+  </data>
+  <data name="RolePlayingStudyGuide" xml:space="preserve">
+    <value>Role Playing Study Guide</value>
+  </data>
+  <data name="HomeSlogan" xml:space="preserve">
+    <value>AI becomes your daily English listening and speaking companion at FAI</value>
+  </data>
+  <data name="Guide" xml:space="preserve">
+    <value>Guide</value>
+  </data>
+  <data name="RolePlay" xml:space="preserve">
+    <value>Role Play</value>
+  </data>
+  <data name="Listening" xml:space="preserve">
+    <value>Listening</value>
+  </data>
+  <data name="SpeakFreely" xml:space="preserve">
+    <value>Speak Freely</value>
+  </data>
+  <data name="Pronounce" xml:space="preserve">
+    <value>Pronounce</value>
+  </data>
+  <data name="NewlyReleased" xml:space="preserve">
+    <value>Newly Released</value>
+  </data>
+  <data name="Prevalent" xml:space="preserve">
+    <value>Prevalent</value>
+  </data>
+</root>

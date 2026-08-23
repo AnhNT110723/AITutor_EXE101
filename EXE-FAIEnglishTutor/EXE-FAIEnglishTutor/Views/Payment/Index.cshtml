@@ -1,5 +1,7 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
 @{
-    Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 @{
     ViewData["Title"] = "Chọn gói nâng cấp FAI";
@@ -34,59 +36,7 @@
                     <li class="nav-item">
                     <a class="nav-link" href="#">Portfolio</a>
                     </li> *@
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        // Đọc thông tin từ cookie
-                        var fullName = User.Identity.Name;
-                        var avatarUrl = User.FindFirst("Avatar")?.Value;
-
-                        <li class="nav-item dropdown">
-
-                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                               data-toggle="dropdown" aria-expanded="false">
-                                <div class="nav-img">
-                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                </div>
-                            </a>
-                            <div class=" menu-items dropdown-menu dropdown-menu-right" aria-labelledby="avatarDropdown">
-                                <div class="menu-title">
-                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                </div>
-
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-area="Mentee" asp-controller="Profile" asp-action="index">
-                                    <i class="bi bi-person-circle"></i> View Profile
-                                </a>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-
-
-                                    @if (User.IsInRole("admin"))
-                                    {
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="index">
-                                            <i class="bi bi-speedometer2"></i> Dashboard
-                                        </a>
-                                    }
-
-                                }
-
-
-
-                                <div class="dropdown-divider"></div>
-                                <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                </a>
-
-                                <form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                            </div>
-                        </li>
-                    }
-                    else
-                    {
-                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Login now</a>
-                    }
+                                            @await Html.PartialAsync("_UserDropdown")
                 </ul>
             </div>
         </div>
@@ -97,29 +47,28 @@
         @if (User.Identity.IsAuthenticated && Model != null && Model.ExpiryDate != null && Model.UpgradeLevel > 0)
         {
             <div class="text-center" style="font-size:30px; color: black">
-                Không tìm thấy dịch vụ nào
+                @Localizer["PaymentNoService"]
             </div>
         }
         else
         {
-            <h2>Chọn gói nâng cấp FAI</h2>
+            <h2>@Localizer["PaymentTitle"]</h2>
             <p style="text-align: center !important; color:black;">
-                Để có thể sử dụng một số chức năng đặc biệt, bạn cần đăng ký gói
-                thành viên:
+                @Localizer["PaymentDesc"]
             </p>
 
             <div class="pricing-container">
                 <div class="pricing-card card-wrapper">
                     <div class="featured">FEATURED</div>
                     <div class="plan-title">FAI MEMBER</div>
-                    <div class="price">48,000₫ cho 1 tháng</div>
+                    <div class="price">@Localizer["PaymentPrice"]</div>
                     <ul class="features text-start">
-                        <li>✔️ Học nhập vai theo tình huống để giao tiếp với AI</li>
-                        <li>✔️ Nghe các bài podcast hay để củng cố kĩ năng nghe </li>
-                        <li>✔️ Học nghe với AI qua tình huống</li>
-                        <li>✔️ Học từ vựng mới theo tình huống</li>
+                        <li>@Localizer["PaymentFeature1"]</li>
+                        <li>@Localizer["PaymentFeature2"]</li>
+                        <li>@Localizer["PaymentFeature3"]</li>
+                        <li>@Localizer["PaymentFeature4"]</li>
                     </ul>
-                    <a href="#" id="pay-link" class="btn btn-pay">🧾 Thanh toán</a>
+                    <a href="#" id="pay-link" class="btn btn-pay">@Localizer["PaymentButton"]</a>
                     <form asp-controller="Payment" id="payForm" asp-action="GenerateQR" style="display: none;" method="post">
                         <input type="hidden" name="planAmount" value="2000" />
                     </form>

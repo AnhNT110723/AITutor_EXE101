@@ -1,38 +1,12 @@
 @using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml"; // hoặc relative path phù hợp
 }
 
 
-<style>
-    /* Tùy chỉnh giao diện thô của Google Translate */
-    #google_translate_element {
-        display: inline-block;
-        border-radius: 8px;
-        padding: 4px 8px;
-        font-size: 14px;
-    }
 
-    /* Ẩn logo Google nếu bạn muốn tối giản */
-    .goog-logo-link {
-        display: none !important;
-    }
-
-    /* Ẩn thông tin quyền và liên kết */
-    .goog-te-gadget span {
-        display: none;
-    }
-
-    /* Dropdown ngôn ngữ */
-    .goog-te-combo {
-        padding: 4px 8px;
-        font-size: 14px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        background-color: white;
-        color: #333;
-    }
-</style>
 
 
 <!-- Page Content  -->
@@ -47,9 +21,7 @@
             </button>
 
 
-            <div class="d-flex justify-content-end align-items-center">
-                <div id="google_translate_element"></div>
-            </div>
+
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -68,41 +40,7 @@
                     <a class="nav-link" href="#">Portfolio</a>
                     </li> *@
 
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        // Đọc thông tin từ cookie
-                        var fullName = User.Identity.Name;
-                        var avatarUrl = User.FindFirst("Avatar")?.Value;
-                        <li class="nav-item dropdown">
-
-                            <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                               data-toggle="dropdown" aria-expanded="false">
-                                <div class="nav-img">
-                                    <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                </div>
-                            </a>
-                            <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                <div class="menu-title">
-                                    <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                </div>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                    <i class="bi bi-person-circle"></i> View Profile
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                    <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                </a>
-
-                                <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                            </div>
-                        </li>
-                    }
-                    else
-                    {
-                        <a class="btn-login-custom btn " asp-controller="Account" asp-action="Login">Login now</a>
-                    }
+                                            @await Html.PartialAsync("_UserDropdown")
                 </ul>
             </div>
         </div>
@@ -127,7 +65,7 @@
                 <div class="situation-card">
                     <div class="situation-header">
                         <span class="icon">&#128221;</span>
-                        <p class="situation-title">Situation</p>
+                        <p class="situation-title">@Localizer["SituationLabel"]</p>
                     </div>
                     <p class="situation-text">
                         @ViewBag.SituationDescription
@@ -149,7 +87,7 @@
             <div class="bottom-controls">
                 <div id="suggestionBox" class="suggestion-box hidden">
                     <p id="suggestionText"></p>
-                    <button onclick="useSuggestion()" class="use-suggestion-btn">Use</button>
+                    <button onclick="useSuggestion()" class="use-suggestion-btn">@Localizer["UseButton"]</button>
                 </div>
                 <div class="controls">
                     <span class="icon suggestion-icon" onclick="getSuggestion()">💡</span>
@@ -159,7 +97,7 @@
 
                 <div class="input-wrapper hidden">
                     <div class="input-container">
-                        <input type="text" id="userInput" placeholder="Type your message..." style="width: 100%;" />
+                        <input type="text" id="userInput" placeholder="@Localizer["TypeYourMessage"]" style="width: 100%;" />
                         <span class="mic-icon-in-input" onclick="toggleMicFromInput()"><i class="bi-mic-fill"></i></span>
                     </div>
                     <!-- <button onclick="sendMessage()" class="send-btn"><i class="bi-send-fill"></i></button> -->
@@ -169,8 +107,8 @@
     </div>
     <div id="welcomeScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; margin-top:40px;  display: flex; justify-content: center; align-items: center; z-index: 1000;">
         <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 800px; width: 95%;">
-            <h3>Welcome to AI Tutor!</h3>
-            <p style="text-align: center !important">Choose your AI character's voice:</p>
+            <h3>@Localizer["WelcomeToAITutor"]</h3>
+            <p style="text-align: center !important">@Localizer["ChooseYourAIVoice"]</p>
             <div class="character-carousel" style="position: relative; width: 100%; height: 350px;">
                 <!-- Character Cards -->
                 <div class="character-card" data-voice="en-US-JennyNeural" data-sample="I'm Jenny, nice to meet you!" style="display: none; text-align: center;">
@@ -210,7 +148,7 @@
                     <i class="bi bi-chevron-right"></i>
                 </button>
             </div>
-            <button onclick="startConversation()" class="btn btn-custom-start">Start</button>
+            <button onclick="startConversation()" class="btn btn-custom-start">@Localizer["StartButton"]</button>
         </div>
     </div>
 </div>
@@ -221,7 +159,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
-
         body {
             font-family: 'Roboto', sans-serif;
         }
@@ -729,6 +666,12 @@
                     };
                     mediaRecorder.onstop = async () => {
                         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        
+                        // Dừng tất cả các track để nhả Micro, tránh việc hệ điều hành tự động giảm âm lượng
+                        if (stream) {
+                            stream.getTracks().forEach(track => track.stop());
+                        }
+
                         await sendAudio(audioBlob);
                     };
                     mediaRecorder.start();
@@ -926,11 +869,26 @@
         }
 
 
-        function speak(text) {
+        function speak(text, icon) {
+            window.speechSynthesis.cancel(); // Dừng speech đang phát
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
             utterance.rate = 1;
             utterance.pitch = 1;
+            utterance.onend = () => {
+                if (icon) {
+                    icon.textContent = '🔈';
+                    icon.classList.remove('disabled');
+                }
+                currentSpeakIcon = null;
+            };
+            utterance.onerror = () => {
+                if (icon) {
+                    icon.textContent = '🔈';
+                    icon.classList.remove('disabled');
+                }
+                currentSpeakIcon = null;
+            };
             window.speechSynthesis.speak(utterance);
         }
 
@@ -1022,11 +980,46 @@
             });
         }
        
+        // Biến toàn cục để theo dõi audio đang phát
+        let currentAudio = null;
+        let currentSpeakIcon = null;
+
+        // Hàm dừng audio/speech đang phát
+        function stopCurrentAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                currentAudio = null;
+            }
+            window.speechSynthesis.cancel();
+            // Reset icon cũ nếu có
+            if (currentSpeakIcon) {
+                currentSpeakIcon.textContent = '🔈';
+                currentSpeakIcon.classList.remove('disabled');
+                currentSpeakIcon = null;
+            }
+        }
+
         // Hàm xử lý sự kiện click cho 🔈
         function handleSpeakClick() {
-            const chatBubble = this.closest('.chat-bubble');
+            const icon = this;
+            const chatBubble = icon.closest('.chat-bubble');
             const messageText = chatBubble.querySelector('p').textContent;
             let audioUrl = chatBubble.getAttribute('data-audio-url');
+
+            // Nếu đang phát cùng icon này → dừng lại
+            if (currentSpeakIcon === icon && currentAudio && !currentAudio.paused) {
+                stopCurrentAudio();
+                return;
+            }
+
+            // Dừng audio trước đó (nếu có)
+            stopCurrentAudio();
+
+            // Disable icon và đổi trạng thái
+            icon.textContent = '⏹';
+            icon.classList.add('disabled');
+            currentSpeakIcon = icon;
             
             if (!audioUrl) {
                 audioUrl = getCachedAudio(messageText);
@@ -1035,8 +1028,27 @@
                 // Phát audio có sẵn
                 const audio = new Audio(audioUrl);
                 audio.type = 'audio/mp3';
+                currentAudio = audio;
+
+                audio.addEventListener('ended', () => {
+                    icon.textContent = '🔈';
+                    icon.classList.remove('disabled');
+                    currentAudio = null;
+                    currentSpeakIcon = null;
+                });
+                audio.addEventListener('error', () => {
+                    icon.textContent = '🔈';
+                    icon.classList.remove('disabled');
+                    currentAudio = null;
+                    currentSpeakIcon = null;
+                });
+
                 audio.play().catch(error => {
                     console.error('Audio play error:', error);
+                    icon.textContent = '🔈';
+                    icon.classList.remove('disabled');
+                    currentAudio = null;
+                    currentSpeakIcon = null;
                 });
             } else {
                 // Gọi API để lấy audio từ Azure TTS
@@ -1055,8 +1067,27 @@
                         if (data.audioUrl) {
                             const audio = new Audio(data.audioUrl);
                             audio.type = 'audio/mp3';
+                            currentAudio = audio;
+
+                            audio.addEventListener('ended', () => {
+                                icon.textContent = '🔈';
+                                icon.classList.remove('disabled');
+                                currentAudio = null;
+                                currentSpeakIcon = null;
+                            });
+                            audio.addEventListener('error', () => {
+                                icon.textContent = '🔈';
+                                icon.classList.remove('disabled');
+                                currentAudio = null;
+                                currentSpeakIcon = null;
+                            });
+
                             audio.play().catch(error => {
                                 console.error('Audio play error:', error);
+                                icon.textContent = '🔈';
+                                icon.classList.remove('disabled');
+                                currentAudio = null;
+                                currentSpeakIcon = null;
                             });
                             // Lưu audioUrl vào chat bubble để dùng lại
                             chatBubble.setAttribute('data-audio-url', data.audioUrl);
@@ -1064,12 +1095,12 @@
                             saveChatHistory();
                         } else {
                             console.error('No audio URL returned');
-                            speak(messageText); // Fallback
+                            speak(messageText, icon); // Fallback
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching audio:', error);
-                        speak(messageText); // Fallback
+                        speak(messageText, icon); // Fallback
                     });
             }
 
@@ -1235,11 +1266,15 @@
             const isEvaluated = chatBubble.getAttribute('data-is-evaluated') === 'true';
             const chatBox = document.getElementById("chatBox");
             console.log('Evaluating message:', decodeURIComponent(encodedMessage), 'Message ID:', messageId, 'Is Evaluated:', isEvaluated);
+
+            // Ngăn click nhiều lần khi đang xử lý
+            if (iconElement.classList.contains('disabled')) return;
+
             // Thêm hiệu ứng loading
             iconElement.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
             iconElement.classList.add('disabled');
 
-            setTimeout(async () => {
+            try {
                 if (isEvaluated) {
                     // Nếu đang hiển thị đánh giá, ẩn nó đi
                     evaluationContainer.innerHTML = '';
@@ -1261,15 +1296,21 @@
                         iconElement.title = 'Hide evaluation';
                     } else {
                         evaluationContainer.innerHTML = `<p><strong>Error:</strong> Could not fetch evaluation.</p>`;
+                        iconElement.textContent = '⭐';
+                        iconElement.title = 'Evaluate grammar';
                     }
                 }
-
-                // Khôi phục icon
-                iconElement.innerHTML = isEvaluated ? '⭐' : '⬇';
+            } catch (error) {
+                console.error('Error in handleEvaluateClick:', error);
+                evaluationContainer.innerHTML = `<p><strong>Error:</strong> Could not fetch evaluation.</p>`;
+                iconElement.textContent = '⭐';
+                iconElement.title = 'Evaluate grammar';
+            } finally {
+                // Luôn gỡ trạng thái disabled sau khi xong
                 iconElement.classList.remove('disabled');
                 chatBox.scrollTop = chatBox.scrollHeight;
                 saveChatHistory(); // Lưu trạng thái
-            }, 300); // Giả lập delay cho UX
+            }
         }
 
         async function evaluateMessage(message, messageId) {
@@ -1320,11 +1361,14 @@
                  }
                 Swal.fire({
                     title: 'Are you sure you want to quit?',
+                    text: 'If you exit, the conversation will not be saved.',
                     icon: 'question',
                     confirmButtonText: 'OK',
                     cancelButtonText: 'Cancel',
                     showCancelButton: true,
                     showCloseButton: true,
+                        scrollbarPadding: false,
+                        heightAuto: false,
                     customClass: {
                         confirmButton: 'custom-confirm-btn',
                         cancelButton: 'custom-cancel-btn'
@@ -1341,6 +1385,47 @@
                     }
                 });
         }
+
+        // Add warning for all navigation links
+        document.addEventListener('DOMContentLoaded', () => {
+            const allLinks = document.querySelectorAll('a');
+            const situationId = '@ViewBag.SituationId';
+            
+            allLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetUrl = this.getAttribute('href');
+                    
+                    // Ignore empty links, javascript links, anchor links (#), or links with onclick events like toggleBack
+                    if (!targetUrl || targetUrl === '#' || targetUrl.startsWith('javascript:') || this.hasAttribute('onclick')) {
+                        return;
+                    }
+
+                    e.preventDefault();
+                    const fullUrl = this.href; // Get absolute URL
+                    Swal.fire({
+                        title: 'Are you sure you want to quit?',
+                        text: 'If you exit, the conversation will not be saved.',
+                        icon: 'question',
+                        confirmButtonText: 'OK',
+                        cancelButtonText: 'Cancel',
+                        showCancelButton: true,
+                        showCloseButton: true,
+                        scrollbarPadding: false,
+                        heightAuto: false,
+                        customClass: {
+                            confirmButton: 'custom-confirm-btn',
+                            cancelButton: 'custom-cancel-btn'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const chatHistoryKey = `chatHistory_${situationId}`;
+                            sessionStorage.removeItem(chatHistoryKey);
+                            window.location.href = fullUrl;
+                        }
+                    });
+                });
+            });
+        });
 
         window.addEventListener('DOMContentLoaded', function () {
 
@@ -1395,16 +1480,7 @@
         });
     </script>
 
-    <script src="script.js"></script>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                { pageLanguage: 'en' },
-                'google_translate_element'
-            );
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 }
+
 

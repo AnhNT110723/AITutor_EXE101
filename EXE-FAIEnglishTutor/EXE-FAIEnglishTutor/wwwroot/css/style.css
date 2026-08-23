@@ -3877,6 +3877,10 @@ input[type="button"].btn-block {
         background-color: transparent;
     }
 
+.custome-dropdown-laguage {
+    padding: 3px 0px !important;
+}
+
 .dropdown-menu.show {
     display: block;
 }

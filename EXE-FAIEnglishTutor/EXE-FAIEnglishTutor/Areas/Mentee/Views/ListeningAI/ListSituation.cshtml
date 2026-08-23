@@ -3,35 +3,7 @@
 }
 
 @model List<Situation>
-<style>
-    /* Tùy chỉnh giao diện thô của Google Translate */
-    #google_translate_element {
-        display: inline-block;
-        border-radius: 8px;
-        padding: 4px 8px;
-        font-size: 14px;
-    }
 
-    /* Ẩn logo Google nếu bạn muốn tối giản */
-    .goog-logo-link {
-        display: none !important;
-    }
-
-    /* Ẩn thông tin quyền và liên kết */
-    .goog-te-gadget span {
-        display: none;
-    }
-
-    /* Dropdown ngôn ngữ */
-    .goog-te-combo {
-        padding: 4px 8px;
-        font-size: 14px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        background-color: white;
-        color: #333;
-    }
-</style>
 <!-- Page Content  -->
 <div id="content" class="p-4 p-md-5">
     <div class="sticky-wrapper sticky-wrapper-list-courses">
@@ -47,9 +19,7 @@
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
 
-                <div class="d-flex justify-content-end align-items-center">
-                    <div id="google_translate_element"></div>
-                </div>
+
 
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
                         data-bs-target="#navbarSupportedContent"
@@ -69,41 +39,7 @@
                         <a class="nav-link" href="#">Portfolio</a>
                         </li> *@
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            // Đọc thông tin từ cookie
-                            var fullName = User.Identity.Name;
-                            var avatarUrl = User.FindFirst("Avatar")?.Value;
-                            <li class="nav-item dropdown">
-
-                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="nav-img">
-                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                    </div>
-                                </a>
-                                <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                    <div class="menu-title">
-                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                        <i class="bi bi-person-circle"></i> View Profile
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                    </a>
-
-                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <a class="btn-login-custom btn " asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
-                        }
+                                                @await Html.PartialAsync("_UserDropdown")
                     </ul>
                 </div>
             </div>
@@ -957,14 +893,4 @@
 
     </script>
 
-    <script src="script.js"></script>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                { pageLanguage: 'en' },
-                'google_translate_element'
-            );
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 }

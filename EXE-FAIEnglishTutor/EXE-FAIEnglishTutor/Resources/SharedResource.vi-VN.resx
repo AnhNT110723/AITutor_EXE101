@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Logout" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+  <data name="ViewProfile" xml:space="preserve">
+    <value>Hồ sơ của bạn</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="Situation" xml:space="preserve">
+    <value>Tình huống</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="LanguageVi" xml:space="preserve">
+    <value>Tiếng Việt</value>
+  </data>
+  <data name="LanguageEn" xml:space="preserve">
+    <value>Tiếng Anh</value>
+  </data>
+  <data name="AITutorStudyGuide" xml:space="preserve">
+    <value>Hướng dẫn học AI Tutor</value>
+  </data>
+  <data name="WhereToLearnAI" xml:space="preserve">
+    <value>Học AI Tutoring ở đâu? Hướng dẫn trên Web</value>
+  </data>
+  <data name="RolePlayingStudyGuide" xml:space="preserve">
+    <value>Hướng dẫn học Nhập vai</value>
+  </data>
+  <data name="HomeSlogan" xml:space="preserve">
+    <value>AI trở thành người bạn đồng hành luyện nghe và nói tiếng Anh hàng ngày tại FAI</value>
+  </data>
+  <data name="Guide" xml:space="preserve">
+    <value>Hướng dẫn</value>
+  </data>
+  <data name="RolePlay" xml:space="preserve">
+    <value>Nhập vai</value>
+  </data>
+  <data name="Listening" xml:space="preserve">
+    <value>Nghe</value>
+  </data>
+  <data name="SpeakFreely" xml:space="preserve">
+    <value>Nói tự do</value>
+  </data>
+  <data name="Pronounce" xml:space="preserve">
+    <value>Phát âm</value>
+  </data>
+  <data name="NewlyReleased" xml:space="preserve">
+    <value>Mới phát hành</value>
+  </data>
+  <data name="Prevalent" xml:space="preserve">
+    <value>Phổ biến</value>
+  </data>
+</root>

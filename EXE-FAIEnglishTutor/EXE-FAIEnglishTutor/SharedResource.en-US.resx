@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="ViewProfile" xml:space="preserve">
+    <value>View Profile</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Situation" xml:space="preserve">
+    <value>Situation</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageVi" xml:space="preserve">
+    <value>Vietnamese</value>
+  </data>
+  <data name="LanguageEn" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="AITutorStudyGuide" xml:space="preserve">
+    <value>AI Tutor Study Guide</value>
+  </data>
+  <data name="WhereToLearnAI" xml:space="preserve">
+    <value>Where to Learn AI Tutoring? Web-Based Guide</value>
+  </data>
+  <data name="RolePlayingStudyGuide" xml:space="preserve">
+    <value>Role Playing Study Guide</value>
+  </data>
+  <data name="HomeSlogan" xml:space="preserve">
+    <value>AI becomes your daily English listening and speaking companion at FAI</value>
+  </data>
+  <data name="Guide" xml:space="preserve">
+    <value>Guide</value>
+  </data>
+  <data name="RolePlay" xml:space="preserve">
+    <value>Role Play</value>
+  </data>
+  <data name="Listening" xml:space="preserve">
+    <value>Listening</value>
+  </data>
+  <data name="SpeakFreely" xml:space="preserve">
+    <value>Speak Freely</value>
+  </data>
+  <data name="Pronounce" xml:space="preserve">
+    <value>Pronounce</value>
+  </data>
+  <data name="NewlyReleased" xml:space="preserve">
+    <value>Newly Released</value>
+  </data>
+  <data name="Prevalent" xml:space="preserve">
+    <value>Prevalent</value>
+  </data>
+  <data name="SidebarToeic" xml:space="preserve">
+    <value>Toeic Study</value>
+  </data>
+  <data name="SidebarAITutor" xml:space="preserve">
+    <value>AI Tutor</value>
+  </data>
+  <data name="SidebarPodcast" xml:space="preserve">
+    <value>Podcast</value>
+  </data>
+  <data name="SidebarMembership" xml:space="preserve">
+    <value>Membership</value>
+  </data>
+  <data name="PaymentTitle" xml:space="preserve">
+    <value>Choose Your FAI Plan</value>
+  </data>
+  <data name="PaymentDesc" xml:space="preserve">
+    <value>To access special features, please subscribe to a membership plan:</value>
+  </data>
+  <data name="PaymentPrice" xml:space="preserve">
+    <value>48,000₫ for 1 month</value>
+  </data>
+  <data name="PaymentFeature1" xml:space="preserve">
+    <value>✔️ Role-play situational conversations with AI</value>
+  </data>
+  <data name="PaymentFeature2" xml:space="preserve">
+    <value>✔️ Listen to great podcasts to strengthen your listening skills</value>
+  </data>
+  <data name="PaymentFeature3" xml:space="preserve">
+    <value>✔️ Practice listening with AI through situations</value>
+  </data>
+  <data name="PaymentFeature4" xml:space="preserve">
+    <value>✔️ Learn new vocabulary through situations</value>
+  </data>
+  <data name="PaymentButton" xml:space="preserve">
+    <value>🧾 Pay Now</value>
+  </data>
+  <data name="PaymentNoService" xml:space="preserve">
+    <value>No services found</value>
+  </data>
+  <data name="RolePlayBack" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="LevelLabel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search keywords in English</value>
+  </data>
+  <data name="CreatePersonalizedSituationDesc" xml:space="preserve">
+    <value>Create personalized characters and situations.</value>
+  </data>
+  <data name="CreateSituation" xml:space="preserve">
+    <value>Create Situation</value>
+  </data>
+  <data name="MyRole" xml:space="preserve">
+    <value>My Role</value>
+  </data>
+  <data name="MyRoleExample" xml:space="preserve">
+    <value>Example: Salesperson</value>
+  </data>
+  <data name="AiRole" xml:space="preserve">
+    <value>AI's Role</value>
+  </data>
+  <data name="AiRoleExample" xml:space="preserve">
+    <value>Example: Female customer</value>
+  </data>
+  <data name="SituationLabel" xml:space="preserve">
+    <value>Situation</value>
+  </data>
+  <data name="SituationExample" xml:space="preserve">
+    <value>In a clothing store, I am advising a customer on buying jeans</value>
+  </data>
+  <data name="SubmitButton" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="FeatureUnderDevelopment" xml:space="preserve">
+    <value>This feature is currently under development.</value>
+  </data>
+  <data name="LessonObjectives" xml:space="preserve">
+    <value>Lesson objectives:</value>
+  </data>
+  <data name="Obj1" xml:space="preserve">
+    <value>You know how to make an appointment</value>
+  </data>
+  <data name="Obj2" xml:space="preserve">
+    <value>Grasp vocabulary on health topics</value>
+  </data>
+  <data name="Obj3" xml:space="preserve">
+    <value>Practice the structure "I want to..."</value>
+  </data>
+  <data name="ReturnToPreviousPage" xml:space="preserve">
+    <value>Return to previous page</value>
+  </data>
+  <data name="PracticeWithAI" xml:space="preserve">
+    <value>Practice with AI</value>
+  </data>
+  <data name="UseButton" xml:space="preserve">
+    <value>Use</value>
+  </data>
+  <data name="TypeYourMessage" xml:space="preserve">
+    <value>Type your message...</value>
+  </data>
+  <data name="WelcomeToAITutor" xml:space="preserve">
+    <value>Welcome to AI Tutor!</value>
+  </data>
+  <data name="ChooseYourAIVoice" xml:space="preserve">
+    <value>Choose your AI character's voice:</value>
+  </data>
+  <data name="StartButton" xml:space="preserve">
+    <value>Start</value>
+  </data>
+</root>

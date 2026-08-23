@@ -477,43 +477,15 @@ namespace EXE_FAIEnglishTutor.Areas.Mentee.Controllers
         {
             try
             {
-                _logger.LogInformation($"Config: ApiKey={_azureTranslatorConfig.ApiKey?.Substring(0, 4)}..., Endpoint={_azureTranslatorConfig.Endpoint}, Region={_azureTranslatorConfig.Region}");
-                _logger.LogInformation($"Translating text: {text} to {targetLang}");
-                string endpoint = $"{_azureTranslatorConfig.Endpoint}/translate?api-version=3.0";
-
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _azureTranslatorConfig.ApiKey);
-                _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Region", _azureTranslatorConfig.Region);
-
-                var requestBody = new[]
-                {
-                    new { Text = text }
-                };
-                var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync($"{endpoint}&to={targetLang}", content);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogInformation($"Translation failed: {response.StatusCode}");
-                    return text; // Trả về text gốc nếu dịch thất bại
-                }
-
-                var responseBody = await response.Content.ReadAsStringAsync();
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var result = JsonSerializer.Deserialize<List<TranslationResponse>>(responseBody, options);
-                if (result == null || result.Count == 0 || result[0].Translations == null || result[0].Translations.Count == 0)
-                {
-                    _logger.LogWarning("Invalid translation response format.");
-                    return text;
-                }
-
-                var translatedText = result[0].Translations[0].Text;
+                // Sử dụng luôn dịch vụ AI (hiện tại là Gemini) để dịch thay vì dùng Azure Translator cũ
+                string prompt = $"You are a professional translator. Translate the following text into {targetLang} language accurately without adding any extra notes or commentary. Here is the text:\n\n{text}";
+                var translatedText = await _aiService.GenerateTextAsync(prompt);
                 _logger.LogInformation($"Translated text: {translatedText}");
                 return translatedText;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error translating text: {ex.Message}");
+                _logger.LogError($"Error translating text via AI service: {ex.Message}");
                 return text; // Trả về text gốc nếu có lỗi
             }
         }

@@ -1,38 +1,12 @@
-﻿@{
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
+@{
     Layout = "~/Views/Shared/_Layout.cshtml"; // hoặc relative path phù hợp
 }
 
 @model Situation
 
-<style>
-    /* Tùy chỉnh giao diện thô của Google Translate */
-    #google_translate_element {
-        display: inline-block;
-        border-radius: 8px;
-        padding: 4px 8px;
-        font-size: 14px;
-    }
 
-    /* Ẩn logo Google nếu bạn muốn tối giản */
-    .goog-logo-link {
-        display: none !important;
-    }
-
-    /* Ẩn thông tin quyền và liên kết */
-    .goog-te-gadget span {
-        display: none;
-    }
-
-    /* Dropdown ngôn ngữ */
-    .goog-te-combo {
-        padding: 4px 8px;
-        font-size: 14px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        background-color: white;
-        color: #333;
-    }
-</style>
 
 <!-- Page Content  -->
 <div id="content" class="p-4 p-md-5 learn-english-ai">
@@ -45,9 +19,7 @@
                     <span class="sr-only">Toggle Menu</span>
                 </button>
 
-                <div class="d-flex justify-content-end align-items-center">
-                    <div id="google_translate_element"></div>
-                </div>
+
 
                 <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button"
                         data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -67,41 +39,7 @@
                         <a class="nav-link" href="#">Portfolio</a>
                         </li> *@
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            // Đọc thông tin từ cookie
-                            var fullName = User.Identity.Name;
-                            var avatarUrl = User.FindFirst("Avatar")?.Value;
-                            <li class="nav-item dropdown">
-
-                                <a class="nav-link dropdown-toggle nav-link-avatar" href="#" id="avatarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="nav-img">
-                                        <img src="@avatarUrl" alt="Avatar" class="img-fluid" style="border-radius: 50%;">
-                                    </div>
-                                </a>
-                                <div class=" menu-items dropdown-menu dropdown-menu-end" aria-labelledby="avatarDropdown">
-                                    <div class="menu-title">
-                                        <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-controller="Profile" asp-action="index">
-                                        <i class="bi bi-person-circle"></i> View Profile
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a id="logout-link" class="dropdown-item text-danger" href="#">
-                                        <i class="bi bi-box-arrow-right"></i> <span id="logoutOption">Logout</span>
-                                    </a>
-
-                                    <form id="logoutForm" asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="display: none;"></form>
-
-                                </div>
-                            </li>
-                        }
-                        else
-                        {
-                            <a class="btn-login-custom btn" asp-area="" asp-controller="Account" asp-action="Login">Login now</a>
-                        }
+                                                @await Html.PartialAsync("_UserDropdown")
                     </ul>
                 </div>
             </div>
@@ -125,34 +63,34 @@
                         <h2 class="title">@Model.SituationName</h2>
 
                         <div class="role">
-                            <div id="my_role" style="color: #F97316;">👤 My role</div> <br><span>@Model.RoleUser</span>
+                            <div id="my_role" style="color: #F97316;">👤 @Localizer["MyRole"]</div> <br><span>@Model.RoleUser</span>
                         </div>
 
                         <div class="role">
-                            <div id="ai_role" style="color: #F97316;">🤖 The role of AI</div> <br> <span>@Model.RoleAi</span>
+                            <div id="ai_role" style="color: #F97316;">🤖 @Localizer["AiRole"]</div> <br> <span>@Model.RoleAi</span>
                         </div>
 
                         <div class="icon-text">
                             <span>📋</span>
                             <p id="situation">
-                                <strong>Situation:</strong> @Model.Description
+                                <strong>@Localizer["SituationLabel"]:</strong> @Model.Description
                             </p>
                         </div>
 
                         <div class="goals">
-                            <p><strong>Lesson objectives:</strong></p>
+                            <p><strong>@Localizer["LessonObjectives"]</strong></p>
                             <ul>
-                                <li>You know how to make an appointment</li>
+                                <li>@Localizer["Obj1"]</li>
                                 <li>
-                                    Grasp vocabulary on health topics
+                                    @Localizer["Obj2"]
                                 </li>
-                                <li>Practice the structure "I want to..."</li>
+                                <li>@Localizer["Obj3"]</li>
                             </ul>
                         </div>
 
                         <div class="button-group">
-                            <a href="#" onclick="back()" style="background-color: #FED7AA; color: #7C2D12;" class="button button-sample">Return to previous page</a>
-                            <button onclick="practiceAI()" style="background-color: #F97316; color: white;" class="button button-ai">Practice with AI</button>
+                            <a href="#" onclick="back()" style="background-color: #FED7AA; color: #7C2D12;" class="button button-sample">@Localizer["ReturnToPreviousPage"]</a>
+                            <button onclick="practiceAI()" style="background-color: #F97316; color: white;" class="button button-ai">@Localizer["PracticeWithAI"]</button>
                         </div>
 
                     </div>
@@ -244,15 +182,6 @@
         }
     </script>
 
-    <script src="script.js"></script>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                { pageLanguage: 'en' },
-                'google_translate_element'
-            );
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
 }
