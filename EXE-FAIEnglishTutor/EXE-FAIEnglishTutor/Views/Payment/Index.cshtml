@@ -58,6 +58,8 @@
             </p>
 
             <div class="pricing-container">
+                <!-- FAI MEMBER (Commented out) -->
+                @*
                 <div class="pricing-card card-wrapper">
                     <div class="featured">FEATURED</div>
                     <div class="plan-title">FAI MEMBER</div>
@@ -71,6 +73,21 @@
                     <a href="#" id="pay-link" class="btn btn-pay">@Localizer["PaymentButton"]</a>
                     <form asp-controller="Payment" id="payForm" asp-action="GenerateQR" style="display: none;" method="post">
                         <input type="hidden" name="planAmount" value="2000" />
+                    </form>
+                </div>
+                *@
+
+                <!-- DONATE -->
+                <div class="pricing-card card-wrapper">
+                    <div class="featured" style="background-color: #ed782b; color: white;">DONATE ❤️</div>
+                    <div class="plan-title">Ủng Hộ FAI English</div>
+                    <div class="price">20,000đ</div>
+                    <ul class="features text-start" style="text-align: center !important;">
+                        <li style="list-style-type: none;">Nếu bạn thấy trang web này hữu ích, hãy ủng hộ để tiếp thêm động lực cho chúng tôi phát triển thêm nhiều tính năng hay nữa nhé! 🥰</li>
+                    </ul>
+                    <a href="#" id="pay-link" class="btn btn-pay">☕ Donate 20.000đ</a>
+                    <form asp-controller="Payment" id="payForm" asp-action="GenerateQR" style="display: none;" method="post">
+                        <input type="hidden" name="planAmount" value="20000" />
                     </form>
                 </div>
             </div>

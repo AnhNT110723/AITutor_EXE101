@@ -29,7 +29,7 @@
                 <h6 class="dropdown-header">Hello, <span>@fullName</span></h6>
             </div>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" style="padding-left: 13px;" asp-controller="Profile" asp-action="index">
+            <a class="dropdown-item" style="padding-left: 13px;" asp-area="Mentee" asp-controller="Profile" asp-action="index">
                 <i class="bi bi-person-circle" style="margin-right: 10px;"></i> @Localizer["ViewProfile"]
             </a>
             <div class="dropdown-divider"></div>
@@ -41,22 +41,22 @@
                                 id="languageDropdown" onclick="event.stopPropagation(); event.preventDefault(); document.getElementById('langSubmenu').classList.toggle('show');">
                             @if (requestCulture.RequestCulture.UICulture.Name == "vi-VN" || requestCulture.RequestCulture.UICulture.Name == "vi")
                             {
-                                <span><img src="~/Images/Co-Vietnam.png" alt="Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> Tiếng Việt</span>
+                                <span><img src="~/images/Co-Vietnam.png" alt="Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> Tiếng Việt</span>
                             }
                             else
                             {
-                                <span><img src="~/Images/co-england.png" alt="Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> English</span>
+                                <span><img src="~/images/co-england.png" alt="Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> English</span>
                             }
                         </button>
                         <ul class="dropdown-menu w-100 shadow" id="langSubmenu" aria-labelledby="languageDropdown" style="position: absolute; z-index: 1050; margin-top: 2px;">
                             <li>
                                 <a class="dropdown-item d-flex align-items-center" href="javascript:void(0)" onclick="document.getElementById('cultureInput').value='vi-VN'; document.getElementById('langForm').submit();">
-                                    <img src="~/Images/Co-Vietnam.png" alt="Vietnam Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> Tiếng Việt
+                                    <img src="~/images/Co-Vietnam.png" alt="Vietnam Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> Tiếng Việt
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item d-flex align-items-center" href="javascript:void(0)" onclick="document.getElementById('cultureInput').value='en-US'; document.getElementById('langForm').submit();">
-                                    <img src="~/Images/co-england.png" alt="England Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> English
+                                    <img src="~/images/co-england.png" alt="England Flag" style="width: 20px; height: 15px; margin-right: 8px; border-radius: 2px;" /> English
                                 </a>
                             </li>
                         </ul>
