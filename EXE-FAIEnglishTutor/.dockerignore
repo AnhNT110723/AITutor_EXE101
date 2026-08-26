@@ -1,0 +1,11 @@
+**/.vs
+**/bin
+**/obj
+**/.vscode
+**/node_modules
+.env
+*.md
+*.sql
+TestLoc/
+TestLoc2/
+.git/

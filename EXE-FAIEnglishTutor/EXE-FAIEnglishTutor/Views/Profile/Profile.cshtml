@@ -17,6 +17,7 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/course-gen.css">
+    <link rel="stylesheet" href="~/css/mentee/profile.css">
 
     <style>
        
@@ -28,14 +29,9 @@
 
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar" class="active">
-            <h1><a asp-controller="home" class="logo"><img src="~/Images/concoc.png" alt="Cup"></a></h1>
+            <h1><a asp-controller="home" class="logo"><img src="~/images/concoc.png" alt="Cup"></a></h1>
             <ul class="list-unstyled components mb-5">
-                <li>
-                    <a asp-controller="Ielts" class="link-test">
-                        <span class="fa fa-users"></span>
-                        <span class="menu-text">Học Ielts</span>
-                    </a>
-                </li>
+
                 <li>
                     <a asp-controller="Toeic" class="link-test">
                         <span class="fas fa-graduation-cap icon"></span>
@@ -123,17 +119,17 @@
                         <div class="dropdown position-relative" style="width: 200px;">
                             <button class="btn btn-light dropdown-toggle" type="button" style="width: 100%;"
                                     id="languageDropdown" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                                <img src="~/Images/Co-Vietnam.png" alt="Flag" class="flag-icon" /> Tiếng Việt
+                                <img src="~/images/Co-Vietnam.png" alt="Flag" class="flag-icon" /> Tiếng Việt
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="languageDropdown">
                                 <li>
                                     <a class="dropdown-item" href="#" data-lang="vi">
-                                        <img src="~/Images/Co-Vietnam.png" alt="Vietnam Flag" class="flag-icon" /> Tiếng Việt
+                                        <img src="~/images/Co-Vietnam.png" alt="Vietnam Flag" class="flag-icon" /> Tiếng Việt
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="#" data-lang="en">
-                                        <img src="~/Images/co-england.png" alt="England Flag" class="flag-icon" /> English
+                                        <img src="~/images/co-england.png" alt="England Flag" class="flag-icon" /> English
                                     </a>
                                 </li>
                             </ul>
@@ -158,8 +154,8 @@
                                 <div class="row">
                                     <!-- Avatar -->
                                     <div class="col-lg-2 col-12">
-                                        <div class="avatar-change position-relative">
-                                            <img src="~/Images/user_icon.webp" alt="">
+                                        <div class="avatar-change position-relative avatar-border">
+                                            <img src="~/images/user_icon.webp" alt="">
                                             <!-- Biểu tượng máy ảnh -->
                                             <button class="camera-icon" id="avatarEditBtn" type="button">
                                                 <i class="fa fa-camera"></i>
@@ -273,16 +269,16 @@
                     <div class="img-normal d-flex gap-2">
                         <!-- Các ảnh mặc định -->
                         <div class="default-avatar">
-                            <img src="~/Images/avatar.jpg" alt="Ảnh 1">
+                            <img src="~/images/avatar.jpg" alt="Ảnh 1">
                         </div>
                         <div class="default-avatar">
-                            <img src="~/Images/user_icon.webp" alt="Ảnh 2">
+                            <img src="~/images/user_icon.webp" alt="Ảnh 2">
                         </div>
                         <div class="default-avatar">
-                            <img src="~/Images/CHAT.png" alt="Ảnh 3">
+                            <img src="~/images/CHAT.png" alt="Ảnh 3">
                         </div>
                         <div class="default-avatar">
-                            <img src="~/Images/concoc.png" alt="Ảnh 4">
+                            <img src="~/images/concoc.png" alt="Ảnh 4">
                         </div>
                     </div>
 

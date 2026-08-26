@@ -164,7 +164,7 @@
             <div class="h-full w-full overflow-hidden">
                 <div class="h-full w-full bg-black/30 py-5 ">
                     <div class="flex h-full w-full flex-col justify-center px-4 md:px-6 lg:px-10">
-                        <!-- <img src="https://image.nhandan.vn/w800/Files/Images/2021/12/19/cv-1639898315592.jpg.webp"/> -->
+                        <!-- <img src="https://image.nhandan.vn/w800/Files/images/2021/12/19/cv-1639898315592.jpg.webp"/> -->
                         <p class="text-display text-white text-lg">FAI English</p>
                         <p class="mb-2 text-md font-light text-white md:max-w-[374px] lg:my-3 lg:text-lg">
                         @Localizer["HomeSlogan"]
@@ -191,7 +191,7 @@
                     <div class="rounded-circle bg-orange p-1">
                         <div class="d-flex justify-content-center align-items-center rounded-circle bg-light img-wrapper"
                              style="width: 80px; height: 80px; padding: 10px;">
-                            <img src="~/Images/CHAT.png" class="img-fluid" alt="img">
+                            <img src="~/images/CHAT.png" class="img-fluid" alt="img">
                         </div>
                     </div>
                     <p class="mt-2 text-center font-custom text-secondary">@Localizer["RolePlay"]</p>
@@ -215,7 +215,7 @@
                 <div class="rounded-circle bg-orange p-1">
                     <div class="d-flex justify-content-center align-items-center rounded-circle bg-light img-wrapper"
                          style="width: 80px; height: 80px; padding: 10px;">
-                            <img src="~/Images/mic-header.png" class="img-fluid" alt="img">
+                            <img src="~/images/mic-header.png" class="img-fluid" alt="img">
                     </div>
                 </div>
                 <p class="mt-2 text-center font-custom text-secondary">@Localizer["SpeakFreely"]</p>
@@ -229,7 +229,7 @@
                     <div class="rounded-circle bg-orange p-1">
                         <div class="d-flex justify-content-center align-items-center rounded-circle bg-light img-wrapper"
                              style="width: 80px; height: 80px; padding: 10px;">
-                            <img src="~/Images/mic-header.png" class="img-fluid" alt="img">
+                            <img src="~/images/mic-header.png" class="img-fluid" alt="img">
                         </div>
                     </div>
                 <p class="mt-2 text-center font-custom text-secondary">@Localizer["Pronounce"]</p>
@@ -254,7 +254,7 @@
                 </button>
 
 
-                <div class="d-flex overflow-hidden" id="course-list-new" style="scroll-behavior: smooth; ">
+                <div class="d-flex overflow-auto hide-scrollbar" id="course-list-new" style="scroll-behavior: smooth; ">
 
                 @foreach (var situation in Model.OrderByDescending(s => s.CreatedAt).Take(8))
                 {
@@ -293,7 +293,7 @@
                 </button>
 
 
-                <div class="d-flex overflow-hidden" id="course-list" style="scroll-behavior: smooth; ">
+                <div class="d-flex overflow-auto hide-scrollbar" id="course-list" style="scroll-behavior: smooth; ">
                 @foreach (var situation in Model)
                 {
                     <a href="@(situation.Type.TypeId == 2 ? $"/Lesson/Step1/{situation.SituatuonId}" : $"/Mentee/Role-Play/{situation.SituatuonId}")">
@@ -377,6 +377,10 @@
     <script src="~/js/ai-chat-utils.js"></script>
     <style>
         body { font-family: 'Open Sans', sans-serif; margin: 0; padding: 0; }
+        
+        /* Ẩn thanh cuộn nhưng vẫn cho phép vuốt */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* ===== Toggle Button ===== */
         .chat-toggle-btn {
@@ -599,7 +603,39 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const scrollAmount = 300; // Khoảng cách cuộn mỗi lần click
 
+            // Slider 1: Newly Released
+            const listNew = document.getElementById('course-list-new');
+            const prevBtnNew = document.getElementById('prev-btn-new');
+            const nextBtnNew = document.getElementById('next-btn-new');
+
+            if (prevBtnNew && nextBtnNew && listNew) {
+                prevBtnNew.addEventListener('click', () => {
+                    listNew.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                });
+                nextBtnNew.addEventListener('click', () => {
+                    listNew.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                });
+            }
+
+            // Slider 2: Prevalent
+            const listPrev = document.getElementById('course-list');
+            const prevBtnPrev = document.getElementById('prev-btn');
+            const nextBtnPrev = document.getElementById('next-btn');
+
+            if (prevBtnPrev && nextBtnPrev && listPrev) {
+                prevBtnPrev.addEventListener('click', () => {
+                    listPrev.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                });
+                nextBtnPrev.addEventListener('click', () => {
+                    listPrev.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
 }
 
 

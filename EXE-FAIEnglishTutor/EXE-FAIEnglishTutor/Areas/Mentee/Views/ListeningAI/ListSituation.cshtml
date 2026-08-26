@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "~/Views/Shared/_Layout.cshtml"; // hoặc relative path phù hợp
 }
 
@@ -112,7 +112,7 @@
                 <a href="#" class="card-link" id="openPopup" data-bs-toggle="modal" data-bs-target="#situationModal">
                     <div class="flex-shrink-0  ">
                         <div class="card">
-                            <img src="~/Images/create-situation.png" class="card-img-top"
+                            <img src="~/images/create-situation.png" class="card-img-top"
                                  alt="Course 3">
 
                             <div class="card-body">
@@ -803,7 +803,7 @@
              let selectedCategory = "";
 
              // Khi chọn category
-             document.querySelectorAll('.dropdown-item').forEach(item => {
+             document.querySelectorAll('.dropdown-menu[aria-labelledby="categoryDropdown"] .dropdown-item').forEach(item => {
                  item.addEventListener('click', function (e) {
                      e.preventDefault();
                      selectedCategory = this.dataset.category;
