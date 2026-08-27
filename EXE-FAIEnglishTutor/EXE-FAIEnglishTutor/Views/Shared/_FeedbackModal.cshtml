@@ -1,0 +1,238 @@
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<EXE_FAIEnglishTutor.SharedResource> Localizer
+
+<!-- Google Font Roboto -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    /* Premium Redesign for Feedback Modal */
+    .custom-feedback-modal {
+        max-width: 850px !important;
+        font-family: 'Roboto', sans-serif !important;
+    }
+    
+    .custom-feedback-modal .modal-content {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        overflow: hidden;
+    }
+
+    /* Header styling */
+    .custom-feedback-modal .modal-header {
+        background: #ffffff;
+        border-bottom: 1px solid #f3f4f6;
+        padding: 1.5rem 2rem;
+        align-items: center;
+    }
+    
+    .custom-feedback-modal .modal-title {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .custom-feedback-modal .header-icon {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+
+    .custom-feedback-modal .close {
+        color: #9ca3af;
+        opacity: 1;
+        font-size: 1.5rem;
+        transition: all 0.2s ease;
+        text-shadow: none;
+        background: #f9fafb;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .custom-feedback-modal .close:hover {
+        background: #f3f4f6;
+        color: #1f2937;
+    }
+
+    /* Body styling */
+    .custom-feedback-modal .modal-body {
+        padding: 1.5rem 2rem;
+        background: #fafafa;
+    }
+
+    .custom-feedback-modal .greeting-text {
+        font-size: 1.05rem;
+        line-height: 1.5;
+        color: #4b5563;
+        background: #ffffff;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        border-left: 4px solid #22c55e;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Form controls */
+    .custom-feedback-modal label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+    }
+
+    .custom-feedback-modal .form-control {
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        padding: 0.75rem 1rem !important;
+        font-size: 1rem;
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        height: auto !important; /* Fix the overlapping/cutting issue */
+        color: #1f2937;
+    }
+
+    .custom-feedback-modal .form-control:focus {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+        outline: none;
+    }
+    
+    .custom-feedback-modal select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/200.svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
+        padding-right: 2.5rem !important;
+    }
+
+    /* Footer buttons */
+    .custom-feedback-modal .modal-footer {
+        background: #ffffff;
+        border-top: 1px solid #f3f4f6;
+        padding: 1.25rem 2rem;
+    }
+
+    .custom-feedback-modal .btn {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .custom-feedback-modal .btn-secondary {
+        background: #f3f4f6;
+        color: #4b5563;
+        border: none;
+    }
+    
+    .custom-feedback-modal .btn-secondary:hover {
+        background: #e5e7eb;
+        color: #1f2937;
+    }
+
+    .custom-feedback-modal .btn-success {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+    }
+
+    .custom-feedback-modal .btn-success:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(34, 197, 94, 0.3);
+    }
+    
+    .custom-feedback-modal .btn-success:active {
+        transform: translateY(0);
+    }
+</style>
+
+<!-- Feedback Button -->
+<button class="feedback-btn" id="openFeedback" title="@Localizer["SendFeedback"]" data-toggle="modal" data-target="#feedbackModal">
+    <i class="fas fa-lightbulb"></i>
+</button>
+
+<!-- Feedback Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered custom-feedback-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="feedbackModalLabel">
+                    <div class="header-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    @Localizer["FeedbackAndBugReport"]
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="greeting-text">
+                    @Localizer["FeedbackGreeting"]
+                </p>
+                
+                <div id="feedbackSuccessMessage" class="alert alert-success d-none" role="alert" style="font-weight: 600; color: #065f46; background-color: #d1fae5; border-color: #a7f3d0; border-radius: 10px; padding: 1rem 1.25rem; font-size: 1.05rem; display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
+                    <i class="fas fa-check-circle" style="font-size: 1.25rem;"></i>
+                    @Localizer["FeedbackSuccess"]
+                </div>
+
+                <div id="feedbackFormContainer">
+                    <div class="row">
+                        <div class="col-md-4 form-group mb-3">
+                            <label>@Localizer["YourName"]</label>
+                            <input type="text" id="fbName" class="form-control" placeholder="@Localizer["EnterYourName"]">
+                        </div>
+                        <div class="col-md-4 form-group mb-3">
+                            <label>@Localizer["SatisfactionLevel"]</label>
+                            <select id="fbRating" class="form-control">
+                                <option value="5">⭐⭐⭐⭐⭐ @Localizer["VerySatisfied"]</option>
+                                <option value="4">⭐⭐⭐⭐ @Localizer["Satisfied"]</option>
+                                <option value="3">⭐⭐⭐ @Localizer["Normal"]</option>
+                                <option value="2">⭐⭐ @Localizer["Unsatisfied"]</option>
+                                <option value="1">⭐ @Localizer["VeryUnsatisfied"]</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group mb-3">
+                            <label>@Localizer["FeedbackType"]</label>
+                            <select id="fbCategory" class="form-control">
+                                <option value="Bug">@Localizer["ReportBug"]</option>
+                                <option value="Feature">@Localizer["FeatureRequest"]</option>
+                                <option value="Improvement">@Localizer["ImprovementSuggestion"]</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>@Localizer["Details"]</label>
+                        <textarea id="fbMessage" class="form-control" rows="3" placeholder="@Localizer["DescribeDetails"]"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                <button type="button" id="submitFeedback" class="btn btn-success">
+                    @Localizer["SendFeedback"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,17 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Tích hợp Sentry
+builder.WebHost.UseSentry(o =>
+{
+    o.Dsn = builder.Configuration["Sentry:Dsn"];
+    o.Debug = true;
+    o.TracesSampleRate = 1.0; // Bắt 100% các transaction để giám sát hiệu năng
+});
+
+// Lấy các hằng số cấu hình tĩnh
+builder.Configuration.InitializeConstants();
+
 
 // Add services to the container.
 builder.Services.AddLocalization();
