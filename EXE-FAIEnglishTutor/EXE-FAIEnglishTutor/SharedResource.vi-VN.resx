@@ -195,4 +195,70 @@
   <data name="StartButton" xml:space="preserve">
     <value>Bắt đầu</value>
   </data>
+  <data name="SendFeedback" xml:space="preserve">
+    <value>Gửi phản hồi</value>
+  </data>
+  <data name="FeedbackAndBugReport" xml:space="preserve">
+    <value>Góp ý &amp; Báo lỗi</value>
+  </data>
+  <data name="FeedbackGreeting" xml:space="preserve">
+    <value>Nếu có bất kỳ điều gì không hài lòng, vui lòng góp ý để chúng tôi có thể cải thiện thêm. Vì hệ thống mới phát triển nên còn nhiều thiếu sót, rất mong nhận được sự thông cảm và đóng góp của bạn. Xin cảm ơn!</value>
+  </data>
+  <data name="FeedbackSuccess" xml:space="preserve">
+    <value>Gửi thành công! Chúng tôi đã tiếp nhận phản hồi của bạn.</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>Tên của bạn</value>
+  </data>
+  <data name="EnterYourName" xml:space="preserve">
+    <value>Nhập tên của bạn</value>
+  </data>
+  <data name="SatisfactionLevel" xml:space="preserve">
+    <value>Mức độ hài lòng</value>
+  </data>
+  <data name="VerySatisfied" xml:space="preserve">
+    <value>Rất hài lòng</value>
+  </data>
+  <data name="Satisfied" xml:space="preserve">
+    <value>Hài lòng</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Bình thường</value>
+  </data>
+  <data name="Unsatisfied" xml:space="preserve">
+    <value>Không hài lòng</value>
+  </data>
+  <data name="VeryUnsatisfied" xml:space="preserve">
+    <value>Rất tệ</value>
+  </data>
+  <data name="FeedbackType" xml:space="preserve">
+    <value>Loại phản hồi</value>
+  </data>
+  <data name="ReportBug" xml:space="preserve">
+    <value>Báo lỗi (Bug)</value>
+  </data>
+  <data name="FeatureRequest" xml:space="preserve">
+    <value>Yêu cầu tính năng</value>
+  </data>
+  <data name="ImprovementSuggestion" xml:space="preserve">
+    <value>Góp ý cải thiện</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Chi tiết</value>
+  </data>
+  <data name="DescribeDetails" xml:space="preserve">
+    <value>Mô tả chi tiết...</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Đang gửi...</value>
+  </data>
+  <data name="PleaseEnterDetails" xml:space="preserve">
+    <value>Vui lòng nhập chi tiết phản hồi!</value>
+  </data>
+  <data name="FeedbackError" xml:space="preserve">
+    <value>Có lỗi xảy ra, vui lòng thử lại sau.</value>
+  </data>
 </root>

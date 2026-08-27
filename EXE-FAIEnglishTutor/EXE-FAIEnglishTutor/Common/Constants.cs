@@ -1,4 +1,4 @@
-﻿namespace EXE_FAIEnglishTutor.Common
+namespace EXE_FAIEnglishTutor.Common
 {
     public static class Constants
     {
@@ -13,7 +13,7 @@
         public const string TARGET_LANG = "vi";
 
         //Base Url
-        public const string BASE_URL = "https://faienglish.xyz/";
+        public static string BASE_URL = "https://faienglish.xyz/";
 
         //Thông tin thẻ ngân hàng
         public const string BANK_ID = "MB";

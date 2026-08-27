@@ -194,4 +194,70 @@
   <data name="StartButton" xml:space="preserve">
     <value>Start</value>
   </data>
+  <data name="SendFeedback" xml:space="preserve">
+    <value>Send feedback</value>
+  </data>
+  <data name="FeedbackAndBugReport" xml:space="preserve">
+    <value>Feedback &amp; Bug Report</value>
+  </data>
+  <data name="FeedbackGreeting" xml:space="preserve">
+    <value>If you are unsatisfied with anything or have any suggestions, please let us know to help improve the application. As we are newly developed, there may be some shortcomings. We appreciate your feedback and understanding. Thank you!</value>
+  </data>
+  <data name="FeedbackSuccess" xml:space="preserve">
+    <value>Sent successfully! We have received your feedback and will review it as soon as possible.</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="EnterYourName" xml:space="preserve">
+    <value>Enter your name</value>
+  </data>
+  <data name="SatisfactionLevel" xml:space="preserve">
+    <value>Satisfaction Level</value>
+  </data>
+  <data name="VerySatisfied" xml:space="preserve">
+    <value>Very satisfied</value>
+  </data>
+  <data name="Satisfied" xml:space="preserve">
+    <value>Satisfied</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Unsatisfied" xml:space="preserve">
+    <value>Unsatisfied</value>
+  </data>
+  <data name="VeryUnsatisfied" xml:space="preserve">
+    <value>Very unsatisfied</value>
+  </data>
+  <data name="FeedbackType" xml:space="preserve">
+    <value>Feedback Type</value>
+  </data>
+  <data name="ReportBug" xml:space="preserve">
+    <value>Report Bug</value>
+  </data>
+  <data name="FeatureRequest" xml:space="preserve">
+    <value>Feature Request</value>
+  </data>
+  <data name="ImprovementSuggestion" xml:space="preserve">
+    <value>Improvement Suggestion</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="DescribeDetails" xml:space="preserve">
+    <value>Describe details...</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sending...</value>
+  </data>
+  <data name="PleaseEnterDetails" xml:space="preserve">
+    <value>Please enter feedback details!</value>
+  </data>
+  <data name="FeedbackError" xml:space="preserve">
+    <value>An error occurred, please try again later.</value>
+  </data>
 </root>
