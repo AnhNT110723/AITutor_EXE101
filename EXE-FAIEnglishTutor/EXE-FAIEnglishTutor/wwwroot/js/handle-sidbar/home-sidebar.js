@@ -162,9 +162,31 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Xử lý sự kiện click vào nút toggle sidebar
     sidebarCollapse.addEventListener('click', function () {
-        // Only update logo and video height, let CSS handle layout
-        setTimeout(updateLogo, 100);
+        sidebar.classList.toggle('active');
+
+        sidebar.classList.toggle('active');
+        const isActive = sidebar.classList.contains('active');
+        const width = window.innerWidth;
+
+        if (width >= 991) {
+            navbar.style.left = isActive ? "80px" : "270px";
+            navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+            //if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
+            //if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
+                content.style.marginLeft = isActive ? "80px" : "270px";
+        } else {
+            navbar.style.left = isActive ? "80px" : "0";
+            navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
+            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
+            //if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
+            //if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
+                content.style.marginLeft = isActive ? "80px" : "0";
+
+        }
+        updateLogo();
         setTimeout(adjustListHeight, 300);
+
     });
 
 
@@ -189,6 +211,20 @@ window.addEventListener('DOMContentLoaded', function () {
 
 // Kiểm tra kích thước màn hình khi trang được tải
 window.addEventListener('DOMContentLoaded', function () {
-    // Let CSS handle layout on load
+
+    const sidebar = document.getElementById('sidebar');
+    const navbar = document.querySelector('.navbar');
+    const bg_custom = document.querySelector('.bg-custom');
+    const item_custom = document.querySelector('.item-custom');
+    const content = document.getElementById('content');
+
+    if (window.innerWidth < 991) {
+        sidebar.classList.remove('active');
+        navbar.style.left =  "0px" ;
+        navbar.style.width = "100%";
+        if (bg_custom) bg_custom.style.width = "100%"
+        if (item_custom) item_custom.style.width = "100%";
+        content.style.marginLeft =  "0";
+    }
 });
 
