@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
@@ -12051,8 +12051,8 @@ a[data-toggle="collapse"] {
 
 
 .bg-custom, .item-custom {
-    width: calc(100% - 80px); /* Giả sử trạng thái ban đầu là inactive */
-    transition: width 0.3s ease, left 0.3s ease, margin-left 0.3s ease;
+    width: 100%;
+    transition: all 0.3s ease;
 }
 
 .w-full {
@@ -12123,24 +12123,19 @@ html {
 
 
 /* Navbar */
-.navbar {
+#sidebar ~ #content .navbar {
     position: fixed;
     top: 0;
-    left: 80px;
-    /* Căn với sidebar mặc định */
-    width: calc(100% - 80px);
-    /* Phần còn lại của màn hình */
+    left: 250px;
+    width: calc(100% - 250px);
     z-index: 1040;
     background: #f8f9fa;
     transition: all 0.3s ease;
-    /* Hiệu ứng khi sidebar thu gọn */
 }
 
-#sidebar.active ~ .navbar {
-    left: 70px;
-    /* Điều chỉnh vị trí khi sidebar thu gọn */
-    width: calc(100% - 70px);
-    /* Điều chỉnh chiều rộng của navbar */
+#sidebar.active ~ #content .navbar {
+    left: 80px;
+    width: calc(100% - 80px);
 }
 
 #sidebar.active ~ #content {
@@ -12170,19 +12165,29 @@ html {
         margin-left: -80px !important;
     }
 
-        #sidebar.active {
-            margin-left: 0 !important;
-        }
+    #sidebar.active {
+        margin-left: 0 !important;
+    }
 
     #content {
         margin-left: 0px;
         transition: all 0.3s ease;
     }
-
-    .navbar {
-        left: 80;
+    
+    #sidebar.active ~ #content {
+        margin-left: 80px;
+    }
+    
+    #sidebar ~ #content .navbar {
+        left: 0;
+        width: 100%;
+    }
+    
+    #sidebar.active ~ #content .navbar {
+        left: 80px;
         width: calc(100% - 80px);
     }
+
 
     .bg-custom {
         margin-right: 0px;
