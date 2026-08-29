@@ -160,71 +160,31 @@ window.addEventListener('DOMContentLoaded', function () {
     //    adjustListHeight();
     //}
 
-    // Xử lý sự kiện click vào nút toggle sidebar
+    // Click handler: giống common_sidebar.js — KHÔNG set inline style
+    // main.js đã toggle class, CSS selector tự xử lý layout cho navbar + content
+    // bg-custom đã fix thành width:100% trong CSS nên không cần JS nữa
     sidebarCollapse.addEventListener('click', function () {
-        sidebar.classList.toggle('active');
-
-        sidebar.classList.toggle('active');
-        const isActive = sidebar.classList.contains('active');
-        const width = window.innerWidth;
-
-        if (width >= 991) {
-            navbar.style.left = isActive ? "80px" : "270px";
-            navbar.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            //if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "calc(100% - 270px)";
-            //if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
-                content.style.marginLeft = isActive ? "80px" : "270px";
-        } else {
-            navbar.style.left = isActive ? "80px" : "0";
-            navbar.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            if (bg_custom) bg_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            //if (item_custom) item_custom.style.width = isActive ? "calc(100% - 80px)" : "100%";
-            //if (right_btn) isActive ? (right_btn.classList.add('act')) : (right_btn.classList.remove('act')),
-                content.style.marginLeft = isActive ? "80px" : "0";
-
-        }
         updateLogo();
         setTimeout(adjustListHeight, 300);
-
     });
 
-
-    // Lắng nghe sự kiện thay đổi kích thước màn hình
-    // window.addEventListener('resize', updateLayoutOnResize);
-    let resizeTimeout;
-
-    window.addEventListener('resize', function () {
-        if (resizeTimeout) clearTimeout(resizeTimeout);
-
-        // Chỉ gọi updateLayoutOnResize sau khi resize dừng 200ms
-        resizeTimeout = setTimeout(() => {
-            //updateLayoutOnResize();
-            adjustListHeight();
-        }, 120);
-    });
-
-    // Điều chỉnh lại chiều cao khi cửa sổ thay đổi kích thước
+    // Điều chỉnh chiều cao video list khi resize
     window.addEventListener('resize', adjustListHeight);
     adjustListHeight();
 });
 
-// Kiểm tra kích thước màn hình khi trang được tải
+// Thiết lập trạng thái mặc định khi F5 — chỉ toggle class, không set inline style
+// CSS media query sẽ tự xử lý layout → không bị freeze khi resize
 window.addEventListener('DOMContentLoaded', function () {
-
     const sidebar = document.getElementById('sidebar');
-    const navbar = document.querySelector('.navbar');
-    const bg_custom = document.querySelector('.bg-custom');
-    const item_custom = document.querySelector('.item-custom');
-    const content = document.getElementById('content');
 
     if (window.innerWidth < 991) {
         sidebar.classList.remove('active');
-        navbar.style.left =  "0px" ;
-        navbar.style.width = "100%";
-        if (bg_custom) bg_custom.style.width = "100%"
-        if (item_custom) item_custom.style.width = "100%";
-        content.style.marginLeft =  "0";
     }
+    // Laptop: sidebar đã có class="active" trong HTML rồi, không cần làm gì thêm
 });
+
+
+
+
 

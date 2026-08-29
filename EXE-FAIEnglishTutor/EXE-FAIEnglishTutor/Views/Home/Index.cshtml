@@ -392,7 +392,7 @@
             background: linear-gradient(135deg, #28a745, #218838);
             border-radius: 50%; border: none; color: white; font-size: 22px;
             cursor: pointer; box-shadow: 0 4px 16px rgba(40,167,69,0.45);
-            z-index: 1050; transition: transform 0.25s, box-shadow 0.25s;
+            z-index: 1030; transition: transform 0.25s, box-shadow 0.25s;
             display: flex; align-items: center; justify-content: center;
         }
         .feedback-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(40,167,69,0.6); }
@@ -632,6 +632,18 @@
                 
                 if (!data.message) {
                     alert('@Html.Raw(Localizer["PleaseEnterDetails"])');
+                    btn.prop('disabled', false).text('@Html.Raw(Localizer["SendFeedback"])');
+                    return;
+                }
+                
+                if (data.name && data.name.length > 50) {
+                    alert('@Html.Raw(Localizer["NameTooLong"])');
+                    btn.prop('disabled', false).text('@Html.Raw(Localizer["SendFeedback"])');
+                    return;
+                }
+                
+                if (data.message && data.message.length > 1000) {
+                    alert('@Html.Raw(Localizer["MessageTooLong"])');
                     btn.prop('disabled', false).text('@Html.Raw(Localizer["SendFeedback"])');
                     return;
                 }

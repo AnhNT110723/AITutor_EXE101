@@ -260,4 +260,10 @@
   <data name="FeedbackError" xml:space="preserve">
     <value>An error occurred, please try again later.</value>
   </data>
+  <data name="NameTooLong" xml:space="preserve">
+    <value>Name cannot exceed 50 characters.</value>
+  </data>
+  <data name="MessageTooLong" xml:space="preserve">
+    <value>Message cannot exceed 1000 characters.</value>
+  </data>
 </root>
