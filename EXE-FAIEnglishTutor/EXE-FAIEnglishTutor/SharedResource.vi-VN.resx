@@ -261,4 +261,10 @@
   <data name="FeedbackError" xml:space="preserve">
     <value>Có lỗi xảy ra, vui lòng thử lại sau.</value>
   </data>
+  <data name="NameTooLong" xml:space="preserve">
+    <value>Tên không được vượt quá 50 ký tự.</value>
+  </data>
+  <data name="MessageTooLong" xml:space="preserve">
+    <value>Nội dung không được vượt quá 1000 ký tự.</value>
+  </data>
 </root>
