@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /Mentee/
+Disallow: /Payment/
+Disallow: /Profile/
+Disallow: /Error/
+Disallow: /debug-locale
+
+Sitemap: https://faienglish.me/sitemap.xml
