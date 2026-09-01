@@ -78,14 +78,21 @@
                 *@
 
                 <!-- DONATE -->
-                <div class="pricing-card card-wrapper">
+                <div class="pricing-card card-wrapper rainbow-card">
                     <div class="featured" style="background-color: #ed782b; color: white;">DONATE ❤️</div>
                     <div class="plan-title">Ủng Hộ FAI English</div>
                     <div class="price">20,000đ</div>
                     <ul class="features text-start" style="text-align: center !important;">
                         <li style="list-style-type: none;">Nếu bạn thấy trang web này hữu ích, hãy ủng hộ để tiếp thêm động lực cho chúng tôi phát triển thêm nhiều tính năng hay nữa nhé! 🥰</li>
                     </ul>
-                    <a href="#" id="pay-link" class="btn btn-pay">☕ Donate 20.000đ</a>
+                    
+                    <!-- Dùng chung class btn-test-online như trang Toeic -->
+                    <div class="text-center mt-4">
+                        <a href="#" id="pay-link" class="btn-test-online">
+                            <span class="effect-test-online">☕ Donate</span>
+                        </a>
+                    </div>
+                    
                     <form asp-controller="Payment" id="payForm" asp-action="GenerateQR" style="display: none;" method="post">
                         <input type="hidden" name="planAmount" value="20000" />
                     </form>
@@ -169,6 +176,7 @@
             border-radius: 20px;
             padding: 20px;
             width: 300px;
+            height: 350px;
             box-shadow: 0 0 15px #00000060;
             transition: transform 0.3s;
         }
@@ -229,21 +237,126 @@
             margin-top: 10px;
         }
 
-        .highlight {
-            color: #00ffff;
-        }
-
-        .highlight-nova {
-            color: #ff00ff;
+          /* Hiệu ứng viền bảy sắc cầu vồng (Nhẹ nhàng hơn) */
+        @@keyframes rainbow {
+            0% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); border-color: rgba(255, 0, 0, 0.4); }
+            14% { box-shadow: 0 0 10px rgba(255, 127, 0, 0.3); border-color: rgba(255, 127, 0, 0.4); }
+            28% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.3); border-color: rgba(255, 255, 0, 0.4); }
+            42% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); border-color: rgba(0, 255, 0, 0.4); }
+            56% { box-shadow: 0 0 10px rgba(0, 0, 255, 0.3); border-color: rgba(0, 0, 255, 0.4); }
+            70% { box-shadow: 0 0 10px rgba(75, 0, 130, 0.3); border-color: rgba(75, 0, 130, 0.4); }
+            84% { box-shadow: 0 0 10px rgba(148, 0, 211, 0.3); border-color: rgba(148, 0, 211, 0.4); }
+            100% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); border-color: rgba(255, 0, 0, 0.4); }
         }
 
         .card-wrapper {
             position: relative;
         }
+
+        .rainbow-card {
+            border: 2px solid rgba(255,0,0,0.4);
+            animation: rainbow 5s linear infinite;
+            box-sizing: border-box;
+        }
+
+        /* Bổ sung CSS cho nút Donate (mượn từ Test Online) */
+        .btn-test-online {
+            display: inline-block;
+            background-color: orange !important;
+            color: white !important;
+            /* font-size: 16px; */
+            font-weight: bold;
+            padding: 6px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+            background: url(/images/effect-1.gif);
+            background-size: cover;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-test-online:hover {
+            transform: scale(1.05);
+            color: white !important;
+            text-decoration: none;
+        }
+
+        /* Hiệu ứng thả lồng đèn trung thu */
+        .lantern {
+            position: fixed;
+            bottom: -50px;
+            z-index: 9999;
+            animation: floatUp 6s linear forwards;
+            pointer-events: none;
+            opacity: 0.9;
+        }
+        
+        @@keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
     </style>
 
+    <!-- Thêm thư viện pháo hoa canvas-confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
+        window.onload = function() {
+            // 1. Hiệu ứng pháo hoa (Bắn trong 3 giây đầu tiên)
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                // Bắn từ bên trái
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff']
+                });
+                // Bắn từ bên phải
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+
+            // 2. Hiệu ứng thả lồng đèn Trung Thu (Chạy liên tục vô tận)
+            const emojis = ['🏮', '🌕', '✨', '🐰', '🥮'];
+            
+            setInterval(() => {
+                const lantern = document.createElement('div');
+                lantern.className = 'lantern';
+                lantern.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Xuất hiện ngẫu nhiên theo chiều ngang
+                lantern.style.left = Math.random() * 95 + 'vw';
+                // Kích thước ngẫu nhiên
+                lantern.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                // Tốc độ bay ngẫu nhiên (4-7 giây)
+                lantern.style.animationDuration = (Math.random() * 3 + 4) + 's'; 
+                
+                document.body.appendChild(lantern);
+                
+                // Xóa DOM sau khi bay xong để không nặng máy
+                setTimeout(() => {
+                    lantern.remove();
+                }, 7000);
+            }, 250); // Cứ 250ms thả một cái, không bao giờ dừng
+        };
+
         const payLink = document.getElementById('pay-link');
         if (payLink) {
             payLink.addEventListener('click', function (event) {
