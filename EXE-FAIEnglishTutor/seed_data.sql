@@ -72,7 +72,7 @@ BEGIN
 END
 
 -- ---- Level 1: Beginner (A1) ----
-INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID) VALUES
+INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID, LearningObjectives) VALUES
 (
     N'Greeting a New Friend',
     N'Practice a simple first-time greeting at school. Learn how to introduce yourself and ask basic questions.',
@@ -123,7 +123,7 @@ INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser,
 );
 
 -- ---- Level 2: Elementary (A2) ----
-INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID) VALUES
+INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID, LearningObjectives) VALUES
 (
     N'At the Doctor''s Office',
     N'Practice describing symptoms and understanding medical advice at a clinic.',
@@ -174,7 +174,7 @@ INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser,
 );
 
 -- ---- Level 3: Intermediate (B1) ----
-INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID) VALUES
+INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID, LearningObjectives) VALUES
 (
     N'Negotiating a Salary',
     N'Practice negotiating your salary during a formal job offer discussion.',
@@ -225,7 +225,7 @@ INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser,
 );
 
 -- ---- Level 4: Upper-Intermediate (B2) ----
-INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID) VALUES
+INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID, LearningObjectives) VALUES
 (
     N'Debate: Remote Work vs. Office Work',
     N'Practice debating the pros and cons of remote vs. traditional office work.',
@@ -276,7 +276,7 @@ INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser,
 );
 
 -- ---- Level 5: Advanced (C1) ----
-INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID) VALUES
+INSERT INTO [Situation] (SituationName, Description, ImageUrl, RoleAI, RoleUser, CreatedAt, TypeID, LevelID, LearningObjectives) VALUES
 (
     N'Geopolitical Strategy Discussion',
     N'Practice high-level diplomatic negotiations on complex geopolitical issues.',
@@ -339,3 +339,4 @@ PRINT N'';
 PRINT N'NOTE: ImageUrl hiện dùng ảnh Unsplash tạm thời.';
 PRINT N'Sau khi upload ảnh thật lên Cloudinary, dùng lệnh sau để cập nhật:';
 PRINT N'  UPDATE [Situation] SET ImageUrl = ''https://res.cloudinary.com/...'' WHERE SituatuonID = X';
+

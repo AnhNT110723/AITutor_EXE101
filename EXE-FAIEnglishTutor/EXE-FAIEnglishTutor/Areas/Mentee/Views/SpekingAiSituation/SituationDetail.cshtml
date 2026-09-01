@@ -80,11 +80,10 @@
                         <div class="goals">
                             <p><strong>@Localizer["LessonObjectives"]</strong></p>
                             <ul>
-                                <li>@Localizer["Obj1"]</li>
-                                <li>
-                                    @Localizer["Obj2"]
-                                </li>
-                                <li>@Localizer["Obj3"]</li>
+                                @foreach (var objective in Model.LearningObjectivesList)
+                                {
+                                    <li>@objective</li>
+                                }
                             </ul>
                         </div>
 
