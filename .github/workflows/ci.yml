@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+﻿name: CI/CD Pipeline
 
 on:
   push:
@@ -58,13 +58,13 @@ jobs:
         script: |
           cd /home/azureuser/aitutor_deploy
           
-          # Cập nhật mã nguồn mới nhất
+          # Cáº­p nháº­t mÃ£ nguá»“n má»›i nháº¥t
           git pull origin dev
           
-          # Kéo image mới nhất về từ Docker Hub
+          # KÃ©o image má»›i nháº¥t vá» tá»« Docker Hub
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/fai-app:latest
           
-          # Tạo lại file .env từ Github Secrets để docker-compose có thể đọc
+          # Táº¡o láº¡i file .env tá»« Github Secrets Ä‘á»ƒ docker-compose cÃ³ thá»ƒ Ä‘á»c
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > .env
           echo "CLOUDINARY_CLOUDNAME=${{ secrets.CLOUDINARY_CLOUDNAME }}" >> .env
           echo "CLOUDINARY_APIKEY=${{ secrets.CLOUDINARY_APIKEY }}" >> .env
@@ -81,8 +81,13 @@ jobs:
           echo "FACEBOOK_APPSECRET=${{ secrets.FACEBOOK_APPSECRET }}" >> .env
           echo "TWITTER_APIKEY=${{ secrets.TWITTER_APIKEY }}" >> .env
           echo "TWITTER_APIKEYSECRET=${{ secrets.TWITTER_APIKEYSECRET }}" >> .env
+          echo "PayOS__ClientId=${{ secrets.PAYOS_CLIENT_ID }}" >> .env
+          echo "PayOS__ApiKey=${{ secrets.PAYOS_API_KEY }}" >> .env
+          echo "PayOS__ChecksumKey=${{ secrets.PAYOS_CHECKSUM_KEY }}" >> .env
           
           # Chạy lại docker-compose
           sudo docker compose up -d --remove-orphans
-          # Dọn dẹp image cũ cho nhẹ máy
+          # Dá»n dáº¹p image cÅ© cho nháº¹ mÃ¡y
           sudo docker image prune -f
+
+
