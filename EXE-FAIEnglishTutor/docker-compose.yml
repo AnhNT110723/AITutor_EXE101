@@ -50,9 +50,9 @@ services:
       - Facebook__AppSecret=${FACEBOOK_APPSECRET}
       - Twitter__APIKey=${TWITTER_APIKEY}
       - Twitter__APIKeySecret=${TWITTER_APIKEYSECRET}
-      - PayOS__ClientId=${PayOS__ClientId}
-      - PayOS__ApiKey=${PayOS__ApiKey}
-      - PayOS__ChecksumKey=${PayOS__ChecksumKey}
+      - PayOS__ClientId=${PAYOS_CLIENT_ID}
+      - PayOS__ApiKey=${PAYOS_API_KEY}
+      - PayOS__ChecksumKey=${PAYOS_CHECKSUM_KEY}
     depends_on:
       fai-db:
         condition: service_healthy

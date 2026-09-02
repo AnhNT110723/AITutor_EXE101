@@ -81,9 +81,9 @@ jobs:
           echo "FACEBOOK_APPSECRET=${{ secrets.FACEBOOK_APPSECRET }}" >> .env
           echo "TWITTER_APIKEY=${{ secrets.TWITTER_APIKEY }}" >> .env
           echo "TWITTER_APIKEYSECRET=${{ secrets.TWITTER_APIKEYSECRET }}" >> .env
-          echo "PayOS__ClientId=${{ secrets.PAYOS_CLIENT_ID }}" >> .env
-          echo "PayOS__ApiKey=${{ secrets.PAYOS_API_KEY }}" >> .env
-          echo "PayOS__ChecksumKey=${{ secrets.PAYOS_CHECKSUM_KEY }}" >> .env
+          echo "PAYOS_CLIENT_ID=${{ secrets.PAYOS_CLIENT_ID }}" >> .env
+          echo "PAYOS_API_KEY=${{ secrets.PAYOS_API_KEY }}" >> .env
+          echo "PAYOS_CHECKSUM_KEY=${{ secrets.PAYOS_CHECKSUM_KEY }}" >> .env
 
           # Chạy lại docker-compose
           sudo docker compose up -d --remove-orphans

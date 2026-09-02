@@ -90,6 +90,15 @@
                     <span class="menu-text">Học Ielts</span>
                     </a>
                     </li> *@
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li>
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="link-test" data-action="admin">
+                                <span class="fas fa-user-shield icon"></span>
+                                <span class="menu-text">Admin Dashboard</span>
+                            </a>
+                        </li>
+                    }
                     <li>
                         <a asp-area="Mentee" asp-controller="Toeic" asp-action="Index" class="link-test" data-action="toeic">
                             <span class="fas fa-graduation-cap icon"></span>
