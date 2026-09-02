@@ -58,13 +58,13 @@ jobs:
         script: |
           cd /home/azureuser/aitutor_deploy
           
-          # Cáº­p nháº­t mÃ£ nguá»“n má»›i nháº¥t
+          # Cập nhật mã nguồn mới nhất
           git pull origin dev
           
-          # KÃ©o image má»›i nháº¥t vá» tá»« Docker Hub
+          # Kéo image mới nhất về từ Docker Hub
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/fai-app:latest
           
-          # Táº¡o láº¡i file .env tá»« Github Secrets Ä‘á»ƒ docker-compose cÃ³ thá»ƒ Ä‘á»c
+          # Tạo lại file .env từ Github Secrets để docker-compose có thể đọc
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > .env
           echo "CLOUDINARY_CLOUDNAME=${{ secrets.CLOUDINARY_CLOUDNAME }}" >> .env
           echo "CLOUDINARY_APIKEY=${{ secrets.CLOUDINARY_APIKEY }}" >> .env
@@ -87,7 +87,5 @@ jobs:
 
           # Chạy lại docker-compose
           sudo docker compose up -d --remove-orphans
-          # Dá»n dáº¹p image cÅ© cho nháº¹ mÃ¡y
+          # Dọn dẹp image cũ cho nhẹ máy
           sudo docker image prune -f
-
-
