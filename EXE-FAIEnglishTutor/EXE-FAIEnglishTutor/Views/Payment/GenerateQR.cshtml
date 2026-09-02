@@ -110,23 +110,8 @@
             </div>
         </div>
     </div>
-    <!-- Modal for Success Notification -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Thành công</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Thanh toán của bạn đã thành công!
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="okButton">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Canvas pháo hoa -->
+    <canvas id="fireworksCanvas" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9998; pointer-events:none;"></canvas>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -159,23 +144,99 @@
                 });
             }
         }
+        // ======================== PHÁO HOA ========================
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let fireworksParticles = [];
+        let fireworksAnimFrame;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function randomColor() {
+            const colors = ['#ff4757','#ffa502','#2ed573','#1e90ff','#eccc68','#ff6b81','#a29bfe','#fd79a8'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function createBurst(x, y) {
+            const count = 80;
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 / count) * i;
+                const speed = Math.random() * 6 + 2;
+                fireworksParticles.push({
+                    x, y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1,
+                    color: randomColor(),
+                    radius: Math.random() * 3 + 1,
+                    decay: Math.random() * 0.015 + 0.01
+                });
+            }
+        }
+
+        function animateFireworks() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            fireworksParticles = fireworksParticles.filter(p => p.alpha > 0);
+            fireworksParticles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.08; // trọng lực nhẹ
+                p.alpha -= p.decay;
+            });
+            fireworksAnimFrame = requestAnimationFrame(animateFireworks);
+        }
+
+        function launchFireworks(duration) {
+            resizeCanvas();
+            canvas.style.display = 'block';
+            const interval = setInterval(() => {
+                createBurst(Math.random() * canvas.width, Math.random() * canvas.height * 0.6);
+            }, 300);
+            animateFireworks();
+            setTimeout(() => {
+                clearInterval(interval);
+                setTimeout(() => {
+                    canvas.style.display = 'none';
+                    cancelAnimationFrame(fireworksAnimFrame);
+                }, 2000);
+            }, duration);
+        }
+        // ======================== HẾT PHÁO HOA ========================
+
         // Polling để kiểm tra trạng thái thanh toán
         function checkPaymentStatus() {
             $.get("/Payment/CheckPaymentStatus?paymentId=@Model.PaymentId", function (data) {
                 if (data.success) {
-                    $("#successModal").modal("show");
                     clearInterval(pollingInterval); // Dừng polling
+                    launchFireworks(4000); // Bắn pháo hoa 4 giây
+                    Swal.fire({
+                        title: '🎉 Cảm ơn bạn!',
+                        html: '<p style="font-size:1.1rem;">Cảm ơn bạn đã <strong>donate</strong> cho chúng tôi!<br>Chúng tôi rất trân trọng sự ủng hộ của bạn ❤️</p>',
+                        icon: 'success',
+                        confirmButtonText: 'Về trang chủ',
+                        confirmButtonColor: '#ed782b',
+                        allowOutsideClick: false,
+                        showClass: {
+                            popup: 'animate__animated animate__zoomIn'
+                        }
+                    }).then(() => {
+                        window.location.href = "@Url.Action("Index", "home")";
+                    });
                 }
             });
         }
         const pollingInterval = setInterval(checkPaymentStatus, 5000); // Kiểm tra mỗi 5 giây
         updateCountdown();
-
-
-        // Xử lý khi nhấn OK
-        $("#okButton").click(function () {
-            window.location.href = "@Url.Action("Index", "home")"; // Quay về Home
-        });
 
 
 
