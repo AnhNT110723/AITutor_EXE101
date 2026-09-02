@@ -97,7 +97,7 @@
 
                 <div class="input-wrapper hidden">
                     <div class="input-container">
-                        <input type="text" id="userInput" placeholder="@Localizer["TypeYourMessage"]" style="width: 100%;" />
+                        <textarea id="userInput" placeholder="@Localizer["TypeYourMessage"]" style="width: 100%; resize: none; overflow: hidden; min-height: 44px; max-height: 150px;" rows="1"></textarea>
                         <span class="mic-icon-in-input" onclick="toggleMicFromInput()"><i class="bi-mic-fill"></i></span>
                     </div>
                     <!-- <button onclick="sendMessage()" class="send-btn"><i class="bi-send-fill"></i></button> -->
@@ -201,9 +201,9 @@
             gap: 15px;
             flex-wrap: wrap;
             background-color: #f8f9fa;
-            padding: 10px;
+            padding: 10px 6px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* CSS cho nút micro */
@@ -249,6 +249,20 @@
                 transform: translateY(10px);
             }
 
+        /* Khi chế độ text bật, ô chat nổi lên và mở rộng ra bên trái để dài hơn */
+        @@media (min-width: 1025px) {
+            .bottom-controls.expanded {
+                position: absolute;
+                bottom: 24px;
+                right: 0px;
+                width: 300px !important;
+                max-width: 80vw;
+                z-index: 100;
+                border-radius: 0 !important;
+                box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
+
         .input-container {
             position: relative;
             flex-grow: 1;
@@ -257,10 +271,10 @@
         #userInput {
             padding: 10px 40px 10px 15px;
             border: 1px solid #ced4da;
-            border-radius: 20px;
-            font-size: 16px;
+            border-radius: 6px;
             outline: none;
             transition: border-color 0.3s ease;
+            line-height: 1.5;
         }
 
             #userInput:focus {
@@ -523,10 +537,16 @@
             const userInputEl = document.getElementById("userInput");
             if (userInputEl) {
                 userInputEl.addEventListener("keypress", function(e) {
-                    if (e.key === "Enter") {
+                    if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         sendMessage();
+                        userInputEl.style.height = "auto";
                     }
+                });
+                // Auto resize height
+                userInputEl.addEventListener("input", function() {
+                    this.style.height = "auto";
+                    this.style.height = (this.scrollHeight) + "px";
                 });
             }
         });
@@ -671,12 +691,15 @@
             const inputWrapper = document.querySelector('.input-wrapper');
             const micButton = document.getElementById('micButton');
             const keyboardIcon = document.querySelector('.keyboard-icon');
+            const bottomControls = document.querySelector('.bottom-controls');
 
             if (inputWrapper.classList.contains('hidden')) {
                 // Hiện ô nhập liệu, ẩn nút micro
                 inputWrapper.classList.remove('hidden');
                 micButton.style.display = 'none';
                 keyboardIcon.style.display = 'none';
+                bottomControls.classList.add('expanded');
+                setTimeout(() => document.getElementById("userInput").focus(), 100);
             }
         }
 
@@ -686,11 +709,13 @@
             const inputWrapper = document.querySelector('.input-wrapper');
             const micButton = document.getElementById('micButton');
             const keyboardIcon = document.querySelector('.keyboard-icon');
+            const bottomControls = document.querySelector('.bottom-controls');
 
             // Ẩn ô nhập liệu, hiện nút micro và icon ⌨
             inputWrapper.classList.add('hidden');
             micButton.style.display = 'inline-block';
             keyboardIcon.style.display = 'inline-block';
+            bottomControls.classList.remove('expanded');
         }
 
 
@@ -1284,19 +1309,19 @@
 
         function useSuggestion() {
             const suggestionText = document.getElementById('suggestionText').textContent;
-            const inputWrapper = document.querySelector('.input-wrapper');
             const userInput = document.getElementById('userInput');
-            const micButton = document.getElementById('micButton');
-            const keyboardIcon = document.querySelector('.keyboard-icon');
 
-            // Hiển thị ô nhập liệu và điền gợi ý vào
-            if (inputWrapper.classList.contains('hidden')) {
-                inputWrapper.classList.remove('hidden');
-                micButton.style.display = 'none';
-                keyboardIcon.style.display = 'none';
-            }
+            // Gọi hàm toggleInput để hiển thị ô nhập liệu, ẩn nút micro và gán class expanded
+            toggleInput();
+            
             userInput.value = suggestionText;
             document.getElementById('suggestionBox').classList.add('hidden');
+            
+            // Chỉnh lại height cho textarea để không bị khuất chữ (do gán value qua JS không trigger sự kiện input)
+            setTimeout(() => {
+                userInput.style.height = "auto";
+                userInput.style.height = (userInput.scrollHeight) + "px";
+            }, 50);
         }
 
 
