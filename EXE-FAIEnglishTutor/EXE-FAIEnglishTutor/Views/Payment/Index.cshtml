@@ -78,14 +78,21 @@
                 *@
 
                 <!-- DONATE -->
-                <div class="pricing-card card-wrapper">
+                <div class="pricing-card card-wrapper rainbow-card">
                     <div class="featured" style="background-color: #ed782b; color: white;">DONATE ❤️</div>
                     <div class="plan-title">Ủng Hộ FAI English</div>
                     <div class="price">20,000đ</div>
                     <ul class="features text-start" style="text-align: center !important;">
                         <li style="list-style-type: none;">Nếu bạn thấy trang web này hữu ích, hãy ủng hộ để tiếp thêm động lực cho chúng tôi phát triển thêm nhiều tính năng hay nữa nhé! 🥰</li>
                     </ul>
-                    <a href="#" id="pay-link" class="btn btn-pay">☕ Donate 20.000đ</a>
+                    
+                    <!-- Dùng chung class btn-test-online như trang Toeic -->
+                    <div class="text-center mt-4">
+                        <a href="#" id="pay-link" class="btn-test-online">
+                            <span class="effect-test-online">☕ Donate</span>
+                        </a>
+                    </div>
+                    
                     <form asp-controller="Payment" id="payForm" asp-action="GenerateQR" style="display: none;" method="post">
                         <input type="hidden" name="planAmount" value="20000" />
                     </form>
@@ -140,6 +147,7 @@
 
 @section Scripts {
     <script src="~/js/handle-sidbar/home-sidebar.js"></script>
+    <link href="~/css/effects.css" rel="stylesheet" />
     <style>
 
         body {
@@ -169,6 +177,7 @@
             border-radius: 20px;
             padding: 20px;
             width: 300px;
+            height: 350px;
             box-shadow: 0 0 15px #00000060;
             transition: transform 0.3s;
         }
@@ -229,21 +238,48 @@
             margin-top: 10px;
         }
 
-        .highlight {
-            color: #00ffff;
+
+
+        /* Bổ sung CSS cho nút Donate (mượn từ Test Online) */
+        .btn-test-online {
+            display: inline-block;
+            background-color: orange !important;
+            color: white !important;
+            /* font-size: 16px; */
+            font-weight: bold;
+            padding: 6px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+            background: url(/images/effect-1.gif);
+            width: 100%;
+            margin-top: 25px;
         }
 
-        .highlight-nova {
-            color: #ff00ff;
-        }
-
-        .card-wrapper {
-            position: relative;
+        .btn-test-online:hover {
+            transform: scale(1.05);
+            color: white !important;
+            text-decoration: none;
         }
     </style>
 
+    <!-- Thư viện pháo hoa canvas-confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Thư viện hiệu ứng của chúng ta -->
+    <script src="~/js/effects.js"></script>
 
     <script>
+        window.onload = function() {
+            // Gọi hiệu ứng pháo hoa (bắn trong 10 giây)
+            playFireworks(10000);
+            
+            // Gọi hiệu ứng thả lồng đèn
+            startLanternEffect(250);
+        };
+
         const payLink = document.getElementById('pay-link');
         if (payLink) {
             payLink.addEventListener('click', function (event) {

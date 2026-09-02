@@ -1,8 +1,3 @@
-// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
 /**
  * Hàm tải ảnh dùng chung (Có thể tái sử dụng cho bất kỳ thẻ img nào)
  * @param {string} imageUrl - Đường dẫn URL hoặc Base64 của ảnh

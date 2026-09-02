@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Dtos;
+using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 
 namespace EXE_FAIEnglishTutor.Services.Interface
@@ -11,5 +11,6 @@ namespace EXE_FAIEnglishTutor.Services.Interface
         Task<decimal> GetMonthlyEarningsAsync();
         Task<decimal> GetAnnualEarningsAsync();
         Task<List<decimal>> GetMonthlyEarningsForChartAsync();
+        Task<PaymentDto> GetPaymentByContentAsync(string content);
     }
 }

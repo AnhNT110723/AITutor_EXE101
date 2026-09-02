@@ -1,0 +1,38 @@
+/* Hiệu ứng viền bảy sắc cầu vồng */
+.rainbow-card {
+    border: 2px solid rgba(255,0,0,0.4);
+    animation: rainbow 5s linear infinite;
+    box-sizing: border-box;
+}
+
+@keyframes rainbow {
+    0% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); border-color: rgba(255, 0, 0, 0.4); }
+    14% { box-shadow: 0 0 10px rgba(255, 127, 0, 0.3); border-color: rgba(255, 127, 0, 0.4); }
+    28% { box-shadow: 0 0 10px rgba(255, 255, 0, 0.3); border-color: rgba(255, 255, 0, 0.4); }
+    42% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); border-color: rgba(0, 255, 0, 0.4); }
+    56% { box-shadow: 0 0 10px rgba(0, 0, 255, 0.3); border-color: rgba(0, 0, 255, 0.4); }
+    70% { box-shadow: 0 0 10px rgba(75, 0, 130, 0.3); border-color: rgba(75, 0, 130, 0.4); }
+    84% { box-shadow: 0 0 10px rgba(148, 0, 211, 0.3); border-color: rgba(148, 0, 211, 0.4); }
+    100% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.3); border-color: rgba(255, 0, 0, 0.4); }
+}
+
+/* Hiệu ứng nền sao đêm lấp lánh (Tái sử dụng cho nút bấm, banner) */
+.effect-stars-bg {
+    background: url('/images/effect-1.gif');
+    color: white !important;
+}
+
+/* Hiệu ứng thả lồng đèn trung thu */
+.lantern {
+    position: fixed;
+    bottom: -50px;
+    z-index: 9999;
+    animation: floatUp 6s linear forwards;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+}

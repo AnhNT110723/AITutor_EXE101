@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Models;
+using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Interface;
 using EXE_FAIEnglishTutor.Repositories.Interface;
 using EXE_FAIEnglishTutor.Dtos;
@@ -43,6 +43,15 @@ namespace EXE_FAIEnglishTutor.Services.Implementaion
         public async Task UpdatePaymentAsync(PaymentDto p)
         {
             await _paymentRepo.UpdatePaymentAsync(p);
+        }
+
+        public async Task<PaymentDto> GetPaymentByContentAsync(string content)
+        {
+            var allPayments = await _paymentRepo.GetAllAsync();
+            var payment = allPayments.FirstOrDefault(p => p.Content == content);
+            if (payment == null) return null;
+
+            return new PaymentDto(payment);
         }
     }
 }
