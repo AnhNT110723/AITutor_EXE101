@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Dtos;
+using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Interface;
 using Microsoft.AspNetCore.Authentication;
@@ -96,6 +96,10 @@ namespace EXE_FAIEnglishTutor.Controllers
 
                 // Xử lý cookie SavedEmail và RefreshToken
                 HandleSavedEmailAndRefreshToken(isPersistent, model.Email, user);
+                if (user.Roles.Any(r => r.RoleName.Equals("admin", StringComparison.OrdinalIgnoreCase)))
+                {
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                }
 
                 return RedirectToAction("Index", "Home");
 
