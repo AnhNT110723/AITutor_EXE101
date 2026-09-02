@@ -104,7 +104,7 @@ jobs:
           echo "PAYOS_CLIENT_ID=${{ secrets.PAYOS_CLIENT_ID }}" >> .env
           echo "PAYOS_API_KEY=${{ secrets.PAYOS_API_KEY }}" >> .env
           echo "PAYOS_CHECKSUM_KEY=${{ secrets.PAYOS_CHECKSUM_KEY }}" >> .env
-
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
           # Buoc 3: Khoi dong lai cac container voi image va cau hinh moi nhat
           sudo docker compose up -d --remove-orphans
 

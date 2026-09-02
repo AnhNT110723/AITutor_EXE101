@@ -45,12 +45,14 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 });
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 
-// Khởi tạo PayOS
-PayOS.PayOSClient payOS = new PayOS.PayOSClient(
-    builder.Configuration["PayOS:ClientId"],
-    builder.Configuration["PayOS:ApiKey"],
-    builder.Configuration["PayOS:ChecksumKey"]
-);
+// Khởi tạo PayOS - đọc config từ ASP.NET Configuration (không để SDK tự đọc env var)
+var payOSOptions = new PayOS.PayOSOptions
+{
+    ClientId = builder.Configuration["PayOS:ClientId"] ?? "",
+    ApiKey = builder.Configuration["PayOS:ApiKey"] ?? "",
+    ChecksumKey = builder.Configuration["PayOS:ChecksumKey"] ?? ""
+};
+PayOS.PayOSClient payOS = new PayOS.PayOSClient(payOSOptions);
 builder.Services.AddSingleton(payOS);
 
 builder.Services.AddHttpClient<SpeechService>(client =>
