@@ -44,6 +44,15 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     }
 });
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+
+// Khởi tạo PayOS
+PayOS.PayOSClient payOS = new PayOS.PayOSClient(
+    builder.Configuration["PayOS:ClientId"],
+    builder.Configuration["PayOS:ApiKey"],
+    builder.Configuration["PayOS:ChecksumKey"]
+);
+builder.Services.AddSingleton(payOS);
+
 builder.Services.AddHttpClient<SpeechService>(client =>
 {
     client.BaseAddress = new Uri("https://api.openai.com/v1/");

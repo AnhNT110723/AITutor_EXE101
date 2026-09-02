@@ -69,6 +69,8 @@
             font-size: 20px;
             margin: 0 5px;
         }
+    .download-btn { color: black; cursor: pointer; transition: color 0.3s; width: max-content; margin: 0 auto; }
+    .download-btn:hover { color: white !important; }
     </style>
 </head>
 <body>
@@ -79,7 +81,7 @@
                     <h5><strong>Thông tin đơn hàng</strong></h5>
                     <p><strong>Mã đơn hàng</strong><br>@Model.PaymentId</p>
                     <p><strong>Mô tả</strong><br>Thanh toán đơn hàng: @Model.Content. Nâng cấp tài khoản FAI.</p>
-                    <p><strong>Số tiền</strong><br class="text-danger fs-4">@Model.TotalAmount VNĐ</p>
+                    <p><strong>Số tiền</strong><br class="text-danger fs-4">@Model.TotalAmount.ToString("N0") VNĐ</p>
                 <div class="bottom-section">
                     <div class="countdown-box mt-4">
                         <p>Đơn hàng sẽ hết hạn sau:</p>
@@ -100,7 +102,7 @@
                     <h5><strong>Quét mã QR để thanh toán</strong></h5>
                     <p>Vui lòng không đóng trang cho đến khi hoàn tất thanh toán</p>
                     <img src="@Model.QRCodeUrl" alt="QR Code" class="img-fluid my-3">
-                    <p class="text-white" style="cursor: pointer;" onclick="downloadImage('@Model.QRCodeUrl', 'QRCode_ThanhToan_@(Model.PaymentId).png')">
+                    <p class="download-btn" onclick="downloadImage('@Model.QRCodeUrl', 'QRCode_ThanhToan_@(Model.PaymentId).png')">
                         <i class="fas fa-download"></i> Lưu về máy
                     </p>
                     <p class="text-white small">Sử dụng App Ngân Hàng hoặc ứng dụng Ví điện tỬ hỗ trợ QR code để quét mã thanh toán.</p>
@@ -210,3 +212,4 @@
     <script src="~/js/utils.js"></script>
 </body>
 </html>
+
