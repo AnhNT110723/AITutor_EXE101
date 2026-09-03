@@ -1,4 +1,4 @@
-﻿USE MASTER
+USE MASTER
 GO
 
 CREATE DATABASE FAI_ENGLISH
@@ -118,7 +118,8 @@ CREATE TABLE Situation (
     CreatedAt DATETIME DEFAULT GETDATE(),
 	TypeID Int foreign key references [Type](TypeID),
 	LevelID Int foreign key references [Level](LevelID),
-	LearningObjectives NVARCHAR(MAX)
+	LearningObjectives NVARCHAR(MAX),
+    [RowVersion] ROWVERSION NOT NULL
 );
 
 

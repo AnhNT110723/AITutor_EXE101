@@ -1,0 +1,242 @@
+@model EXE_FAIEnglishTutor.Dtos.SituationFilterViewModel
+
+@{
+    ViewData["Title"] = "Quản lý Tình huống Role-Play";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+    int totalPages = Model.TotalPages;
+    int currentPage = Model.Page;
+    int startItem = Model.TotalItems == 0 ? 0 : (currentPage - 1) * Model.PageSize + 1;
+    int endItem = Math.Min(currentPage * Model.PageSize, Model.TotalItems);
+
+    var pagesToShow = new List<int>();
+    if (totalPages <= 7)
+    {
+        for (int i = 1; i <= totalPages; i++) { pagesToShow.Add(i); }
+    }
+    else
+    {
+        if (currentPage <= 4)
+        {
+            for (int i = 1; i <= 5; i++) { pagesToShow.Add(i); }
+            pagesToShow.Add(-1);
+            pagesToShow.Add(totalPages);
+        }
+        else if (currentPage >= totalPages - 3)
+        {
+            pagesToShow.Add(1);
+            pagesToShow.Add(-1);
+            for (int i = totalPages - 4; i <= totalPages; i++) { pagesToShow.Add(i); }
+        }
+        else
+        {
+            pagesToShow.Add(1);
+            pagesToShow.Add(-1);
+            pagesToShow.Add(currentPage - 1);
+            pagesToShow.Add(currentPage);
+            pagesToShow.Add(currentPage + 1);
+            pagesToShow.Add(-2);
+            pagesToShow.Add(totalPages);
+        }
+    }
+}
+
+<style>
+    .page-item.active .page-link {
+        background-color: #ed782b !important;
+        border-color: #ed782b !important;
+        color: #fff !important;
+    }
+    .page-link {
+        color: #ed782b;
+    }
+    .page-link:hover {
+        color: #d66418;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card shadow mb-4 border-0">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center bg-white border-bottom-0">
+            <h5 class="m-0 font-weight-bold" style="color: #ed782b;">Danh sách Tình huống (Role-Play)</h5>
+            <a asp-action="Create" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" style="background-color:#ed782b; border-color:#ed782b">
+                <i class="fas fa-plus fa-sm text-white-50"></i> Thêm mới
+            </a>
+        </div>
+        <div class="card-body">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <!-- Bộ lọc dữ liệu (Filter Bar) -->
+            <form method="get" asp-action="Index" class="mb-4 p-3 bg-light rounded-3 shadow-sm border">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                            <input type="text" name="search" value="@Model.Search" class="form-control border-start-0" placeholder="Tìm kiếm tên, mô tả..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <select name="levelId" class="form-select bg-white" asp-items="ViewBag.Levels">
+                            <option value="">-- Tất cả Level --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <select name="typeId" class="form-select bg-white" asp-items="ViewBag.Types">
+                            <option value="">-- Tất cả Phân loại --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 col-sm-12 d-flex gap-2">
+                        <button type="submit" class="btn text-white w-100 shadow-sm" style="background-color: #ed782b; border-color: #ed782b;">
+                            <i class="fas fa-filter"></i> Lọc
+                        </button>
+                        @if (!string.IsNullOrEmpty(Model.Search) || Model.LevelId.HasValue || Model.TypeId.HasValue)
+                        {
+                            <a asp-action="Index" class="btn btn-outline-secondary" title="Đặt lại bộ lọc">
+                                <i class="fas fa-undo"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </form>
+
+            <!-- Bảng dữ liệu (Data Table) -->
+            @if (!Model.Items.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                    <p class="text-muted fs-5">Không tìm thấy tình huống nào phù hợp.</p>
+                    @if (!string.IsNullOrEmpty(Model.Search) || Model.LevelId.HasValue || Model.TypeId.HasValue)
+                    {
+                        <a asp-action="Index" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                            <i class="fas fa-arrow-left"></i> Xem tất cả tình huống
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" width="100%" cellspacing="0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 100px;">Ảnh</th>
+                                <th>Tên tình huống</th>
+                                <th style="width: 120px;">Level</th>
+                                <th style="width: 140px;">Type</th>
+                                <th style="width: 130px;">Ngày tạo</th>
+                                <th class="text-center" style="width: 110px;">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                        {
+                                            <img src="@item.ImageUrl" alt="img" class="rounded shadow-sm" style="width: 80px; height: 50px; object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center shadow-sm" style="width: 80px; height: 50px;">N/A</div>
+                                        }
+                                    </td>
+                                    <td><strong class="text-dark">@item.SituationName</strong></td>
+                                    <td>
+                                        <span class="badge bg-info text-dark rounded-pill">@(item.Level?.LevelName ?? "N/A")</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary rounded-pill">@(item.Type?.TypeName ?? "N/A")</span>
+                                    </td>
+                                    <td>@(item.CreatedAt?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                                    <td class="text-center">
+                                        <a asp-action="Edit" asp-route-id="@item.SituatuonId" class="btn btn-sm btn-outline-primary rounded-circle" title="Sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="Delete" asp-route-id="@item.SituatuonId" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tình huống này?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" title="Xóa">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Thanh phân trang (Pagination Bar) -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center mt-3 pt-3 border-top">
+                    <div class="text-muted small mb-2 mb-md-0">
+                        Hiển thị <strong>@startItem</strong> - <strong>@endItem</strong> trong tổng số <strong>@Model.TotalItems</strong> tình huống
+                    </div>
+
+                    @if (totalPages > 1)
+                    {
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-sm m-0">
+                                <!-- Nút Trước (Prev) -->
+                                <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                                    <a class="page-link" asp-action="Index"
+                                       asp-route-page="@(currentPage - 1)"
+                                       asp-route-search="@Model.Search"
+                                       asp-route-levelId="@Model.LevelId"
+                                       asp-route-typeId="@Model.TypeId"
+                                       aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+
+                                <!-- Danh sách các trang với logic rút gọn dấu ba chấm -->
+                                @foreach (var p in pagesToShow)
+                                {
+                                    if (p < 0)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item @(p == currentPage ? "active" : "")">
+                                            <a class="page-link" asp-action="Index"
+                                               asp-route-page="@p"
+                                               asp-route-search="@Model.Search"
+                                               asp-route-levelId="@Model.LevelId"
+                                               asp-route-typeId="@Model.TypeId">
+                                                @p
+                                            </a>
+                                        </li>
+                                    }
+                                }
+
+                                <!-- Nút Sau (Next) -->
+                                <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                                    <a class="page-link" asp-action="Index"
+                                       asp-route-page="@(currentPage + 1)"
+                                       asp-route-search="@Model.Search"
+                                       asp-route-levelId="@Model.LevelId"
+                                       asp-route-typeId="@Model.TypeId"
+                                       aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

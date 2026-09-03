@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 
@@ -39,6 +40,9 @@ public partial class Situation
     }
 
     public DateTime? CreatedAt { get; set; }
+
+    [Timestamp]
+    public byte[]? RowVersion { get; set; }
 
     public int? TypeId { get; set; }
 

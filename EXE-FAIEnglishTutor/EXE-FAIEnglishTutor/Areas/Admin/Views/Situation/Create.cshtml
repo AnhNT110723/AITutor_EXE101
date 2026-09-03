@@ -1,0 +1,138 @@
+@model EXE_FAIEnglishTutor.Models.Situation
+
+@{
+    ViewData["Title"] = "Thêm Tình huống mới";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4 border-0">
+        <div class="card-header py-3 bg-white border-bottom-0">
+            <h5 class="m-0 font-weight-bold" style="color: #ed782b;">Thêm Tình huống (Role-Play) mới</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <!-- Cột Trái: Thông tin cơ bản -->
+                    <div class="col-md-6 border-end pe-4">
+                        <h6 class="text-primary mb-3"><i class="fas fa-info-circle"></i> Thông tin cơ bản</h6>
+                        
+                        <div class="mb-3">
+                            <label asp-for="SituationName" class="form-label fw-bold">Tên tình huống <span class="text-danger">*</span></label>
+                            <input asp-for="SituationName" class="form-control" required placeholder="Nhập tên tình huống..." />
+                            <span asp-validation-for="SituationName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold">Mô tả</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Nhập mô tả ngắn..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TypeId" class="form-label fw-bold">Loại (Type)</label>
+                                <select asp-for="TypeId" class="form-select" asp-items="ViewBag.Types">
+                                    <option value="">-- Chọn Loại --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LevelId" class="form-label fw-bold">Cấp độ (Level)</label>
+                                <select asp-for="LevelId" class="form-select" asp-items="ViewBag.Levels">
+                                    <option value="">-- Chọn Cấp độ --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ảnh đại diện</label>
+                            <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" onchange="previewImage(this);" />
+                            <div class="mt-3">
+                                <img id="imgPreview" src="" alt="Preview" class="img-fluid rounded shadow-sm d-none" style="max-height: 200px;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cột Phải: Vai trò và Mục tiêu -->
+                    <div class="col-md-6 ps-4">
+                        <h6 class="text-primary mb-3"><i class="fas fa-tasks"></i> Thiết lập Vai trò & Mục tiêu</h6>
+
+                        <div class="mb-3">
+                            <label asp-for="RoleAi" class="form-label fw-bold">Vai trò của AI</label>
+                            <textarea asp-for="RoleAi" class="form-control" rows="2" placeholder="Ví dụ: You are a friendly doctor..."></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="RoleUser" class="form-label fw-bold">Vai trò của Học viên (User)</label>
+                            <textarea asp-for="RoleUser" class="form-control" rows="2" placeholder="Ví dụ: You are a patient..."></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Mục tiêu bài học (Learning Objectives)</label>
+                            <p class="text-muted small mb-2">Thêm từng dòng mục tiêu bài học. Hệ thống sẽ tự động chuyển thành định dạng chuẩn.</p>
+                            
+                            <div id="learningObjectivesContainer">
+                                <div class="input-group mb-2 objective-item">
+                                    <input type="text" name="learningObjectivesList" class="form-control" placeholder="Nhập mục tiêu..." />
+                                    <button class="btn btn-outline-danger btn-remove-objective" type="button"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary mt-2 rounded-pill px-3" id="btnAddObjective">
+                                <i class="fas fa-plus"></i> Thêm mục tiêu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="mt-4" />
+                <div class="d-flex justify-content-end mt-3">
+                    <a asp-action="Index" class="btn btn-secondary me-2 rounded-pill px-4">Hủy</a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm" style="background-color:#ed782b; border-color:#ed782b">
+                        <i class="fas fa-save"></i> Lưu lại
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // JS Xử lý Preview ảnh
+        function previewImage(input) {
+            var preview = document.getElementById('imgPreview');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = "";
+                preview.classList.add('d-none');
+            }
+        }
+
+        // JS Xử lý thêm bớt dòng Learning Objectives
+        $(document).ready(function() {
+            $('#btnAddObjective').click(function() {
+                var html = `
+                <div class="input-group mb-2 objective-item">
+                    <input type="text" name="learningObjectivesList" class="form-control" placeholder="Nhập mục tiêu..." />
+                    <button class="btn btn-outline-danger btn-remove-objective" type="button"><i class="fas fa-times"></i></button>
+                </div>`;
+                $('#learningObjectivesContainer').append(html);
+            });
+
+            $(document).on('click', '.btn-remove-objective', function() {
+                if ($('.objective-item').length > 1) {
+                    $(this).closest('.objective-item').remove();
+                } else {
+                    $(this).siblings('input').val(''); // Nếu chỉ còn 1 dòng thì chỉ clear text
+                }
+            });
+        });
+    </script>
+}
