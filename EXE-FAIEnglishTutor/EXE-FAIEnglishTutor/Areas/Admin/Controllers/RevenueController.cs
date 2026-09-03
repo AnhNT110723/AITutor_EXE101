@@ -1,11 +1,11 @@
-﻿using EXE_FAIEnglishTutor.Services.Interface;
+using EXE_FAIEnglishTutor.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EXE_FAIEnglishTutor.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,Admin")]
     public class RevenueController : Controller
     {
         private readonly IUserService _userService;

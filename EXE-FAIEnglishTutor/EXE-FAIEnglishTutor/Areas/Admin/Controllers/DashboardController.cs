@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Dtos;
+using EXE_FAIEnglishTutor.Dtos;
 using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Services.Implementaion;
 using EXE_FAIEnglishTutor.Services.Interface;
@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 namespace EXE_FAIEnglishTutor.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,Admin")]
     public class DashboardController : Controller
     {
         private readonly IUserService _userService;

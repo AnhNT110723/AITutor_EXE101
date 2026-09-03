@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Models;
+using EXE_FAIEnglishTutor.Models;
 using EXE_FAIEnglishTutor.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,9 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
 
         public async Task<User> FindExternalUserByProviderAsync(string provider, string providerId)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Provider == provider && u.ProviderId == providerId);
+            return await _context.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Provider == provider && u.ProviderId == providerId);
         }
 
         public async Task<IEnumerable<User>> GetAllUserAsync()
@@ -34,7 +36,9 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation
 
         public async Task<User> GetUserByEmailAsync(string email)
         {
-                return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> GetUserByIdAsync(int id)
