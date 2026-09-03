@@ -1,4 +1,4 @@
-﻿using EXE_FAIEnglishTutor.Repositories.Interface.Mentee;
+using EXE_FAIEnglishTutor.Repositories.Interface.Mentee;
 using EXE_FAIEnglishTutor.Repositories.Interface;
 using EXE_FAIEnglishTutor.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +33,12 @@ namespace EXE_FAIEnglishTutor.Repositories.Implementation.Mentee
 
         public async Task<List<Situation>> GetListSituationByRolePlay(int rolePlay)
         {
-            var x = await _context.Situations.Include(x => x.Level).Where(t => t.TypeId == rolePlay).ToListAsync();
+            var x = await _context.Situations
+                .Include(x => x.Level)
+                .Where(t => t.TypeId == rolePlay)
+                .OrderByDescending(t => t.CreatedAt)
+                .ThenByDescending(t => t.SituatuonId)
+                .ToListAsync();
             return x;
         }
 

@@ -11,6 +11,8 @@ using EXE_FAIEnglishTutor.Repositories.Implementation.Mentee;
 using EXE_FAIEnglishTutor.Services.Interface.Mentee;
 using EXE_FAIEnglishTutor.Services.Implementaion.Mentee;
 using EXE_FAIEnglishTutor.Services.Implementaion.AI;
+using EXE_FAIEnglishTutor.Services.Interface.Admin;
+using EXE_FAIEnglishTutor.Services.Implementaion.Admin;
 using Microsoft.Extensions.Options;
 
 namespace EXE_FAIEnglishTutor.Configurations
@@ -58,6 +60,7 @@ namespace EXE_FAIEnglishTutor.Configurations
             //Situation
             services.AddScoped<ISituationService, SituationService>();
             services.AddScoped<ISituationRepository, SituationRepository>();
+            services.AddScoped<ISituationAdminService, SituationAdminService>();
 
             //Role
             services.AddScoped<IRoleRepository, RoleRepositoryImpl>();
